@@ -1,4 +1,4 @@
-package com.example.roodie.materialmovies.views.fragments;
+package com.roodie.materialmovies.views.fragments;
 
 import android.app.Fragment;
 

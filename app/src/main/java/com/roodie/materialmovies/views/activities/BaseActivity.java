@@ -1,4 +1,4 @@
-package com.example.roodie.materialmovies.views.activities;
+package com.roodie.materialmovies.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.roodie.materialmovies.R;
-import com.example.roodie.model.Display;
+import com.roodie.materialmovies.R;
+import com.roodie.model.Display;
 
 /**
  * Created by Roodie on 27.06.2015.
@@ -29,8 +29,6 @@ public class BaseActivity extends ActionBarActivity {
 
         mCardContainer = findViewById(R.id.card_container);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-
     }
 
     @Override

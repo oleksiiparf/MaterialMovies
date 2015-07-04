@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="default_summary_maxlines">5</integer>
+
+    <integer name="detail_card_max_items">3</integer>
+
+</resources>

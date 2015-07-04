@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Platform.Theme.MMovies" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="Platform.Theme.MMovies.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="Base.Theme.MMovies" parent="Platform.Theme.MMovies">
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Base.Theme.MMovies.Dark" parent="Platform.Theme.MMovies.Dark">
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Theme.MMovies" parent="Base.Theme.MMovies">
+        <item name="android:textColorHighlight">@color/primary_color_translucent</item>
+
+        <item name="grey_shade">@color/light_gray</item>
+
+        <item name="windowActionModeOverlay">true</item>
+
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/primary_color_dark</item>
+        <item name="colorAccent">@color/accent_color</item>
+    </style>
+
+    <style name="Theme.MMovies.Images" parent="Base.Theme.MMovies.Dark">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+
+    <style name="Theme.Philm.Framed" parent="Theme.MMovies">
+        <item name="windowActionBarOverlay">false</item>
+    </style>
+
+
+
+
+
+</resources>

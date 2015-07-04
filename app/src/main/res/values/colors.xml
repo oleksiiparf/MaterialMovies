@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="theme_primary">#363F44</color>
+    <color name="theme_primary_dark">#ff1a1f23</color>
+    <color name="theme_accent">#E91C62</color>
+    <color name="theme_window_background">#363F44</color>
+
+    <color name="movie_placeholder">#ff4e5d64</color>
+
+    <color name="side_menu_background">#FF202020</color>
+
+    <color name="dark_gray">#FF333333</color>
+    <color name="light_gray">#FFDDDDDD</color>
+    <color name="mid_gray">#FFAAAAAA</color>
+
+    <color name="primary_color_translucent">#998BC34A</color>
+    <color name="primary_color">#363F44</color>
+    <color name="primary_color_dark">#ff1a1f23</color>
+    <color name="accent_color">#E91C62</color>
+
+    <color name="drawer_background">#FFDDDDDD</color>
+    <color name="chrome_background">#E6E6E6E6</color>
+    <color name="chrome_custom_background_alpha">#E6FFFFFF</color>
+
+    <color name="translucent_black_dark">#BB000000</color>
+    <color name="translucent_black_light">#70000000</color>
+
+    <color name="enabled">@color/grey_60</color>
+    <color name="disabled">@color/grey_30</color>
+
+    <color name="grey_60">#99333333</color>
+    <color name="grey_45">#73333333</color>
+    <color name="grey_30">#4C333333</color>
+
+
+</resources>
