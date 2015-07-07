@@ -13,4 +13,5 @@ public interface ListItem<P> {
     public P getListItem();
 
     public int getListSectionTitle();
+
 }
