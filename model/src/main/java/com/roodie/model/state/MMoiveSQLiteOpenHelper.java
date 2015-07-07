@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.google.common.base.Preconditions;
+import com.roodie.model.entities.MovieWrapper;
 import com.uwetrottmann.tmdb.entities.Movie;
 
 import java.util.Collection;
@@ -52,7 +53,7 @@ public class MMoiveSQLiteOpenHelper extends SQLiteOpenHelper implements Database
     }
 
     @Override
-    public void put(Movie movie) {
+    public void put(MovieWrapper movie) {
         assetNotClosed();
 
         try {
@@ -64,7 +65,7 @@ public class MMoiveSQLiteOpenHelper extends SQLiteOpenHelper implements Database
     }
 
     @Override
-    public void put(Collection<Movie> movies) {
+    public void put(Collection<MovieWrapper> movies) {
         assetNotClosed();
         try {
             cupboard().withDatabase(getWritableDatabase()).put(movies);
@@ -75,12 +76,12 @@ public class MMoiveSQLiteOpenHelper extends SQLiteOpenHelper implements Database
     }
 
     @Override
-    public List<Movie> getWatchList() {
+    public List<MovieWrapper> getWatchList() {
         return queryMovies("", "");
     }
 
     @Override
-    public void delete(Collection<Movie> movies) {
+    public void delete(Collection<MovieWrapper> movies) {
         assetNotClosed();
         SQLiteDatabase db = null;
 
@@ -88,7 +89,7 @@ public class MMoiveSQLiteOpenHelper extends SQLiteOpenHelper implements Database
             db = getWritableDatabase();
             db.beginTransaction();
             final DatabaseCompartment dbc = cupboard().withDatabase(db);
-            for (Movie movie : movies) {
+            for (MovieWrapper movie : movies) {
                 dbc.delete(movie);
             }
             db.setTransactionSuccessful();
@@ -130,11 +131,11 @@ public class MMoiveSQLiteOpenHelper extends SQLiteOpenHelper implements Database
         Preconditions.checkState(!mIsClosed, "Database is closed");
     }
 
-    private List<Movie> queryMovies(String selection, String... selectionArgs) {
+    private List<MovieWrapper> queryMovies(String selection, String... selectionArgs) {
         assetNotClosed();
-        QueryResultIterable<Movie> iterable = null;
+        QueryResultIterable<MovieWrapper> iterable = null;
          try {
-             iterable = cupboard().withDatabase(getReadableDatabase()).query(Movie.class)
+             iterable = cupboard().withDatabase(getReadableDatabase()).query(MovieWrapper.class)
                      .withSelection(selection, selectionArgs)
                      .query();
          } finally {

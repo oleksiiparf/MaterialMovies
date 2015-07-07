@@ -78,7 +78,7 @@ public abstract class BaseMovieRunnable<R> extends NetworkCallRunnable<R> {
         return new BaseState.ShowLoadingProgressEvent(getCallingId(), show);
     }
 
-    public Lazy<EntitityMapper> getLazyEntityMapper() {
-        return mLazyEntityMapper;
+    public EntitityMapper getEntityMapper() {
+        return mLazyEntityMapper.get();
     }
 }

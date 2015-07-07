@@ -1,5 +1,6 @@
 package com.roodie.model.state;
 
+import com.roodie.model.entities.MovieWrapper;
 import com.uwetrottmann.tmdb.entities.Movie;
 
 import java.util.Collection;
@@ -10,13 +11,13 @@ import java.util.List;
  */
 public interface DatabaseHelper {
 
-    void put(Movie movie);
+    void put(MovieWrapper movie);
 
-    void put(Collection<Movie> movies);
+    void put(Collection<MovieWrapper> movies);
 
-    List<Movie> getWatchList();
+    List<MovieWrapper> getWatchList();
 
-    void delete(Collection<Movie> movies);
+    void delete(Collection<MovieWrapper> movies);
 
     void deleteAllMovies();
 

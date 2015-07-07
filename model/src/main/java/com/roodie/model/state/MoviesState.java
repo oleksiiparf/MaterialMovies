@@ -1,6 +1,8 @@
 package com.roodie.model.state;
 
 import com.roodie.model.entities.ListItem;
+import com.roodie.model.entities.MovieWrapper;
+import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.TmdbConfiguration;
 import com.google.common.base.Preconditions;
 import com.uwetrottmann.tmdb.entities.Configuration;
@@ -15,17 +17,19 @@ import java.util.Map;
  */
 public interface MoviesState extends BaseState {
 
-    public Map<String, Movie> getTmdbIdMovies();
+    public Map<String, MovieWrapper> getTmdbIdMovies();
 
-    public Movie getMovie(String id);
+    public Map<String, MovieWrapper> getImdbIdMovies();
 
-    public Movie getMovie(int id);
+    public MovieWrapper getMovie(String id);
 
-    public void putMovie(Movie movie);
+    public MovieWrapper getMovie(int id);
 
-    public List<Movie> getTrending();
+    public void putMovie(MovieWrapper movie);
 
-    public void setTrending(List<Movie> trending);
+    public List<MovieWrapper> getTrending();
+
+    public void setTrending(List<MovieWrapper> trending);
 
     public MoviePaginatedResult getPopular();
 
@@ -39,24 +43,24 @@ public interface MoviesState extends BaseState {
 
     public void setUpcoming(MoviePaginatedResult upcoming);
 
-    public List<Movie> getWatchlist();
+    public List<MovieWrapper> getWatchlist();
 
-    public void setWatchlist(List<Movie> watchlist);
+    public void setWatchlist(List<MovieWrapper> watchlist);
 
     public List<Movie> getRecommended();
 
-    public void setRecommended(List<Movie> recommended);
+    public void setRecommended(List<MovieWrapper> recommended);
 
     public Configuration getTmdbConfiguration();
 
     public void setTmdbConfiguration(TmdbConfiguration configuration);
 
 
-    public Map<String, Person> getPeople();
+    public Map<String, PersonWrapper> getPeople();
 
-    public Person getPerson(int id);
+    public PersonWrapper getPerson(int id);
 
-    public Person getPerson(String id);
+    public PersonWrapper getPerson(String id);
 
     public static class LibraryChangedEvent {}
 
@@ -78,65 +82,65 @@ public interface MoviesState extends BaseState {
 
     public static class WatchingMovieUpdatedEvent {}
 
-    public static class MovieInformationUpdatedEvent extends BaseArgumentEvent<Movie> {
-        public MovieInformationUpdatedEvent(int callingId, Movie item) {
+    public static class MovieInformationUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
+        public MovieInformationUpdatedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class MovieReleasesUpdatedEvent extends BaseArgumentEvent<Movie> {
-        public MovieReleasesUpdatedEvent(int callingId, Movie item) {
+    public static class MovieReleasesUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
+        public MovieReleasesUpdatedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class MovieRelatedItemsUpdatedEvent extends BaseArgumentEvent<Movie> {
-        public MovieRelatedItemsUpdatedEvent(int callingId, Movie item) {
+    public static class MovieRelatedItemsUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
+        public MovieRelatedItemsUpdatedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class MovieVideosItemsUpdatedEvent extends BaseArgumentEvent<Movie> {
-        public MovieVideosItemsUpdatedEvent(int callingId, Movie item) {
+    public static class MovieVideosItemsUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
+        public MovieVideosItemsUpdatedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class MovieImagesUpdatedEvent extends BaseArgumentEvent<Movie> {
-        public MovieImagesUpdatedEvent(int callingId, Movie item) {
+    public static class MovieImagesUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
+        public MovieImagesUpdatedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class MovieCastItemsUpdatedEvent extends BaseArgumentEvent<Movie> {
-        public MovieCastItemsUpdatedEvent(int callingId, Movie item) {
+    public static class MovieCastItemsUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
+        public MovieCastItemsUpdatedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class MovieUserRatingChangedEvent extends BaseArgumentEvent<Movie> {
-        public MovieUserRatingChangedEvent(int callingId, Movie item) {
+    public static class MovieUserRatingChangedEvent extends BaseArgumentEvent<MovieWrapper> {
+        public MovieUserRatingChangedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class PersonChangedEvent extends BaseArgumentEvent<Person> {
-        public PersonChangedEvent(int callingId, Person item) {
+    public static class PersonChangedEvent extends BaseArgumentEvent<PersonWrapper> {
+        public PersonChangedEvent(int callingId, PersonWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class MovieFlagsUpdatedEvent extends BaseArgumentEvent<List<Movie>> {
-        public MovieFlagsUpdatedEvent(int callingId, List<Movie> item) {
+    public static class MovieFlagsUpdatedEvent extends BaseArgumentEvent<List<MovieWrapper>> {
+        public MovieFlagsUpdatedEvent(int callingId, List<MovieWrapper> item) {
             super(callingId, item);
         }
     }
 
 
-    public class MoviePaginatedResult extends PaginatedResult<Movie> {
+    public class MoviePaginatedResult extends PaginatedResult<MovieWrapper> {
     }
 
-    public class PersonPaginatedResult extends PaginatedResult<Person> {
+    public class PersonPaginatedResult extends PaginatedResult<PersonWrapper> {
     }
 
     public class SearchResult {

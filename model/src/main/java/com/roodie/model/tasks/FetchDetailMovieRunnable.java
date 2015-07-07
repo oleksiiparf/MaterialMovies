@@ -1,9 +1,14 @@
 package com.roodie.model.tasks;
 
+import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.state.MoviesState;
+import com.roodie.model.util.MoviesCollections;
 import com.uwetrottmann.tmdb.entities.AppendToResponse;
 import com.uwetrottmann.tmdb.entities.Movie;
 import com.uwetrottmann.tmdb.enumerations.AppendToResponseItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit.RetrofitError;
 
@@ -35,14 +40,40 @@ public class FetchDetailMovieRunnable extends  BaseMovieRunnable<Movie> {
     @Override
     public void onSuccess(Movie result) {
 
-        getDbHelper().put(result);
-        getEventBus().post(new MoviesState.MovieInformationUpdatedEvent(getCallingId(), result));
+        MovieWrapper movie = getEntityMapper().map(result);
+        movie.markFullFetchCompleted();
+
+        // Releases depends on country, need to update manually
+        if (result.releases != null) {
+            movie.updateReleases(result.releases,
+                    getCountryProvider().getTwoLetterCountryCode());
+        }
+
+        //Releases should be mapped due to entity mapper
+        if (result.similar_movies != null) {
+            List<MovieWrapper> movies = new ArrayList<>(result.similar_movies.results.size());
+            for (Movie mMovie: result.similar_movies.results) {
+                movies.add(getEntityMapper().map(mMovie));
+            }
+            movie.setRelated(movies);
+        }
+
+        if (result.credits != null && !MoviesCollections.isEmpty(result.credits.cast)){
+            movie.setCast(getEntityMapper().mapCredits(result.credits.cast));
+        }
+
+        if (result.credits != null && !MoviesCollections.isEmpty(result.credits.crew)){
+            movie.setCrew(getEntityMapper().mapCredits(result.credits.crew));
+        }
+
+        getDbHelper().put(movie);
+        getEventBus().post(new MoviesState.MovieInformationUpdatedEvent(getCallingId(), movie));
     }
 
     @Override
     public void onError(RetrofitError re) {
         if (re.getResponse() != null && re.getResponse().getStatus() == 404) {
-            Movie movie = mMoviesState.getMovie(mId);
+            MovieWrapper movie = mMoviesState.getMovie(mId);
             if (movie != null) {
                 getDbHelper().put(movie);
                 getEventBus()

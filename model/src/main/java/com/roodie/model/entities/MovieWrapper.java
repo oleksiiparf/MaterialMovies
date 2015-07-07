@@ -3,13 +3,14 @@ package com.roodie.model.entities;
 import android.text.TextUtils;
 
 import com.google.common.base.Preconditions;
-import com.roodie.model.Constants;
+import com.roodie.model.util.CountryProvider;
 import com.roodie.model.util.IntUtils;
 import com.roodie.model.util.MoviesCollections;
-import com.roodie.model.util.TimeUtils;
+import com.uwetrottmann.tmdb.entities.CountryRelease;
 import com.uwetrottmann.tmdb.entities.Genre;
 import com.uwetrottmann.tmdb.entities.Image;
 import com.uwetrottmann.tmdb.entities.Movie;
+import com.uwetrottmann.tmdb.entities.Releases;
 import com.uwetrottmann.tmdb.entities.SpokenLanguage;
 import com.uwetrottmann.tmdb.entities.Video;
 import com.uwetrottmann.tmdb.entities.Videos;
@@ -164,6 +165,44 @@ public class MovieWrapper {
         }
     }
 
+    public void updateReleases(final Releases releases, final String countryCode) {
+        Preconditions.checkNotNull(releases, "releases cannot be null");
+
+        if (!MoviesCollections.isEmpty(releases.countries)) {
+            CountryRelease countryRelease = null;
+            CountryRelease usRelease = null;
+
+            for (CountryRelease release : releases.countries) {
+                if (countryCode != null && countryCode.equalsIgnoreCase(release.iso_3166_1)) {
+                    countryRelease = release;
+                    break;
+                } else if (CountryProvider.US_TWO_LETTER_CODE
+                        .equalsIgnoreCase(release.iso_3166_1)) {
+                    usRelease = release;
+                }
+            }
+
+            if (countryRelease == null) {
+                countryRelease = usRelease;
+            }
+
+            if (countryRelease != null) {
+                if (!TextUtils.isEmpty(countryRelease.certification)) {
+                    tmdbCertification = countryRelease.certification;
+                }
+                if (countryRelease.release_date != null) {
+                    tmdbReleasedTime = countryRelease.release_date.getTime();
+                    tmdbReleasedCountryCode = countryRelease.iso_3166_1;
+
+                    if (tmdbYear == 0 && tmdbReleasedTime != 0) {
+                        CALENDAR.setTimeInMillis(tmdbReleasedTime);
+                        tmdbYear = CALENDAR.get(Calendar.YEAR);
+                    }
+                }
+            }
+        }
+    }
+
     private static String getGenresString(List<Genre> list) {
         if (!MoviesCollections.isEmpty(list)) {
             StringBuffer sb = new StringBuffer();
@@ -254,6 +293,22 @@ public class MovieWrapper {
 
     public void setCast(List<MovieCreditWrapper> cast) {
         this.cast = cast;
+    }
+
+    public long getTmdbReleasedTime() {
+        return tmdbReleasedTime;
+    }
+
+    public void setTmdbReleasedTime(long tmdbReleasedTime) {
+        this.tmdbReleasedTime = tmdbReleasedTime;
+    }
+
+    public List<MovieWrapper> getRelated() {
+        return related;
+    }
+
+    public void setRelated(List<MovieWrapper> related) {
+        this.related = related;
     }
 
     public int getAverageRatingPercent() {
