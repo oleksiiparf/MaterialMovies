@@ -5,7 +5,7 @@ import com.uwetrottmann.tmdb.entities.Video;
 /**
  * Created by Roodie on 25.06.2015.
  */
-public class MMoviesTrailer {
+public class TrailerWrapper {
 
     private static final String SOURCE_YOUTUBE = "youtube";
 
@@ -24,7 +24,7 @@ public class MMoviesTrailer {
     private String mName;
     private Type mType;
 
-    public void setFromTmdb(Video video) {
+    public void set(Video video) {
         if (SOURCE_YOUTUBE.equalsIgnoreCase(video.site)) {
             mSource = Source.YOUTUBE;
         } else {

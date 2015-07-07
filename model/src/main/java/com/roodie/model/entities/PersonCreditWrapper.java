@@ -8,12 +8,12 @@ import java.util.Comparator;
 /**
  * Created by Roodie on 02.07.2015.
  */
-public  class MMoviesPersonCredit {
+public  class PersonCreditWrapper extends BasicWrapper{
 
-    public static final Comparator<MMoviesPersonCredit> COMPARATOR_SORT_DATE
-            = new Comparator<MMoviesPersonCredit>() {
+    public static final Comparator<PersonCreditWrapper> COMPARATOR_SORT_DATE
+            = new Comparator<PersonCreditWrapper>() {
         @Override
-        public int compare(MMoviesPersonCredit movie, MMoviesPersonCredit movie2) {
+        public int compare(PersonCreditWrapper movie, PersonCreditWrapper movie2) {
             if (movie.releaseDate > movie2.releaseDate) {
                 return -1;
             } else if (movie.releaseDate < movie2.releaseDate) {
@@ -29,7 +29,7 @@ public  class MMoviesPersonCredit {
     final String posterPath;
     final long releaseDate;
 
-    public MMoviesPersonCredit(PersonCastCredit credit) {
+    public PersonCreditWrapper(PersonCastCredit credit) {
         this.id = credit.id;
         this.title = credit.title;
         this.posterPath = credit.poster_path;
@@ -37,7 +37,7 @@ public  class MMoviesPersonCredit {
         this.releaseDate = credit.release_date != null ? credit.release_date.getTime() : 0;
     }
 
-    public MMoviesPersonCredit(PersonCrewCredit credit) {
+    public PersonCreditWrapper(PersonCrewCredit credit) {
         this.id = credit.id;
         this.title = credit.title;
         this.posterPath = credit.poster_path;
