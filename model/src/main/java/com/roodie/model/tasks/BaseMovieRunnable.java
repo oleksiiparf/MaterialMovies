@@ -4,6 +4,7 @@ import com.roodie.model.network.NetworkCallRunnable;
 import com.roodie.model.network.NetworkError;
 import com.roodie.model.state.AsyncDatabaseHelper;
 import com.roodie.model.state.BaseState;
+import com.roodie.model.state.EntitityMapper;
 import com.roodie.model.state.MoviesState;
 import com.roodie.model.util.CountryProvider;
 import com.squareup.otto.Bus;
@@ -25,6 +26,7 @@ public abstract class BaseMovieRunnable<R> extends NetworkCallRunnable<R> {
     @Inject Lazy<Bus> mEventBus;
     @Inject Lazy<AsyncDatabaseHelper> mDbHelper;
     @Inject Lazy<CountryProvider> mCountryProvider;
+    @Inject Lazy<EntitityMapper> mLazyEntityMapper;
 
 
 
@@ -76,5 +78,7 @@ public abstract class BaseMovieRunnable<R> extends NetworkCallRunnable<R> {
         return new BaseState.ShowLoadingProgressEvent(getCallingId(), show);
     }
 
-
+    public Lazy<EntitityMapper> getLazyEntityMapper() {
+        return mLazyEntityMapper;
+    }
 }
