@@ -69,7 +69,6 @@ public interface BaseState {
         }
     }
 
-
     public static class ShowRelatedLoadingProgressEvent extends ShowLoadingProgressEvent {
         public ShowRelatedLoadingProgressEvent(int callingId, boolean show) {
             super(callingId, show);
