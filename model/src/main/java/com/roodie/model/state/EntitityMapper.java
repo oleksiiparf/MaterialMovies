@@ -70,7 +70,7 @@ public class EntitityMapper {
         return item;
     }
 
-    public List<MovieCreditWrapper> mapCredits(List<CrewMember> entities) {
+    public List<MovieCreditWrapper> mapCrewCredits(List<CrewMember> entities) {
         final ArrayList<MovieCreditWrapper> credits = new ArrayList<>(entities.size());
         for (CrewMember entity : entities) {
             credits.add(new MovieCreditWrapper(map(entity), entity.job, entity.department));
@@ -98,7 +98,7 @@ public class EntitityMapper {
         return item;
     }
 
-    public List<MovieCreditWrapper> mapCredits(List<CastMember> entities) {
+    public List<MovieCreditWrapper> mapCastCredits(List<CastMember> entities) {
         final ArrayList<MovieCreditWrapper> credits = new ArrayList<>(entities.size());
         for (CastMember entity : entities) {
             credits.add(new MovieCreditWrapper(map(entity), entity.character, entity.order));

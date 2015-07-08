@@ -70,7 +70,23 @@ public interface BaseState {
     }
 
 
+    public static class ShowRelatedLoadingProgressEvent extends ShowLoadingProgressEvent {
+        public ShowRelatedLoadingProgressEvent(int callingId, boolean show) {
+            super(callingId, show);
+        }
+    }
 
+    public static class ShowCreditLoadingProgressEvent extends ShowLoadingProgressEvent {
+        public ShowCreditLoadingProgressEvent(int callingId, boolean show) {
+            super(callingId, show);
+        }
+    }
+
+    public static class ShowVideosLoadingProgressEvent extends ShowLoadingProgressEvent {
+        public ShowVideosLoadingProgressEvent(int callingId, boolean show) {
+            super(callingId, show);
+        }
+    }
 
     public static class OnErrorEvent {
         public final int callingId;
