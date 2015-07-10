@@ -1,10 +1,10 @@
 package com.roodie.materialmovies.modules;
 
 import com.roodie.materialmovies.modules.library.NetworkProvider;
+import com.roodie.materialmovies.modules.library.PersistanceProvider;
 import com.roodie.materialmovies.modules.library.StateProvider;
 import com.roodie.materialmovies.modules.library.UtilProvider;
 import com.roodie.materialmovies.views.MMoviesApplication;
-
 
 import dagger.Module;
 
@@ -15,7 +15,8 @@ import dagger.Module;
         includes = {
                 UtilProvider.class,
                 NetworkProvider.class,
-                StateProvider.class
+                StateProvider.class,
+                PersistanceProvider.class
         }
 
 )
