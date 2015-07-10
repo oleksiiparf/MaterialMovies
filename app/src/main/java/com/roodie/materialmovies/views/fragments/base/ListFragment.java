@@ -3,6 +3,7 @@ package com.roodie.materialmovies.views.fragments.base;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +14,16 @@ import android.widget.ListAdapter;
 /**
  * Created by Roodie on 01.07.2015.
  */
-public abstract class ListFragment<E extends AbsListView> extends BaseFragment {
+public abstract class ListFragment<E extends AbsListView> extends BaseFragment implements AbsListView.OnScrollListener {
 
     ListAdapter mAdapter;
     E mListView;
+
+    private int mFirstVisiblePosition;
+    private int mFirstVisiblePositionTop;
+
+    private boolean mLoadMoreIsAtBottom;
+    private int mLoadMoreRequestedItemCount;
 
     public ListFragment() {
     }
@@ -87,6 +94,25 @@ public abstract class ListFragment<E extends AbsListView> extends BaseFragment {
     public void onListItemClick(E l, View v, int position, long id) {
     }
 
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        mLoadMoreIsAtBottom = totalItemCount > mLoadMoreRequestedItemCount
+                && firstVisibleItem + visibleItemCount == totalItemCount;
+
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && mLoadMoreIsAtBottom) {
+            if (onScrolledToBottom()) {
+                mLoadMoreRequestedItemCount = view.getCount();
+                mLoadMoreIsAtBottom = false;
+            }
+        }
+    }
+
+    protected abstract boolean onScrolledToBottom();
+
     final private AdapterView.OnItemClickListener mOnClickListener =
             new AdapterView.OnItemClickListener() {
                 @Override
@@ -94,6 +120,8 @@ public abstract class ListFragment<E extends AbsListView> extends BaseFragment {
                     onListItemClick((E)parent, view, position, id);
                 }
             };
+
+
 
 }
 
