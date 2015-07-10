@@ -1,7 +1,5 @@
 package com.roodie.materialmovies.mvp.presenters;
 
-import android.view.View;
-
 import com.google.common.base.Preconditions;
 import com.roodie.model.Display;
 
@@ -16,6 +14,8 @@ import com.roodie.model.Display;
  */
 abstract class BasePresenter {
 
+
+    private Display mDisplay;
     private boolean mInited;
 
     /**
@@ -49,8 +49,12 @@ abstract class BasePresenter {
 
     protected void onPaused() {}
 
-    public abstract boolean hasCallbacks();
+    public Display getDisplay() {
+        return mDisplay;
+    }
 
-
+    public void setDisplay(Display mDisplay) {
+        this.mDisplay = mDisplay;
+    }
 }
 

@@ -3,7 +3,6 @@ package com.roodie.materialmovies.views.fragments.base;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +43,18 @@ public abstract class ListFragment<E extends AbsListView> extends BaseFragment i
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getListView().setOnScrollListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        saveListViewPosition();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     /**
@@ -65,6 +76,29 @@ public abstract class ListFragment<E extends AbsListView> extends BaseFragment i
         this.mAdapter = mAdapter;
         if (mListView != null) {
             mListView.setAdapter(mAdapter);
+        }
+    }
+
+    private void saveListViewPosition() {
+        E listView = getListView();
+
+        mFirstVisiblePosition = listView.getFirstVisiblePosition();
+
+        if (mFirstVisiblePosition != AdapterView.INVALID_POSITION && listView.getChildCount() > 0) {
+            mFirstVisiblePositionTop = listView.getChildAt(0).getTop();
+        }
+    }
+
+    protected void moveListViewToSavedPositions() {
+        final E list = getListView();
+        if (mFirstVisiblePosition != AdapterView.INVALID_POSITION
+                && list.getFirstVisiblePosition() <= 0) {
+            list.post(new Runnable() {
+                @Override
+                public void run() {
+                    list.setSelection(mFirstVisiblePosition);
+                }
+            });
         }
     }
 

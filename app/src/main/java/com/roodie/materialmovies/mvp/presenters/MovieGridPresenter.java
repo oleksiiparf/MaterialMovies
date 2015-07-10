@@ -1,8 +1,11 @@
 package com.roodie.materialmovies.mvp.presenters;
 
-import android.view.View;
+import android.os.Bundle;
+import android.text.TextUtils;
 
+import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.mvp.views.BaseMovieListView;
+import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
 
 
@@ -28,17 +31,25 @@ public class MovieGridPresenter extends BasePresenter {
         super.onPaused();
     }
 
-    @Override
-    public boolean hasCallbacks() {
-        return mMovieGridView != null;
-    }
 
     protected void attachView(MovieGridView view) {
         this.mMovieGridView = view;
     }
 
-    public MovieGridView getCallbacks() {
-        return mMovieGridView;
+    public void showMovieDetail(MovieWrapper movie, Bundle bundle){
+        Preconditions.checkNotNull(movie, "movie cannot be null");
+        Display display = getDisplay();
+        if (display != null) {
+            if (!TextUtils.isEmpty(movie.getImdbId())) {
+                display.startMovieDetailActivity(movie.getImdbId(), bundle);
+            }
+        }
+    }
+
+
+    public void onScrolledToBottom(){
+
+
     }
 
     public interface MovieGridView extends BaseMovieListView<MovieWrapper> {

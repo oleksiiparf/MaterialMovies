@@ -1,17 +1,19 @@
 package com.roodie.materialmovies.views.adapters;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.roodie.materialmovies.R;
+import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.model.entities.ListItem;
-import com.uwetrottmann.tmdb.entities.Movie;
+import com.roodie.model.entities.MovieWrapper;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by Roodie on 29.06.2015.
@@ -21,15 +23,15 @@ public class MovieGridAdapter extends BaseAdapter {
     private final Activity mActivity;
     private final LayoutInflater mLayoutInflater;
 
-    private List<ListItem<Movie>> mItems;
+    private List<ListItem<MovieWrapper>> mItems;
 
     public MovieGridAdapter(Activity activity) {
         this.mActivity = activity;
         mLayoutInflater = mActivity.getLayoutInflater();
     }
 
-private void setitems(List<ListItem<Movie>> items) {
-    if (!Objects.equals(items, mItems)) {
+    public void setItems(List<ListItem<MovieWrapper>> items) {
+    if (!items.equals(mItems)) {
         mItems = items;
         notifyDataSetChanged();
     }
@@ -46,7 +48,7 @@ private void setitems(List<ListItem<Movie>> items) {
     }
 
     @Override
-    public ListItem<Movie> getItem(int position) {
+    public ListItem<MovieWrapper> getItem(int position) {
         return mItems.get(position);
     }
 
@@ -57,6 +59,25 @@ private void setitems(List<ListItem<Movie>> items) {
         if (view == null) {
             view = mLayoutInflater.inflate(R.layout.item_grid_movie, parent, false);
         }
+        final MovieWrapper movie = getItem(position).getListItem();
+
+        final MMoviesImageView imageView = (MMoviesImageView) view.findViewById(R.id.image_poster);
+        imageView.loadPoster(movie, new MMoviesImageView.OnLoadedListener() {
+            @Override
+            public void onSuccess(MMoviesImageView imageView, Bitmap bitmap) {
+
+            }
+
+            @Override
+            public void onError(MMoviesImageView imageView) {
+
+            }
+        });
+
+        final TextView title = (TextView) view.findViewById(R.id.textview_title);
+        title.setText(movie.getTmdbTitle());
+
+
         return view;
     }
 }
