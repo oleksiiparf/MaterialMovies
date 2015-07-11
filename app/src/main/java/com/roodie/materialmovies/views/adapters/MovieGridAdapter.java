@@ -1,15 +1,19 @@
 package com.roodie.materialmovies.views.adapters;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
+import com.roodie.materialmovies.settings.DisplaySettings;
+import com.roodie.materialmovies.settings.TmdbSettings;
+import com.roodie.materialmovies.util.MMoviesServiceUtils;
+import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
 
@@ -22,12 +26,26 @@ public class MovieGridAdapter extends BaseAdapter {
 
     private final Activity mActivity;
     private final LayoutInflater mLayoutInflater;
+    private Context mContext;
+    private MMoviesServiceUtils mUtils;
 
     private List<ListItem<MovieWrapper>> mItems;
+
+    private String mImageBaseUrl;
 
     public MovieGridAdapter(Activity activity) {
         this.mActivity = activity;
         mLayoutInflater = mActivity.getLayoutInflater();
+        this.mContext = mActivity.getApplicationContext();
+        mUtils = MMoviesApplication.from(mContext).getMMoviesServiceUtils();
+        if (DisplaySettings.isHighDestinyScreen(mContext)) {
+            mImageBaseUrl = TmdbSettings.getImageBaseUrl(mContext)
+                    + TmdbSettings.POSTER_SIZE_SPEC_W342;
+        } else {
+            mImageBaseUrl = TmdbSettings.getImageBaseUrl(mContext)
+                    + TmdbSettings.POSTER_SIZE_SPEC_W154;
+        }
+
     }
 
     public void setItems(List<ListItem<MovieWrapper>> items) {
@@ -54,30 +72,36 @@ public class MovieGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
+        ViewHolder holder;
 
-        if (view == null) {
-            view = mLayoutInflater.inflate(R.layout.item_grid_movie, parent, false);
+        if (convertView == null) {
+            convertView = mLayoutInflater.inflate(R.layout.item_grid_movie, null);
+
+            holder = new ViewHolder();
+            holder.title = (TextView) convertView.findViewById(R.id.title);
+            holder.poster = (ImageView) convertView.findViewById(R.id.poster);
+
+
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
+
         final MovieWrapper movie = getItem(position).getListItem();
 
-        final MMoviesImageView imageView = (MMoviesImageView) view.findViewById(R.id.image_poster);
-        imageView.loadPoster(movie, new MMoviesImageView.OnLoadedListener() {
-            @Override
-            public void onSuccess(MMoviesImageView imageView, Bitmap bitmap) {
+        holder.title.setText(movie.getTmdbTitle());
 
-            }
+        //load poster
+        mUtils.loadWithPicasso(mContext, mImageBaseUrl + movie.getPosterUrl())
+                .into(holder.poster);
 
-            @Override
-            public void onError(MMoviesImageView imageView) {
-
-            }
-        });
-
-        final TextView title = (TextView) view.findViewById(R.id.textview_title);
-        title.setText(movie.getTmdbTitle());
-
-
-        return view;
+        return convertView;
     }
+
+    static class ViewHolder {
+        TextView title;
+
+        ImageView poster;
+    }
+
 }

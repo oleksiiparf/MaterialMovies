@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import com.roodie.materialmovies.qualifiers.AppContext;
 import com.roodie.materialmovies.util.AndroidMMoviesPreferences;
+import com.roodie.materialmovies.util.MMoviesAndroidUtils;
 import com.roodie.model.util.MMoviesPreferences;
 
 import javax.inject.Singleton;
@@ -31,5 +32,11 @@ public class PersistanceProvider {
     public MMoviesPreferences provideMMoviesPreferences(@AppContext Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return new AndroidMMoviesPreferences(preferences);
+    }
+
+
+    @Provides @Singleton
+    public MMoviesAndroidUtils provideMMoviesAndroidUtils() {
+        return new MMoviesAndroidUtils();
     }
 }

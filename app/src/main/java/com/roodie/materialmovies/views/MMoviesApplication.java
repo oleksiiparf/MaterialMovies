@@ -6,6 +6,9 @@ import android.content.Context;
 import com.roodie.materialmovies.modules.ApplicationModule;
 import com.roodie.materialmovies.modules.TaskProvider;
 import com.roodie.materialmovies.modules.library.ContextProvider;
+import com.roodie.materialmovies.util.MMoviesServiceUtils;
+
+import javax.inject.Inject;
 
 import dagger.ObjectGraph;
 
@@ -18,6 +21,8 @@ public class MMoviesApplication extends Application  {
         return (MMoviesApplication) context.getApplicationContext();
     }
 
+    @Inject
+    MMoviesServiceUtils mMMoviesServiceUtils;
     private ObjectGraph mObjectGraph;
 
     @Override
@@ -34,6 +39,10 @@ public class MMoviesApplication extends Application  {
 
     public ObjectGraph getObjectGraph() {
         return mObjectGraph;
+    }
+
+    public MMoviesServiceUtils getMMoviesServiceUtils() {
+        return mMMoviesServiceUtils;
     }
 
     public void inject(Object object) {
