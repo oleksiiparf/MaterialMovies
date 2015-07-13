@@ -20,6 +20,8 @@ import android.os.Bundle;
 
 public interface Display {
 
+    public static final String PARAM_ID = "_id";
+
     public void showPopular();
 
     public void startMovieDetailActivity(String movieId, Bundle bundle);
@@ -30,9 +32,7 @@ public interface Display {
 
     public void showMovieImagesFragment(String movieId);
 
-    public void startAboutActivity();
-
-    public void showAboutFragment();
+    public void startSettingsActivity();
 
     public void closeDrawerLayout();
 
@@ -44,27 +44,25 @@ public interface Display {
 
     public boolean popEntireFragmentBackStack();
 
-    public void showUpNavigation(boolean show);
-
     public void finishActivity();
 
     public void showRelatedMovies(String movieId);
 
-    public void showCastList(String movieId);
+    public void showCastListFragment(String movieId);
 
-    public void showCrewList(String movieId);
+    public void showCrewListFragment(String movieId);
 
     public void showPersonDetailActivity(String id, Bundle bundle);
 
-    public void showPersonDetail(String id);
+    public void showPersonDetailFragment(String id);
 
-    public void showPersonCastCredits(String id);
+    public void showPersonCastCreditsFragment(String id);
 
-    public void showPersonCrewCredits(String id);
-
-    public void showCredentialsChanged();
+    public void showPersonCrewCreditsFragment(String id);
 
     public void playYoutubeVideo(String id);
+
+    public boolean toggleDrawer();
 
     public void setStatusBarColor(float scroll);
 
