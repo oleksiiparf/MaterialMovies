@@ -15,14 +15,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * Created by Roodie on 07.07.2015.
  */
+
+@Singleton
 public class EntitityMapper {
 
-    final MoviesState mMoviesState;
+    final ApplicationState mMoviesState;
 
-    public EntitityMapper(MoviesState mMoviesState) {
+    @Inject
+    public EntitityMapper(ApplicationState mMoviesState) {
         this.mMoviesState = Preconditions.checkNotNull(mMoviesState, "mMoviesState cannot be null");
     }
 

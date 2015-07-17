@@ -5,7 +5,7 @@ import com.uwetrottmann.tmdb.entities.Video;
 /**
  * Created by Roodie on 25.06.2015.
  */
-public class TrailerWrapper {
+public class TrailerWrapper extends BasicWrapper<TrailerWrapper> {
 
     private static final String SOURCE_YOUTUBE = "youtube";
 

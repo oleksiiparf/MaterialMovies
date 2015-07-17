@@ -10,7 +10,6 @@ import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.TmdbConfiguration;
 import com.squareup.otto.Bus;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -98,11 +97,6 @@ public  class ApplicationState implements BaseState, MoviesState {
     @Override
     public void setPopular(MoviePaginatedResult popular) {
         mPopular = popular;
-        List<MovieWrapper> items = mPopular.items;
-        if (items != null) {
-            System.out.println("ApplicationState: items != null");
-        }
-        System.out.println("ApplicationState: Popular: " + items);
         mEventBus.post(new PopularChangedEvent());
     }
 

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Roodie on 07.07.2015.
  */
-public class PersonWrapper extends  BasicWrapper {
+public class PersonWrapper extends  BasicWrapper<PersonWrapper> {
 
     Integer tmdbId;
     String name;
@@ -27,7 +27,7 @@ public class PersonWrapper extends  BasicWrapper {
 
     transient List<PersonCreditWrapper> castCredits;
     transient List<PersonCreditWrapper> crewCredits;
-    transient boolean fetchedCredits;
+    transient boolean isfetchedCredits;
 
     public void set(CrewMember member) {
         tmdbId = member.id;
@@ -100,8 +100,20 @@ public class PersonWrapper extends  BasicWrapper {
         return crewCredits;
     }
 
+    public void setCastCredits(List<PersonCreditWrapper> castCredits) {
+        this.castCredits = castCredits;
+    }
+
+    public void setCrewCredits(List<PersonCreditWrapper> crewCredits) {
+        this.crewCredits = crewCredits;
+    }
+
     public boolean isFetchedCredits() {
-        return fetchedCredits;
+        return isfetchedCredits;
+    }
+
+    public void setfetchedCredits(boolean fetchedCredits) {
+        this.isfetchedCredits = fetchedCredits;
     }
 
     private void calculateAge() {

@@ -8,7 +8,7 @@ import java.util.Comparator;
 /**
  * Created by Roodie on 02.07.2015.
  */
-public  class PersonCreditWrapper extends BasicWrapper{
+public  class PersonCreditWrapper extends BasicWrapper<PersonCreditWrapper> {
 
     public static final Comparator<PersonCreditWrapper> COMPARATOR_SORT_DATE
             = new Comparator<PersonCreditWrapper>() {

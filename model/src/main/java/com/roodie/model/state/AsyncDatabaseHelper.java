@@ -1,20 +1,14 @@
 package com.roodie.model.state;
 
 import com.roodie.model.entities.MovieWrapper;
-import com.uwetrottmann.tmdb.entities.Movie;
 
 import java.util.Collection;
-import java.util.List;
+
 
 /**
  * Created by Roodie on 24.06.2015.
  */
 public interface AsyncDatabaseHelper {
-
-    public void mergeWatchlist(List<MovieWrapper> watchlist);
-
-    public void getWatchlist(Callback<List<MovieWrapper>> callback);
-
 
     public void put(Collection<MovieWrapper> movies);
 

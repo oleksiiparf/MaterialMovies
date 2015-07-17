@@ -3,7 +3,7 @@ package com.roodie.model.entities;
 /**
  * Created by Roodie on 07.07.2015.
  */
-public abstract class BasicWrapper implements ListItem{
+public abstract class BasicWrapper<C> implements ListItem<C>{
 
     public static final int TYPE_TMDB = 1;
     public static final int TYPE_IMDB = 2;
@@ -14,12 +14,13 @@ public abstract class BasicWrapper implements ListItem{
     }
 
     @Override
-    public Object getListItem() {
-        return  this;
+    public C getListItem() {
+        return (C) this;
     }
 
     @Override
     public int getListSectionTitle() {
         return 0;
     }
+
 }

@@ -23,13 +23,15 @@ import java.util.List;
 /**
  * Created by Roodie on 07.07.2015.
  */
-public class MovieWrapper {
+public class MovieWrapper extends BasicWrapper<MovieWrapper> {
 
+    public static final int NOT_SET = 0;
     public static final int TYPE_TMDB = 1;
     public static final int TYPE_IMDB = 2;
 
     private static final Calendar CALENDAR = Calendar.getInstance();
 
+    Long _id;
     int idType;
     String imdbId;
     Integer tmdbId;
@@ -66,16 +68,16 @@ public class MovieWrapper {
 
     String tmdbMainLanguage;
 
-    long lastFullFetchFromTmdbStarted;
-    long lastFullFetchFromTmdbCompleted;
+    transient long lastFullFetchFromTmdbStarted;
+    transient long lastFullFetchFromTmdbCompleted;
 
     boolean loadedFromTmdb;
 
-    List<MovieWrapper> related;
-    List<MovieCreditWrapper> cast;
-    List<MovieCreditWrapper> crew;
-    List<TrailerWrapper> trailers;
-    List<BackgroundImage> backgroundImages;
+    transient List<MovieWrapper> related;
+    transient List<MovieCreditWrapper> cast;
+    transient List<MovieCreditWrapper> crew;
+    transient List<TrailerWrapper> trailers;
+    transient List<BackgroundImage> backgroundImages;
 
     public MovieWrapper() {
     }
@@ -89,6 +91,18 @@ public class MovieWrapper {
 
         if (!TextUtils.isEmpty(movie.imdb_id)) {
             imdbId = movie.imdb_id;
+        }
+
+        if (_id == null || idType == NOT_SET ) {
+            if (!TextUtils.isEmpty(imdbId)) {
+                _id = new Long(imdbId.hashCode());
+                idType = TYPE_IMDB;
+            } else if (tmdbId != null) {
+                _id = new Long(tmdbId);
+                idType = TYPE_TMDB;
+            } else {
+                idType = NOT_SET;
+            }
         }
 
         if (!TextUtils.isEmpty(movie.title)) {
@@ -234,6 +248,10 @@ public class MovieWrapper {
         return newValue != null ? newValue.getTime() : currentValue;
     }
 
+    public Long getDBId() {
+        return _id;
+    }
+
     public int getIdType() {
         return idType;
     }
@@ -253,6 +271,10 @@ public class MovieWrapper {
 
     public boolean hasPosterUrl() {
         return !TextUtils.isEmpty(tmdbPosterUrl);
+    }
+
+    public String getPosterUrl() {
+        return tmdbPosterUrl;
     }
 
     public boolean hasBackdropUrl() {
@@ -303,6 +325,10 @@ public class MovieWrapper {
         this.tmdbReleasedTime = tmdbReleasedTime;
     }
 
+    public String getTmdbBackdropUrl() {
+        return tmdbBackdropUrl;
+    }
+
     public List<MovieWrapper> getRelated() {
         return related;
     }
@@ -335,6 +361,10 @@ public class MovieWrapper {
                 lastFullFetchFromTmdbCompleted = System.currentTimeMillis();
         }
 
+    @Override
+    public String toString() {
+        return new StringBuffer().append(tmdbId).append(" ").append(imdbId).append(" ").append(tmdbTitle+ "  ").toString();
+    }
 
     public static class BackgroundImage {
         public final String url;
