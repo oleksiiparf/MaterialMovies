@@ -4,7 +4,6 @@ import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.TmdbConfiguration;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,10 +25,6 @@ public interface MoviesState extends BaseState {
 
     public void setPopular(MoviePaginatedResult popular);
 
-    public List<MovieWrapper> getRecommended();
-
-    public void setRecommended(List<MovieWrapper> recommended);
-
     public TmdbConfiguration getTmdbConfiguration();
 
     public void setTmdbConfiguration(TmdbConfiguration configuration);
@@ -41,10 +36,6 @@ public interface MoviesState extends BaseState {
     public PersonWrapper getPerson(String id);
 
     public static class PopularChangedEvent {}
-
-    public static class TrendingChangedEvent {}
-
-    public static class RecommendedChangedEvent {}
 
     public static class TmdbConfigurationChangedEvent {}
 

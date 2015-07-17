@@ -3,26 +3,23 @@ package com.roodie.model.state;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
+import com.google.common.base.Preconditions;
 import com.roodie.model.controllers.DrawerMenuItem;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.TmdbConfiguration;
-import com.google.common.base.Preconditions;
 import com.squareup.otto.Bus;
-import com.uwetrottmann.tmdb.entities.Configuration;
-import com.uwetrottmann.tmdb.entities.Movie;
-import com.uwetrottmann.tmdb.entities.Person;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Roodie on 02.07.2015.
  */
-public final class ApplicationState implements BaseState, MoviesState {
 
-    private static final int INITIAL_MOVIE_MAP_CAPACITY = 100;
+public  class ApplicationState implements BaseState, MoviesState {
+
+    private static final int INITIAL_MOVIE_MAP_CAPACITY = 200;
 
     private final Bus mEventBus;
 
@@ -30,9 +27,9 @@ public final class ApplicationState implements BaseState, MoviesState {
     private Map<String, MovieWrapper> mImdbIdMovies;
     private Map<String, PersonWrapper> mPeople;
 
-    private MoviePaginatedResult mPopular;
+    private String popularString = "Popular";
 
-    private List<MovieWrapper> mRecomended;
+    private MoviePaginatedResult mPopular;
 
     private TmdbConfiguration mConfiguration;
 
@@ -76,7 +73,7 @@ public final class ApplicationState implements BaseState, MoviesState {
 
     @Override
     public Map<String, MovieWrapper> getImdbIdMovies() {
-        return getImdbIdMovies();
+        return mImdbIdMovies;
     }
 
     @Override
@@ -94,21 +91,19 @@ public final class ApplicationState implements BaseState, MoviesState {
         return mPopular;
     }
 
+    public String getPopularString() {
+        return popularString;
+    }
+
     @Override
     public void setPopular(MoviePaginatedResult popular) {
         mPopular = popular;
+        List<MovieWrapper> items = mPopular.items;
+        if (items != null) {
+            System.out.println("ApplicationState: items != null");
+        }
+        System.out.println("ApplicationState: Popular: " + items);
         mEventBus.post(new PopularChangedEvent());
-    }
-
-    @Override
-    public List<MovieWrapper> getRecommended() {
-        return mRecomended;
-    }
-
-    @Override
-    public void setRecommended(List<MovieWrapper> recommended) {
-        mRecomended = recommended;
-        mEventBus.post(new RecommendedChangedEvent());
     }
 
     @Override
@@ -150,7 +145,6 @@ public final class ApplicationState implements BaseState, MoviesState {
         if (movie == null) {
             movie = mImdbIdMovies.get(id);
         }
-
         return movie;
     }
 }

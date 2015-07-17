@@ -1,9 +1,9 @@
 package com.roodie.model.state;
 
-import com.roodie.model.controllers.DrawerMenuItem;
-import com.roodie.model.network.NetworkError;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
+import com.roodie.model.controllers.DrawerMenuItem;
+import com.roodie.model.network.NetworkError;
 
 import java.util.List;
 
@@ -51,6 +51,17 @@ public interface BaseState {
         public int hashCode() {
             return items != null ? items.hashCode() : 0;
         }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            for (T item: items) {
+               sb.append(item.toString());
+            }
+            sb.append("Page: " + page + " total pages: " + totalPages);
+            return sb.toString();
+        }
+
     }
 
     public static class ShowLoadingProgressEvent {

@@ -1,7 +1,6 @@
 package com.roodie.materialmovies.modules.library;
 
 import com.roodie.model.state.ApplicationState;
-import com.roodie.model.state.MoviesState;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
@@ -19,16 +18,11 @@ import dagger.Provides;
 
 public class StateProvider {
 
-    @Provides
-    @Singleton
+    @Provides @Singleton
     public ApplicationState provideApplicationState(Bus bus) {
         return new ApplicationState(bus);
     }
 
-    @Provides
-    public MoviesState provideMovieState(ApplicationState state) {
-        return state;
-    }
 
 
 }
