@@ -27,8 +27,12 @@ abstract class BasePaginatedRunnable<R extends BaseState.PaginatedResult<T>, T, 
                 paginatedResult = createPaginatedResult();
                 paginatedResult.items = new ArrayList<>();
             }
+
+            updatePaginatedResult(paginatedResult, result);
+            updateState(paginatedResult);
         }
     }
+
 
     protected int getPage() {
         return mPage;
