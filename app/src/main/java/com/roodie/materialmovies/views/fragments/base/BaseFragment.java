@@ -1,5 +1,6 @@
 package com.roodie.materialmovies.views.fragments.base;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +24,11 @@ public class BaseFragment extends Fragment {
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
     }
 
     protected void setSupportActionBar(Toolbar toolbar) {
