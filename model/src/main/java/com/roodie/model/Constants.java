@@ -5,6 +5,8 @@ package com.roodie.model;
  */
 public class Constants {
 
+
+
     public static final String TMDB_API_KEY = "8673a5378a15fbea14bb426f5222f4ed";
 
     public static final boolean DEBUG_NETWORK = false;
@@ -16,5 +18,7 @@ public class Constants {
 
     public static final long STALE_MOVIE_DETAIL_THRESHOLD = 2 * DAY_IN_MILLIS;
     public static final long FULL_MOVIE_DETAIL_ATTEMPT_THRESHOLD = 60 * 60 * 1000; // 60 secs
+
+    public static final boolean DEBUG = true;
 
 }

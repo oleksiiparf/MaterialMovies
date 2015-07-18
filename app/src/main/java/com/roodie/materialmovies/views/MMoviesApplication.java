@@ -5,8 +5,11 @@ import android.content.Context;
 
 import com.roodie.materialmovies.modules.ApplicationModule;
 import com.roodie.materialmovies.modules.TaskProvider;
+import com.roodie.materialmovies.modules.ViewUtilProvider;
 import com.roodie.materialmovies.modules.library.ContextProvider;
-import com.roodie.materialmovies.util.MMoviesServiceUtils;
+import com.roodie.materialmovies.modules.library.InjectorModule;
+import com.roodie.materialmovies.mvp.presenters.MovieGridPresenter;
+import com.roodie.model.util.Injector;
 
 import javax.inject.Inject;
 
@@ -15,14 +18,14 @@ import dagger.ObjectGraph;
 /**
  * Created by Roodie on 02.07.2015.
  */
-public class MMoviesApplication extends Application  {
+public class MMoviesApplication extends Application implements Injector {
 
     public static MMoviesApplication from(Context context) {
         return (MMoviesApplication) context.getApplicationContext();
     }
 
-    @Inject
-    MMoviesServiceUtils mMMoviesServiceUtils;
+    @Inject MovieGridPresenter mGridPresenter;
+
     private ObjectGraph mObjectGraph;
 
     @Override
@@ -32,7 +35,9 @@ public class MMoviesApplication extends Application  {
         mObjectGraph = ObjectGraph.create(
                 new ContextProvider(this),
                 new ApplicationModule(),
-                new TaskProvider()
+                new TaskProvider(),
+                new ViewUtilProvider(),
+                new InjectorModule(this)
         );
         mObjectGraph.inject(this);
     }
@@ -41,11 +46,12 @@ public class MMoviesApplication extends Application  {
         return mObjectGraph;
     }
 
-    public MMoviesServiceUtils getMMoviesServiceUtils() {
-        return mMMoviesServiceUtils;
-    }
 
     public void inject(Object object) {
         mObjectGraph.inject(object);
+    }
+
+    public MovieGridPresenter getGridPresenter() {
+        return mGridPresenter;
     }
 }
