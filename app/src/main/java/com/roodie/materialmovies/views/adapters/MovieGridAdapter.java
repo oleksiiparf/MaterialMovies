@@ -2,6 +2,7 @@ package com.roodie.materialmovies.views.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,25 +10,30 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.common.base.Objects;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.settings.DisplaySettings;
 import com.roodie.materialmovies.settings.TmdbSettings;
 import com.roodie.materialmovies.util.MMoviesServiceUtils;
-import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by Roodie on 29.06.2015.
  */
 public class MovieGridAdapter extends BaseAdapter {
 
+    private static final String LOG_TAG = MovieGridAdapter.class.getName();
+
     private final Activity mActivity;
     private final LayoutInflater mLayoutInflater;
     private Context mContext;
-    private MMoviesServiceUtils mUtils;
+    @Inject MMoviesServiceUtils mUtils;
 
     private List<ListItem<MovieWrapper>> mItems;
 
@@ -37,7 +43,7 @@ public class MovieGridAdapter extends BaseAdapter {
         this.mActivity = activity;
         mLayoutInflater = mActivity.getLayoutInflater();
         this.mContext = mActivity.getApplicationContext();
-        mUtils = MMoviesApplication.from(mContext).getMMoviesServiceUtils();
+
         if (DisplaySettings.isHighDestinyScreen(mContext)) {
             mImageBaseUrl = TmdbSettings.getImageBaseUrl(mContext)
                     + TmdbSettings.POSTER_SIZE_SPEC_W342;
@@ -49,7 +55,7 @@ public class MovieGridAdapter extends BaseAdapter {
     }
 
     public void setItems(List<ListItem<MovieWrapper>> items) {
-    if (!items.equals(mItems)) {
+    if (!Objects.equal(items, mItems)) {
         mItems = items;
         notifyDataSetChanged();
     }
@@ -75,11 +81,12 @@ public class MovieGridAdapter extends BaseAdapter {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = mLayoutInflater.inflate(R.layout.item_grid_movie, null);
+            convertView = mLayoutInflater.inflate(R.layout.item_grid_movie,parent, false);
 
             holder = new ViewHolder();
             holder.title = (TextView) convertView.findViewById(R.id.title);
             holder.poster = (ImageView) convertView.findViewById(R.id.poster);
+            holder.poster.setDrawingCacheEnabled(true);
 
 
             convertView.setTag(holder);
@@ -90,17 +97,20 @@ public class MovieGridAdapter extends BaseAdapter {
         final MovieWrapper movie = getItem(position).getListItem();
 
         holder.title.setText(movie.getTmdbTitle());
-
         //load poster
-        mUtils.loadWithPicasso(mContext, mImageBaseUrl + movie.getPosterUrl())
-                .into(holder.poster);
+        Log.d(LOG_TAG, "Adapter " + movie.getPosterUrl());
+
+        Picasso.with(mContext)
+                .load(mImageBaseUrl + movie.getPosterUrl())
+                .fit().centerCrop().into(holder.poster);
+       // mUtils.loadWithPicasso(mContext, mImageBaseUrl +  movie.getPosterUrl())
+       //         .into(holder.poster);
 
         return convertView;
     }
 
-    static class ViewHolder {
+     class ViewHolder {
         TextView title;
-
         ImageView poster;
     }
 
