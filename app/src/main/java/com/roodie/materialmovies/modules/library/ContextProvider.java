@@ -2,8 +2,11 @@ package com.roodie.materialmovies.modules.library;
 
 import android.content.Context;
 
-import com.roodie.materialmovies.qualifiers.AppContext;
 import com.google.common.base.Preconditions;
+import com.roodie.materialmovies.qualifiers.AppContext;
+import com.roodie.materialmovies.qualifiers.FilesDirectory;
+
+import java.io.File;
 
 import dagger.Module;
 import dagger.Provides;
@@ -22,4 +25,10 @@ public class ContextProvider {
 
     @Provides @AppContext
     public Context provideAppContext() {return  mAppContext;}
+
+    @Provides @FilesDirectory
+    public File providePrivateFileDirectory() {
+        return mAppContext.getFilesDir();
+    }
+
 }

@@ -1,0 +1,74 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin_half">8dp</dimen>
+    <dimen name="activity_horizontal_margin_double">32dp</dimen>
+    <dimen name="activity_horizontal_margin_double_double">64dp</dimen>
+
+
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin_half">8dp</dimen>
+    <dimen name="activity_vertical_margin_double">32dp</dimen>
+    <dimen name="activity_vertical_margin_double_double">64dp</dimen>
+
+    <dimen name="insets">1dp</dimen>
+    <dimen name="item_movie_width">196dp</dimen>
+    <dimen name="item_movie_height">248dp</dimen>
+
+    <dimen name="spacing_micro">4dp</dimen>
+    <dimen name="spacing_minor">8dp</dimen>
+    <dimen name="spacing_major">16dp</dimen>
+    <dimen name="spacing_massive">24dp</dimen>
+
+    <dimen name="drawer_login_height">180dp</dimen>
+    <dimen name="drawer_side_menu_width">304dp</dimen>
+    <dimen name="drawer_user_text_size">14dp</dimen>
+    <dimen name="drawer_movie_checkin_poster_width">56dp</dimen>
+    <!-- Should be movie_detail_poster_width * 1.6 -->
+    <dimen name="drawer_movie_checkin_poster_height">90dp</dimen>
+    <dimen name="drawer_account_avatar_width">56dp</dimen>
+    <dimen name="drawer_account_avatar_height">56dp</dimen>
+
+    <dimen name="movie_detail_login_title_textsize">26dp</dimen>
+
+    <dimen name="movie_grid_spacing">4dp</dimen>
+
+    <dimen name="movie_detail_poster_width">100dp</dimen>
+    <!-- Old: 64 -->
+    <!-- Should be movie_detail_poster_width * 1.6 -->
+    <dimen name="movie_detail_poster_height">170dp</dimen>
+    <!-- Old: 102 -->
+
+    <dimen name="movie_detail_ratingbar_height">144dp</dimen>
+
+    <dimen name="movie_detail_fanart_height">224dp</dimen>
+
+    <dimen name="movie_detail_pinned_elevation">6dp</dimen>
+    <dimen name="movie_detail_title_textsize">26dp</dimen>
+    <dimen name="movie_detail_tagline_textsize">16dp</dimen>
+    <dimen name="movie_detail_summary_textsize">16dp</dimen>
+    <dimen name="movie_detail_flag_width">18dp</dimen>
+    <dimen name="movie_detail_flag_height">12dp</dimen>
+
+    <dimen name="movie_detail_trailers_height">160dp</dimen>
+    <dimen name="movie_detail_trailers_item_width">240dp</dimen>
+    <dimen name="movie_detail_multi_item_width">75dp</dimen>
+
+    <dimen name="person_detail_subtitle_textsize">13dp</dimen>
+
+    <dimen name="detail_card_height">140dp</dimen>
+    <dimen name="detail_card_item_width">90dp</dimen>
+
+    <dimen name="movie_list_image_width">48dp</dimen>
+    <dimen name="movie_list_item_height">88dp</dimen>
+
+    <dimen name="movie_list_small_image_width">48dp</dimen>
+    <dimen name="movie_list_small_item_height">72dp</dimen>
+
+    <dimen name="movie_discover_tab_height">48dp</dimen>
+
+    <dimen name="movie_backdrop_title_left_initial">16dp</dimen>
+    <dimen name="movie_backdrop_title_left_final">64dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+</resources>

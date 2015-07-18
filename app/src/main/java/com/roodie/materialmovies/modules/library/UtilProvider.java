@@ -9,7 +9,6 @@ import com.roodie.materialmovies.util.MMoviesBackgroundExecutor;
 import com.roodie.materialmovies.util.MMoviesCountryProvider;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.CountryProvider;
-import com.roodie.model.util.ImageHelper;
 import com.squareup.otto.Bus;
 
 import java.util.concurrent.Executors;
@@ -39,12 +38,16 @@ public class UtilProvider {
         return new MMoviesCountryProvider(context);
     }
 
+    @Provides @Singleton @GeneralPurpose
+    public BackgroundExecutor provideMultiThreadExecutor() {
+        final int numberCores = Runtime.getRuntime().availableProcessors();
+        return new MMoviesBackgroundExecutor(Executors.newFixedThreadPool(numberCores * 2 + 1));
+    }
 
     @Provides @Singleton @Database
     public BackgroundExecutor provideDatabaseThreadExecutor() {
         return new MMoviesBackgroundExecutor(Executors.newSingleThreadExecutor());
     }
-
 
 
 }

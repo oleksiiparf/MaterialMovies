@@ -7,11 +7,11 @@ import java.lang.annotation.RetentionPolicy;
 import javax.inject.Qualifier;
 
 /**
- * Created by Roodie on 25.06.2015.
+ * Created by Roodie on 16.07.2015.
  */
 
 @Qualifier
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AppContext {
+public @interface ApplicationState {
 }

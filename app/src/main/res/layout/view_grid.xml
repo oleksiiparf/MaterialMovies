@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <GridView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:numColumns="auto_fit"
-          android:columnWidth="@dimen/movie_grid_item_width"
-          android:verticalSpacing="@dimen/movie_grid_spacing"
-          android:horizontalSpacing="@dimen/movie_grid_spacing"
-          android:drawSelectorOnTop="true"
-          android:clipToPadding="false" />
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:verticalSpacing="@dimen/movie_grid_spacing"
+    android:horizontalSpacing="@dimen/movie_grid_spacing"
+    android:clipToPadding="false"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:columnWidth="@dimen/item_movie_width"
+    android:numColumns="auto_fit"
+    android:drawSelectorOnTop="true"
+    />

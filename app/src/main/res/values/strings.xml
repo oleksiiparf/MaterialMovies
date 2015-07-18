@@ -1,0 +1,78 @@
+<resources>
+
+    <string name="app_name">MMovies</string>
+    <string name="title_film_detail">Film Detail</string>
+
+    <!-- Main Menu -->
+    <string name="movies_title">Movies</string>
+    <string name="shows_title">Shows</string>
+    <string name="popular_title">Popular</string>
+    <string name="trending_title">Trending</string>
+    <string name="preferences">Settings</string>
+    <string name="about_title">About</string>
+    <string name="in_theatres_title">In theatres</string>
+    <string name="drawer_open_content_desc">Drawer open</string>
+    <string name="drawer_closed_content_desc">Drawer closed</string>
+
+
+    <!-- Media items -->
+    <string name="details">Details</string>
+    <string name="movie_details_released">Released</string>
+    <string name="movie_details_runtime">Runtime</string>
+    <string name="movie_details_runtime_content">%1$d mins</string>
+    <string name="movie_details_certification">Certification</string>
+    <string name="movie_details_genres">Genres</string>
+    <string name="movie_details_budget">Budget</string>
+    <string name="movie_details_budget_content">$%,d</string>
+    <string name="movie_details_language">Language</string>
+    <string name="related_movies">Related</string>
+    <string name="cast_movies">Cast</string>
+    <string name="crew_movies">Crew</string>
+    <string name="images_movies">Images</string>
+    <string name="trailers_movies">Trailers</string>
+
+
+    <!-- Menu items -->
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_about">About</string>
+    <string name="menu_filter">Filter</string>
+    <string name="menu_filter_clear">Clear</string>
+
+    <string name="empty_network_error">%1$s could not be retrieved due to an network error. Check your internet connection and try again.</string>
+    <string name="empty_unknown_error">%1$s could not be retrieved due to an unknown error.</string>
+
+    <string name="error_network">Network error</string>
+    <string name="error_movie_not_found_tmdb">Movie not found at TMDb</string>
+    <string name="error_unknown">Unknown error</string>
+
+    <string name="movie_title_year">%1$s (%2$d)</string>
+    <string name="movie_rating_votes">%1$d%% - %2$d votes</string>
+    <string name="movie_release_date">Release date: %1$s</string>
+
+    <string name="action_mark_liked">Mark as liked</string>
+    <string name="action_mark_unliked">Mark as unliked</string>
+
+
+    <string name="category_movies">Movies</string>
+    <string name="category_shows">Shows</string>
+    <string name="category_people">People</string>
+
+    <string name="movie_detail_votes">Votes</string>
+    <string name="movie_detail_global">Global</string>
+    <string name="movie_detail_rating">Rating</string>
+
+    <string name="person_born_date">Born: %1$s</string>
+    <string name="person_born_date_with_loc">Born: %1$s at %2$s</string>
+    <string name="person_age">Age: %1$s</string>
+    <string name="person_death_date">Died: %1$s, aged %2$s</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="see_more">See more</string>
+
+
+    <!-- Status messages -->
+    <string name="offline">Connect to a network, then try again.</string>
+    <string name="offline_no_wifi">Connect to Wi-Fi or allow all connections, then try again.</string>
+
+</resources>

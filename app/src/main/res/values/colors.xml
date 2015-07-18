@@ -4,7 +4,6 @@
     <color name="theme_primary">#363F44</color>
     <color name="theme_primary_dark">#ff1a1f23</color>
     <color name="theme_accent">#E91C62</color>
-    <color name="theme_window_background">#363F44</color>
 
     <color name="movie_placeholder">#ff4e5d64</color>
 
@@ -17,6 +16,7 @@
     <color name="primary_color_translucent">#998BC34A</color>
     <color name="primary_color">#363F44</color>
     <color name="primary_color_dark">#ff1a1f23</color>
+    <color name="window_background_color">#ff54646c</color>
     <color name="accent_color">#E91C62</color>
 
     <color name="drawer_background">#FFDDDDDD</color>
