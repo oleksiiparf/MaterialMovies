@@ -103,9 +103,6 @@ public class MovieGridAdapter extends BaseAdapter {
         Picasso.with(mContext)
                 .load(mImageBaseUrl + movie.getPosterUrl())
                 .fit().centerCrop().into(holder.poster);
-       // mUtils.loadWithPicasso(mContext, mImageBaseUrl +  movie.getPosterUrl())
-       //         .into(holder.poster);
-
         return convertView;
     }
 
