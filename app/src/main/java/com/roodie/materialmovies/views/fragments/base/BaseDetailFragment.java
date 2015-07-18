@@ -6,15 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.mvp.views.MovieView;
 import com.roodie.materialmovies.views.custom_views.PinnedSectionListView;
-import com.roodie.model.network.NetworkError;
 
 /**
  * Created by Roodie on 28.06.2015.
@@ -57,6 +53,18 @@ public abstract class BaseDetailFragment extends BaseFragment implements Adapter
        if (mEmptyView != null) {
            mEmptyView.setText(stringId);
        }
+    }
+
+    protected interface DetailType<E> {
+
+        public String name();
+
+        public int getLayoutId();
+
+        public int getViewType();
+
+        public boolean isEnabled();
+
     }
 
     protected abstract ListAdapter createListAdapter();

@@ -2,18 +2,15 @@ package com.roodie.materialmovies.mvp.presenters;
 
 import android.os.Bundle;
 
+import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.mvp.views.MovieView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
-import com.roodie.model.entities.MMoviesPersonCredit;
+import com.roodie.model.entities.MovieWrapper;
+import com.roodie.model.entities.PersonCreditWrapper;
+import com.roodie.model.state.ApplicationState;
 import com.roodie.model.state.AsyncDatabaseHelper;
-import com.roodie.model.state.BaseState;
-import com.roodie.model.state.MoviesState;
-import com.roodie.model.tasks.BaseMovieRunnable;
-
 import com.roodie.model.util.BackgroundExecutor;
-import com.google.common.base.Preconditions;
-import com.squareup.otto.Subscribe;
-import com.uwetrottmann.tmdb.entities.Movie;
+import com.roodie.model.util.Injector;
 
 import javax.inject.Inject;
 
@@ -26,24 +23,33 @@ public class MovieDetailPresenter extends BasePresenter {
 
     private final BackgroundExecutor mExecutor;
     private final AsyncDatabaseHelper mDbHelper;
-    private final MoviesState mMoviesState;
     private MovieDetailView mMoviesView;
+    private final ApplicationState mState;
+    private final Injector mInjector;
+
+    private boolean attached = false;
 
     @Inject
     public MovieDetailPresenter(
             @GeneralPurpose BackgroundExecutor executor,
-            AsyncDatabaseHelper dbHelper, MoviesState movieState) {
+            AsyncDatabaseHelper dbHelper, ApplicationState state, Injector injector) {
         super();
-        mMoviesState = Preconditions.checkNotNull(movieState, "moviesState cannot be null");
         mExecutor = Preconditions.checkNotNull(executor, "executor can not be null");
         mDbHelper = Preconditions.checkNotNull(dbHelper, "executor can not be null");
+        mState = Preconditions.checkNotNull(state, "application state cannot be null");
+        mInjector = Preconditions.checkNotNull(injector, "injector cannot be null");
     }
 
     @Override
-    public void onInited() {
-        super.onInited();
-        mMoviesState.registerForEvents(this);
+    public void initialize() {
+        checkViewAlreadySetted();
+    }
 
+    public void attachView (MovieDetailView view) {
+        Preconditions.checkNotNull(view, "View cannot be null");
+        this.mMoviesView = view;
+        attached = true;
+        mState.registerForEvents(this);
     }
 
     @Override
@@ -52,60 +58,29 @@ public class MovieDetailPresenter extends BasePresenter {
     }
 
     @Override
-    protected void onPaused() {
-        super.onPaused();
-        mMoviesState.unregisterForEvents(this);
+    public void onPause() {
+        mState.unregisterForEvents(this);
     }
 
-    public void refresh() {
+    public void refresh() {}
 
+
+
+    private void checkViewAlreadySetted() {
+        Preconditions.checkState(attached = true, "View not attached");
     }
 
-    @Subscribe
-    public void onTmdbConfigurationChanged(MoviesState.TmdbConfigurationChangedEvent event) {
-
-    }
-
-    @Subscribe
-    public void onRecommendedChanged(MoviesState.RecommendedChangedEvent event) {
-
-    }
-
-    @Subscribe
-    public void onMovieDetailChanged(MoviesState.MovieInformationUpdatedEvent event) {
-
-    }
-
-    @Subscribe
-    public void onMovieReleasedChanged(MoviesState.MovieReleasesUpdatedEvent event) {
-
-    }
-
-    @Subscribe
-    public void onMovieImagesChanged(MoviesState.MovieImagesUpdatedEvent event) {
-
-    }
-
-    @Subscribe
-    public void onNetworkError(BaseState.OnErrorEvent event) {
-
-    }
-
-
-    private <R> void executeTask(BaseMovieRunnable<R> task) {
-        mExecutor.execute(task);
-    }
 
 
     public interface MovieDetailView extends MovieView {
 
-        void setMovie(Movie movie);
+        void setMovie(MovieWrapper movie);
 
-        void showMovieDetail(Movie movie, Bundle bundle);
+        void showMovieDetail(MovieWrapper movie, Bundle bundle);
 
-        void showMovieDetail(MMoviesPersonCredit credit, Bundle bundle);
+        void showMovieDetail(PersonCreditWrapper credit, Bundle bundle);
 
-        void showRelatedMovies(Movie movie);
+        void showRelatedMovies(MovieWrapper movie);
 
     }
 }
