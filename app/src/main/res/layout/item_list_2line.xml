@@ -4,8 +4,8 @@
              android:layout_width="match_parent"
              android:layout_height="@dimen/movie_list_small_item_height">
 
-    <com.roodie.materialmovies.views.custom_views.MMoviesImageView
-          android:id="@+id/imageview_poster"
+    <ImageView
+          android:id="@+id/poster"
           android:layout_width="@dimen/movie_list_small_image_width"
           android:layout_height="@dimen/movie_list_small_image_width"
           android:layout_gravity="center_vertical"
@@ -22,13 +22,13 @@
           android:layout_gravity="center_vertical">
 
         <TextView
-              android:id="@+id/textview_title"
+              android:id="@+id/title"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               style="@style/Widget.MMovies.Movie.List.Title" />
 
         <TextView
-              android:id="@+id/textview_subtitle_1"
+              android:id="@+id/subtitle_1"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               style="@style/Widget.MMovies.Movie.List.Subtitle" />
