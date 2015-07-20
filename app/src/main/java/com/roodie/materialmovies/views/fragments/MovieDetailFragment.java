@@ -299,6 +299,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             this.mItemOnClickListener = mItemOnClickListener;
         }
 
+
         @Override
         public abstract MovieCreditWrapper getItem(int position) ;
 
@@ -342,6 +343,58 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             return R.layout.item_movie_detail_list_2line;
         }
     }
+
+    private class MovieCastAdapter extends BaseMovieCastAdapter {
+
+        public MovieCastAdapter(LayoutInflater mInflater) {
+            super(mInflater, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MovieCreditWrapper cast = (MovieCreditWrapper) v.getTag();
+                    if (cast != null) {
+                        //showPersonDeatail();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public int getCount() {
+            return mMovie != null ? MoviesCollections.size(mMovie.getCast()) : 0;
+        }
+
+        @Override
+        public MovieCreditWrapper getItem(int position) {
+            return mMovie.getCast().get(position);
+        }
+    }
+
+    private class MovieCrewAdapter extends BaseMovieCastAdapter {
+
+        public MovieCrewAdapter(LayoutInflater mInflater) {
+            super(mInflater, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MovieCreditWrapper cast = (MovieCreditWrapper) v.getTag();
+                    if (cast != null) {
+                        //showPersonDeatail();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public int getCount() {
+            return mMovie != null ? MoviesCollections.size(mMovie.getCrew()) : 0;
+        }
+
+        @Override
+        public MovieCreditWrapper getItem(int position) {
+            return mMovie.getCrew().get(position);
+        }
+    }
+
+
 
     private class RelatedMoviesAdapter extends BaseAdapter {
 
@@ -414,6 +467,8 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     private class DetailAdapter extends BaseDetailAdapter<DetailItemType> {
 
         private RelatedMoviesAdapter mRelatedMoviesAdapter;
+        private MovieCastAdapter mMovieCastAdapter;
+        private MovieCrewAdapter mMovieCrewAdapter;
 
         @Override
         protected void bindView(DetailItemType item, View view) {
@@ -446,7 +501,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                     cardLayout,
                     seeMoreClickListener,
                     getRelatedMoviesAdapter()
-                    );
+            );
 
         }
 
@@ -456,6 +511,22 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         }
         return  mRelatedMoviesAdapter;
         }
+
+        private MovieCastAdapter getMovieCastAdapter() {
+            if (mMovieCastAdapter == null) {
+                mMovieCastAdapter = new MovieCastAdapter(LayoutInflater.from(getActivity()));
+            }
+            return  mMovieCastAdapter;
+        }
+
+        private MovieCrewAdapter getMovieCrewAdapter() {
+            if (mMovieCrewAdapter == null) {
+                mMovieCrewAdapter = new MovieCrewAdapter(LayoutInflater.from(getActivity()));
+            }
+            return  mMovieCrewAdapter;
+        }
+
+
     }
 
     @Override

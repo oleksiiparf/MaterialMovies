@@ -293,6 +293,10 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> {
         this.backgroundImages = backgroundImages;
     }
 
+    public int getYear() {
+        return tmdbYear;
+    }
+
     public List<TrailerWrapper> getTrailers() {
         return trailers;
     }
@@ -323,6 +327,10 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> {
 
     public void setTmdbReleasedTime(long tmdbReleasedTime) {
         this.tmdbReleasedTime = tmdbReleasedTime;
+    }
+
+    public String getOverview() {
+        return tmdbOverview;
     }
 
     public String getTmdbBackdropUrl() {
