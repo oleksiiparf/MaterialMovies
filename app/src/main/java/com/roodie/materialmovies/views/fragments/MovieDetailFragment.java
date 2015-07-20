@@ -3,7 +3,9 @@ package com.roodie.materialmovies.views.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,11 +22,13 @@ import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.MovieDetailPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
+import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
 import com.roodie.model.entities.MovieCreditWrapper;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.network.NetworkError;
+import com.roodie.model.util.MoviesCollections;
 
 import java.util.ArrayList;
 
@@ -31,6 +36,8 @@ import java.util.ArrayList;
  * Created by Roodie on 27.06.2015.
  */
 public class MovieDetailFragment extends BaseDetailFragment implements MovieDetailPresenter.MovieDetailView, View.OnClickListener, AbsListView.OnScrollListener {
+
+    private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
     private MovieDetailPresenter mPresenter;
 
@@ -74,6 +81,8 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        getListView().setOnScrollListener(this);
     }
 
     @Override
@@ -102,6 +111,13 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             }
         }
         return false;
+    }
+
+
+
+
+    public MovieDetailPresenter getPresenter() {
+        return mPresenter;
     }
 
     /**
@@ -150,6 +166,11 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
     }
 
+    @Override
+    public void showMovieImages(MovieWrapper movie) {
+
+    }
+
     /**
      *
      * OnScrollListener
@@ -171,7 +192,20 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.imageview_poster: {
+                showMovieImages(mMovie);
+            }
+            break;
+        }
+    }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.d(LOG_TAG, "OnItemPositionClicked: " + position);
+        if ( getListAdapter().getItem(position) == DetailItemType.BACKDROP_IMAGES) {
+            showMovieImages(mMovie);
+        }
     }
 
     @Override
@@ -179,19 +213,56 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         return new DetailAdapter();
     }
 
+    @Override
+    protected DetailAdapter getListAdapter() {
+        return (DetailAdapter)super.getListAdapter();
+    }
+
+
     private void populateUi() {
         if (mMovie == null) {
             return;
         }
         mItems.clear();
+
+        mItems.add(DetailItemType.TITLE);
+
+        if (!TextUtils.isEmpty(mMovie.getOverview())) {
+            mItems.add(DetailItemType.SUMMARY);
+        }
+
+        mItems.add(DetailItemType.DETAILS);
+
+        if (!MoviesCollections.isEmpty(mMovie.getTrailers())) {
+            mItems.add(DetailItemType.TRAILERS);
+        }
+
+        if (!MoviesCollections.isEmpty(mMovie.getCast())) {
+            mItems.add(DetailItemType.CAST);
+        }
+
+        if (!MoviesCollections.isEmpty(mMovie.getCrew())) {
+            mItems.add(DetailItemType.CREW);
+        }
+
+        if (!MoviesCollections.isEmpty(mMovie.getRelated())) {
+            mItems.add(DetailItemType.RELATED);
+        }
+
+      //  if (hasBigPosterView()) {
+      //      getBigPosterView().loadPoster(mMovie, mPosterListener);
+      //  }
+
+        getListAdapter().setItems(mItems);
     }
 
     private enum DetailItemType implements DetailType {
+        BACKDROP_IMAGES(R.layout.item_movie_backdrop_spacing),
         TITLE(R.layout.item_movie_detail_title), //includes poster, tagline and rating
-        DETAILS(R.layout.item_movie_detail_details),//include details
-        SUMMARY(R.layout.item_movie_detail_summary),//includes description text, maybe
+        DETAILS(R.layout.item_movie_detail_details) ,//include details
+        SUMMARY(R.layout.item_movie_detail_summary), //includes description text, maybe
         TRAILERS(R.layout.item_movie_detail_trailers),// includes trailers
-        RELATED(R.layout.item_movie_detail_generic_card),// includes related
+        RELATED(R.layout.item_movie_detail_generic_card),// includes related movies list
         CAST(R.layout.item_movie_detail_generic_card), /// includes cast list
         CREW(R.layout.item_movie_detail_generic_card); // includes crew list
 
@@ -209,7 +280,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
         @Override
         public int getViewType() {
-            return 0;
+            return RELATED.ordinalId();
         }
 
         @Override
@@ -272,9 +343,123 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         }
     }
 
+    private class RelatedMoviesAdapter extends BaseAdapter {
+
+        private final View.OnClickListener mItemOnClickListener;
+        private final LayoutInflater mInflater;
+
+        public RelatedMoviesAdapter( LayoutInflater mInflater) {
+            this.mInflater = mInflater;
+
+            this.mItemOnClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //show movie detail
+                }
+            };
+
+        }
+
+        @Override
+        public int getCount() {
+            if (mMovie != null & !MoviesCollections.isEmpty(mMovie.getRelated())) {
+                return mMovie.getRelated().size();
+            } else
+            return 0;
+        }
+
+        @Override
+        public MovieWrapper getItem(int position) {
+            return mMovie.getRelated().get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = mInflater.inflate(getLayoutId(), parent, false);
+            }
+
+            final MovieWrapper movie = getItem(position);
+
+            final TextView title = (TextView) convertView.findViewById(R.id.textview_title);
+            if (movie.getYear() > 0) {
+                title.setText(getString(R.string.movie_title_year,
+                        movie.getTmdbTitle(), movie.getYear()));
+            } else {
+                title.setText(movie.getTmdbTitle());
+            }
+
+            final ImageView imageView =
+                    (ImageView) convertView.findViewById(R.id.imageview_poster);
+
+            convertView.setOnClickListener(mItemOnClickListener);
+            convertView.setTag(movie);
+
+            return convertView;
+        }
+
+        protected int getLayoutId() {
+            return R.layout.item_movie_detail_list_1line;
+        }
+    }
 
 
 
-    private class DetailAdapter extends BaseAdapter {
+
+    private class DetailAdapter extends BaseDetailAdapter<DetailItemType> {
+
+        private RelatedMoviesAdapter mRelatedMoviesAdapter;
+
+        @Override
+        protected void bindView(DetailItemType item, View view) {
+            Log.d(LOG_TAG, "Bind view: " + item.name());
+
+            switch(item) {
+                case TITLE:
+                    break;
+                case RELATED:
+                    bindRelated(view);
+                    break;
+            }
+
+            view.setTag(item);
+        }
+
+        private void bindRelated(View view) {
+            Log.d(LOG_TAG, "Bind related.");
+
+            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // show Related Movies
+                }
+            };
+
+            MovieDetailCardLayout cardLayout = (MovieDetailCardLayout) view;
+            cardLayout.setTitle(R.string.related_movies);
+            populateDetailGrid((ViewGroup) view.findViewById(R.id.card_content),
+                    cardLayout,
+                    seeMoreClickListener,
+                    getRelatedMoviesAdapter()
+                    );
+
+        }
+
+        private RelatedMoviesAdapter getRelatedMoviesAdapter() {
+            if (mRelatedMoviesAdapter == null) {
+                mRelatedMoviesAdapter = new RelatedMoviesAdapter(LayoutInflater.from(getActivity()));
+        }
+        return  mRelatedMoviesAdapter;
+        }
+    }
+
+    @Override
+    protected void setSupportActionBar(Toolbar toolbar) {
+       setSupportActionBar(toolbar, false);
     }
 }

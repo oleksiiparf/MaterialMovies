@@ -31,8 +31,12 @@ public class BaseFragment extends Fragment {
         super.onAttach(activity);
     }
 
-    protected void setSupportActionBar(Toolbar toolbar) {
-        ((BaseActivity) getActivity()).setSupportActionBar(toolbar, true);
+    protected  void setSupportActionBar(Toolbar toolbar) {
+        setSupportActionBar(toolbar, true);
+    }
+
+    protected final void setSupportActionBar(Toolbar toolbar, boolean handle) {
+        ((BaseActivity) getActivity()).setSupportActionBar(toolbar, handle);
     }
 
     public Toolbar getToolbar() {
