@@ -34,7 +34,6 @@ abstract class BasePresenter {
      */
     public abstract void onPause();
 
-
     public Display getDisplay() {
         return mDisplay;
     }

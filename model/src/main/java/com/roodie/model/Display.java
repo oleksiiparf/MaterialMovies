@@ -52,7 +52,7 @@ public interface Display {
 
     public void showCrewListFragment(String movieId);
 
-    public void showPersonDetailActivity(String id, Bundle bundle);
+    public void startPersonDetailActivity(String id, Bundle bundle);
 
     public void showPersonDetailFragment(String id);
 

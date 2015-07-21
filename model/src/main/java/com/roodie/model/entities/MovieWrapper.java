@@ -3,6 +3,7 @@ package com.roodie.model.entities;
 import android.text.TextUtils;
 
 import com.google.common.base.Preconditions;
+import com.roodie.model.Constants;
 import com.roodie.model.util.CountryProvider;
 import com.roodie.model.util.IntUtils;
 import com.roodie.model.util.MoviesCollections;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static com.roodie.model.util.TimeUtils.isPastStartingPoint;
 
 /**
  * Created by Roodie on 07.07.2015.
@@ -359,6 +362,13 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> {
                 || MoviesCollections.isEmpty(cast)
                 || MoviesCollections.isEmpty(crew)
                 || MoviesCollections.isEmpty(related);
+    }
+
+    public boolean needFullFetchFromTmdb() {
+        return (needFullFetch() || isPastStartingPoint(lastFullFetchFromTmdbCompleted,
+                Constants.STALE_MOVIE_DETAIL_THRESHOLD)) &&
+                isPastStartingPoint(lastFullFetchFromTmdbStarted,
+                        Constants.FULL_MOVIE_DETAIL_ATTEMPT_THRESHOLD);
     }
 
     public void markFullFetchStarted() {

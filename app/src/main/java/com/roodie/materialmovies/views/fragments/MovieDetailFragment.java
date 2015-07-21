@@ -26,7 +26,6 @@ import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
 import com.roodie.model.entities.MovieCreditWrapper;
 import com.roodie.model.entities.MovieWrapper;
-import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.network.NetworkError;
 import com.roodie.model.util.MoviesCollections;
 
@@ -81,6 +80,8 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mPresenter.attachView(this);
+        mPresenter.initialize();
 
         getListView().setOnScrollListener(this);
     }
@@ -140,7 +141,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
     @Override
     public String getRequestParameter() {
-        return null;
+        return getArguments().getString(QUERY_MOVIE_ID);
     }
 
     /**
@@ -151,25 +152,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         mMovie = movie;
     }
 
-    @Override
-    public void showMovieDetail(MovieWrapper movie, Bundle bundle) {
-
-    }
-
-    @Override
-    public void showMovieDetail(PersonCreditWrapper credit, Bundle bundle) {
-
-    }
-
-    @Override
-    public void showRelatedMovies(MovieWrapper movie) {
-
-    }
-
-    @Override
-    public void showMovieImages(MovieWrapper movie) {
-
-    }
 
     /**
      *
@@ -194,7 +176,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imageview_poster: {
-                showMovieImages(mMovie);
+                getPresenter().showMovieImages(mMovie);
             }
             break;
         }
@@ -204,7 +186,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(LOG_TAG, "OnItemPositionClicked: " + position);
         if ( getListAdapter().getItem(position) == DetailItemType.BACKDROP_IMAGES) {
-            showMovieImages(mMovie);
+            getPresenter().showMovieImages(mMovie);
         }
     }
 
@@ -352,7 +334,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 public void onClick(View v) {
                     MovieCreditWrapper cast = (MovieCreditWrapper) v.getTag();
                     if (cast != null) {
-                        //showPersonDeatail();
+                       getPresenter().showPersonDetail(cast.getPerson(), null);
                     }
                 }
             });
@@ -377,7 +359,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 public void onClick(View v) {
                     MovieCreditWrapper cast = (MovieCreditWrapper) v.getTag();
                     if (cast != null) {
-                        //showPersonDeatail();
+                        getPresenter().showPersonDetail(cast.getPerson(), null);
                     }
                 }
             });
@@ -407,7 +389,8 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             this.mItemOnClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //show movie detail
+                   getPresenter().showMovieDetail((MovieWrapper) v.getTag(),
+                           null);
                 }
             };
 
@@ -497,7 +480,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // show Related Movies
+                   getPresenter().showRelatedMovies(mMovie);
                 }
             };
 
@@ -517,7 +500,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //show all cast list
+                    getPresenter().showCastList(mMovie);
                 }
             };
 
@@ -537,7 +520,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //show all crew list
+                   getPresenter().showCrewList(mMovie);
                 }
             };
 

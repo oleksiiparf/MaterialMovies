@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.views.activities.MovieActivity;
 import com.roodie.materialmovies.views.activities.MovieImagesActivity;
@@ -28,7 +29,6 @@ import com.roodie.materialmovies.views.fragments.PersonDetailFragment;
 import com.roodie.materialmovies.views.fragments.PopularMoviesFragment;
 import com.roodie.materialmovies.views.fragments.RelatedMoviesFragment;
 import com.roodie.model.Display;
-import com.google.common.base.Preconditions;
 
 /**
  * Created by Roodie on 27.06.2015.
@@ -170,7 +170,7 @@ public class MMoviesDisplay implements Display {
 
 
     @Override
-    public void showPersonDetailActivity(String id, Bundle bundle) {
+    public void startPersonDetailActivity(String id, Bundle bundle) {
         Intent intent = new Intent(mActivity, PersonActivity.class);
         intent.putExtra(PARAM_ID, id);
         startActivity(intent, bundle);
