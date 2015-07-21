@@ -1,5 +1,6 @@
 package com.roodie.materialmovies.mvp.presenters;
 
+import com.google.common.base.Preconditions;
 import com.roodie.model.Display;
 
 /**
@@ -41,5 +42,19 @@ abstract class BasePresenter {
     public void setDisplay(Display mDisplay) {
         this.mDisplay = mDisplay;
     }
+
+    public void attachDisplay(Display display) {
+        Preconditions.checkNotNull(display, "display is null");
+        Preconditions.checkState(getDisplay() == null, "we currently have a display");
+        setDisplay(display);
+    }
+
+    public void detachDisplay(Display display) {
+        Preconditions.checkNotNull(display, "display is null");
+        Preconditions.checkState(getDisplay() == display, "display is not attached");
+        setDisplay(null);
+    }
+
+
 }
 

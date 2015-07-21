@@ -3,6 +3,7 @@ package com.roodie.materialmovies.views.fragments.base;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +14,7 @@ import android.widget.GridView;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.MovieGridPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
+import com.roodie.materialmovies.views.activities.MainActivity;
 import com.roodie.materialmovies.views.adapters.MovieGridAdapter;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
@@ -28,6 +30,8 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     private MovieGridPresenter mMovieGridPresenter;
     private MovieGridAdapter mMovieGridAdapter;
 
+    private MovieWrapper mMovie;
+
     private static final String LOG_TAG = MovieGridFragment.class.getSimpleName();
 
     @Override
@@ -37,16 +41,16 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
 
         mMovieGridAdapter = new MovieGridAdapter(getActivity());
         setListAdapter(mMovieGridAdapter);
-
-
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mMovieGridPresenter = MMoviesApplication.from(activity.getApplicationContext()).getGridPresenter();
+        mMovieGridPresenter.attachDisplay(((MainActivity) this.getActivity()).getDisplay());
 
     }
+
 
     @Override
     public void onPause() {
@@ -105,7 +109,9 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     @Override
     public void onListItemClick(GridView l, View v, int position, long id) {
        if (hasPresenter()) {
+
            ListItem<MovieWrapper> item =  (ListItem<MovieWrapper>) l.getItemAtPosition(position);
+           Log.d(LOG_TAG, "List item clicked  " + item.getListItem().getTmdbTitle());
            if (item.getListType() == ListItem.TYPE_ITEM) {
                getPresenter().showMovieDetail(item.getListItem(),
                       null);

@@ -1,13 +1,11 @@
 package com.roodie.materialmovies.mvp.presenters;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.mvp.views.BaseMovieListView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
-import com.roodie.model.Constants;
 import com.roodie.model.Display;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
@@ -40,7 +38,6 @@ public class MovieGridPresenter extends BasePresenter {
     private MovieGridView mMovieGridView;
     private final BackgroundExecutor mExecutor;
     private final ApplicationState mState;
-   // private final MoviesState mState;
     private final Injector mInjector;
 
     private static final int TMDB_FIRST_PAGE = 1;
@@ -82,10 +79,12 @@ public class MovieGridPresenter extends BasePresenter {
         this.mMovieGridView = view;
         attached = true;
         mState.registerForEvents(this);
+    }
 
-        if (mState.getTmdbConfiguration() == null) {
-            fetchTmdbConfiguration();
-        }
+    public void attachDisplay(Display display) {
+        Preconditions.checkNotNull(display, "display is null");
+        Preconditions.checkState(getDisplay() == null, "we currently have a display");
+        setDisplay(display);
     }
 
     @Subscribe
@@ -105,13 +104,12 @@ public class MovieGridPresenter extends BasePresenter {
 
     @Subscribe
     public void onTmdbConfigurationChanged(ApplicationState.TmdbConfigurationChangedEvent event) {
-        Log.d(LOG_TAG, "Tmdb config changed");
         populateUi();
     }
 
     @Subscribe
     public void onLoadingProgressVisibilityChanged(BaseState.ShowLoadingProgressEvent event) {
-        Log.d(LOG_TAG,"Loading progress visibility changed");
+        Log.d(LOG_TAG, "Loading progress visibility changed");
         if (attached) {
             if (event.secondary) {
                 mMovieGridView.showSecondaryLoadingProgress(event.show);
@@ -126,8 +124,8 @@ public class MovieGridPresenter extends BasePresenter {
         Preconditions.checkNotNull(movie, "movie cannot be null");
         Display display = getDisplay();
         if (display != null) {
-            if (!TextUtils.isEmpty(movie.getImdbId())) {
-                display.startMovieDetailActivity(movie.getImdbId(), bundle);
+            if (movie.getTmdbId() != null) {
+                display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), bundle);
             }
         }
     }
@@ -179,39 +177,19 @@ public class MovieGridPresenter extends BasePresenter {
 
 
     public void  populateUi(){
-        if (mState.getTmdbConfiguration() == null) {
-            Log.d(LOG_TAG, "TMDB Configuration not downloaded yet.");
-       //     return;
-        }
-        if (Constants.DEBUG) {
             Log.d(LOG_TAG, "populateUi: " + mMovieGridView.getClass().getSimpleName());
-        }
-        populateMovieListUi();
-    }
-
-
-    private void populateMovieListUi() {
-
         List<MovieWrapper> items = null;
-
-                String none = mState.getPopularString();
-                ApplicationState.MoviePaginatedResult popular = mState.getPopular();
-                if (popular != null) {
-                    items = popular.items;
-                    System.out.println("Items" + items);
-                }
-            System.out.println("Popular string : " + none);
-
-
+        ApplicationState.MoviePaginatedResult popular = mState.getPopular();
+        if (popular != null) {
+            items = popular.items;
+        }
         if (items == null) {
-            Log.d(LOG_TAG, "Items == null");
             mMovieGridView.setItems(null);
         } else  {
-            Log.d(LOG_TAG, "Items != null");
             mMovieGridView.setItems(createListItemList(items));
         }
-    }
 
+    }
 
     private <T extends ListItem<T>> List<ListItem<T>> createListItemList(final List<T> items) {
         Preconditions.checkNotNull(items, "items cannot be null");

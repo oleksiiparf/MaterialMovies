@@ -22,6 +22,7 @@ import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.MovieDetailPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
+import com.roodie.materialmovies.views.activities.MovieActivity;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
 import com.roodie.model.entities.MovieCreditWrapper;
@@ -40,7 +41,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
     private MovieDetailPresenter mPresenter;
 
-
     private MovieWrapper mMovie;
 
     private final ArrayList<DetailItemType> mItems = new ArrayList<>();
@@ -48,7 +48,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     private static final String QUERY_MOVIE_ID = "movie_id";
 
     public static MovieDetailFragment newInstance(String movieId) {
-        Preconditions.checkArgument(!TextUtils.isEmpty(movieId), "MovieId can not be null");
+        Preconditions.checkArgument(movieId != null, "MovieId can not be null");
 
         Bundle bundle = new Bundle();
         bundle.putString(QUERY_MOVIE_ID, movieId);
@@ -61,7 +61,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MMoviesApplication.from(getActivity()).inject(this);
+        //MMoviesApplication.from(getActivity()).inject(this);
         setHasOptionsMenu(true);
     }
 
@@ -69,6 +69,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getDetailMoviePresenter();
+        mPresenter.attachDisplay(((MovieActivity)this.getActivity()).getDisplay());
     }
 
     @Nullable
@@ -207,16 +208,16 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         }
         mItems.clear();
 
-        mItems.add(DetailItemType.TITLE);
+      //  mItems.add(DetailItemType.TITLE);
 
         if (!TextUtils.isEmpty(mMovie.getOverview())) {
-            mItems.add(DetailItemType.SUMMARY);
+        //    mItems.add(DetailItemType.SUMMARY);
         }
 
-        mItems.add(DetailItemType.DETAILS);
+       // mItems.add(DetailItemType.DETAILS);
 
         if (!MoviesCollections.isEmpty(mMovie.getTrailers())) {
-            mItems.add(DetailItemType.TRAILERS);
+        //    mItems.add(DetailItemType.TRAILERS);
         }
 
         if (!MoviesCollections.isEmpty(mMovie.getCast())) {
@@ -262,7 +263,14 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
         @Override
         public int getViewType() {
-            return RELATED.ordinalId();
+            switch (this) {
+                case RELATED:
+                case CAST:
+                case CREW:
+                    return RELATED.ordinal();
+                default:
+                    return ordinal();
+            }
         }
 
         @Override
@@ -452,6 +460,11 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         private RelatedMoviesAdapter mRelatedMoviesAdapter;
         private MovieCastAdapter mMovieCastAdapter;
         private MovieCrewAdapter mMovieCrewAdapter;
+
+        @Override
+        public int getViewTypeCount() {
+            return DetailItemType.values().length;
+        }
 
         @Override
         protected void bindView(DetailItemType item, View view) {

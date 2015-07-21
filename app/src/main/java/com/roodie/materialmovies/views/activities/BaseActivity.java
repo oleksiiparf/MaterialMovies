@@ -22,7 +22,7 @@ public class BaseActivity extends ActionBarActivity {
 
     private View mCardContainer;
     private DrawerLayout mDrawerLayout;
-    private Display mDisplay;
+    protected Display mDisplay;
     private NavigationView mNavigationView;
 
     @Override

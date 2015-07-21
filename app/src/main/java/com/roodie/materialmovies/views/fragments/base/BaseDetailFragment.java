@@ -67,7 +67,7 @@ public abstract class BaseDetailFragment extends BaseFragment implements Adapter
 
         public int getLayoutId();
 
-        public int ordinalId();
+        public int ordinal();
 
         public int getViewType();
 
@@ -113,7 +113,7 @@ public abstract class BaseDetailFragment extends BaseFragment implements Adapter
 
         @Override
         public long getItemId(int position) {
-            return mItems.get(position).ordinalId();
+            return mItems.get(position).ordinal();
         }
 
         @Override

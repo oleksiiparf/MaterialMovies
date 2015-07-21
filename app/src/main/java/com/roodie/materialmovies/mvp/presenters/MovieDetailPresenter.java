@@ -134,7 +134,6 @@ public class MovieDetailPresenter extends BasePresenter {
     }
 
     private void fetchDetailMovieIfNeeded(final int callingId, String id) {
-        Log.d(LOG_TAG, "fetch detail movie if needed 2 params");
         Preconditions.checkNotNull(id, "id cannot be null");
 
         MovieWrapper cached = mState.getMovie(id);

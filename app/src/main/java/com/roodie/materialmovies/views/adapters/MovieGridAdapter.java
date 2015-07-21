@@ -2,7 +2,6 @@ package com.roodie.materialmovies.views.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,8 +97,6 @@ public class MovieGridAdapter extends BaseAdapter {
 
         holder.title.setText(movie.getTmdbTitle());
         //load poster
-        Log.d(LOG_TAG, "Adapter " + movie.getPosterUrl());
-
         Picasso.with(mContext)
                 .load(mImageBaseUrl + movie.getPosterUrl())
                 .fit().centerCrop().into(holder.poster);
