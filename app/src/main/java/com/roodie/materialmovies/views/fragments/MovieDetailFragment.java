@@ -480,6 +480,12 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 case RELATED:
                     bindRelated(view);
                     break;
+                case CAST:
+                    bindCast(view);
+                    break;
+                case CREW:
+                    bindCrew(view);
+                    break;
             }
 
             view.setTag(item);
@@ -504,6 +510,47 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             );
 
         }
+
+        private void bindCast(View view) {
+            Log.d(LOG_TAG, "Bind cast");
+
+            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //show all cast list
+                }
+            };
+
+            MovieDetailCardLayout cardLayout = (MovieDetailCardLayout) view;
+            cardLayout.setTitle(R.string.cast_movies);
+
+            populateDetailGrid((ViewGroup) view.findViewById(R.id.card_content),
+                    cardLayout,
+                    seeMoreClickListener,
+                    getMovieCastAdapter());
+        }
+
+
+        private void bindCrew(View view) {
+            Log.d(LOG_TAG, "Bind crew");
+
+            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //show all crew list
+                }
+            };
+
+            MovieDetailCardLayout cardLayout = (MovieDetailCardLayout) view;
+            cardLayout.setTitle(R.string.crew_movies);
+
+            populateDetailGrid((ViewGroup) view.findViewById(R.id.card_content),
+                    cardLayout,
+                    seeMoreClickListener,
+                    getMovieCrewAdapter());
+        }
+
+
 
         private RelatedMoviesAdapter getRelatedMoviesAdapter() {
             if (mRelatedMoviesAdapter == null) {
