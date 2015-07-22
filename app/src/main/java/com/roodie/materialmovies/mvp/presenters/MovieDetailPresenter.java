@@ -10,6 +10,7 @@ import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
+import com.roodie.model.entities.TrailerWrapper;
 import com.roodie.model.state.ApplicationState;
 import com.roodie.model.state.AsyncDatabaseHelper;
 import com.roodie.model.state.BaseState;
@@ -33,6 +34,7 @@ public class MovieDetailPresenter extends BasePresenter {
 
     private final BackgroundExecutor mExecutor;
     private final AsyncDatabaseHelper mDbHelper;
+
 
     private final ApplicationState mState;
     private final Injector mInjector;
@@ -84,11 +86,11 @@ public class MovieDetailPresenter extends BasePresenter {
         Preconditions.checkNotNull(view, "View cannot be null");
         this.mMoviesView = view;
         attached = true;
-        mState.registerForEvents(this);
     }
 
     @Override
     public void onResume() {
+        mState.registerForEvents(this);
     }
 
     @Override
@@ -234,6 +236,20 @@ public class MovieDetailPresenter extends BasePresenter {
         Display display = getDisplay();
         if (display != null) {
             display.showCrewListFragment(String.valueOf(movie.getTmdbId()));
+        }
+    }
+
+    public void playTrailer(TrailerWrapper trailer) {
+        Preconditions.checkNotNull(trailer, "trailer cannot be null");
+        Preconditions.checkNotNull(trailer.getId(), "trailer id cannot be null");
+
+        final Display display = getDisplay();
+        if (display != null) {
+            switch (trailer.getSource()) {
+                case YOUTUBE:
+                    display.playYoutubeVideo(trailer.getId());
+                    break;
+            }
         }
     }
 

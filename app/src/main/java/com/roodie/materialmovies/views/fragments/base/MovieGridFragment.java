@@ -16,6 +16,7 @@ import com.roodie.materialmovies.mvp.presenters.MovieGridPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.activities.MainActivity;
 import com.roodie.materialmovies.views.adapters.MovieGridAdapter;
+import com.roodie.model.Display;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.network.NetworkError;
@@ -30,7 +31,7 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     private MovieGridPresenter mMovieGridPresenter;
     private MovieGridAdapter mMovieGridAdapter;
 
-    private MovieWrapper mMovie;
+    private Display mDisplay;
 
     private static final String LOG_TAG = MovieGridFragment.class.getSimpleName();
 
@@ -47,10 +48,10 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mMovieGridPresenter = MMoviesApplication.from(activity.getApplicationContext()).getGridPresenter();
-        mMovieGridPresenter.attachDisplay(((MainActivity) this.getActivity()).getDisplay());
+        mDisplay = ((MainActivity) this.getActivity()).getDisplay();
+        mMovieGridPresenter.attachDisplay(mDisplay);
 
     }
-
 
     @Override
     public void onPause() {
@@ -62,6 +63,12 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     public void onResume() {
         super.onResume();
         mMovieGridPresenter.onResume();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mMovieGridPresenter.detachDisplay(mDisplay);
     }
 
     @Override

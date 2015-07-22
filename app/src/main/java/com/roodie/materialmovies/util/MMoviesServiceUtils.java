@@ -4,13 +4,13 @@ import android.content.Context;
 import android.os.Build;
 import android.os.StatFs;
 
-import com.google.common.base.Preconditions;
 import com.roodie.model.Constants;
-import com.roodie.model.util.MMoviesPreferences;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +19,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Roodie on 11.07.2015.
  */
-public  class MMoviesServiceUtils {
-
-    private  final MMoviesPreferences mPreferences;
+public final class MMoviesServiceUtils {
 
     private static OkHttpClient cachingHttpClient;
     private static OkUrlFactory cachingUrlFactory;
@@ -31,10 +29,6 @@ public  class MMoviesServiceUtils {
     private static final int MAX_DISK_API_CACHE_SIZE = 10 * 1024 * 1024; // 10MB
 
     private static Picasso mPicasso;
-
-    public MMoviesServiceUtils(MMoviesPreferences preferences) {
-        mPreferences = Preconditions.checkNotNull(preferences, "preferences cannot be null");
-    }
 
 
     public static synchronized OkHttpClient getCachingOkHttpClient(Context context) {
@@ -78,6 +72,26 @@ public  class MMoviesServiceUtils {
 
         // Bound inside min/max size for disk cache.
         return Math.max(Math.min(size, MAX_DISK_API_CACHE_SIZE), MIN_DISK_API_CACHE_SIZE);
+    }
+
+    public static synchronized Picasso getPicasso(Context context) {
+        if (mPicasso == null) {
+            mPicasso = new Picasso.Builder(context).build();
+        }
+        return mPicasso;
+    }
+
+    /**
+     * Build Picasso {@link com.squareup.picasso.RequestCreator} which respects user requirement of
+     * only loading images over WiFi.
+     */
+    public static RequestCreator loadWithPicasso(Context context, String path) {
+        RequestCreator requestCreator = getPicasso(context).load(path);
+        if (!Utils.isAllowedLargeDataConnection(context, false)) {
+            // avoid the network, hit the cache immediately + accept stale images.
+            requestCreator.networkPolicy(NetworkPolicy.OFFLINE);
+        }
+        return requestCreator;
     }
 
 

@@ -1,6 +1,7 @@
 package com.roodie.materialmovies.views.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -21,12 +22,16 @@ import android.widget.TextView;
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.MovieDetailPresenter;
+import com.roodie.materialmovies.util.MMoviesServiceUtils;
+import com.roodie.materialmovies.util.TmdbTools;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.activities.MovieActivity;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
+import com.roodie.model.Display;
 import com.roodie.model.entities.MovieCreditWrapper;
 import com.roodie.model.entities.MovieWrapper;
+import com.roodie.model.entities.TrailerWrapper;
 import com.roodie.model.network.NetworkError;
 import com.roodie.model.util.MoviesCollections;
 
@@ -42,6 +47,10 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     private MovieDetailPresenter mPresenter;
 
     private MovieWrapper mMovie;
+
+    private Context mContext;
+
+    private  Display mDisplay;
 
     private final ArrayList<DetailItemType> mItems = new ArrayList<>();
 
@@ -61,15 +70,17 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //MMoviesApplication.from(getActivity()).inject(this);
+       // MMoviesApplication.from(getActivity()).inject(this);
         setHasOptionsMenu(true);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mContext = activity.getApplicationContext();
         mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getDetailMoviePresenter();
-        mPresenter.attachDisplay(((MovieActivity)this.getActivity()).getDisplay());
+        mDisplay = ((MovieActivity)this.getActivity()).getDisplay();
+        mPresenter.attachDisplay(mDisplay);
     }
 
     @Nullable
@@ -96,12 +107,19 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     public void onPause() {
         super.onPause();
         mPresenter.onPause();
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mPresenter.onResume();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mPresenter.detachDisplay(mDisplay);
     }
 
     @Override
@@ -114,9 +132,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         }
         return false;
     }
-
-
-
 
     public MovieDetailPresenter getPresenter() {
         return mPresenter;
@@ -279,7 +294,9 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         }
     }
 
-
+    /**
+     * BaseMovieCastAdapter
+     */
     private abstract class BaseMovieCastAdapter extends BaseAdapter {
         private final LayoutInflater mInflater;
         private final View.OnClickListener mItemOnClickListener;
@@ -311,6 +328,12 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             title.setText(credit.getPerson().getName());
 
             final ImageView image = (ImageView) convertView.findViewById(R.id.poster);
+            MMoviesServiceUtils.loadWithPicasso(mContext, TmdbTools.buildProfileImageUrl(mContext, credit.getPerson().getPictureUrl(),
+                    TmdbTools.ProfileImageSize.W185))
+                    .resizeDimen(image.getWidth(), image.getHeight())
+                    .centerCrop()
+                    .error(R.drawable.ic_profile_placeholder)
+                    .into(image);
             //Load with Picasso
 
             final TextView subTitle = (TextView) convertView.findViewById(R.id.subtitle_1);
@@ -334,6 +357,9 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         }
     }
 
+    /**
+     * MovieCastAdapter
+     */
     private class MovieCastAdapter extends BaseMovieCastAdapter {
 
         public MovieCastAdapter(LayoutInflater mInflater) {
@@ -359,6 +385,9 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         }
     }
 
+    /**
+     * MovieCrewAdapter
+     */
     private class MovieCrewAdapter extends BaseMovieCastAdapter {
 
         public MovieCrewAdapter(LayoutInflater mInflater) {
@@ -384,8 +413,9 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         }
     }
 
-
-
+    /**
+     * RelatedMoviesAdapter
+     */
     private class RelatedMoviesAdapter extends BaseAdapter {
 
         private final View.OnClickListener mItemOnClickListener;
@@ -441,6 +471,13 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             final ImageView imageView =
                     (ImageView) convertView.findViewById(R.id.imageview_poster);
 
+            MMoviesServiceUtils.loadWithPicasso(mContext, TmdbTools.buildProfileImageUrl(mContext, movie.getPosterUrl(),
+                    TmdbTools.ProfileImageSize.W185))
+                    .resizeDimen(imageView.getWidth(), imageView.getHeight())
+                    .centerCrop()
+                    .error(R.drawable.ic_profile_placeholder)
+                    .into(imageView);
+
             convertView.setOnClickListener(mItemOnClickListener);
             convertView.setTag(movie);
 
@@ -452,14 +489,76 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         }
     }
 
+    /**
+     * MovieTrailersAdapter
+     */
+    private class MovieTrailersAdapter extends BaseAdapter {
+        private LayoutInflater mInflater;
+        private View.OnClickListener mOnClickListener;
+
+        public MovieTrailersAdapter(LayoutInflater mInflater) {
+            this.mInflater = mInflater;
+
+            this.mOnClickListener = new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    TrailerWrapper trailer = (TrailerWrapper) v.getTag();
+                    if (trailer != null) {
+                        getPresenter().playTrailer(trailer);
+                    }
+                }
+            };
+        }
+
+        @Override
+        public int getCount() {
+            if (mMovie != null && !MoviesCollections.isEmpty(mMovie.getTrailers())) {
+                return mMovie.getTrailers().size();
+            } else {
+                return 0;
+            }
+        }
+
+        @Override
+        public TrailerWrapper getItem(int position) {
+            return mMovie.getTrailers().get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+           if (convertView == null) {
+               convertView = mInflater.inflate(R.layout.item_movie_trailer, parent, false);
+           }
+            final TrailerWrapper trailer = getItem(position);
+
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.thumbnail);
+            // imageView set trailer
 
 
+            TextView title = (TextView) convertView.findViewById(R.id.title);
+            title.setText(trailer.getName());
 
+            convertView.setOnClickListener(mOnClickListener);
+            convertView.setTag(trailer);
+
+            return convertView;
+        }
+    }
+
+    /**
+     * BaseDetailAdapter
+     */
     private class DetailAdapter extends BaseDetailAdapter<DetailItemType> {
 
         private RelatedMoviesAdapter mRelatedMoviesAdapter;
         private MovieCastAdapter mMovieCastAdapter;
         private MovieCrewAdapter mMovieCrewAdapter;
+        private MovieTrailersAdapter mMovieTrailersAdapter;
 
         @Override
         public int getViewTypeCount() {
@@ -482,9 +581,21 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 case CREW:
                     bindCrew(view);
                     break;
+                case TRAILERS:
+                    bindTrailers(view);
+                    break;
             }
 
             view.setTag(item);
+        }
+
+        private void bindTrailers(View view) {
+            Log.d(LOG_TAG, "Bind trailers");
+
+            populateDetailGrid((ViewGroup) view.findViewById(R.id.card_content),
+                    (MovieDetailCardLayout) view,
+                    null,
+                    getMovieTrailersAdapter());
         }
 
         private void bindRelated(View view) {
@@ -567,6 +678,13 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 mMovieCrewAdapter = new MovieCrewAdapter(LayoutInflater.from(getActivity()));
             }
             return  mMovieCrewAdapter;
+        }
+
+        private MovieTrailersAdapter getMovieTrailersAdapter() {
+            if (mMovieTrailersAdapter == null) {
+                mMovieTrailersAdapter = new MovieTrailersAdapter(LayoutInflater.from(getActivity()));
+            }
+            return mMovieTrailersAdapter;
         }
 
 

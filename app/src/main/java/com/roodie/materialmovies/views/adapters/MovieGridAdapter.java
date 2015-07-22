@@ -13,14 +13,11 @@ import com.google.common.base.Objects;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.settings.DisplaySettings;
 import com.roodie.materialmovies.settings.TmdbSettings;
-import com.roodie.materialmovies.util.MMoviesServiceUtils;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * Created by Roodie on 29.06.2015.
@@ -32,7 +29,6 @@ public class MovieGridAdapter extends BaseAdapter {
     private final Activity mActivity;
     private final LayoutInflater mLayoutInflater;
     private Context mContext;
-    @Inject MMoviesServiceUtils mUtils;
 
     private List<ListItem<MovieWrapper>> mItems;
 

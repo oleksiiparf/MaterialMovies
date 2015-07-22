@@ -59,6 +59,7 @@ public class MovieGridPresenter extends BasePresenter {
 
     @Override
     public void initialize() {
+
         checkViewAlreadySetted();
         //on ui attached
         fetchPopularIfNeeded(1);
@@ -66,7 +67,7 @@ public class MovieGridPresenter extends BasePresenter {
 
     @Override
     public void onResume() {
-
+        mState.registerForEvents(this);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class MovieGridPresenter extends BasePresenter {
         Preconditions.checkNotNull(view, "View cannot be null");
         this.mMovieGridView = view;
         attached = true;
-        mState.registerForEvents(this);
+
     }
 
     public void attachDisplay(Display display) {
@@ -127,6 +128,8 @@ public class MovieGridPresenter extends BasePresenter {
             if (movie.getTmdbId() != null) {
                 display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), bundle);
             }
+        } else {
+            Log.d(LOG_TAG, "Display is null");
         }
     }
 
