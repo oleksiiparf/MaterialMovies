@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/spacing_micro"
         android:layout_gravity="center_vertical"
-        android:text="null"
+        android:text="Sample1"
          />
 
     <View
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:drawablePadding="@dimen/spacing_micro"
-        android:text="Sample"
+        android:text="Sample2"
          />
 
 </merge>

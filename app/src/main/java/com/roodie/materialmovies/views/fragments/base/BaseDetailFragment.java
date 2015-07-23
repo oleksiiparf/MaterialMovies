@@ -1,32 +1,27 @@
 package com.roodie.materialmovies.views.fragments.base;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
-import com.roodie.materialmovies.views.custom_views.PinnedSectionListView;
-import com.roodie.materialmovies.views.custom_views.RecyclerView;
-
-import java.util.List;
 
 /**
  * Created by Roodie on 28.06.2015.
  */
-public abstract class BaseDetailFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+public abstract class BaseDetailFragment extends BaseFragment {
 
-    private PinnedSectionListView mListView;
-    private ListAdapter mAdapter;
+    RecyclerView mRecyclerView;
 
-    private TextView mEmptyView;
+    private BaseDetailAdapter mAdapter;
+
+    private Context mContext;
 
 
     @Override
@@ -34,6 +29,11 @@ public abstract class BaseDetailFragment extends BaseFragment implements Adapter
         super.onResume();
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mContext = activity.getApplicationContext();
+    }
 
     @Nullable
     @Override
@@ -45,160 +45,131 @@ public abstract class BaseDetailFragment extends BaseFragment implements Adapter
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mAdapter = createListAdapter();
-
-        mListView = (PinnedSectionListView) view.findViewById(android.R.id.list);
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
-
-        mEmptyView = (TextView) view.findViewById(android.R.id.empty);
-        mListView.setEmptyView(mEmptyView);
-    }
-
-    public void setEmptyText(String stringId) {
-       if (mEmptyView != null) {
-           mEmptyView.setText(stringId);
-       }
-    }
-
-    protected interface DetailType<E> {
-
-        public String name();
-
-        public int getLayoutId();
-
-        public int ordinal();
-
-        public int getViewType();
-
-        public boolean isEnabled();
+        mAdapter = createRecyclerAdapter();
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
     }
 
-    protected abstract ListAdapter createListAdapter();
 
-    protected PinnedSectionListView getListView() {
-        return mListView;
+    protected abstract BaseDetailAdapter createRecyclerAdapter();
+
+    protected RecyclerView getRecyclerView() {
+        return mRecyclerView;
     }
 
-    protected ListAdapter getListAdapter() {
+    protected BaseDetailAdapter getRecyclerAdapter() {
         return mAdapter;
     }
 
+    /**
+     * BaseViewHolder
+     *
+     * @param <T>
+     */
+    abstract public class BaseViewHolder<T extends RecyclerView.ViewHolder> {
 
+        private BaseDetailAdapter mDataBindAdapter;
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
-
-    protected abstract  class BaseDetailAdapter<E extends DetailType> extends BaseAdapter
-    implements PinnedSectionListView.PinnedSectionListAdapter {
-        private List<E> mItems;
-
-        public void setItems(List<E> mItems) {
-            this.mItems = mItems;
-            notifyDataSetChanged();
+        public BaseViewHolder(BaseDetailAdapter dataBindAdapter) {
+            mDataBindAdapter = dataBindAdapter;
         }
 
-        @Override
-        public int getCount() {
-            return mItems != null ? mItems.size() : 0;
+        abstract public T newViewHolder(ViewGroup parent);
+
+        abstract public void bindViewHolder(T holder, int position);
+
+        abstract public int getItemCount();
+
+        public final void notifyDataSetChanged() {
+            mDataBindAdapter.notifyDataSetChanged();
         }
 
-        @Override
-        public E getItem(int position) {
-            return mItems.get(position);
+        public final void notifyBinderDataSetChanged() {
+            notifyBinderItemRangeChanged(0, getItemCount());
         }
 
-        @Override
-        public long getItemId(int position) {
-            return mItems.get(position).ordinal();
+        public final void notifyBinderItemChanged(int position) {
+            mDataBindAdapter.notifyBinderItemChanged(this, position);
         }
 
-        @Override
-        public boolean hasStableIds() {
-            return true;
+        public final void notifyBinderItemRangeChanged(int positionStart, int itemCount) {
+            mDataBindAdapter.notifyBinderItemRangeChanged(this, positionStart, itemCount);
         }
 
-        @Override
-        public int getItemViewType(int position) {
-            return getItem(position).getViewType();
+        public final void notifyBinderItemInserted(int position) {
+            mDataBindAdapter.notifyBinderItemInserted(this, position);
         }
 
-        @Override
-        public boolean isEnabled(int position) {
-            return getItem(position).isEnabled();
+        public final void notifyBinderItemMoved(int fromPosition, int toPosition) {
+            mDataBindAdapter.notifyBinderItemMoved(this, fromPosition, toPosition);
         }
 
-        @Override
-        public boolean areAllItemsEnabled() {
-            return false;
+        public final void notifyBinderItemRangeInserted(int positionStart, int itemCount) {
+            mDataBindAdapter.notifyBinderItemRangeInserted(this, positionStart, itemCount);
         }
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final E item = getItem(position);
-
-            if (convertView == null) {
-                final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                convertView = inflater.inflate(item.getLayoutId(), parent, false);
-            }
-            // Bind to the view
-            bindView(item, convertView);
-            return convertView;
+        public final void notifyBinderItemRemoved(int position) {
+            mDataBindAdapter.notifyBinderItemRemoved(this, position);
         }
 
-
-        protected abstract void bindView(final E item, final View view);
-
-        protected void populateDetailGrid(
-                ViewGroup layout,
-                MovieDetailCardLayout cardLayout,
-                View.OnClickListener seeMoreClickListener,
-                BaseAdapter adapter) {
-
-            final RecyclerView recyclerView = new RecyclerView(layout);
-            recyclerView.recycleViews();
-
-            if (!adapter.isEmpty()) {
-                final int numItems = getResources().getInteger(R.integer.detail_card_max_items);
-                final int adpterCount = adapter.getCount();
-
-                for (int i = 0; i < Math.min(numItems, adpterCount); i++) {
-                    View view = adapter.getView(i, recyclerView.getRecycledView(), layout);
-                    layout.addView(view);
-                }
-
-                final boolean showMore = numItems < adapter.getCount();
-                cardLayout.setSeeMoreVisibility(showMore);
-                cardLayout.setSeeMoreOnClickListener(showMore ? seeMoreClickListener : null) ;
-            }
-
-            recyclerView.clearRecycledViews();
-
-        }
-
-
-        protected void rebindView(final E item) {
-            ListView listView = getListView();
-
-            for (int i = 0, m = listView.getChildCount(); i < m; i++) {
-                View child = listView.getChildAt(i);
-                if (child != null && child.getTag() == item) {
-                    bindView(item, child);
-                    return;
-                }
-
-            }
-        }
-
-        @Override
-        public boolean isItemViewTypePinned(int viewType) {
-            return false;
+        public final void notifyBinderItemRangeRemoved(int positionStart, int itemCount) {
+            mDataBindAdapter.notifyBinderItemRangeRemoved(this, positionStart, itemCount);
         }
     }
 
+    /**
+     * BaseDetailAdapter
+     */
+    abstract public class BaseDetailAdapter extends android.support.v7.widget.RecyclerView.Adapter<android.support.v7.widget.RecyclerView.ViewHolder> {
 
+        @Override
+        public android.support.v7.widget.RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return getDataBinder(viewType).newViewHolder(parent);
+        }
 
+        @Override
+        public void onBindViewHolder(android.support.v7.widget.RecyclerView.ViewHolder viewHolder, int position) {
+            int binderPosition = getBinderPosition(position);
+            getDataBinder(viewHolder.getItemViewType()).bindViewHolder(viewHolder, binderPosition);
+        }
+
+        @Override
+        public abstract int getItemCount();
+
+        @Override
+        public abstract int getItemViewType(int position);
+
+        public abstract <T extends BaseViewHolder> T getDataBinder(int viewType);
+
+        public abstract int getPosition(BaseViewHolder binder, int binderPosition);
+
+        public abstract int getBinderPosition(int position);
+
+        public void notifyBinderItemChanged(BaseViewHolder binder, int binderPosition) {
+            notifyItemChanged(getPosition(binder, binderPosition));
+        }
+
+        public abstract void notifyBinderItemRangeChanged(BaseViewHolder binder, int positionStart,
+                                                          int itemCount);
+
+        public void notifyBinderItemInserted(BaseViewHolder binder, int binderPosition) {
+            notifyItemInserted(getPosition(binder, binderPosition));
+        }
+
+        public void notifyBinderItemMoved(BaseViewHolder binder, int fromPosition, int toPosition) {
+            notifyItemMoved(getPosition(binder, fromPosition), getPosition(binder, toPosition));
+        }
+
+        public abstract void notifyBinderItemRangeInserted(BaseViewHolder binder, int positionStart,
+                                                           int itemCount);
+
+        public void notifyBinderItemRemoved(BaseViewHolder binder, int binderPosition) {
+            notifyItemRemoved(getPosition(binder, binderPosition));
+        }
+
+        public abstract void notifyBinderItemRangeRemoved(BaseViewHolder binder, int positionStart,
+                                                          int itemCount);
+    }
 }

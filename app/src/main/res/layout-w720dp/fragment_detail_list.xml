@@ -54,11 +54,12 @@
             </android.support.design.widget.AppBarLayout>
 
 
-            <View
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/detail_movie_container"
                 android:layout_width="match_parent"
-                android:layout_height="0px"
-                android:layout_weight="1" />
+                android:layout_height="match_parent"/>
+
+
 
         </LinearLayout>
 
@@ -67,7 +68,11 @@
             android:layout_height="match_parent"
             android:layout_weight="2">
 
-            <include layout="@layout/include_fragment_detail_list" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
         </FrameLayout>
 

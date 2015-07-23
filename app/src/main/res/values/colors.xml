@@ -26,6 +26,8 @@
     <color name="translucent_black_dark">#BB000000</color>
     <color name="translucent_black_light">#70000000</color>
 
+    <color name="protection_dark">#66000000</color>
+
     <color name="enabled">@color/grey_60</color>
     <color name="disabled">@color/grey_30</color>
 
