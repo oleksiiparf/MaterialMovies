@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/include_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageview_person"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/person_detail_headshot_large_height"
+                android:scaleType="centerCrop"
+                android:src="@color/protection_dark" />
+
+            <TextView
+                android:id="@+id/textview_person_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imageViewPersonHeadshot"
+                android:layout_marginBottom="@dimen/default_padding"
+                android:layout_marginLeft="@dimen/keyline"
+                android:layout_marginRight="@dimen/keyline"
+                android:maxLines="2"
+                android:ellipsize="end"
+                tools:text="Kiefer Sutherland"
+                android:shadowColor="@color/protection_dark"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="2" />
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </ScrollView>
+
+
+
+</FrameLayout>

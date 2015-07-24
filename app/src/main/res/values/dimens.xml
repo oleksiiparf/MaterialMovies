@@ -5,11 +5,15 @@
     <dimen name="activity_horizontal_margin_double">32dp</dimen>
     <dimen name="activity_horizontal_margin_double_double">64dp</dimen>
 
+    <dimen name="default_padding">8dp</dimen>
+    <dimen name="keyline">16dp</dimen>
 
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_vertical_margin_half">8dp</dimen>
     <dimen name="activity_vertical_margin_double">32dp</dimen>
     <dimen name="activity_vertical_margin_double_double">64dp</dimen>
+
+    <dimen name="activity_movies_margins">@dimen/activity_horizontal_margin</dimen>
 
     <dimen name="insets">1dp</dimen>
     <dimen name="item_movie_width">196dp</dimen>
@@ -55,6 +59,9 @@
     <dimen name="movie_detail_multi_item_width">75dp</dimen>
 
     <dimen name="person_detail_subtitle_textsize">13dp</dimen>
+    <dimen name="person_detail_headshot_size">40dp</dimen>
+    <dimen name="person_detail_headshot_large_width">100dp</dimen>
+    <dimen name="person_detail_headshot_large_height">300dp</dimen>
 
     <dimen name="detail_card_height">140dp</dimen>
     <dimen name="detail_card_item_width">90dp</dimen>
@@ -69,6 +76,8 @@
 
     <dimen name="movie_backdrop_title_left_initial">16dp</dimen>
     <dimen name="movie_backdrop_title_left_final">64dp</dimen>
+
+    <dimen name="person_headshot_size">40dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>
 </resources>
