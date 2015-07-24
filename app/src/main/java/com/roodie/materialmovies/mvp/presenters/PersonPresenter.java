@@ -1,20 +1,20 @@
 package com.roodie.materialmovies.mvp.presenters;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.mvp.views.MovieView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
-import com.roodie.model.Display;
 import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.state.ApplicationState;
-import com.roodie.model.state.AsyncDatabaseHelper;
 import com.roodie.model.state.BaseState;
 import com.roodie.model.state.MoviesState;
 import com.roodie.model.tasks.BaseMovieRunnable;
 import com.roodie.model.tasks.FetchPersonRunnable;
 import com.roodie.model.util.BackgroundExecutor;
+import com.roodie.model.util.Injector;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
@@ -24,27 +24,30 @@ import javax.inject.Inject;
  */
 public class PersonPresenter extends BasePresenter {
 
+    public static final String LOG_TAG = PersonPresenter.class.getSimpleName();
+
     private PersonView mPersonView;
 
     private final BackgroundExecutor mExecutor;
-    private final AsyncDatabaseHelper mDbHelper;
     private final ApplicationState mState;
+    private final Injector mInjector;
 
     private boolean attached = false;
 
 
     @Inject
     public PersonPresenter(
-            @GeneralPurpose BackgroundExecutor executor,
-            AsyncDatabaseHelper dbHelper, ApplicationState state) {
+            ApplicationState state,
+            @GeneralPurpose BackgroundExecutor executor, Injector injector) {
         super();
         mState = Preconditions.checkNotNull(state, "moviesState cannot be null");
         mExecutor = Preconditions.checkNotNull(executor, "executor can not be null");
-        mDbHelper = Preconditions.checkNotNull(dbHelper, "executor can not be null");
+        mInjector = Preconditions.checkNotNull(injector, "injector cannot be null");
     }
 
     @Subscribe
-    public void onPersonCreditsChanged(MoviesState.PersonChangedEvent event) {
+    public void onPersonInfoChanged(MoviesState.PersonChangedEvent event) {
+        Log.d(LOG_TAG, "On Person Changed info");
         populateUi(event);
     }
 
@@ -101,6 +104,7 @@ public class PersonPresenter extends BasePresenter {
     }
 
     private <R> void executeTask(BaseMovieRunnable<R> task) {
+        mInjector.inject(task);
         mExecutor.execute(task);
     }
 
@@ -113,45 +117,13 @@ public class PersonPresenter extends BasePresenter {
         }
     }
 
-    public void showMovieDetail(PersonCreditWrapper credit, Bundle bundle) {
-        Preconditions.checkNotNull(credit, "credit cannot be null");
-
-        Display display = getDisplay();
-        if (display != null) {
-            display.startMovieDetailActivity(String.valueOf(credit.getId()), bundle);
-        }
-    }
-
-
-
-    public void showPersonCastCredits(PersonWrapper person) {
-        Preconditions.checkNotNull(person, "person cannot be null");
-        Preconditions.checkNotNull(person.getTmdbId(), "person id cannot be null");
-
-        Display display = getDisplay();
-        if (display != null) {
-            display.showPersonCastCreditsFragment(String.valueOf(person.getTmdbId()));
-        }
-    }
-
-    public void showPersonCrewCredits(PersonWrapper person) {
-        Preconditions.checkNotNull(person, "person cannot be null");
-        Preconditions.checkNotNull(person.getTmdbId(), "person id cannot be null");
-
-        Display display = getDisplay();
-        if (display != null) {
-            display.showPersonCrewCreditsFragment(String.valueOf(person.getTmdbId()));
-        }
-    }
-
-
 
     public interface PersonView extends MovieView {
 
         void setPerson(PersonWrapper person);
-
-        void showPersonDetail(PersonWrapper person, Bundle bundle);
-
+        void showMovieDetail(PersonCreditWrapper credit, Bundle bundle);
+        void showPersonCastCredits(PersonWrapper person);
+        void showPersonCrewCredits(PersonWrapper person);
     }
 
 }

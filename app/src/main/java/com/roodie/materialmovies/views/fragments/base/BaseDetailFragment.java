@@ -23,10 +23,7 @@ public abstract class BaseDetailFragment extends BaseFragment {
 
     RecyclerView mRecyclerView;
 
-    private BaseDetailAdapter mAdapter;
-
     private Context mContext;
-
 
     @Override
     public void onResume() {
@@ -49,22 +46,12 @@ public abstract class BaseDetailFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mAdapter = createRecyclerAdapter();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
-        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-
     }
-
-
-    protected abstract BaseDetailAdapter createRecyclerAdapter();
 
     protected RecyclerView getRecyclerView() {
         return mRecyclerView;
-    }
-
-    protected BaseDetailAdapter getRecyclerAdapter() {
-        return mAdapter;
     }
 
     /**

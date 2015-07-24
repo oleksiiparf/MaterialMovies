@@ -27,7 +27,6 @@ import com.roodie.materialmovies.settings.TmdbSettings;
 import com.roodie.materialmovies.util.MMoviesServiceUtils;
 import com.roodie.materialmovies.util.TmdbTools;
 import com.roodie.materialmovies.views.MMoviesApplication;
-import com.roodie.materialmovies.views.activities.MovieActivity;
 import com.roodie.materialmovies.views.custom_views.ArcProgress;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout;
@@ -37,6 +36,7 @@ import com.roodie.model.Constants;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieCreditWrapper;
 import com.roodie.model.entities.MovieWrapper;
+import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.TrailerWrapper;
 import com.roodie.model.network.NetworkError;
 import com.roodie.model.util.MoviesCollections;
@@ -55,13 +55,13 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
     private MovieDetailPresenter mPresenter;
+    private DetailAdapter mAdapter;
     private MovieWrapper mMovie;
     private final ArrayList<DetailItemType> mItems = new ArrayList<>();
 
     private CollapsingToolbarLayout mCollapsingToolbar;
 
     private Context mContext;
-    private  Display mDisplay;
 
     private RelatedMoviesAdapter mRelatedMoviesAdapter;
     private MovieCastAdapter mMovieCastAdapter;
@@ -95,8 +95,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         super.onAttach(activity);
         mContext = activity.getApplicationContext();
         mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getDetailMoviePresenter();
-        mDisplay = ((MovieActivity)this.getActivity()).getDisplay();
-        mPresenter.attachDisplay(mDisplay);
     }
 
     @Nullable
@@ -129,12 +127,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     public void onResume() {
         super.onResume();
         mPresenter.onResume();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mPresenter.detachDisplay(mDisplay);
     }
 
     @Override
@@ -182,6 +174,84 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     public void setMovie(MovieWrapper movie) {
         mMovie = movie;
         populateUi();
+        getRecyclerView().setAdapter(mAdapter);
+    }
+
+    @Override
+    public void showMovieDetail(MovieWrapper movie, Bundle bundle) {
+        Preconditions.checkNotNull(movie, "movie cannot be null");
+
+        Display display = getDisplay();
+        if (display != null) {
+            if (movie.getTmdbId() != null) {
+                display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), bundle);
+            }
+        }
+    }
+
+    @Override
+    public void showRelatedMovies(MovieWrapper movie) {
+        Preconditions.checkNotNull(movie, "movie cannot be null");
+        Display display = getDisplay();
+        if (display != null) {
+            display.showRelatedMovies(String.valueOf(movie.getTmdbId()));
+        }
+    }
+
+    @Override
+    public void showMovieImages(MovieWrapper movie) {
+        Preconditions.checkNotNull(movie, "movie cannot be null");
+
+        final Display display = getDisplay();
+        if (display != null) {
+            display.startMovieImagesActivity(String.valueOf(movie.getTmdbId()));
+        }
+    }
+
+    @Override
+    public void showPersonDetail(PersonWrapper person, Bundle bundle) {
+        Preconditions.checkNotNull(person, "person cannot be null");
+        Preconditions.checkNotNull(person.getTmdbId(), "person id cannot be null");
+
+        Display display = getDisplay();
+        if (display != null) {
+            display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), bundle);
+        }
+    }
+
+    @Override
+    public void showCastList(MovieWrapper movie) {
+        Preconditions.checkNotNull(movie, "movie cannot be null");
+
+        Display display = getDisplay();
+        if (display != null) {
+            display.showCastListFragment(String.valueOf(movie.getTmdbId()));
+        }
+    }
+
+    @Override
+    public void showCrewList(MovieWrapper movie) {
+        Preconditions.checkNotNull(movie, "movie cannot be null");
+
+        Display display = getDisplay();
+        if (display != null) {
+            display.showCrewListFragment(String.valueOf(movie.getTmdbId()));
+        }
+    }
+
+    @Override
+    public void playTrailer(TrailerWrapper trailer) {
+        Preconditions.checkNotNull(trailer, "trailer cannot be null");
+        Preconditions.checkNotNull(trailer.getId(), "trailer id cannot be null");
+
+        final Display display = getDisplay();
+        if (display != null) {
+            switch (trailer.getSource()) {
+                case YOUTUBE:
+                    display.playYoutubeVideo(trailer.getId());
+                    break;
+            }
+        }
     }
 
 
@@ -194,20 +264,18 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imageview_poster: {
-                getPresenter().showMovieImages(mMovie);
+                showMovieImages(mMovie);
             }
             break;
         }
     }
 
-    @Override
-    protected DetailAdapter createRecyclerAdapter() {
-        return new DetailAdapter();
+    protected DetailAdapter createRecyclerAdapter(List<DetailItemType> items) {
+        return new DetailAdapter(items);
     }
 
-    @Override
     protected DetailAdapter getRecyclerAdapter() {
-        return (DetailAdapter)super.getRecyclerAdapter();
+        return mAdapter;
     }
 
     private void populateUi() {
@@ -252,7 +320,9 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             mItems.add(DetailItemType.RELATED);
         }
 
-        getRecyclerAdapter().addBinders(mItems);
+        mAdapter = createRecyclerAdapter(mItems);
+
+       // getRecyclerAdapter().addBinders(mItems);
     }
 
      enum DetailItemType  {
@@ -273,6 +343,35 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         List<BaseViewHolder> mItems;
 
         public DetailAdapter() {
+        }
+
+        public DetailAdapter(List<DetailItemType> items) {
+            mItems = new ArrayList<>(items.size());
+            for (DetailItemType item : items) {
+                switch (item) {
+                    case TITLE:
+                        mItems.add(new MovieTitleBinder(this));
+                        break;
+                    case SUMMARY:
+                        mItems.add(new MovieSummaryBinder(this));
+                        break;
+                    case DETAILS:
+                        mItems.add(new MovieDetailsBinder(this));
+                        break;
+                    case TRAILERS:
+                        mItems.add(new MovieTrailersBinder(this));
+                        break;
+                    case CAST:
+                        mItems.add(new MovieCastBinder(this));
+                        break;
+                    case CREW:
+                        mItems.add(new MovieCrewBinder(this));
+                        break;
+                    case RELATED:
+                        mItems.add(new MovieRelatedBinder(this));
+                }
+            }
+            addAllBinder(mItems);
         }
 
         public void addBinders(List<DetailItemType> items) {
@@ -519,7 +618,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getPresenter().showCastList(mMovie);
+                    showCastList(mMovie);
                 }
             };
 
@@ -587,7 +686,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getPresenter().showCrewList(mMovie);
+                    showCrewList(mMovie);
                 }
             };
 
@@ -655,7 +754,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getPresenter().showCrewList(mMovie);
+                    showCrewList(mMovie);
                 }
             };
 
@@ -821,7 +920,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 public void onClick(View v) {
                     MovieCreditWrapper cast = (MovieCreditWrapper) v.getTag();
                     if (cast != null) {
-                       getPresenter().showPersonDetail(cast.getPerson(), null);
+                       showPersonDetail(cast.getPerson(), null);
                     }
                 }
             });
@@ -849,7 +948,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 public void onClick(View v) {
                     MovieCreditWrapper cast = (MovieCreditWrapper) v.getTag();
                     if (cast != null) {
-                        getPresenter().showPersonDetail(cast.getPerson(), null);
+                        showPersonDetail(cast.getPerson(), null);
                     }
                 }
             });
@@ -880,7 +979,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             this.mItemOnClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   getPresenter().showMovieDetail((MovieWrapper) v.getTag(),
+                   showMovieDetail((MovieWrapper) v.getTag(),
                            null);
                 }
             };
@@ -957,7 +1056,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 public void onClick(View v) {
                     TrailerWrapper trailer = (TrailerWrapper) v.getTag();
                     if (trailer != null) {
-                        getPresenter().playTrailer(trailer);
+                        playTrailer(trailer);
                     }
                 }
             };

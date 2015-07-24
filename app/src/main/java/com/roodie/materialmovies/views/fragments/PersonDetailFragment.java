@@ -1,7 +1,6 @@
 package com.roodie.materialmovies.views.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +17,6 @@ import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.PersonPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
-import com.roodie.materialmovies.views.activities.PersonActivity;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
 import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
@@ -41,11 +39,9 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     private static final String KEY_PERSON_ID = "person_id";
 
     private PersonPresenter mPresenter;
+    private DetailAdapter mAdapter;
     private PersonWrapper mPerson;
     private final ArrayList<PersonItems> mItems = new ArrayList<>();
-
-    private Context mContext;
-    private Display mDisplay;
 
     private ImageView personImagePoster;
     private TextView personName;
@@ -75,10 +71,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mContext = activity.getApplicationContext();
         mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getPersonPresenter();
-        mDisplay = ((PersonActivity)this.getActivity()).getDisplay();
-        mPresenter.attachDisplay(mDisplay);
     }
 
     @Nullable
@@ -114,7 +107,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     @Override
     public void onDetach() {
         super.onDetach();
-        mPresenter.detachDisplay(mDisplay);
+
     }
 
     public PersonPresenter getPresenter() {
@@ -134,16 +127,13 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     }
 
 
-    @Override
-    protected DetailAdapter createRecyclerAdapter() {
-        return new DetailAdapter();
+    protected DetailAdapter createRecyclerAdapter(List<PersonItems> items) {
+        return new DetailAdapter(items);
     }
 
-    @Override
     protected DetailAdapter getRecyclerAdapter() {
-        return (DetailAdapter)super.getRecyclerAdapter();
+        return mAdapter;
     }
-
 
     /**
      * PersonView
@@ -154,11 +144,39 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     public void setPerson(PersonWrapper person) {
         mPerson = person;
         populateUi();
+        getRecyclerView().setAdapter(mAdapter);
     }
 
     @Override
-    public void showPersonDetail(PersonWrapper person, Bundle bundle) {
+    public void showMovieDetail(PersonCreditWrapper credit, Bundle bundle) {
+        Preconditions.checkNotNull(credit, "credit cannot be null");
 
+        Display display = getDisplay();
+        if (display != null) {
+            display.startMovieDetailActivity(String.valueOf(credit.getId()), bundle);
+        }
+    }
+
+    @Override
+    public void showPersonCastCredits(PersonWrapper person) {
+        Preconditions.checkNotNull(person, "person cannot be null");
+        Preconditions.checkNotNull(person.getTmdbId(), "person id cannot be null");
+
+        Display display = getDisplay();
+        if (display != null) {
+            display.showPersonCastCreditsFragment(String.valueOf(person.getTmdbId()));
+        }
+    }
+
+    @Override
+    public void showPersonCrewCredits(PersonWrapper person) {
+        Preconditions.checkNotNull(person, "person cannot be null");
+        Preconditions.checkNotNull(person.getTmdbId(), "person id cannot be null");
+
+        Display display = getDisplay();
+        if (display != null) {
+            display.showPersonCrewCreditsFragment(String.valueOf(person.getTmdbId()));
+        }
     }
 
     /**
@@ -196,6 +214,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
             return;
         }
 
+        personName.setText(mPerson.getName());
         mItems.clear();
         mItems.add(PersonItems.TITLE);
 
@@ -209,18 +228,20 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         if (!MoviesCollections.isEmpty(mPerson.getCrewCredits())) {
             mItems.add(PersonItems.CREDITS_CREW);
         }
+
+        mAdapter = createRecyclerAdapter(mItems);
     }
 
     /**
      * DetailAdapter
      */
     public class DetailAdapter extends  EnumListDetailAdapter<PersonItems> {
-        List<BaseViewHolder> mItems;
+        private List<BaseViewHolder> mItems;
 
         public DetailAdapter() {
         }
 
-        public void addBinders(List<PersonItems> items) {
+        public DetailAdapter(List<PersonItems> items) {
             mItems = new ArrayList<>(items.size());
             for (PersonItems item : items) {
                 switch (item) {
@@ -249,12 +270,13 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
 
         public PersonTitleBinder(BaseDetailAdapter dataBindAdapter) {
             super(dataBindAdapter);
+            Log.d(LOG_TAG, "Bind title");
         }
 
         @Override
         public ViewHolder newViewHolder(ViewGroup parent) {
             View view = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.item_movie_detail_summary, parent, false);
+                    R.layout.item_person_detail_title, parent, false);
             return new ViewHolder(view);
         }
 
@@ -321,6 +343,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
 
         public PersonBiographyBinder(BaseDetailAdapter dataBindAdapter) {
             super(dataBindAdapter);
+            Log.d(LOG_TAG, "Bind Biography");
         }
 
         @Override
@@ -333,6 +356,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
             holder.biography.setText(mPerson.getBiography());
+            Log.d(LOG_TAG, mPerson.getBiography());
         }
 
         @Override
@@ -380,7 +404,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getPresenter().showPersonCastCredits(mPerson);
+                    showPersonCastCredits(mPerson);
                 }
             };
 
@@ -448,7 +472,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getPresenter().showPersonCrewCredits(mPerson);
+                    showPersonCrewCredits(mPerson);
                 }
             };
 
@@ -516,14 +540,16 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
 
             final PersonCreditWrapper credit = getItem(position);
 
-            final TextView title = (TextView) view.findViewById(R.id.textview_title);
+            final TextView title = (TextView) view.findViewById(R.id.title);
+            Preconditions.checkState(title != null, "title == null");
+           // Preconditions.checkState(credit.getTitle() == null, "credit.getTitle() != null  " + credit.getTitle());
             title.setText(credit.getTitle());
 
             final ImageView imageView =
-                    (ImageView) view.findViewById(R.id.imageview_poster);
+                    (ImageView) view.findViewById(R.id.poster);
             //load poster to imageView
 
-            TextView subTitle = (TextView) view.findViewById(R.id.textview_subtitle_1);
+            TextView subTitle = (TextView) view.findViewById(R.id.subtitle_1);
             if (!TextUtils.isEmpty(credit.getJob())) {
                 subTitle.setText(credit.getJob());
                 subTitle.setVisibility(View.VISIBLE);
@@ -553,7 +579,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
                     if (hasPresenter()) {
                         PersonCreditWrapper credit = (PersonCreditWrapper) view.getTag();
                         if (credit != null && credit != null) {
-                            getPresenter().showMovieDetail(credit,
+                            showMovieDetail(credit,
                                     null);
                         }
                     }
@@ -583,7 +609,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
                     if (hasPresenter()) {
                         PersonCreditWrapper credit = (PersonCreditWrapper) view.getTag();
                         if (credit != null && credit != null) {
-                            getPresenter().showMovieDetail(credit,
+                            showMovieDetail(credit,
                                     null);
                         }
                     }

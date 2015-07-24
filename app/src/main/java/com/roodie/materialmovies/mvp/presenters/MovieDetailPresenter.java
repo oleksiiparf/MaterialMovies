@@ -6,13 +6,10 @@ import android.util.Log;
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.mvp.views.MovieView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
-import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
-import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.TrailerWrapper;
 import com.roodie.model.state.ApplicationState;
-import com.roodie.model.state.AsyncDatabaseHelper;
 import com.roodie.model.state.BaseState;
 import com.roodie.model.state.MoviesState;
 import com.roodie.model.tasks.BaseMovieRunnable;
@@ -33,7 +30,6 @@ public class MovieDetailPresenter extends BasePresenter {
     private static final String LOG_TAG = MovieDetailPresenter.class.getSimpleName();
 
     private final BackgroundExecutor mExecutor;
-    private final AsyncDatabaseHelper mDbHelper;
 
 
     private final ApplicationState mState;
@@ -44,10 +40,9 @@ public class MovieDetailPresenter extends BasePresenter {
     @Inject
     public MovieDetailPresenter(
             @GeneralPurpose BackgroundExecutor executor,
-            AsyncDatabaseHelper dbHelper, ApplicationState state, Injector injector) {
+            ApplicationState state, Injector injector) {
         super();
         mExecutor = Preconditions.checkNotNull(executor, "executor can not be null");
-        mDbHelper = Preconditions.checkNotNull(dbHelper, "executor can not be null");
         mState = Preconditions.checkNotNull(state, "application state cannot be null");
         mInjector = Preconditions.checkNotNull(injector, "injector cannot be null");
     }
@@ -173,90 +168,15 @@ public class MovieDetailPresenter extends BasePresenter {
         mExecutor.execute(task);
     }
 
-
-    public void showMovieDetail(MovieWrapper movie, Bundle bundle) {
-        Preconditions.checkNotNull(movie, "movie cannot be null");
-
-        Display display = getDisplay();
-        if (display != null) {
-            if (movie.getTmdbId() != null) {
-                display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), bundle);
-            }
-        }
-    }
-
-    public void showMovieDetail(PersonCreditWrapper credit, Bundle bundle) {
-        Preconditions.checkNotNull(credit, "credit cannot be null");
-
-        Display display = getDisplay();
-        if (display != null) {
-            display.startMovieDetailActivity(String.valueOf(credit.getId()), bundle);
-        }
-    }
-
-    public void showRelatedMovies(MovieWrapper movie) {
-        Preconditions.checkNotNull(movie, "movie cannot be null");
-        Display display = getDisplay();
-        if (display != null) {
-            display.showRelatedMovies(String.valueOf(movie.getTmdbId()));
-        }
-    }
-
-    public void showMovieImages(MovieWrapper movie) {
-        Preconditions.checkNotNull(movie, "movie cannot be null");
-
-        final Display display = getDisplay();
-        if (display != null) {
-            display.startMovieImagesActivity(String.valueOf(movie.getTmdbId()));
-        }
-    }
-
-    public void showPersonDetail(PersonWrapper person, Bundle bundle) {
-        Preconditions.checkNotNull(person, "person cannot be null");
-        Preconditions.checkNotNull(person.getTmdbId(), "person id cannot be null");
-
-        Display display = getDisplay();
-        if (display != null) {
-            display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), bundle);
-        }
-    }
-
-    public void showCastList(MovieWrapper movie) {
-        Preconditions.checkNotNull(movie, "movie cannot be null");
-
-        Display display = getDisplay();
-        if (display != null) {
-            display.showCastListFragment(String.valueOf(movie.getTmdbId()));
-        }
-    }
-
-    public void showCrewList(MovieWrapper movie) {
-        Preconditions.checkNotNull(movie, "movie cannot be null");
-
-        Display display = getDisplay();
-        if (display != null) {
-            display.showCrewListFragment(String.valueOf(movie.getTmdbId()));
-        }
-    }
-
-    public void playTrailer(TrailerWrapper trailer) {
-        Preconditions.checkNotNull(trailer, "trailer cannot be null");
-        Preconditions.checkNotNull(trailer.getId(), "trailer id cannot be null");
-
-        final Display display = getDisplay();
-        if (display != null) {
-            switch (trailer.getSource()) {
-                case YOUTUBE:
-                    display.playYoutubeVideo(trailer.getId());
-                    break;
-            }
-        }
-    }
-
-
-
     public interface MovieDetailView extends MovieView {
 
         void setMovie(MovieWrapper movie);
+        void showMovieDetail(MovieWrapper movie, Bundle bundle);
+        void playTrailer(TrailerWrapper trailer);
+        void showCrewList(MovieWrapper movie);
+        void showCastList(MovieWrapper movie);
+        void showPersonDetail(PersonWrapper person, Bundle bundle);
+        void showMovieImages(MovieWrapper movie);
+        void showRelatedMovies(MovieWrapper movie);
     }
 }

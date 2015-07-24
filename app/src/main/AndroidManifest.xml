@@ -32,6 +32,21 @@
 
         </activity>
 
+        <activity
+            android:name=".views.activities.PersonActivity"
+            android:parentActivityName=".views.activities.MainActivity">
+
+            <intent-filter>
+                <action android:name="philm.intent.action.VIEW_PERSON"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.activities.MainActivity" />
+
+        </activity>
+
 
     </application>
 

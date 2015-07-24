@@ -11,10 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 
+import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.MovieGridPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
-import com.roodie.materialmovies.views.activities.MainActivity;
 import com.roodie.materialmovies.views.adapters.MovieGridAdapter;
 import com.roodie.model.Display;
 import com.roodie.model.entities.ListItem;
@@ -31,8 +31,6 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     private MovieGridPresenter mMovieGridPresenter;
     private MovieGridAdapter mMovieGridAdapter;
 
-    private Display mDisplay;
-
     private static final String LOG_TAG = MovieGridFragment.class.getSimpleName();
 
     @Override
@@ -48,9 +46,6 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mMovieGridPresenter = MMoviesApplication.from(activity.getApplicationContext()).getGridPresenter();
-        mDisplay = ((MainActivity) this.getActivity()).getDisplay();
-        mMovieGridPresenter.attachDisplay(mDisplay);
-
     }
 
     @Override
@@ -68,7 +63,6 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     @Override
     public void onDetach() {
         super.onDetach();
-        mMovieGridPresenter.detachDisplay(mDisplay);
     }
 
     @Override
@@ -118,9 +112,9 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
        if (hasPresenter()) {
 
            ListItem<MovieWrapper> item =  (ListItem<MovieWrapper>) l.getItemAtPosition(position);
-           Log.d(LOG_TAG, "List item clicked  " + item.getListItem().getTmdbTitle());
+           Log.d(LOG_TAG, "List item clicked  " + item.getListItem().getTitle());
            if (item.getListType() == ListItem.TYPE_ITEM) {
-               getPresenter().showMovieDetail(item.getListItem(),
+               showMovieDetail(item.getListItem(),
                       null);
            }
        }
@@ -167,6 +161,16 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
         setSecondaryProgressShown(visible);
     }
 
+    @Override
+    public void showMovieDetail(MovieWrapper movie, Bundle bundle){
+        Preconditions.checkNotNull(movie, "movie cannot be null");
+        Display display = getDisplay();
+        if (display != null) {
+            if (movie.getTmdbId() != null) {
+                display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), bundle);
+            }
+        }
+    }
     @Override
     public String getRequestParameter() {
         return null;

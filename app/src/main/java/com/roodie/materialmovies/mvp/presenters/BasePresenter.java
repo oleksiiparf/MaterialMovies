@@ -1,8 +1,5 @@
 package com.roodie.materialmovies.mvp.presenters;
 
-import com.google.common.base.Preconditions;
-import com.roodie.model.Display;
-
 /**
  * Created by Roodie on 25.06.2015.
  */
@@ -13,9 +10,6 @@ import com.roodie.model.Display;
  * declares some methods to attach the fragment/activity lifecycle.
  */
 abstract class BasePresenter {
-
-
-    private Display mDisplay;
 
     /**
      * Called when the presenter is initialized, this method represents the start of the presenter
@@ -34,27 +28,6 @@ abstract class BasePresenter {
      * Called when the presenter is paused.
      */
     public abstract void onPause();
-
-    public Display getDisplay() {
-        return mDisplay;
-    }
-
-    public void setDisplay(Display mDisplay) {
-        this.mDisplay = mDisplay;
-    }
-
-    public void attachDisplay(Display display) {
-        Preconditions.checkNotNull(display, "display is null");
-        Preconditions.checkState(getDisplay() == null, "we currently have a display");
-        setDisplay(display);
-    }
-
-    public void detachDisplay(Display display) {
-        Preconditions.checkNotNull(display, "display is null");
-        Preconditions.checkState(getDisplay() == display, "display is not attached");
-        setDisplay(null);
-    }
-
 
 }
 

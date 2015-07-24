@@ -219,8 +219,7 @@ public class MMoviesDisplay implements Display {
 
     @Override
     public void showPersonDetailFragment(String id) {
-        showFragmentFromDrawer(PersonDetailFragment.newInstance(id));
-
+            showFragmentFromDrawer(PersonDetailFragment.newInstance(id));
     }
 
     @Override

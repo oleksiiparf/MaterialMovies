@@ -6,7 +6,6 @@ import android.util.Log;
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.mvp.views.BaseMovieListView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
-import com.roodie.model.Display;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.state.ApplicationState;
@@ -54,9 +53,6 @@ public class MovieGridPresenter extends BasePresenter {
 
     }
 
-
-
-
     @Override
     public void initialize() {
 
@@ -80,12 +76,6 @@ public class MovieGridPresenter extends BasePresenter {
         this.mMovieGridView = view;
         attached = true;
 
-    }
-
-    public void attachDisplay(Display display) {
-        Preconditions.checkNotNull(display, "display is null");
-        Preconditions.checkState(getDisplay() == null, "we currently have a display");
-        setDisplay(display);
     }
 
     @Subscribe
@@ -117,19 +107,6 @@ public class MovieGridPresenter extends BasePresenter {
             } else {
                 mMovieGridView.showLoadingProgress(event.show);
             }
-        }
-    }
-
-
-    public void showMovieDetail(MovieWrapper movie, Bundle bundle){
-        Preconditions.checkNotNull(movie, "movie cannot be null");
-        Display display = getDisplay();
-        if (display != null) {
-            if (movie.getTmdbId() != null) {
-                display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), bundle);
-            }
-        } else {
-            Log.d(LOG_TAG, "Display is null");
         }
     }
 
@@ -213,5 +190,6 @@ public class MovieGridPresenter extends BasePresenter {
 
     public interface MovieGridView extends BaseMovieListView<MovieWrapper> {
 
+        void showMovieDetail(MovieWrapper movie, Bundle bundle);
     }
 }

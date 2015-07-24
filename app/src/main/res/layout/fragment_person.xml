@@ -10,9 +10,16 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/header_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -27,10 +34,10 @@
                 android:id="@+id/textview_person_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/imageViewPersonHeadshot"
                 android:layout_marginBottom="@dimen/default_padding"
                 android:layout_marginLeft="@dimen/keyline"
                 android:layout_marginRight="@dimen/keyline"
+                android:layout_alignBottom="@+id/imageview_person"
                 android:maxLines="2"
                 android:ellipsize="end"
                 tools:text="Kiefer Sutherland"
@@ -43,8 +50,11 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header_layout"/>
+
+        </LinearLayout>
 
     </ScrollView>
 
