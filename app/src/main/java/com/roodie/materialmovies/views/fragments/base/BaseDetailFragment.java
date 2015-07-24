@@ -12,6 +12,10 @@ import android.view.ViewGroup;
 
 import com.roodie.materialmovies.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by Roodie on 28.06.2015.
  */
@@ -171,5 +175,126 @@ public abstract class BaseDetailFragment extends BaseFragment {
 
         public abstract void notifyBinderItemRangeRemoved(BaseViewHolder binder, int positionStart,
                                                           int itemCount);
+    }
+
+    /**
+     * ListDetailAdapter
+     */
+    public class ListDetailAdapter extends BaseDetailAdapter {
+
+        private List<BaseViewHolder> mBinderList = new ArrayList<>();
+
+        @Override
+        public int getItemCount() {
+            int itemCount = 0;
+            for (BaseViewHolder binder : mBinderList) {
+                itemCount += binder.getItemCount();
+            }
+            return itemCount;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            int itemCount = 0;
+            for (int viewType = 0; viewType < mBinderList.size(); viewType++) {
+                itemCount += mBinderList.get(viewType).getItemCount();
+                if (position < itemCount) {
+                    return viewType;
+                }
+            }
+            throw new IllegalArgumentException("arg position is invalid");
+        }
+
+        @Override
+        public <T extends BaseViewHolder> T getDataBinder(int viewType) {
+            return (T) mBinderList.get(viewType);
+        }
+
+        @Override
+        public int getPosition(BaseViewHolder binder, int binderPosition) {
+            int viewType = mBinderList.indexOf(binder);
+            if (viewType < 0) {
+                throw new IllegalStateException("binder does not exist in adapter");
+            }
+
+            int position = binderPosition;
+            for (int i = 0; i < viewType; i++) {
+                position += mBinderList.get(i).getItemCount();
+            }
+
+            return position;
+        }
+
+        @Override
+        public int getBinderPosition(int position) {
+            int binderItemCount;
+            for (int i = 0; i < mBinderList.size(); i++) {
+                binderItemCount = mBinderList.get(i).getItemCount();
+                if (position - binderItemCount < 0) {
+                    break;
+                }
+                position -= binderItemCount;
+            }
+            return position;
+        }
+
+        @Override
+        public void notifyBinderItemRangeChanged(BaseViewHolder binder, int positionStart, int itemCount) {
+            notifyItemRangeChanged(getPosition(binder, positionStart), itemCount);
+        }
+
+        @Override
+        public void notifyBinderItemRangeInserted(BaseViewHolder binder, int positionStart, int itemCount) {
+            notifyItemRangeInserted(getPosition(binder, positionStart), itemCount);
+        }
+
+        @Override
+        public void notifyBinderItemRangeRemoved(BaseViewHolder binder, int positionStart, int itemCount) {
+            notifyItemRangeRemoved(getPosition(binder, positionStart), itemCount);
+        }
+
+        public List<BaseViewHolder> getBinderList() {
+            return mBinderList;
+        }
+
+        public void addBinder(BaseViewHolder binder) {
+            mBinderList.add(binder);
+        }
+
+        public void addAllBinder(List<BaseViewHolder> dataSet) {
+            mBinderList.addAll(dataSet);
+        }
+
+        public void addAllBinder(BaseViewHolder... dataSet) {
+            mBinderList.addAll(Arrays.asList(dataSet));
+        }
+
+        public void setBinder(int index, BaseViewHolder binder) {
+            mBinderList.set(index, binder);
+        }
+
+        public void removeBinder(int index) {
+            mBinderList.remove(index);
+        }
+
+        public void removeBinder(BaseViewHolder binder) {
+            mBinderList.remove(binder);
+        }
+
+        public void clearBinderList() {
+            mBinderList.clear();
+        }
+    }
+
+    /**
+     * EnumListDetailAdapter
+     *
+     * @param <E>
+     */
+    public abstract class EnumListDetailAdapter<E extends Enum<E>> extends ListDetailAdapter {
+
+        public <T extends BaseViewHolder> T getDataBinder(E e) {
+            return getDataBinder(e.ordinal());
+        }
     }
 }
