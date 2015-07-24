@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,9 @@ import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.PersonPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
-import com.roodie.materialmovies.views.activities.MovieActivity;
+import com.roodie.materialmovies.views.activities.PersonActivity;
+import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
+import com.roodie.materialmovies.views.custom_views.ViewRecycler;
 import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.PersonCreditWrapper;
@@ -24,6 +28,7 @@ import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.network.NetworkError;
 import com.roodie.model.util.MoviesCollections;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +38,7 @@ import java.util.List;
 public class PersonDetailFragment extends BaseDetailFragment implements PersonPresenter.PersonView {
 
     private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
-    private static final String PERSON_ID = "person_id";
+    private static final String KEY_PERSON_ID = "person_id";
 
     private PersonPresenter mPresenter;
     private PersonWrapper mPerson;
@@ -45,11 +50,14 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     private ImageView personImagePoster;
     private TextView personName;
 
+    private CastCreditsAdapter mCastCreditAdapter;
+    private CrewCreditsAdapter mCrewCreditAdapter;
+
     public static PersonDetailFragment newInstance(String personId) {
         Preconditions.checkArgument(!TextUtils.isEmpty(personId), "personId cannot be empty");
 
         Bundle bundle = new Bundle();
-        bundle.putString(PERSON_ID, personId);
+        bundle.putString(KEY_PERSON_ID, personId);
 
         PersonDetailFragment fragment = new PersonDetailFragment();
         fragment.setArguments(bundle);
@@ -69,7 +77,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         super.onAttach(activity);
         mContext = activity.getApplicationContext();
         mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getPersonPresenter();
-        mDisplay = ((MovieActivity)this.getActivity()).getDisplay();
+        mDisplay = ((PersonActivity)this.getActivity()).getDisplay();
         mPresenter.attachDisplay(mDisplay);
     }
 
@@ -127,9 +135,15 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
 
 
     @Override
-    protected BaseDetailAdapter createRecyclerAdapter() {
-        return null;
+    protected DetailAdapter createRecyclerAdapter() {
+        return new DetailAdapter();
     }
+
+    @Override
+    protected DetailAdapter getRecyclerAdapter() {
+        return (DetailAdapter)super.getRecyclerAdapter();
+    }
+
 
     /**
      * PersonView
@@ -138,7 +152,6 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
      */
     @Override
     public void setPerson(PersonWrapper person) {
-
         mPerson = person;
         populateUi();
     }
@@ -170,7 +183,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
 
     @Override
     public String getRequestParameter() {
-        return null;
+        return getArguments().getString(KEY_PERSON_ID);
     }
 
     @Override
@@ -212,20 +225,266 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
             for (PersonItems item : items) {
                 switch (item) {
                     case TITLE:
-                       // mItems.add(new PersonTitleBinder(this));
+                        mItems.add(new PersonTitleBinder(this));
                         break;
                     case BIOGRAPHY:
-                       // mItems.add(new PersonBiographyBinder(this));
+                        mItems.add(new PersonBiographyBinder(this));
                         break;
                     case CREDITS_CAST:
-                       // mItems.add(new PersonCastBinder(this));
+                        mItems.add(new PersonCastBinder(this));
                         break;
                     case CREDITS_CREW:
-                       // mItems.add(new PersonCrewBinder(this));
+                        mItems.add(new PersonCrewBinder(this));
                         break;
                 }
             }
             addAllBinder(mItems);
+        }
+    }
+
+    /**
+     * PersonTitleBinder
+     */
+    public class PersonTitleBinder extends BaseViewHolder<PersonTitleBinder.ViewHolder> {
+
+        public PersonTitleBinder(BaseDetailAdapter dataBindAdapter) {
+            super(dataBindAdapter);
+        }
+
+        @Override
+        public ViewHolder newViewHolder(ViewGroup parent) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_movie_detail_summary, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void bindViewHolder(ViewHolder holder, int position) {
+
+            DateFormat mMediumDateFormatter = DateFormat.getDateInstance();
+
+            if (mPerson.getDateOfBirth() != null) {
+                if (!TextUtils.isEmpty(mPerson.getPlaceOfBirth())) {
+                    holder.subtitle1.setText(
+                            getString(R.string.person_born_date_with_loc,
+                                    mMediumDateFormatter.format(mPerson.getDateOfBirth()),
+                                    mPerson.getPlaceOfBirth())
+                    );
+                } else {
+                    holder.subtitle1.setText(
+                            getString(R.string.person_born_date,
+                                    mMediumDateFormatter.format(mPerson.getDateOfBirth()))
+                    );
+                }
+                holder.subtitle1.setVisibility(View.VISIBLE);
+            } else {
+                holder.subtitle1.setVisibility(View.GONE);
+            }
+
+            if (mPerson.getDateOfDeath() != null) {
+                holder.subtitle2.setText(
+                        getString(R.string.person_death_date,
+                                mMediumDateFormatter.format(mPerson.getDateOfDeath()),
+                                mPerson.getAge())
+                );
+                holder.subtitle2.setVisibility(View.VISIBLE);
+            } else if (mPerson.getDateOfBirth() != null) {
+                holder.subtitle2.setText(getString(R.string.person_age, mPerson.getAge()));
+                holder.subtitle2.setVisibility(View.VISIBLE);
+            } else {
+                holder.subtitle2.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 1;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            TextView subtitle1;
+            TextView subtitle2;
+
+            public ViewHolder(View view) {
+                super(view);
+                subtitle1 = (TextView) view.findViewById(R.id.textview_subtitle_1);
+                subtitle2 = (TextView) view.findViewById(R.id.textview_subtitle_2);
+            }
+        }
+    }
+
+    /**
+     * PersonBiographyBinder
+     */
+    public class PersonBiographyBinder extends BaseViewHolder<PersonBiographyBinder.ViewHolder> {
+
+        public PersonBiographyBinder(BaseDetailAdapter dataBindAdapter) {
+            super(dataBindAdapter);
+        }
+
+        @Override
+        public ViewHolder newViewHolder(ViewGroup parent) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_person_detail_biography, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void bindViewHolder(ViewHolder holder, int position) {
+            holder.biography.setText(mPerson.getBiography());
+        }
+
+        @Override
+        public int getItemCount() {
+            return 1;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            TextView biography;
+
+            public ViewHolder(View view) {
+                super(view);
+                biography = (TextView) view.findViewById(R.id.textview_biography);
+            }
+        }
+    }
+
+    /**
+     * PersonCastBinder
+     */
+    public class PersonCastBinder extends BaseViewHolder<PersonCastBinder.ViewHolder> {
+
+        MovieDetailCardLayout cardLayout;
+
+        public PersonCastBinder(BaseDetailAdapter dataBindAdapter) {
+            super(dataBindAdapter);
+            Log.d(LOG_TAG, "Bind cast");
+        }
+
+        @Override
+        public ViewHolder newViewHolder(ViewGroup parent) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_movie_detail_generic_card, parent, false);
+            cardLayout = (MovieDetailCardLayout) view;
+
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void bindViewHolder(ViewHolder holder, int position) {
+
+            cardLayout.setTitle(R.string.cast_movies);
+
+            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getPresenter().showPersonCastCredits(mPerson);
+                }
+            };
+
+            final ViewRecycler viewRecycler = new ViewRecycler(holder.layout);
+            viewRecycler.recycleViews();
+
+            if (!getCastCreditAdapter().isEmpty()) {
+                final int numItems = getResources().getInteger(R.integer.detail_card_max_items);
+                final int adapterCount = getCastCreditAdapter().getCount();
+
+                for (int i = 0; i < Math.min(numItems, adapterCount); i++) {
+                    View view = getCastCreditAdapter().getView(i, viewRecycler.getRecycledView(), holder.layout);
+                    holder.layout.addView(view);
+                }
+                final boolean showSeeMore = numItems < getCastCreditAdapter().getCount();
+                cardLayout.setSeeMoreVisibility(showSeeMore);
+                cardLayout.setSeeMoreOnClickListener(showSeeMore ? seeMoreClickListener : null);
+
+            }
+            viewRecycler.clearRecycledViews();
+        }
+
+        @Override
+        public int getItemCount() {
+            return 1;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            ViewGroup layout;
+
+            public ViewHolder(View view) {
+                super(view);
+                layout = (ViewGroup) view.findViewById(R.id.card_content);
+            }
+        }
+    }
+
+    /**
+     * PersonCrewBinder
+     */
+    public class PersonCrewBinder extends BaseViewHolder<PersonCrewBinder.ViewHolder> {
+
+        MovieDetailCardLayout cardLayout;
+
+        public PersonCrewBinder(BaseDetailAdapter dataBindAdapter) {
+            super(dataBindAdapter);
+            Log.d(LOG_TAG, "Bind crew");
+        }
+
+        @Override
+        public ViewHolder newViewHolder(ViewGroup parent) {
+
+            View view = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_movie_detail_generic_card, parent, false);
+            cardLayout = (MovieDetailCardLayout) view;
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void bindViewHolder(ViewHolder holder, int position) {
+
+            cardLayout.setTitle(R.string.crew_movies);
+
+            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getPresenter().showPersonCrewCredits(mPerson);
+                }
+            };
+
+            final ViewRecycler viewRecycler = new ViewRecycler(holder.layout);
+            viewRecycler.recycleViews();
+
+            if (!getCrewCreditAdapter().isEmpty()) {
+                final int numItems = getResources().getInteger(R.integer.detail_card_max_items);
+                final int adapterCount = getCrewCreditAdapter().getCount();
+
+                for (int i = 0; i < Math.min(numItems, adapterCount); i++) {
+                    View view = getCrewCreditAdapter().getView(i, viewRecycler.getRecycledView(), holder.layout);
+                    holder.layout.addView(view);
+                }
+                final boolean showSeeMore = numItems < getCrewCreditAdapter().getCount();
+                cardLayout.setSeeMoreVisibility(showSeeMore);
+                cardLayout.setSeeMoreOnClickListener(showSeeMore ? seeMoreClickListener : null);
+
+            }
+            viewRecycler.clearRecycledViews();
+        }
+
+        @Override
+        public int getItemCount() {
+            return 1;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            ViewGroup layout;
+
+            public ViewHolder(View view) {
+                super(view);
+
+                layout = (ViewGroup) view.findViewById(R.id.card_content);
+            }
         }
     }
 
@@ -341,6 +600,20 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         public PersonCreditWrapper getItem(int position) {
             return mPerson.getCastCredits().get(position);
         }
+    }
+
+    private CastCreditsAdapter getCastCreditAdapter() {
+        if (mCastCreditAdapter == null) {
+            mCastCreditAdapter = new CastCreditsAdapter(LayoutInflater.from(getActivity()));
+        }
+        return mCastCreditAdapter;
+    }
+
+    private CrewCreditsAdapter getCrewCreditAdapter() {
+        if (mCrewCreditAdapter == null) {
+            mCrewCreditAdapter = new CrewCreditsAdapter(LayoutInflater.from(getActivity()));
+        }
+        return mCrewCreditAdapter;
     }
 
 
