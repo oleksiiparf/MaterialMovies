@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        jcenter()
         mavenCentral()
     }
 
@@ -13,6 +14,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
@@ -45,10 +47,13 @@ dependencies {
     compile project(':model')
 
     compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:design:22.2.0'
+    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.android.support:design:22.2.1'
     compile 'com.android.support:cardview-v7:22.0.+'
     compile 'com.android.support:palette-v7:22.0.+'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.afollestad:material-dialogs:0.7.7.0'
+
     apt 'com.squareup.dagger:dagger-compiler:1.2.+'
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
