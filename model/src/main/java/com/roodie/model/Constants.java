@@ -9,6 +9,8 @@ public class Constants {
 
     public static final String TMDB_API_KEY = "8673a5378a15fbea14bb426f5222f4ed";
 
+    public static final int SCREEN_WIDTH_W_720_DP = 720;
+
     public static final boolean DEBUG_NETWORK = false;
 
     public static final int CONNECT_TIMEOUT_MILLIS = 15 * 1000; // 15s

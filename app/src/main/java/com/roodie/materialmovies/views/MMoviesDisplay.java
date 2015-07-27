@@ -19,15 +19,10 @@ import com.roodie.materialmovies.views.activities.MovieActivity;
 import com.roodie.materialmovies.views.activities.MovieImagesActivity;
 import com.roodie.materialmovies.views.activities.PersonActivity;
 import com.roodie.materialmovies.views.activities.SettingsActivity;
-import com.roodie.materialmovies.views.fragments.MovieCastListFragment;
-import com.roodie.materialmovies.views.fragments.MovieCrewListFragment;
 import com.roodie.materialmovies.views.fragments.MovieDetailFragment;
 import com.roodie.materialmovies.views.fragments.MovieImagesFragment;
-import com.roodie.materialmovies.views.fragments.PersonCastListFragment;
-import com.roodie.materialmovies.views.fragments.PersonCrewListFragment;
 import com.roodie.materialmovies.views.fragments.PersonDetailFragment;
 import com.roodie.materialmovies.views.fragments.PopularMoviesFragment;
-import com.roodie.materialmovies.views.fragments.RelatedMoviesFragment;
 import com.roodie.model.Display;
 
 /**
@@ -154,20 +149,10 @@ public class MMoviesDisplay implements Display {
         return backStackCount > 0;
     }
 
-
-
     @Override
     public void finishActivity() {
         mActivity.finish();
     }
-
-
-    @Override
-    public void showRelatedMovies(String movieId) {
-        showFragment(RelatedMoviesFragment.newInstance(movieId));
-
-    }
-
 
     @Override
     public void startPersonDetailActivity(String id, Bundle bundle) {
@@ -175,8 +160,6 @@ public class MMoviesDisplay implements Display {
         intent.putExtra(PARAM_ID, id);
         startActivity(intent, bundle);
     }
-
-
 
     @Override
     public void playYoutubeVideo(String id) {
@@ -207,28 +190,7 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
-    public void showCastListFragment(String movieId) {
-        showFragment(MovieCastListFragment.newInstance(movieId));
-    }
-
-    @Override
-    public void showCrewListFragment(String movieId) {
-        showFragment(MovieCrewListFragment.newInstance(movieId));
-
-    }
-
-    @Override
     public void showPersonDetailFragment(String id) {
             showFragmentFromDrawer(PersonDetailFragment.newInstance(id));
-    }
-
-    @Override
-    public void showPersonCastCreditsFragment(String id) {
-        showFragment(PersonCastListFragment.newInstance(id));
-    }
-
-    @Override
-    public void showPersonCrewCreditsFragment(String id) {
-        showFragment(PersonCrewListFragment.newInstance(id));
     }
 }

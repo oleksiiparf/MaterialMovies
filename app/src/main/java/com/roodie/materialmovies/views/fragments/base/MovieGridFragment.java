@@ -175,4 +175,9 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     public String getRequestParameter() {
         return null;
     }
+
+    @Override
+    public boolean isModal() {
+        return false;
+    }
 }

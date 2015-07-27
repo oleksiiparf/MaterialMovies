@@ -91,7 +91,7 @@ public class MovieGridAdapter extends BaseAdapter {
 
         final MovieWrapper movie = getItem(position).getListItem();
 
-        holder.title.setText(movie.getTmdbTitle());
+        holder.title.setText(movie.getTitle());
         //load poster
         Picasso.with(mContext)
                 .load(mImageBaseUrl + movie.getPosterUrl())

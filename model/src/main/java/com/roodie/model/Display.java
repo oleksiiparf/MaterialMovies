@@ -46,19 +46,9 @@ public interface Display {
 
     public void finishActivity();
 
-    public void showRelatedMovies(String movieId);
-
-    public void showCastListFragment(String movieId);
-
-    public void showCrewListFragment(String movieId);
-
     public void startPersonDetailActivity(String id, Bundle bundle);
 
     public void showPersonDetailFragment(String id);
-
-    public void showPersonCastCreditsFragment(String id);
-
-    public void showPersonCrewCreditsFragment(String id);
 
     public void playYoutubeVideo(String id);
 
@@ -67,5 +57,6 @@ public interface Display {
     public void setStatusBarColor(float scroll);
 
     public void setSupportActionBar(Object toolbar, boolean handleBackground);
+
 
 }
