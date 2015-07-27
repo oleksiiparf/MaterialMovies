@@ -1,6 +1,7 @@
 package com.roodie.materialmovies.views.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.PersonPresenter;
@@ -35,7 +38,7 @@ import java.util.List;
  */
 public class PersonDetailFragment extends BaseDetailFragment implements PersonPresenter.PersonView {
 
-    private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
+    private static final String LOG_TAG = PersonDetailFragment.class.getSimpleName();
     private static final String KEY_PERSON_ID = "person_id";
 
     private PersonPresenter mPresenter;
@@ -48,6 +51,8 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
 
     private CastCreditsAdapter mCastCreditAdapter;
     private CrewCreditsAdapter mCrewCreditAdapter;
+
+    private Context mContext;
 
     public static PersonDetailFragment newInstance(String personId) {
         Preconditions.checkArgument(!TextUtils.isEmpty(personId), "personId cannot be empty");
@@ -71,6 +76,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mContext = activity.getApplicationContext();
         mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getPersonPresenter();
     }
 
@@ -147,6 +153,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         getRecyclerView().setAdapter(mAdapter);
     }
 
+
     @Override
     public void showMovieDetail(PersonCreditWrapper credit, Bundle bundle) {
         Preconditions.checkNotNull(credit, "credit cannot be null");
@@ -158,25 +165,27 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     }
 
     @Override
-    public void showPersonCastCredits(PersonWrapper person) {
-        Preconditions.checkNotNull(person, "person cannot be null");
-        Preconditions.checkNotNull(person.getTmdbId(), "person id cannot be null");
+    public void showPersonCreditsDialog(MovieQueryType queryType) {
+        Preconditions.checkNotNull(queryType, "Query type cannot be null");
+        Log.d(LOG_TAG, "Show detail dialog list");
+        ListView list = new ListView(mContext);
+        String mTitle = "";
+        boolean wrapInScrollView = false;
 
-        Display display = getDisplay();
-        if (display != null) {
-            display.showPersonCastCreditsFragment(String.valueOf(person.getTmdbId()));
+        switch (queryType) {
+            case PERSON_CREDITS_CAST:
+                list.setAdapter(getCastCreditAdapter());
+                mTitle = getResources().getString(R.string.cast_movies);
+                break;
+            case PERSON_CREDITS_CREW:
+                list.setAdapter(getCrewCreditAdapter());
+                mTitle = getResources().getString(R.string.crew_movies);
+                break;
         }
-    }
-
-    @Override
-    public void showPersonCrewCredits(PersonWrapper person) {
-        Preconditions.checkNotNull(person, "person cannot be null");
-        Preconditions.checkNotNull(person.getTmdbId(), "person id cannot be null");
-
-        Display display = getDisplay();
-        if (display != null) {
-            display.showPersonCrewCreditsFragment(String.valueOf(person.getTmdbId()));
-        }
+        new MaterialDialog.Builder(getActivity())
+                .title(mTitle)
+                .customView(list, wrapInScrollView)
+                .show();
     }
 
     /**
@@ -202,6 +211,11 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     @Override
     public String getRequestParameter() {
         return getArguments().getString(KEY_PERSON_ID);
+    }
+
+    @Override
+    public MovieQueryType getQueryType() {
+        return MovieQueryType.PERSON_DETAIL;
     }
 
     @Override
@@ -404,7 +418,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showPersonCastCredits(mPerson);
+                    showPersonCreditsDialog(MovieQueryType.PERSON_CREDITS_CAST);
                 }
             };
 
@@ -472,7 +486,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showPersonCrewCredits(mPerson);
+                    showPersonCreditsDialog(MovieQueryType.PERSON_CREDITS_CREW);
                 }
             };
 

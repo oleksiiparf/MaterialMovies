@@ -77,7 +77,7 @@ public class MovieDetailPresenter extends BasePresenter {
         fetchDetailMovieIfNeeded(2, mMoviesView.getRequestParameter());
     }
 
-    public void attachView (MovieDetailView view) {
+    public void attachView(MovieDetailView view) {
         Preconditions.checkNotNull(view, "View cannot be null");
         this.mMoviesView = view;
         attached = true;
@@ -98,10 +98,15 @@ public class MovieDetailPresenter extends BasePresenter {
         Preconditions.checkNotNull(event, "event cannot be null");
 
         Log.d(LOG_TAG, "populateUI: " + mMoviesView.getClass().getSimpleName());
+
         final MovieWrapper movie = mState.getMovie(mMoviesView.getRequestParameter());
 
-        if (movie != null) {
-            mMoviesView.setMovie(movie);
+        switch (mMoviesView.getQueryType()) {
+            case MOVIE_DETAIL:
+                if (movie != null) {
+                    mMoviesView.setMovie(movie);
+                }
+                break;
         }
     }
 
@@ -109,6 +114,9 @@ public class MovieDetailPresenter extends BasePresenter {
         fetchDetailMovie(2, mMoviesView.getRequestParameter());
     }
 
+    /**
+     * Fetch detail movie information
+     */
     private void fetchDetailMovie(final int callingId, String id) {
         Preconditions.checkNotNull(id, "id cannot be null");
 
@@ -148,7 +156,7 @@ public class MovieDetailPresenter extends BasePresenter {
             if (movie.getTmdbId() != null) {
                 fetchDetailMovieFromTmdb(callingId, movie.getTmdbId());
             } else {
-                fetchDetailMovieFromTmdb(callingId,Integer.valueOf(movie.getImdbId()));
+                fetchDetailMovieFromTmdb(callingId, Integer.valueOf(movie.getImdbId()));
             }
         }
     }
@@ -171,12 +179,15 @@ public class MovieDetailPresenter extends BasePresenter {
     public interface MovieDetailView extends MovieView {
 
         void setMovie(MovieWrapper movie);
+
         void showMovieDetail(MovieWrapper movie, Bundle bundle);
+
         void playTrailer(TrailerWrapper trailer);
-        void showCrewList(MovieWrapper movie);
-        void showCastList(MovieWrapper movie);
+
         void showPersonDetail(PersonWrapper person, Bundle bundle);
+
         void showMovieImages(MovieWrapper movie);
-        void showRelatedMovies(MovieWrapper movie);
+
+        void showMovieCreditsDialog(MovieQueryType queryType);
     }
 }

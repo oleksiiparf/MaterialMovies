@@ -28,6 +28,7 @@ public class PersonPresenter extends BasePresenter {
 
     private PersonView mPersonView;
 
+
     private final BackgroundExecutor mExecutor;
     private final ApplicationState mState;
     private final Injector mInjector;
@@ -50,6 +51,7 @@ public class PersonPresenter extends BasePresenter {
         Log.d(LOG_TAG, "On Person Changed info");
         populateUi(event);
     }
+
 
     @Subscribe
     public void onNetworkError(BaseState.OnErrorEvent event) {
@@ -74,7 +76,7 @@ public class PersonPresenter extends BasePresenter {
         fetchPersonIfNeeded(3, mPersonView.getRequestParameter());
     }
 
-    public void attachView (PersonView view) {
+    public void attachView(PersonView view) {
         Preconditions.checkNotNull(view, "View cannot be null");
         this.mPersonView = view;
         attached = true;
@@ -90,6 +92,9 @@ public class PersonPresenter extends BasePresenter {
         mState.unregisterForEvents(this);
     }
 
+    /**
+     * Fetch person information
+     */
     private void fetchPersonIfNeeded(final int callingId, String id) {
         Preconditions.checkNotNull(id, "id cannot be null");
 
@@ -112,18 +117,24 @@ public class PersonPresenter extends BasePresenter {
         Preconditions.checkNotNull(event, "event cannot be null");
 
         final PersonWrapper person = mState.getPerson(mPersonView.getRequestParameter());
-        if (person != null) {
-            mPersonView.setPerson(person);
+        Log.d(LOG_TAG, "Populate ui: " + mPersonView.getQueryType().toString());
+        switch (mPersonView.getQueryType()) {
+            case PERSON_DETAIL:
+                if (person != null) {
+                    mPersonView.setPerson(person);
+                }
+                break;
         }
-    }
 
+    }
 
     public interface PersonView extends MovieView {
 
         void setPerson(PersonWrapper person);
+
         void showMovieDetail(PersonCreditWrapper credit, Bundle bundle);
-        void showPersonCastCredits(PersonWrapper person);
-        void showPersonCrewCredits(PersonWrapper person);
+
+        void showPersonCreditsDialog(MovieQueryType queryType);
     }
 
 }

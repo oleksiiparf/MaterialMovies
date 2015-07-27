@@ -81,6 +81,8 @@ public interface MoviesState extends BaseState {
         }
     }
 
+
+
     public class MoviePaginatedResult extends PaginatedResult<MovieWrapper> {
     }
 

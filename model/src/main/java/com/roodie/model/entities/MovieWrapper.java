@@ -254,30 +254,8 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> {
     public Long getDBId() {
         return _id;
     }
-
-    public int getIdType() {
-        return idType;
-    }
-
-    public String getImdbId() {
-        return imdbId;
-    }
-
-    public Integer getTmdbId() {
-        return tmdbId;
-    }
-
-    public String getTmdbTitle() {
-        return tmdbTitle;
-    }
-
-
     public boolean hasPosterUrl() {
         return !TextUtils.isEmpty(tmdbPosterUrl);
-    }
-
-    public String getPosterUrl() {
-        return tmdbPosterUrl;
     }
 
     public boolean hasBackdropUrl() {
@@ -296,56 +274,124 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> {
         this.backgroundImages = backgroundImages;
     }
 
-    public int getYear() {
-        return tmdbYear;
-    }
-
-    public List<TrailerWrapper> getTrailers() {
-        return trailers;
-    }
-
     public void setTrailers(List<TrailerWrapper> trailers) {
         this.trailers = trailers;
-    }
-
-    public List<MovieCreditWrapper> getCrew() {
-        return crew;
     }
 
     public void setCrew(List<MovieCreditWrapper> crew) {
         this.crew = crew;
     }
 
-    public List<MovieCreditWrapper> getCast() {
-        return cast;
-    }
-
     public void setCast(List<MovieCreditWrapper> cast) {
         this.cast = cast;
-    }
-
-    public long getTmdbReleasedTime() {
-        return tmdbReleasedTime;
     }
 
     public void setTmdbReleasedTime(long tmdbReleasedTime) {
         this.tmdbReleasedTime = tmdbReleasedTime;
     }
 
-    public String getOverview() {
-        return tmdbOverview;
+    public void setRelated(List<MovieWrapper> related) {
+        this.related = related;
     }
 
-    public String getTmdbBackdropUrl() {
-        return tmdbBackdropUrl;
+    public List<TrailerWrapper> getTrailers() {
+        return trailers;
+    }
+
+    public List<MovieCreditWrapper> getCrew() {
+        return crew;
+    }
+
+    public List<MovieCreditWrapper> getCast() {
+        return cast;
     }
 
     public List<MovieWrapper> getRelated() {
         return related;
     }
 
-    public void setRelated(List<MovieWrapper> related) {
-        this.related = related;
+    public long getLastFullFetchFromTmdbCompleted() {
+        return lastFullFetchFromTmdbCompleted;
+    }
+
+    public long getLastFullFetchFromTmdbStarted() {
+        return lastFullFetchFromTmdbStarted;
+    }
+
+    public String getMainLanguageTitle() {
+        return tmdbMainLanguage;
+    }
+
+    public String getGenres() {
+        return tmdbGenres;
+    }
+
+    public String getCertification() {
+        return tmdbCertification;
+    }
+
+    public int getRuntime() {
+        return tmdbRuntime;
+    }
+
+    public int getRatingVotes() {
+        return tmdbRatingVotes;
+    }
+
+    public int getRatingPercent() {
+        return tmdbRatingPercent;
+    }
+
+    public String getReleasedCountryCode() {
+        return tmdbReleasedCountryCode;
+    }
+
+    public long getReleasedTime() {
+        return tmdbReleasedTime;
+    }
+
+    public int getBudget() {
+        return tmdbBudget;
+    }
+
+    public boolean isTmdbIsAdult() {
+        return tmdbIsAdult;
+    }
+
+    public int getYear() {
+        return tmdbYear;
+    }
+
+    public String getTmdbBackdropUrl() {
+        return tmdbBackdropUrl;
+    }
+
+    public String getPosterUrl() {
+        return tmdbPosterUrl;
+    }
+
+    public String getTagline() {
+        return tmdbTagline;
+    }
+
+    public String getOverview() {
+        return tmdbOverview;
+    }
+
+    public String getSortTitle() {
+        return tmdbSortTitle;
+    }
+
+    public String getTitle() {
+        return tmdbTitle;
+    }
+
+    public Integer getTmdbId() {
+        return tmdbId;
+    }
+
+    public String getImdbId() {
+        return imdbId;
     }
 
     public int getAverageRatingPercent() {

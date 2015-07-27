@@ -18,8 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.MovieDetailPresenter;
@@ -167,9 +169,16 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         return getArguments().getString(QUERY_MOVIE_ID);
     }
 
+    @Override
+    public MovieQueryType getQueryType() {
+        return MovieQueryType.MOVIE_DETAIL;
+    }
+
+
     /**
      * MovieDetailView
      */
+
     @Override
     public void setMovie(MovieWrapper movie) {
         mMovie = movie;
@@ -189,14 +198,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         }
     }
 
-    @Override
-    public void showRelatedMovies(MovieWrapper movie) {
-        Preconditions.checkNotNull(movie, "movie cannot be null");
-        Display display = getDisplay();
-        if (display != null) {
-            display.showRelatedMovies(String.valueOf(movie.getTmdbId()));
-        }
-    }
 
     @Override
     public void showMovieImages(MovieWrapper movie) {
@@ -220,26 +221,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     }
 
     @Override
-    public void showCastList(MovieWrapper movie) {
-        Preconditions.checkNotNull(movie, "movie cannot be null");
-
-        Display display = getDisplay();
-        if (display != null) {
-            display.showCastListFragment(String.valueOf(movie.getTmdbId()));
-        }
-    }
-
-    @Override
-    public void showCrewList(MovieWrapper movie) {
-        Preconditions.checkNotNull(movie, "movie cannot be null");
-
-        Display display = getDisplay();
-        if (display != null) {
-            display.showCrewListFragment(String.valueOf(movie.getTmdbId()));
-        }
-    }
-
-    @Override
     public void playTrailer(TrailerWrapper trailer) {
         Preconditions.checkNotNull(trailer, "trailer cannot be null");
         Preconditions.checkNotNull(trailer.getId(), "trailer id cannot be null");
@@ -252,6 +233,33 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                     break;
             }
         }
+    }
+
+    @Override
+    public void showMovieCreditsDialog(MovieQueryType queryType) {
+        Preconditions.checkNotNull(queryType, "Query type cannot be null");
+        Log.d(LOG_TAG, "Show detail dialog list");
+        ListView list = new ListView(mContext);
+        String mTitle = "";
+        boolean wrapInScrollView = false;
+
+        switch (queryType) {
+            case MOVIE_CAST:
+                list.setAdapter(getMovieCastAdapter());
+                mTitle = getResources().getString(R.string.cast_movies);
+                break;
+            case MOVIE_CREW:
+                list.setAdapter(getMovieCrewAdapter());
+                mTitle = getResources().getString(R.string.crew_movies);
+                break;
+            case MOVIE_RELATED:
+                list.setAdapter(getRelatedMoviesAdapter());
+                mTitle = getResources().getString(R.string.related_movies);
+        }
+        new MaterialDialog.Builder(getActivity())
+                .title(mTitle)
+                .customView(list, wrapInScrollView)
+                .show();
     }
 
 
@@ -618,7 +626,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showCastList(mMovie);
+                    showMovieCreditsDialog(MovieQueryType.MOVIE_CAST);
                 }
             };
 
@@ -686,7 +694,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showCrewList(mMovie);
+                    showMovieCreditsDialog(MovieQueryType.MOVIE_CREW);
                 }
             };
 
@@ -754,7 +762,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showCrewList(mMovie);
+                    showMovieCreditsDialog(MovieQueryType.MOVIE_RELATED);
                 }
             };
 

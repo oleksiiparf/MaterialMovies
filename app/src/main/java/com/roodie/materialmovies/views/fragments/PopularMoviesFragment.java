@@ -14,4 +14,9 @@ public class PopularMoviesFragment extends MovieGridFragment  {
         return false;
     }
 
+    @Override
+    public MovieQueryType getQueryType() {
+        return MovieQueryType.POPULAR ;
+    }
+
 }
