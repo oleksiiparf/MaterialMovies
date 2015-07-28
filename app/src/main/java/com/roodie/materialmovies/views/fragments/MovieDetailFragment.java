@@ -30,6 +30,7 @@ import com.roodie.materialmovies.util.MMoviesServiceUtils;
 import com.roodie.materialmovies.util.TmdbTools;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.custom_views.ArcProgress;
+import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
@@ -62,6 +63,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     private final ArrayList<DetailItemType> mItems = new ArrayList<>();
 
     private CollapsingToolbarLayout mCollapsingToolbar;
+    private MMoviesImageView mBackdropImageView;
 
     private Context mContext;
 
@@ -109,6 +111,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mCollapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.backdrop_toolbar);
+        mBackdropImageView = (MMoviesImageView) view.findViewById(R.id.backdrop_image);
         mPresenter.attachView(this);
         mPresenter.initialize();
     }
@@ -292,6 +295,11 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         }
         mItems.clear();
 
+        if (mBackdropImageView != null) {
+            if (mMovie.hasBackdropUrl()) {
+                mBackdropImageView.loadBackdrop(mMovie);
+            }
+        }
         if (mCollapsingToolbar != null) {
             mCollapsingToolbar.setTitle(mMovie.getTitle());
         }
@@ -887,14 +895,11 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             final TextView title = (TextView) convertView.findViewById(R.id.title);
             title.setText(credit.getPerson().getName());
 
-            final ImageView image = (ImageView) convertView.findViewById(R.id.poster);
-            MMoviesServiceUtils.loadWithPicasso(mContext, TmdbTools.buildProfileImageUrl(mContext, credit.getPerson().getPictureUrl(),
-                    TmdbTools.ProfileImageSize.W185))
-                    .resizeDimen(R.dimen.person_headshot_size, R.dimen.person_headshot_size)
-                    .centerCrop()
-                    .error(R.drawable.ic_profile_placeholder)
-                    .into(image);
+            final MMoviesImageView image = (MMoviesImageView) convertView.findViewById(R.id.poster);
+            image.setAvatarMode(true);
             //Load with Picasso
+            image.loadProfile(credit.getPerson());
+
 
             final TextView subTitle = (TextView) convertView.findViewById(R.id.subtitle_1);
             if (subTitle != null) {
@@ -1028,8 +1033,10 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 title.setText(movie.getTitle());
             }
 
-            final ImageView imageView =
-                    (ImageView) convertView.findViewById(R.id.poster);
+            final MMoviesImageView imageView =
+                    (MMoviesImageView) convertView.findViewById(R.id.poster);
+            imageView.setAvatarMode(false);
+            imageView.loadPoster(movie);
 
             MMoviesServiceUtils.loadWithPicasso(mContext, TmdbTools.buildProfileImageUrl(mContext, movie.getPosterUrl(),
                     TmdbTools.ProfileImageSize.W185))

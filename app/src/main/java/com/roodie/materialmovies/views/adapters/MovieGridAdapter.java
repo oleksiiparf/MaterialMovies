@@ -6,16 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.common.base.Objects;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.settings.DisplaySettings;
 import com.roodie.materialmovies.settings.TmdbSettings;
+import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -80,9 +79,7 @@ public class MovieGridAdapter extends BaseAdapter {
 
             holder = new ViewHolder();
             holder.title = (TextView) convertView.findViewById(R.id.title);
-            holder.poster = (ImageView) convertView.findViewById(R.id.poster);
-            holder.poster.setDrawingCacheEnabled(true);
-
+            holder.poster = (MMoviesImageView) convertView.findViewById(R.id.poster);
 
             convertView.setTag(holder);
         } else {
@@ -93,15 +90,13 @@ public class MovieGridAdapter extends BaseAdapter {
 
         holder.title.setText(movie.getTitle());
         //load poster
-        Picasso.with(mContext)
-                .load(mImageBaseUrl + movie.getPosterUrl())
-                .fit().centerCrop().into(holder.poster);
+        holder.poster.loadPoster(movie);
         return convertView;
     }
 
      class ViewHolder {
         TextView title;
-        ImageView poster;
+        MMoviesImageView poster;
     }
 
 }

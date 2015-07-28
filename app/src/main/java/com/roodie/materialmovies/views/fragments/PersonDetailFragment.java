@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,6 +19,7 @@ import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.PersonPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
+import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
 import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
@@ -46,7 +46,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     private PersonWrapper mPerson;
     private final ArrayList<PersonItems> mItems = new ArrayList<>();
 
-    private ImageView personImagePoster;
+    private MMoviesImageView personImagePoster;
     private TextView personName;
 
     private CastCreditsAdapter mCastCreditAdapter;
@@ -90,7 +90,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        personImagePoster = (ImageView) view.findViewById(R.id.imageview_person);
+        personImagePoster = (MMoviesImageView) view.findViewById(R.id.imageview_person);
         personName = (TextView) view.findViewById(R.id.textview_person_name);
 
         mPresenter.attachView(this);
@@ -226,6 +226,10 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     private void populateUi() {
         if (mPerson == null) {
             return;
+        }
+
+        if (personImagePoster != null) {
+            personImagePoster.loadProfile(mPerson);
         }
 
         personName.setText(mPerson.getName());
@@ -559,9 +563,10 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
            // Preconditions.checkState(credit.getTitle() == null, "credit.getTitle() != null  " + credit.getTitle());
             title.setText(credit.getTitle());
 
-            final ImageView imageView =
-                    (ImageView) view.findViewById(R.id.poster);
+            final MMoviesImageView imageView =
+                    (MMoviesImageView) view.findViewById(R.id.poster);
             //load poster to imageView
+            imageView.loadPoster(credit);
 
             TextView subTitle = (TextView) view.findViewById(R.id.subtitle_1);
             if (!TextUtils.isEmpty(credit.getJob())) {

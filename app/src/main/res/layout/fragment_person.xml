@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <com.roodie.materialmovies.views.custom_views.MMoviesImageView
                 android:id="@+id/imageview_person"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/person_detail_headshot_large_height"

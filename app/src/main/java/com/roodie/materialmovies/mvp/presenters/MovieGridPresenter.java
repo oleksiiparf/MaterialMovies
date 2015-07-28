@@ -11,7 +11,6 @@ import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.state.ApplicationState;
 import com.roodie.model.state.BaseState;
 import com.roodie.model.tasks.BaseMovieRunnable;
-import com.roodie.model.tasks.FetchConfigurationRunnable;
 import com.roodie.model.tasks.FetchPopularRunnable;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.Injector;
@@ -94,11 +93,6 @@ public class MovieGridPresenter extends BasePresenter {
     }
 
     @Subscribe
-    public void onTmdbConfigurationChanged(ApplicationState.TmdbConfigurationChangedEvent event) {
-        populateUi();
-    }
-
-    @Subscribe
     public void onLoadingProgressVisibilityChanged(BaseState.ShowLoadingProgressEvent event) {
         Log.d(LOG_TAG, "Loading progress visibility changed");
         if (attached) {
@@ -147,14 +141,6 @@ public class MovieGridPresenter extends BasePresenter {
             fetchPopular(callingId, TMDB_FIRST_PAGE);
         }
     }
-
-    private void fetchTmdbConfiguration() {
-        FetchConfigurationRunnable task = new FetchConfigurationRunnable();
-        mInjector.inject(task);
-        mExecutor.execute(task);
-    }
-
-
 
     public void  populateUi(){
             Log.d(LOG_TAG, "populateUi: " + mMovieGridView.getClass().getSimpleName());

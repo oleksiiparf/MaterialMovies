@@ -25,7 +25,7 @@
     android:paddingLeft="@dimen/spacing_major"
     android:paddingRight="@dimen/spacing_major">
 
-    <ImageView
+    <com.roodie.materialmovies.views.custom_views.MMoviesImageView
           android:id="@+id/poster"
           android:layout_width="@dimen/movie_list_image_width"
           android:layout_height="match_parent"

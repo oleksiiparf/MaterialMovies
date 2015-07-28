@@ -73,6 +73,7 @@ public class PersonPresenter extends BasePresenter {
 
     @Override
     public void initialize() {
+
         fetchPersonIfNeeded(3, mPersonView.getRequestParameter());
     }
 

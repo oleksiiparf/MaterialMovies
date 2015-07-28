@@ -7,7 +7,7 @@
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackground">
 
-    <ImageView
+    <com.roodie.materialmovies.views.custom_views.MMoviesImageView
             android:id="@+id/imageview_drawer_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

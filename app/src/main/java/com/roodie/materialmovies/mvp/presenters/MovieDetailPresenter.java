@@ -74,6 +74,7 @@ public class MovieDetailPresenter extends BasePresenter {
     @Override
     public void initialize() {
         checkViewAlreadySetted();
+
         fetchDetailMovieIfNeeded(2, mMoviesView.getRequestParameter());
     }
 

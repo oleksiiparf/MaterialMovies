@@ -6,7 +6,7 @@
     android:layout_height="@dimen/item_movie_height"
     android:clipChildren="false">
 
-    <ImageView
+    <com.roodie.materialmovies.views.custom_views.MMoviesImageView
         android:id="@+id/poster"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

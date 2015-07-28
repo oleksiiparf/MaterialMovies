@@ -30,8 +30,8 @@
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleMarginEnd="64dp">
 
-            <ImageView
-                android:id="@+id/poster"
+            <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+                android:id="@+id/backdrop_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
