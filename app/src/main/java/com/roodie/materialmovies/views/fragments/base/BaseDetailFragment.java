@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.roodie.materialmovies.R;
 
@@ -21,7 +22,9 @@ import java.util.List;
  */
 public abstract class BaseDetailFragment extends BaseFragment {
 
-    RecyclerView mRecyclerView;
+    protected RecyclerView mRecyclerView;
+    private LinearLayout mTitleContainer;
+
 
     private Context mContext;
 
@@ -48,11 +51,18 @@ public abstract class BaseDetailFragment extends BaseFragment {
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+
+        mTitleContainer = (LinearLayout) view.findViewById(R.id.container_layout);
     }
 
     protected RecyclerView getRecyclerView() {
         return mRecyclerView;
     }
+
+    public boolean hasTitleContainer() {
+        return mTitleContainer != null;
+    }
+
 
     /**
      * BaseViewHolder

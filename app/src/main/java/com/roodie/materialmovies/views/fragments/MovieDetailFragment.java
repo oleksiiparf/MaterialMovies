@@ -2,7 +2,6 @@ package com.roodie.materialmovies.views.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -30,12 +29,12 @@ import com.roodie.materialmovies.util.MMoviesServiceUtils;
 import com.roodie.materialmovies.util.TmdbTools;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.custom_views.ArcProgress;
+import com.roodie.materialmovies.views.custom_views.AutofitTextView;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
 import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
-import com.roodie.model.Constants;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieCreditWrapper;
 import com.roodie.model.entities.MovieWrapper;
@@ -63,7 +62,13 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     private final ArrayList<DetailItemType> mItems = new ArrayList<>();
 
     private CollapsingToolbarLayout mCollapsingToolbar;
-    private MMoviesImageView mBackdropImageView;
+    private MMoviesImageView mFanartImageView;
+    private TextView mTitleTextView;
+    private AutofitTextView mTaglineTextView;
+    private MMoviesImageView mPosterImageView;
+    private ArcProgress mRatingBar;
+    private TextView mVotesTextView;
+
 
     private Context mContext;
 
@@ -111,7 +116,16 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mCollapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.backdrop_toolbar);
-        mBackdropImageView = (MMoviesImageView) view.findViewById(R.id.backdrop_image);
+        mFanartImageView = (MMoviesImageView) view.findViewById(R.id.imageview_fanart);
+        if (mFanartImageView != null) {
+            mFanartImageView.setOnClickListener(this);
+        }
+
+        mTitleTextView = (TextView) view.findViewById(R.id.textview_title);
+        mTaglineTextView = (AutofitTextView) view.findViewById(R.id.textview_tagline);
+        mPosterImageView = (MMoviesImageView) view.findViewById(R.id.imageview_poster);
+        mRatingBar = (ArcProgress) view.findViewById(R.id.rating_bar);
+        mVotesTextView = (TextView) view.findViewById(R.id.textview_votes);
         mPresenter.attachView(this);
         mPresenter.initialize();
     }
@@ -295,27 +309,30 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         }
         mItems.clear();
 
-        if (mBackdropImageView != null) {
-            if (mMovie.hasBackdropUrl()) {
-                mBackdropImageView.loadBackdrop(mMovie);
-            }
+        if (mMovie.hasBackdropUrl()) {
+            mFanartImageView.loadBackdrop(mMovie);
         }
+
         if (mCollapsingToolbar != null) {
             mCollapsingToolbar.setTitle(mMovie.getTitle());
         }
 
-        Configuration configuration = mContext.getResources().getConfiguration();
-        if (configuration.screenWidthDp >= Constants.SCREEN_WIDTH_W_720_DP) {
-            Log.d(LOG_TAG, "wide screen");
-            mItems.add(DetailItemType.TITLE);
+        if (hasTitleContainer() && mTitleTextView != null) {
+            mTitleTextView.setText(mMovie.getTitle());
+            mTaglineTextView.setText(mMovie.getTagline());
+            mPosterImageView.loadPoster(mMovie);
+
+            mRatingBar.setMax(100);
+            mRatingBar.setProgress(mMovie.getAverageRatingPercent());
+            mVotesTextView.setText(String.valueOf(mMovie.getRatingVotes()));
         } else {
-            Log.d(LOG_TAG, "narrow screen");
             mItems.add(DetailItemType.TITLE);
         }
 
         if (!TextUtils.isEmpty(mMovie.getOverview())) {
             mItems.add(DetailItemType.SUMMARY);
         }
+
 
         mItems.add(DetailItemType.DETAILS);
 
@@ -338,7 +355,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
         mAdapter = createRecyclerAdapter(mItems);
 
-       // getRecyclerAdapter().addBinders(mItems);
     }
 
      enum DetailItemType  {
@@ -390,34 +406,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             addAllBinder(mItems);
         }
 
-        public void addBinders(List<DetailItemType> items) {
-            mItems = new ArrayList<>(items.size());
-            for (DetailItemType item : items) {
-                switch (item) {
-                    case TITLE:
-                        mItems.add(new MovieTitleBinder(this));
-                        break;
-                    case SUMMARY:
-                        mItems.add(new MovieSummaryBinder(this));
-                        break;
-                    case DETAILS:
-                        mItems.add(new MovieDetailsBinder(this));
-                        break;
-                    case TRAILERS:
-                        mItems.add(new MovieTrailersBinder(this));
-                        break;
-                    case CAST:
-                        mItems.add(new MovieCastBinder(this));
-                        break;
-                    case CREW:
-                        mItems.add(new MovieCrewBinder(this));
-                        break;
-                    case RELATED:
-                        mItems.add(new MovieRelatedBinder(this));
-                }
-            }
-            addAllBinder(mItems);
-        }
     }
 
     /**

@@ -26,7 +26,7 @@
             app:expandedTitleMarginEnd="64dp">
 
             <com.roodie.materialmovies.views.custom_views.MMoviesImageView
-                android:id="@+id/backdrop_image"
+                android:id="@+id/imageview_fanart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
