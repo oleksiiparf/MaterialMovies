@@ -21,6 +21,7 @@ import com.roodie.materialmovies.mvp.presenters.PersonPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
+import com.roodie.materialmovies.views.custom_views.RecyclerViewHeader;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
 import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
 import com.roodie.model.Display;
@@ -42,13 +43,14 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     private static final String KEY_PERSON_ID = "person_id";
 
     private PersonPresenter mPresenter;
-    private DetailAdapter mAdapter;
     private PersonWrapper mPerson;
     private final ArrayList<PersonItems> mItems = new ArrayList<>();
 
     private MMoviesImageView personImagePoster;
     private TextView personName;
+    private RecyclerViewHeader mHeader;
 
+    private DetailAdapter mAdapter;
     private CastCreditsAdapter mCastCreditAdapter;
     private CrewCreditsAdapter mCrewCreditAdapter;
 
@@ -90,6 +92,11 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mHeader = (RecyclerViewHeader) view.findViewById(R.id.header);
+
+        if (mHeader != null) {
+            mHeader.attachTo(getRecyclerView(), true);
+        }
         personImagePoster = (MMoviesImageView) view.findViewById(R.id.imageview_person);
         personName = (TextView) view.findViewById(R.id.textview_person_name);
 

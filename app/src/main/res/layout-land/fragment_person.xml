@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/include_toolbar" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/header_layout"
+            android:layout_width="0px"
+            android:layout_weight="5"
+            android:layout_height="match_parent">
+
+            <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+                android:id="@+id/imageview_person"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@color/protection_dark" />
+
+            <TextView
+                android:id="@+id/textview_person_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_padding"
+                android:layout_marginLeft="@dimen/keyline"
+                android:layout_marginRight="@dimen/keyline"
+                android:layout_alignBottom="@+id/imageview_person"
+                android:maxLines="2"
+                android:ellipsize="end"
+                tools:text="Kiefer Sutherland"
+                android:shadowColor="@color/protection_dark"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="2" />
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="0px"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header_layout"/>
+
+        </LinearLayout>
+
+</FrameLayout>

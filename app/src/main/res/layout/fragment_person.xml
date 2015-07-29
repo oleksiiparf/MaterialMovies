@@ -8,56 +8,42 @@
 
     <include layout="@layout/include_toolbar" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/header_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.roodie.materialmovies.views.custom_views.MMoviesImageView
-                android:id="@+id/imageview_person"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/person_detail_headshot_large_height"
-                android:scaleType="centerCrop"
-                android:src="@color/protection_dark" />
-
-            <TextView
-                android:id="@+id/textview_person_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/default_padding"
-                android:layout_marginLeft="@dimen/keyline"
-                android:layout_marginRight="@dimen/keyline"
-                android:layout_alignBottom="@+id/imageview_person"
-                android:maxLines="2"
-                android:ellipsize="end"
-                tools:text="Kiefer Sutherland"
-                android:shadowColor="@color/protection_dark"
-                android:shadowDx="0"
-                android:shadowDy="0"
-                android:shadowRadius="2" />
-
-        </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/header_layout"/>
-
-        </LinearLayout>
-
-    </ScrollView>
+            android:layout_height="wrap_content" />
 
 
+       <com.roodie.materialmovies.views.custom_views.RecyclerViewHeader
+           android:id="@+id/header"
+           android:layout_width="match_parent"
+           android:layout_height="@dimen/person_detail_headshot_large_height"
+           android:layout_gravity="center_horizontal|top">
+
+           <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+               android:id="@+id/imageview_person"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:scaleType="centerCrop"
+               android:src="@color/protection_dark" />
+
+           <TextView
+               android:id="@+id/textview_person_name"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginBottom="@dimen/default_padding"
+               android:layout_marginLeft="@dimen/keyline"
+               android:layout_marginRight="@dimen/keyline"
+               android:layout_alignBottom="@+id/imageview_person"
+               android:maxLines="2"
+               android:ellipsize="end"
+               tools:text="Kiefer Sutherland"
+               android:shadowColor="@color/protection_dark"
+               android:shadowDx="0"
+               android:shadowDy="0"
+               android:shadowRadius="2" />
+
+       </com.roodie.materialmovies.views.custom_views.RecyclerViewHeader>
 
 </FrameLayout>
