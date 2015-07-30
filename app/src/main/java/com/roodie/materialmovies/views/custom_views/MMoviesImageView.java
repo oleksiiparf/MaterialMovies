@@ -151,6 +151,18 @@ public class MMoviesImageView extends ImageView {
         }
     }
 
+    public void loadBackdrop(MovieWrapper.BackdropImage image) {
+        loadBackdrop(image, null);
+    }
+
+    public void loadBackdrop(MovieWrapper.BackdropImage image, OnLoadedListener listener) {
+        if (!TextUtils.isEmpty(image.url)) {
+            setImageHandler(new MovieBackdropImageHandler(image, listener));
+        } else {
+            reset();
+        }
+    }
+
     private void setImageHandler(ImageHandler handler) {
         if (mImageHandler != null && mImageHandler.isStarted() && !mImageHandler.isFinished()) {
             Picasso.with(getContext()).cancelRequest(mBitmapTarget);
@@ -271,6 +283,24 @@ public class MMoviesImageView extends ImageView {
             return ImageHelper.getFanartUrl(movie, imageView.getWidth(), imageView.getHeight());
         }
 
+    }
+
+    private class MovieBackdropImageHandler extends ImageHandler<MovieWrapper.BackdropImage> {
+
+        MovieBackdropImageHandler(MovieWrapper.BackdropImage backdrop, OnLoadedListener callback) {
+            super(backdrop, callback);
+        }
+
+        @Override
+        protected String buildUrl(MovieWrapper.BackdropImage backdrop,
+                                  ImageView imageView) {
+            return ImageHelper.getFanartUrl(backdrop, imageView.getWidth(), imageView.getHeight());
+        }
+
+        @Override
+        public boolean centerCrop() {
+            return false;
+        }
     }
 
 
