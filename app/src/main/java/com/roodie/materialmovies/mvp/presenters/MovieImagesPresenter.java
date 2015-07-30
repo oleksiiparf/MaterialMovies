@@ -1,5 +1,7 @@
 package com.roodie.materialmovies.mvp.presenters;
 
+import android.util.Log;
+
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.mvp.views.MovieView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
@@ -23,6 +25,8 @@ import javax.inject.Inject;
  */
 public class MovieImagesPresenter extends BasePresenter {
 
+    private static final String LOG_TAG = MovieImagesPresenter.class.getSimpleName();
+
     private MovieImagesView mView;
 
     private final ApplicationState mState;
@@ -42,6 +46,7 @@ public class MovieImagesPresenter extends BasePresenter {
 
     @Subscribe
     public void onMovieImagesChanged(MoviesState.MovieImagesUpdatedEvent event) {
+        Log.d(LOG_TAG, "On movie images received");
         populateUi(event);
     }
 

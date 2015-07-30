@@ -1,5 +1,7 @@
 package com.roodie.materialmovies.views.fragments;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
@@ -8,10 +10,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.MovieImagesPresenter;
+import com.roodie.materialmovies.views.MMoviesApplication;
+import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.fragments.base.BaseFragment;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.network.NetworkError;
@@ -27,7 +32,7 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
     private static final String CURRENT_ITEM = "viewpager_current";
 
     private MovieImagesPresenter mPresenter;
-    List<MovieWrapper.BackgroundImage> mImages;
+    List<MovieWrapper.BackdropImage> mImages;
 
     private ViewPager mViewPager;
     private ImageAdapter mAdapter;
@@ -43,6 +48,12 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
         fragment.setArguments(bundle);
 
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getMovieImagesPresenter();
     }
 
     @Nullable
@@ -63,12 +74,21 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
         if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_ITEM)) {
             mVisibleItem = savedInstanceState.getInt(CURRENT_ITEM);
         }
+        mPresenter.attachView(this);
+        mPresenter.initialize();
     }
 
     @Override
     public void onPause() {
         mVisibleItem = mViewPager.getCurrentItem();
+        mPresenter.onPause();
         super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        mPresenter.onResume();
+        super.onResume();
     }
 
     @Override
@@ -76,7 +96,6 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
         outState.putInt(CURRENT_ITEM, mViewPager.getCurrentItem());
         super.onSaveInstanceState(outState);
     }
-
 
     /**
      * MovieView
@@ -95,17 +114,19 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
      * MovieImagesView
      */
     @Override
-    public void setItems(List<MovieWrapper.BackgroundImage> images) {
+    public void setItems(List<MovieWrapper.BackdropImage> images) {
         mImages = images;
         if (mAdapter != null) {
+            System.out.println("Adapter != null");
             mAdapter.notifyDataSetChanged();
+            mViewPager.setCurrentItem(mVisibleItem);
         }
     }
 
 
     @Override
     public String getRequestParameter() {
-        return null;
+        return getArguments().getString(MOVIE_ID);
     }
 
     @Override
@@ -127,22 +148,45 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            return super.instantiateItem(container, position);
+            final MovieWrapper.BackdropImage image = mImages.get(position);
+
+            final View view = getLayoutInflater(null).inflate(R.layout.item_movie_image, container, false);
+
+            final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+
+            MMoviesImageView imageView = (MMoviesImageView) view.findViewById(R.id.imageview_backdrop);
+
+            imageView.loadBackdrop(image, new MMoviesImageView.OnLoadedListener() {
+                @Override
+                public void onSuccess(MMoviesImageView imageView, Bitmap bitmap) {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onError(MMoviesImageView imageView) {
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
+
+            container.addView(view, ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+
+            return view;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            super.destroyItem(container, position, object);
+            container.removeView(container.getChildAt(position));
         }
 
         @Override
         public int getCount() {
-            return 0;
+            return mImages != null ? mImages.size() : 0;
         }
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return false;
+            return true;
         }
     }
 }

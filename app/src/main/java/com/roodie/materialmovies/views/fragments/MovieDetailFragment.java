@@ -52,7 +52,7 @@ import java.util.List;
 /**
  * Created by Roodie on 27.06.2015.
  */
-public class MovieDetailFragment extends BaseDetailFragment implements MovieDetailPresenter.MovieDetailView, View.OnClickListener {
+public class MovieDetailFragment extends BaseDetailFragment implements MovieDetailPresenter.MovieDetailView {
 
     private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
@@ -118,7 +118,12 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         mCollapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.backdrop_toolbar);
         mFanartImageView = (MMoviesImageView) view.findViewById(R.id.imageview_fanart);
         if (mFanartImageView != null) {
-            mFanartImageView.setOnClickListener(this);
+            mFanartImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showMovieImages(mMovie);
+                }
+            });
         }
 
         mTitleTextView = (TextView) view.findViewById(R.id.textview_title);
@@ -285,15 +290,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         return false;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.imageview_poster: {
-                showMovieImages(mMovie);
-            }
-            break;
-        }
-    }
 
     protected DetailAdapter createRecyclerAdapter(List<DetailItemType> items) {
         return new DetailAdapter(items);

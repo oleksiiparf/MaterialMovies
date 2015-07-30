@@ -10,6 +10,7 @@ import com.roodie.materialmovies.modules.library.ContextProvider;
 import com.roodie.materialmovies.modules.library.InjectorModule;
 import com.roodie.materialmovies.mvp.presenters.MovieDetailPresenter;
 import com.roodie.materialmovies.mvp.presenters.MovieGridPresenter;
+import com.roodie.materialmovies.mvp.presenters.MovieImagesPresenter;
 import com.roodie.materialmovies.mvp.presenters.PersonPresenter;
 import com.roodie.model.util.Injector;
 
@@ -33,6 +34,9 @@ public class MMoviesApplication extends Application implements Injector {
 
     @Inject
     PersonPresenter mPersonPresenter;
+
+    @Inject
+    MovieImagesPresenter mMovieImagesPresenter;
 
     private ObjectGraph mObjectGraph;
 
@@ -69,5 +73,9 @@ public class MMoviesApplication extends Application implements Injector {
 
     public PersonPresenter getPersonPresenter() {
         return mPersonPresenter;
+    }
+
+    public MovieImagesPresenter getMovieImagesPresenter() {
+        return mMovieImagesPresenter;
     }
 }
