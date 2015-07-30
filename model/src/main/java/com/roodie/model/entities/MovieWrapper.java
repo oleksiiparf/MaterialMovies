@@ -80,7 +80,7 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> {
     transient List<MovieCreditWrapper> cast;
     transient List<MovieCreditWrapper> crew;
     transient List<TrailerWrapper> trailers;
-    transient List<BackgroundImage> backgroundImages;
+    transient List<BackdropImage> backdropImages;
 
     public MovieWrapper() {
     }
@@ -262,16 +262,16 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> {
         return !TextUtils.isEmpty(tmdbBackdropUrl);
     }
 
-    public List<BackgroundImage> getBackgroundImages() {
-        return backgroundImages;
+    public List<BackdropImage> getBackdropImages() {
+        return backdropImages;
     }
 
     public boolean isLoadedFromTmdb() {
         return loadedFromTmdb;
     }
 
-    public void setBackgroundImages(List<BackgroundImage> backgroundImages) {
-        this.backgroundImages = backgroundImages;
+    public void setBackdropImages(List<BackdropImage> backdropImages) {
+        this.backdropImages = backdropImages;
     }
 
     public void setTrailers(List<TrailerWrapper> trailers) {
@@ -430,16 +430,16 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> {
         return new StringBuffer().append(tmdbId).append(" ").append(imdbId).append(" ").append(tmdbTitle+ "  ").toString();
     }
 
-    public static class BackgroundImage {
+    public static class BackdropImage {
         public final String url;
         public final int sourceType;
 
-        public BackgroundImage(String url, int sourceType) {
+        public BackdropImage(String url, int sourceType) {
             this.url = Preconditions.checkNotNull(url, "url cannot be null");
             this.sourceType = sourceType;
         }
 
-        public BackgroundImage(Image image) {
+        public BackdropImage(Image image) {
             this.url = image.file_path;
             this.sourceType = MovieWrapper.TYPE_TMDB;
         }

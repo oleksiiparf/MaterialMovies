@@ -5,7 +5,6 @@ import com.roodie.model.state.MoviesState;
 import com.roodie.model.util.MoviesCollections;
 import com.uwetrottmann.tmdb.entities.Image;
 import com.uwetrottmann.tmdb.entities.Images;
-import com.uwetrottmann.tmdb.entities.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +30,14 @@ public class FetchMovieImagesRunnable extends BaseMovieRunnable<Images> {
 
     @Override
     public void onSuccess(Images result) {
-        MovieWrapper movie = mMoviesState.getMovie(mId);
+        MovieWrapper movie = mState.getMovie(mId);
         if (movie != null) {
             if (!MoviesCollections.isEmpty(result.backdrops)) {
-                List<MovieWrapper.BackgroundImage> backdrops = new ArrayList<>();
+                List<MovieWrapper.BackdropImage> backdrops = new ArrayList<>();
                 for (Image image : result.backdrops) {
-                    backdrops.add(new MovieWrapper.BackgroundImage(image));
+                    backdrops.add(new MovieWrapper.BackdropImage(image));
                 }
-                movie.setBackgroundImages(backdrops);
+                movie.setBackdropImages(backdrops);
             }
 
             getEventBus().post(new MoviesState.MovieImagesUpdatedEvent(getCallingId(), movie));
