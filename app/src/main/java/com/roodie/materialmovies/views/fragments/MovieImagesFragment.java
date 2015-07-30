@@ -23,6 +23,8 @@ import com.roodie.model.network.NetworkError;
 
 import java.util.List;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 /**
  * Created by Roodie on 27.06.2015.
  */
@@ -69,6 +71,8 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
         mAdapter = new ImageAdapter();
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mAdapter);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_ITEM)) {
@@ -156,27 +160,34 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
 
             MMoviesImageView imageView = (MMoviesImageView) view.findViewById(R.id.imageview_backdrop);
 
+            final PhotoViewAttacher attacher = new PhotoViewAttacher(imageView);
+
             imageView.loadBackdrop(image, new MMoviesImageView.OnLoadedListener() {
                 @Override
                 public void onSuccess(MMoviesImageView imageView, Bitmap bitmap) {
                     progressBar.setVisibility(View.GONE);
+                    attacher.update();
                 }
 
                 @Override
                 public void onError(MMoviesImageView imageView) {
                     progressBar.setVisibility(View.GONE);
+                    attacher.update();
                 }
             });
 
             container.addView(view, ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT);
 
-            return view;
+            return new PagerItem(view, attacher);
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(container.getChildAt(position));
+            final PagerItem pagerItem = (PagerItem) object;
+            pagerItem.photoViewAttacher.cleanup();
+            container.removeView(pagerItem.view);
+            pagerItem.clear();
         }
 
         @Override
@@ -186,7 +197,61 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return true;
+            return view == ((PagerItem) object).view;
+        }
+    }
+
+    private static class PagerItem {
+        View view;
+        PhotoViewAttacher photoViewAttacher;
+
+        PagerItem(View view, PhotoViewAttacher photoViewAttacher) {
+            this.view = view;
+            this.photoViewAttacher = photoViewAttacher;
+        }
+
+        void clear() {
+            view = null;
+            photoViewAttacher = null;
+        }
+    }
+
+    public class ZoomOutPageTransformer implements ViewPager.PageTransformer {
+        private static final float MIN_SCALE = 0.85f;
+        private static final float MIN_ALPHA = 0.5f;
+
+        public void transformPage(View view, float position) {
+            int pageWidth = view.getWidth();
+            int pageHeight = view.getHeight();
+
+            if (position < -1) { // [-Infinity,-1)
+                // This page is way off-screen to the left.
+                view.setAlpha(0);
+
+            } else if (position <= 1) { // [-1,1]
+                // Modify the default slide transition to shrink the page as well
+                float scaleFactor = Math.max(MIN_SCALE, 1 - Math.abs(position));
+                float vertMargin = pageHeight * (1 - scaleFactor) / 2;
+                float horzMargin = pageWidth * (1 - scaleFactor) / 2;
+                if (position < 0) {
+                    view.setTranslationX(horzMargin - vertMargin / 2);
+                } else {
+                    view.setTranslationX(-horzMargin + vertMargin / 2);
+                }
+
+                // Scale the page down (between MIN_SCALE and 1)
+                view.setScaleX(scaleFactor);
+                view.setScaleY(scaleFactor);
+
+                // Fade the page relative to its size.
+                view.setAlpha(MIN_ALPHA +
+                        (scaleFactor - MIN_SCALE) /
+                                (1 - MIN_SCALE) * (1 - MIN_ALPHA));
+
+            } else { // (1,+Infinity]
+                // This page is way off-screen to the right.
+                view.setAlpha(0);
+            }
         }
     }
 }
