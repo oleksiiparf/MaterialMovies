@@ -117,18 +117,19 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         super.onViewCreated(view, savedInstanceState);
         mCollapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.backdrop_toolbar);
         mFanartImageView = (MMoviesImageView) view.findViewById(R.id.imageview_fanart);
-        if (mFanartImageView != null) {
-            mFanartImageView.setOnClickListener(new View.OnClickListener() {
+
+
+        mTitleTextView = (TextView) view.findViewById(R.id.textview_title);
+        mTaglineTextView = (AutofitTextView) view.findViewById(R.id.textview_tagline);
+        mPosterImageView = (MMoviesImageView) view.findViewById(R.id.imageview_poster);
+        if (mPosterImageView != null) {
+            mPosterImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showMovieImages(mMovie);
                 }
             });
         }
-
-        mTitleTextView = (TextView) view.findViewById(R.id.textview_title);
-        mTaglineTextView = (AutofitTextView) view.findViewById(R.id.textview_tagline);
-        mPosterImageView = (MMoviesImageView) view.findViewById(R.id.imageview_poster);
         mRatingBar = (ArcProgress) view.findViewById(R.id.rating_bar);
         mVotesTextView = (TextView) view.findViewById(R.id.textview_votes);
         mPresenter.attachView(this);
@@ -462,6 +463,14 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             holder.taglineTextView.setText(mMovie.getTagline());
             String mImageBaseUrl = TmdbSettings.getImageBaseUrl(mContext)
                     + TmdbSettings.POSTER_SIZE_SPEC_W154;
+
+            holder.posterImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showMovieImages(mMovie);
+                }
+            });
+
             Picasso.with(mContext)
                     .load(mImageBaseUrl + mMovie.getPosterUrl())
                     .fit().
