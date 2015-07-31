@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Themes -->
+    <string name="theme_default">Material Movies Light</string>
+    <string name="theme_dark_alt">Android Dark</string>
+    <string name="theme_light">Dark</string>
+
+    <!-- Theme variants -->
+    <string-array name="themeSelection">
+        <item>@string/theme_default</item>
+        <item>@string/theme_dark_alt</item>
+        <item>@string/theme_light</item>
+    </string-array>
+    <string-array name="themeSelectionData">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+</resources>

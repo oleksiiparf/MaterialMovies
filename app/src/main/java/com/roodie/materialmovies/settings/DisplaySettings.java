@@ -8,7 +8,6 @@ import android.util.DisplayMetrics;
  */
 public class DisplaySettings {
 
-
     /**
      * Returns true for all screens with dpi higher than {@link DisplayMetrics#DENSITY_HIGH}.
      */

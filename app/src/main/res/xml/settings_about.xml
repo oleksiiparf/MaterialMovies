@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="version"
+        android:summary="@string/current_buld_version"
+        android:title="@string/build_version" />
+
+    <Preference
+        android:key="creator"
+        android:summary="@string/creator_context"
+        android:title="@string/creator" >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/AlexParfenjuk" />
+        </Preference>
+
+    <Preference
+        android:key="poweredTmdb"
+        android:summary="@string/powered_tmdb_content"
+        android:title="@string/powered_tmdb" />
+
+</PreferenceScreen>

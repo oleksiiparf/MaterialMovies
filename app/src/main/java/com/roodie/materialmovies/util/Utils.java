@@ -7,6 +7,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.roodie.materialmovies.R;
+import com.roodie.materialmovies.views.activities.SettingsActivity;
 
 /**
  * Created by Roodie on 22.07.2015.
@@ -41,12 +42,36 @@ public class Utils {
         return isConnected;
     }
 
-    public static int getDisplayWidth(Context context) {
+    public static int getScreenWidth(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         return size.x;
-
     }
+
+    public static int getScreenHeight(Context c) {
+            WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            return size.y;
+    }
+
+    /**
+     * Sets the global app theme variable. Applied by all activities once they are created.
+     */
+    public static synchronized void updateTheme(String themeIndex) {
+        int theme = Integer.valueOf(themeIndex);
+        switch (theme) {
+            case 1:
+                SettingsActivity.THEME = R.style.Theme_MMovies;
+                break;
+            default:
+                SettingsActivity.THEME = R.style.Theme_MMovies;
+                break;
+        }
+    }
+
+
 }
