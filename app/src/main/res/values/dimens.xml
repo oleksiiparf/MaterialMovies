@@ -5,6 +5,9 @@
     <dimen name="activity_horizontal_margin_double">32dp</dimen>
     <dimen name="activity_horizontal_margin_double_double">64dp</dimen>
 
+    <dimen name="title_summary_item_padding_bottom">15.0dip</dimen>
+    <dimen name="title_summary_item_margin_bottom">16.0dip</dimen>
+
     <dimen name="default_padding">8dp</dimen>
     <dimen name="keyline">16dp</dimen>
 
@@ -36,12 +39,12 @@
     <dimen name="movie_detail_login_title_textsize">26dp</dimen>
 
     <dimen name="movie_grid_spacing">4dp</dimen>
+    <dimen name="movie_grid_item_width">100dp</dimen>
+    <dimen name="movie_grid_item_height">170dp</dimen>
 
-    <dimen name="movie_detail_poster_width">100dp</dimen>
-    <!-- Old: 64 -->
-    <!-- Should be movie_detail_poster_width * 1.6 -->
-    <dimen name="movie_detail_poster_height">170dp</dimen>
-    <!-- Old: 102 -->
+    <dimen name="movie_detail_poster_width">136.0dip</dimen>
+    <dimen name="movie_detail_poster_height">203.0dip</dimen>
+
 
     <dimen name="movie_detail_ratingbar_height">144dp</dimen>
 
@@ -80,4 +83,5 @@
     <dimen name="person_headshot_size">40dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>
+
 </resources>

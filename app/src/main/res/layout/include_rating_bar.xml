@@ -1,52 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/spacing_minor"
-            android:layout_marginBottom="@dimen/spacing_minor"
-        android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_minor"
+    android:layout_marginBottom="@dimen/spacing_minor"
+    android:orientation="vertical">
 
-        <LinearLayout
-                android:id="@+id/top_bar"
-                android:layout_width="match_parent"
-                android:layout_height="0px"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="?attr/grey_shade">
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
 
-            <TextView
-                    android:id="@+id/textview_votes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.MMovies.Movie.Detail.Ratings.Votes"/>
+>
 
-            <TextView
-                    android:id="@+id/textview_votes_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/movie_detail_votes"
-                    style="@style/Widget.MMovies.Movie.Detail.Ratings.Title"/>
+        <TextView
+            android:id="@+id/textview_votes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            style="@style/Widget.MMovies.Movie.Detail.Ratings.Votes"
+           />
 
-        </LinearLayout>
-
-        <LinearLayout
-                android:id="@+id/bottom_bar"
-                android:layout_width="match_parent"
-                android:layout_height="0px"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="?attr/grey_shade">
-
-            <com.roodie.materialmovies.views.custom_views.ArcProgress
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rating_bar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                app:arc_bottom_text="GLOBAL"/>
-        </LinearLayout>
+        <TextView
+            android:id="@+id/textview_votes_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/movie_detail_votes"
+            style="@style/Widget.MMovies.Movie.Detail.Ratings.Title"
+            />
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="0px"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center_vertical">
+
+        <com.roodie.materialmovies.views.custom_views.ArcProgress
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/rating_bar"
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            app:arc_bottom_text="GLOBAL"/>
+    </FrameLayout>
+
+</LinearLayout>

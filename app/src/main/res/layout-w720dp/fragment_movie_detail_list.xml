@@ -32,32 +32,37 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-            <com.roodie.materialmovies.views.custom_views.MMoviesImageView
-                android:id="@+id/imageview_fanart"
-                android:layout_width="match_parent"
-                android:layout_height="500px"
-                android:scaleType="centerCrop"
-                android:fitsSystemWindows="true"
-                app:layout_collapseMode="parallax" />
-
-                <TextView
-                    android:id="@+id/textview_title"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/default_padding"
-                    android:layout_marginLeft="@dimen/keyline"
-                    android:layout_marginRight="@dimen/keyline"
-                    android:layout_alignBottom="@+id/imageview_fanart"
-                    android:maxLines="2"
-                    android:ellipsize="end"
-                    tools:text="Kiefer Sutherland"
-                    android:shadowColor="@color/protection_dark"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="2" />
+                    android:layout_height="match_parent">
+
+                    <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+                        android:id="@+id/imageview_fanart"
+                        android:layout_width="match_parent"
+                        android:layout_height="500px"
+                        android:scaleType="centerCrop"
+                        android:fitsSystemWindows="true"
+                        app:layout_collapseMode="parallax" />
+
+                        <TextView
+                            android:id="@+id/textview_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/default_padding"
+                            android:layout_marginLeft="@dimen/keyline"
+                            android:layout_marginRight="@dimen/keyline"
+                            android:layout_alignBottom="@+id/imageview_fanart"
+                            android:maxLines="2"
+                            android:ellipsize="end"
+                            tools:text="Kiefer Sutherland"
+                            android:shadowColor="@color/protection_dark"
+                            android:shadowDx="0"
+                            android:shadowDy="0"
+                            android:shadowRadius="2" />
+
+                </RelativeLayout>
 
                 <include layout="@layout/item_movie_detail_title"></include>
-
 
             </LinearLayout>
 

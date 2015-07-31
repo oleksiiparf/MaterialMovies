@@ -479,7 +479,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
             holder.ratingBar.setMax(100);
             holder.ratingBar.setProgress(mMovie.getAverageRatingPercent());
-            //holder.votes.setText(mMovie.getRatingVotes());
+            holder.votes.setText(String.valueOf(mMovie.getRatingVotes()));
         }
 
         @Override
