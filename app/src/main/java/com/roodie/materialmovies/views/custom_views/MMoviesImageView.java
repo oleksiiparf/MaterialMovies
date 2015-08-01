@@ -307,7 +307,7 @@ public class MMoviesImageView extends ImageView {
     private final Target mBitmapTarget = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            Log.d(LOG_TAG, "On bitmap loaded");
+            //Log.d(LOG_TAG, "On bitmap loaded");
             setImageBitmapImpl(bitmap);
             if (mImageHandler != null) {
                 if (mImageHandler.mListener != null) {
@@ -319,7 +319,7 @@ public class MMoviesImageView extends ImageView {
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
-            Log.d(LOG_TAG, "On bitmap failed");
+            //Log.d(LOG_TAG, "On bitmap failed");
             if (mImageHandler != null) {
                 if (mImageHandler.mListener != null) {
                     mImageHandler.mListener.onError(MMoviesImageView.this);
@@ -331,7 +331,7 @@ public class MMoviesImageView extends ImageView {
 
         @Override
         public void onPrepareLoad(Drawable placeHolderDrawable) {
-            Log.d(LOG_TAG, "On prepare load");
+            //Log.d(LOG_TAG, "On prepare load");
             if (mImageHandler == null || mImageHandler.shouldDisplayPlaceholder()) {
                 setImageDrawableImpl(placeHolderDrawable);
             }

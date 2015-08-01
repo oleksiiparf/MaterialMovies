@@ -22,7 +22,13 @@ public interface Display {
 
     public static final String PARAM_ID = "_id";
 
-    public void showPopular();
+    public void showMovies();
+
+    public void showShows();
+
+    public void showSettings();
+
+    public void showAbout();
 
     public void startMovieDetailActivity(String movieId, Bundle bundle);
 
@@ -37,6 +43,8 @@ public interface Display {
     public void closeDrawerLayout();
 
     public boolean hasMainFragment();
+
+    public void showUpNavigation(boolean show);
 
     public void setActionBarTitle(CharSequence title);
 

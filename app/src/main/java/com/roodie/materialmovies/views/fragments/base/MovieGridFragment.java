@@ -37,7 +37,6 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
         mMovieGridAdapter = new MovieGridAdapter(getActivity());
         setListAdapter(mMovieGridAdapter);
     }
@@ -92,6 +91,12 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //set actionbar up navigation
+        final Display display = getDisplay();
+        if (!isModal()) {
+            display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
+        }
+
         final int spacing = getResources().getDimensionPixelSize(R.dimen.movie_grid_spacing);
         getListView().setPadding(spacing, spacing, spacing, spacing);
         mMovieGridPresenter.attachView(this);
@@ -179,5 +184,10 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     @Override
     public boolean isModal() {
         return false;
+    }
+
+    @Override
+    public MovieQueryType getQueryType() {
+        return MovieQueryType.POPULAR;
     }
 }

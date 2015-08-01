@@ -25,8 +25,6 @@ import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.MovieDetailPresenter;
 import com.roodie.materialmovies.settings.TmdbSettings;
-import com.roodie.materialmovies.util.MMoviesServiceUtils;
-import com.roodie.materialmovies.util.TmdbTools;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.custom_views.ArcProgress;
 import com.roodie.materialmovies.views.custom_views.AutofitTextView;
@@ -115,6 +113,13 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //set actionbar up navigation
+        final Display display = getDisplay();
+        if (!isModal()) {
+            display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
+        }
+
         mCollapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.backdrop_toolbar);
         mFanartImageView = (MMoviesImageView) view.findViewById(R.id.imageview_fanart);
 
@@ -1030,13 +1035,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                     (MMoviesImageView) convertView.findViewById(R.id.poster);
             imageView.setAvatarMode(false);
             imageView.loadPoster(movie);
-
-            MMoviesServiceUtils.loadWithPicasso(mContext, TmdbTools.buildProfileImageUrl(mContext, movie.getPosterUrl(),
-                    TmdbTools.ProfileImageSize.W185))
-                    .resizeDimen(R.dimen.person_headshot_size, R.dimen.person_headshot_size)
-                    .centerCrop()
-                    .error(R.color.protection_dark)
-                    .into(imageView);
 
             convertView.setOnClickListener(mItemOnClickListener);
             convertView.setTag(movie);

@@ -23,6 +23,7 @@ import com.roodie.materialmovies.views.fragments.MovieDetailFragment;
 import com.roodie.materialmovies.views.fragments.MovieImagesFragment;
 import com.roodie.materialmovies.views.fragments.PersonDetailFragment;
 import com.roodie.materialmovies.views.fragments.PopularMoviesFragment;
+import com.roodie.materialmovies.views.fragments.ShowsFragment;
 import com.roodie.model.Display;
 
 /**
@@ -30,10 +31,13 @@ import com.roodie.model.Display;
  */
 public class MMoviesDisplay implements Display {
 
+    private static final String LOG_TAG = MMoviesDisplay.class.getSimpleName();
+
     private final ActionBarActivity mActivity;
     private final DrawerLayout mDrawerLayout;
 
     private Toolbar mToolbar;
+    private boolean mCanChangeToolbarBackground;
 
     public MMoviesDisplay(ActionBarActivity mActivity, DrawerLayout mDrawerLayout) {
         this.mActivity = Preconditions.checkNotNull(mActivity, "Activity can not be null");
@@ -62,8 +66,32 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
-    public void showPopular() {
+    public void showMovies() {
         showFragmentFromDrawer(new PopularMoviesFragment());
+    }
+
+    @Override
+    public void showShows() {
+        showFragmentFromDrawer(new ShowsFragment());
+    }
+
+    @Override
+    public void showSettings() {
+        startSettingsActivity();
+    }
+
+    @Override
+    public void showAbout() {
+    }
+
+    @Override
+    public void showUpNavigation(boolean show) {
+        final ActionBar ab = mActivity.getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+            ab.setHomeButtonEnabled(true);
+            ab.setHomeAsUpIndicator(show ? R.drawable.ic_back : R.drawable.ic_menu);
+        }
     }
 
     @Override
@@ -179,6 +207,8 @@ public class MMoviesDisplay implements Display {
     @Override
     public void setSupportActionBar(Object toolbar, boolean handleBackground) {
         mToolbar = (Toolbar) toolbar;
+        mCanChangeToolbarBackground = handleBackground;
+
 
         if (mDrawerLayout != null && mToolbar != null) {
             final ActionBar ab = mActivity.getSupportActionBar();
@@ -186,6 +216,12 @@ public class MMoviesDisplay implements Display {
                 ab.setDisplayHomeAsUpEnabled(true);
                 ab.setHomeButtonEnabled(true);
             }
+        }
+    }
+
+    private void setToolbarBackground(int color) {
+        if (mCanChangeToolbarBackground && mToolbar != null) {
+            mToolbar.setBackgroundColor(color);
         }
     }
 

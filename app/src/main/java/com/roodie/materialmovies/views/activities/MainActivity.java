@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity {
     protected void handleIntent(Intent intent, Display display) {
         if (Intent.ACTION_MAIN.equals(intent.getAction())) {
             if (!display.hasMainFragment()) {
-             display.showPopular();
+             display.showMovies();
                }
         }
     }

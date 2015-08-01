@@ -2,22 +2,24 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/include_toolbar" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
+        style="@style/Widget.MMovies.Toolbar" />
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+      <include layout="@layout/include_receicler_view"/>
 
 
        <com.roodie.materialmovies.views.custom_views.RecyclerViewHeader
            android:id="@+id/header"
            android:layout_width="match_parent"
+           android:layout_marginTop="?attr/actionBarSize"
            android:layout_height="@dimen/person_detail_headshot_large_height"
            android:layout_gravity="center_horizontal|top">
 

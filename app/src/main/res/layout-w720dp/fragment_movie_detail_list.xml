@@ -5,12 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        style="@style/Widget.MMovies.Toolbar.Transparent"
-        app:layout_collapseMode="pin" />
+<include layout="@layout/include_toolbar"></include>
 
 <LinearLayout
     android:layout_height="match_parent"
@@ -25,7 +20,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -78,7 +74,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize" />
 
     </FrameLayout>
 

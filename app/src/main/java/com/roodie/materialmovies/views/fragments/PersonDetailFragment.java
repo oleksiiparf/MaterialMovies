@@ -91,6 +91,11 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //set actionbar up navigation
+        final Display display = getDisplay();
+        if (!isModal()) {
+            display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
+        }
 
         mHeader = (RecyclerViewHeader) view.findViewById(R.id.header);
 

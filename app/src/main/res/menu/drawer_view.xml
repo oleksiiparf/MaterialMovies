@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group  android:id="@+id/menu_group_1">
 
         <item
-            android:id="@+id/nav_movies"
-            android:icon="@drawable/ic_movie_black"
+            android:id="@+id/menu_movies"
+            android:icon="@drawable/ic_play_circle"
             android:title="Movies" />
         <item
-            android:id="@+id/nav_shows"
-            android:icon="@drawable/ic_local_movies_black"
+            android:id="@+id/menu_shows"
+            android:icon="@drawable/ic_emoticon_cool"
             android:title="Shows" />
+
         </group>
 
-    <item android:title="Sub items">
-        <menu>
-            <item
-                android:icon="@drawable/ic_tune_black"
-                android:title="Settings" />
+    <group android:id="@+id/menu_group_2">
+        <item
+            android:id="@+id/menu_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="Settings" />
 
-        </menu>
-    </item>
-
+        <item
+            android:id="@+id/menu_about"
+            android:title="About"
+            android:icon="@drawable/ic_alert_circle"/>
+    </group>
 
 </menu>

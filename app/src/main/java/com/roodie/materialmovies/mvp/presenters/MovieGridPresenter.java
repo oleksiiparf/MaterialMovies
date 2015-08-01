@@ -139,6 +139,8 @@ public class MovieGridPresenter extends BasePresenter {
         ApplicationState.MoviePaginatedResult popular = mState.getPopular();
         if (popular == null || MoviesCollections.isEmpty(popular.items)) {
             fetchPopular(callingId, TMDB_FIRST_PAGE);
+        } else {
+            populateUi();
         }
     }
 

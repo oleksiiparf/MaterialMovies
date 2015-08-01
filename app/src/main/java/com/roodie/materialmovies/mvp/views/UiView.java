@@ -12,6 +12,7 @@ public interface UiView {
 
     public enum MovieQueryType {
         POPULAR,
+        SHOWS,
         MOVIE_DETAIL,
         MOVIE_RELATED,
         MOVIE_CAST,
@@ -20,7 +21,23 @@ public interface UiView {
         PERSON_DETAIL,
         PERSON_CREDITS_CAST,
         PERSON_CREDITS_CREW,
-        NONE
+        NONE;
+
+        public boolean showUpNavigation() {
+            switch (this) {
+                case MOVIE_DETAIL:
+                case MOVIE_RELATED:
+                case MOVIE_CAST:
+                case MOVIE_CREW:
+                case MOVIE_IMAGES:
+                case PERSON_DETAIL:
+                case PERSON_CREDITS_CAST:
+                case PERSON_CREDITS_CREW:
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 
 }
