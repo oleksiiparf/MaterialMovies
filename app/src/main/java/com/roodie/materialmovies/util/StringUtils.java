@@ -1,6 +1,7 @@
 package com.roodie.materialmovies.util;
 
 import com.roodie.materialmovies.R;
+import com.roodie.materialmovies.mvp.views.UiView;
 import com.roodie.model.network.NetworkError;
 
 /**
@@ -18,5 +19,17 @@ public class StringUtils {
                 default:
                     return R.string.empty_unknown_error;
         }
+    }
+
+    public static int getStringResId(UiView.MovieTab tab) {
+        switch (tab) {
+            case POPULAR:
+                return R.string.popular_title;
+            case IN_THEATRES:
+                return R.string.in_theatres_title;
+            case UPCOMING:
+                return R.string.upcoming_title;
+        }
+        return 0;
     }
 }

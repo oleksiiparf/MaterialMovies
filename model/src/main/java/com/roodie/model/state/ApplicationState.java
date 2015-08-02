@@ -29,6 +29,8 @@ public  class ApplicationState implements BaseState, MoviesState {
     private String popularString = "Popular";
 
     private MoviePaginatedResult mPopular;
+    private MoviePaginatedResult mNowPlaying;
+    private MoviePaginatedResult mUpcoming;
 
     private TmdbConfiguration mConfiguration;
 
@@ -90,14 +92,28 @@ public  class ApplicationState implements BaseState, MoviesState {
         return mPopular;
     }
 
-    public String getPopularString() {
-        return popularString;
-    }
-
     @Override
     public void setPopular(MoviePaginatedResult popular) {
         mPopular = popular;
         mEventBus.post(new PopularChangedEvent());
+    }
+
+    public MoviePaginatedResult getNowPlaying() {
+        return mNowPlaying;
+    }
+
+    public void setNowPlaying(MoviePaginatedResult mNowPlaying) {
+        this.mNowPlaying = mNowPlaying;
+        mEventBus.post(new InTheatresChangedEvent());
+    }
+
+    public MoviePaginatedResult getUpcoming() {
+        return mUpcoming;
+    }
+
+    public void setUpcoming(MoviePaginatedResult mUpcoming) {
+        this.mUpcoming = mUpcoming;
+        mEventBus.post(new UpcomingChangedEvent());
     }
 
     @Override

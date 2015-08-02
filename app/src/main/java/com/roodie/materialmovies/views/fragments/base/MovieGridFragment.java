@@ -28,10 +28,14 @@ import java.util.List;
  */
 public abstract class MovieGridFragment extends ListFragment<GridView> implements MovieGridPresenter.MovieGridView {
 
-    private MovieGridPresenter mMovieGridPresenter;
+    protected MovieGridPresenter mMovieGridPresenter;
     private MovieGridAdapter mMovieGridAdapter;
 
+    private static final String ARG_PRESENTER = "presenter";
+
     private static final String LOG_TAG = MovieGridFragment.class.getSimpleName();
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,8 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
         mMovieGridAdapter = new MovieGridAdapter(getActivity());
         setListAdapter(mMovieGridAdapter);
     }
+
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -50,24 +56,45 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     @Override
     public void onPause() {
         super.onPause();
-        mMovieGridPresenter.onPause();
+        Log.d(LOG_TAG, "####  On Pause");
+       // mMovieGridPresenter.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(LOG_TAG, "####  On Resume");
         mMovieGridPresenter.onResume();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        Log.d(LOG_TAG, "####  On Detach");
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(LOG_TAG, "####  On Destroy");
+        //mMovieGridPresenter.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(LOG_TAG, "####  On Stop");
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
        super.onCreateOptionsMenu(menu, inflater);
-          }
+    }
+
+    public static String getArgument() {
+        return ARG_PRESENTER;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

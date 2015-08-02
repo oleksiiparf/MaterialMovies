@@ -37,7 +37,7 @@ public abstract class BaseTabFragment extends BaseFragment {
         mAdapter = new TabPagerAdapter(getChildFragmentManager());
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        mViewPager.setOffscreenPageLimit(1);
+        //mViewPager.setOffscreenPageLimit(1);
 
        // mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.spacing_minor));
 

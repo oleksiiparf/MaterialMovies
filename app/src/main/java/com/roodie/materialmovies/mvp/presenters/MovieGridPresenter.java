@@ -14,6 +14,7 @@ import com.roodie.model.state.BaseState;
 import com.roodie.model.tasks.BaseMovieRunnable;
 import com.roodie.model.tasks.FetchInTheatresRunnable;
 import com.roodie.model.tasks.FetchPopularRunnable;
+import com.roodie.model.tasks.FetchUpcomingRunnable;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.Injector;
 import com.roodie.model.util.MoviesCollections;
@@ -58,7 +59,17 @@ public class MovieGridPresenter extends BasePresenter {
 
         checkViewAlreadySetted();
         //on ui attached
-        fetchPopularIfNeeded(1);
+        switch (mMovieGridView.getQueryType()) {
+            case POPULAR:
+                fetchPopularIfNeeded(1);
+                break;
+            case IN_THEATERS:
+                fetchNowPlayingIfNeeded(1);
+                break;
+            case UPCOMING:
+                fetchUpcomingIfNeeded(1);
+                break;
+        }
     }
 
     @Override
@@ -88,7 +99,14 @@ public class MovieGridPresenter extends BasePresenter {
 
     @Subscribe
     public void onInTheatresChanged(ApplicationState.InTheatresChangedEvent event) {
+        Log.d(LOG_TAG, "In Theatres changed");
         populateUiFromQueryType(UiView.MovieQueryType.IN_THEATERS);
+    }
+
+    @Subscribe
+    public void onUpcomingChanged(ApplicationState.UpcomingChangedEvent event) {
+        Log.d(LOG_TAG, "Upcoming changed");
+        populateUiFromQueryType(UiView.MovieQueryType.UPCOMING);
     }
 
     @Subscribe
@@ -113,7 +131,18 @@ public class MovieGridPresenter extends BasePresenter {
     }
 
     public void refresh() {
-        fetchPopular(1);
+        switch (mMovieGridView.getQueryType()) {
+            case POPULAR:
+                fetchPopular(1);
+                break;
+            case UPCOMING:
+                fetchUpcoming(1);
+                break;
+            case  IN_THEATERS:
+                fetchNowPlaying(1);
+                break;
+        }
+
     }
 
 
@@ -124,10 +153,22 @@ public class MovieGridPresenter extends BasePresenter {
     public void onScrolledToBottom(){
         ApplicationState.MoviePaginatedResult result;
 
-        result = mState.getPopular();
-        if (canFetchNextPage(result)) {
-            fetchPopular(1, result.page + 1);
+        switch (mMovieGridView.getQueryType()) {
+            case POPULAR:
+                result = mState.getPopular();
+                if (canFetchNextPage(result)) {
+                    fetchPopular(1, result.page + 1);
+                }
+                break;
+
+            case UPCOMING:
+                result = mState.getUpcoming();
+                if (canFetchNextPage(result)) {
+                    fetchUpcoming(1, result.page + 1);
+                }
+                break;
         }
+
     }
 
     private boolean canFetchNextPage(ApplicationState.PaginatedResult<?> paginatedResult) {
@@ -165,8 +206,32 @@ public class MovieGridPresenter extends BasePresenter {
         }
     }
 
+    private void fetchNowPlaying(final int callingId) {
+        mState.setNowPlaying(null);
+        fetchNowPlaying(callingId, TMDB_FIRST_PAGE);
+    }
+
     private void fetchNowPlaying(final int callingId, final int page) {
         executeTask(new FetchInTheatresRunnable(callingId, page));
+    }
+
+    /**
+     * Fetch upcoming movies task
+     */
+    private void fetchUpcomingIfNeeded(final int callingId) {
+        ApplicationState.MoviePaginatedResult upcoming = mState.getUpcoming();
+        if (upcoming == null || MoviesCollections.isEmpty(upcoming.items)) {
+            fetchUpcoming(callingId, TMDB_FIRST_PAGE);
+        }
+    }
+
+    private void fetchUpcoming(final int callingId) {
+        mState.setUpcoming(null);
+        fetchUpcoming(callingId, TMDB_FIRST_PAGE);
+    }
+
+    private void fetchUpcoming(final int callingId, final int page) {
+        executeTask(new FetchUpcomingRunnable(callingId, page));
     }
 
     public void  populateUiFromQueryType(UiView.MovieQueryType queryType){
@@ -178,14 +243,25 @@ public class MovieGridPresenter extends BasePresenter {
                 if (popular != null) {
                     items = popular.items;
                 }
-                if (items == null) {
-                    mMovieGridView.setItems(null);
-                } else  {
-                    mMovieGridView.setItems(createListItemList(items));
-                }
                 break;
             case IN_THEATERS:
+                ApplicationState.MoviePaginatedResult nowPlaying = mState.getNowPlaying();
+                if (nowPlaying != null) {
+                    items = nowPlaying.items;
+                }
                 break;
+            case UPCOMING:
+                ApplicationState.MoviePaginatedResult upcoming = mState.getUpcoming();
+                if (upcoming != null) {
+                    items = upcoming.items;
+                }
+                break;
+        }
+
+        if (items == null) {
+            mMovieGridView.setItems(null);
+        } else  {
+            mMovieGridView.setItems(createListItemList(items));
         }
 
 
