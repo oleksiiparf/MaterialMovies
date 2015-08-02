@@ -21,7 +21,6 @@ import com.roodie.materialmovies.mvp.presenters.PersonPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
-import com.roodie.materialmovies.views.custom_views.RecyclerViewHeader;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
 import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
 import com.roodie.model.Display;
@@ -48,7 +47,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
 
     private MMoviesImageView personImagePoster;
     private TextView personName;
-    private RecyclerViewHeader mHeader;
+   // private RecyclerViewHeader mHeader;
 
     private DetailAdapter mAdapter;
     private CastCreditsAdapter mCastCreditAdapter;
@@ -97,11 +96,11 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
             display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
         }
 
-        mHeader = (RecyclerViewHeader) view.findViewById(R.id.header);
-
-        if (mHeader != null) {
-            mHeader.attachTo(getRecyclerView(), true);
-        }
+       // mHeader = (RecyclerViewHeader) view.findViewById(R.id.header);
+//
+       // if (mHeader != null) {
+       //     mHeader.attachTo(getRecyclerView(), true);
+       // }
         personImagePoster = (MMoviesImageView) view.findViewById(R.id.imageview_person);
         personName = (TextView) view.findViewById(R.id.textview_person_name);
 
@@ -138,6 +137,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
 
 
     private enum PersonItems  {
+        HEADER,
         TITLE,                        //(R.layout.item_person_detail_title)
         BIOGRAPHY,                    //(R.layout.item_movie_detail_summary)
         CREDITS_CAST,                 //(R.layout.item_movie_detail_generic_card),
@@ -243,9 +243,14 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         if (personImagePoster != null) {
             personImagePoster.loadProfile(mPerson);
         }
-
-        personName.setText(mPerson.getName());
+        if (personName != null) {
+            personName.setText(mPerson.getName());
+        }
         mItems.clear();
+
+        if (personImagePoster == null && personName == null) {
+            mItems.add(PersonItems.HEADER);
+        }
         mItems.add(PersonItems.TITLE);
 
         if (!TextUtils.isEmpty(mPerson.getBiography())) {
@@ -275,6 +280,9 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
             mItems = new ArrayList<>(items.size());
             for (PersonItems item : items) {
                 switch (item) {
+                    case HEADER:
+                        mItems.add(new PersonHeaderBinder(this));
+                        break;
                     case TITLE:
                         mItems.add(new PersonTitleBinder(this));
                         break;
@@ -290,6 +298,47 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
                 }
             }
             addAllBinder(mItems);
+        }
+    }
+
+    /**
+     * PersonHeaderBinder
+     */
+    public class PersonHeaderBinder extends BaseViewHolder<PersonHeaderBinder.ViewHolder> {
+
+        public PersonHeaderBinder(BaseDetailAdapter dataBindAdapter) {
+            super(dataBindAdapter);
+            Log.d(LOG_TAG, "Bind header");
+        }
+
+        @Override
+        public ViewHolder newViewHolder(ViewGroup parent) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_person_header, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void bindViewHolder(ViewHolder holder, int position) {
+            holder.personImage.loadProfile(mPerson);
+            holder.personName.setText(mPerson.getName());
+        }
+
+        @Override
+        public int getItemCount() {
+            return 1;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            MMoviesImageView personImage;
+            TextView personName;
+
+            public ViewHolder(View view) {
+                super(view);
+                personImage = (MMoviesImageView) view.findViewById(R.id.imageview_person);
+                personName = (TextView) view.findViewById(R.id.textview_person_name);
+            }
         }
     }
 

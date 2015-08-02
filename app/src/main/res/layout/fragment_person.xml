@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,39 +12,12 @@
         style="@style/Widget.MMovies.Toolbar" />
 
 
-      <include layout="@layout/include_receicler_view"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_height="match_parent"
 
-
-       <com.roodie.materialmovies.views.custom_views.RecyclerViewHeader
-           android:id="@+id/header"
-           android:layout_width="match_parent"
-           android:layout_marginTop="?attr/actionBarSize"
-           android:layout_height="@dimen/person_detail_headshot_large_height"
-           android:layout_gravity="center_horizontal|top">
-
-           <com.roodie.materialmovies.views.custom_views.MMoviesImageView
-               android:id="@+id/imageview_person"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:scaleType="centerCrop"
-               android:src="@color/protection_dark" />
-
-           <TextView
-               android:id="@+id/textview_person_name"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_marginBottom="@dimen/default_padding"
-               android:layout_marginLeft="@dimen/keyline"
-               android:layout_marginRight="@dimen/keyline"
-               android:layout_alignBottom="@+id/imageview_person"
-               android:maxLines="2"
-               android:ellipsize="end"
-               tools:text="Kiefer Sutherland"
-               android:shadowColor="@color/protection_dark"
-               android:shadowDx="0"
-               android:shadowDy="0"
-               android:shadowRadius="2" />
-
-       </com.roodie.materialmovies.views.custom_views.RecyclerViewHeader>
+        xmlns:android="http://schemas.android.com/apk/res/android" />
 
 </FrameLayout>
