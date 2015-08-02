@@ -21,8 +21,8 @@ import com.roodie.materialmovies.views.activities.PersonActivity;
 import com.roodie.materialmovies.views.activities.SettingsActivity;
 import com.roodie.materialmovies.views.fragments.MovieDetailFragment;
 import com.roodie.materialmovies.views.fragments.MovieImagesFragment;
+import com.roodie.materialmovies.views.fragments.MoviesTabFragment;
 import com.roodie.materialmovies.views.fragments.PersonDetailFragment;
-import com.roodie.materialmovies.views.fragments.PopularMoviesFragment;
 import com.roodie.materialmovies.views.fragments.ShowsFragment;
 import com.roodie.model.Display;
 
@@ -67,7 +67,7 @@ public class MMoviesDisplay implements Display {
 
     @Override
     public void showMovies() {
-        showFragmentFromDrawer(new PopularMoviesFragment());
+        showFragmentFromDrawer(new MoviesTabFragment());
     }
 
     @Override

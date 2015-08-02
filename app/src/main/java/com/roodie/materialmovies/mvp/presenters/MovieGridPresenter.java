@@ -21,14 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 
 /**
  * Created by Roodie on 10.07.2015.
  */
 
-@Singleton
+
 public class MovieGridPresenter extends BasePresenter {
 
     private static final String LOG_TAG = MovieGridPresenter.class.getSimpleName();
@@ -62,11 +61,13 @@ public class MovieGridPresenter extends BasePresenter {
 
     @Override
     public void onResume() {
+        System.out.println("####  Registered " + this);
         mState.registerForEvents(this);
     }
 
     @Override
     public void onPause() {
+        System.out.println("####  Unregistered " + this);
         mState.unregisterForEvents(this);
     }
 
@@ -174,7 +175,40 @@ public class MovieGridPresenter extends BasePresenter {
         mExecutor.execute(task);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        MovieGridPresenter that = (MovieGridPresenter) o;
+
+        if (attached != that.attached) return false;
+        if (mMovieGridView != null ? !mMovieGridView.equals(that.mMovieGridView) : that.mMovieGridView != null)
+            return false;
+        if (mExecutor != null ? !mExecutor.equals(that.mExecutor) : that.mExecutor != null)
+            return false;
+        if (mState != null ? !mState.equals(that.mState) : that.mState != null) return false;
+        return !(mInjector != null ? !mInjector.equals(that.mInjector) : that.mInjector != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = mMovieGridView != null ? mMovieGridView.hashCode() : 0;
+        result = 31 * result + (mExecutor != null ? mExecutor.hashCode() : 0);
+        result = 31 * result + (mState != null ? mState.hashCode() : 0);
+        result = 31 * result + (mInjector != null ? mInjector.hashCode() : 0);
+        result = 31 * result + (attached ? 1 : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("");
+        sb.append("hashcode").append(hashCode());
+        sb.append('}');
+        return sb.toString();
+    }
 
     public interface MovieGridView extends BaseMovieListView<MovieWrapper> {
 
