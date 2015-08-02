@@ -25,6 +25,14 @@ public interface MoviesState extends BaseState {
 
     public void setPopular(MoviePaginatedResult popular);
 
+    public MoviePaginatedResult getNowPlaying();
+
+    public void setNowPlaying(MoviePaginatedResult nowPlaying);
+
+    public MoviePaginatedResult getUpcoming();
+
+    public void setUpcoming(MoviePaginatedResult upcoming);
+
     public TmdbConfiguration getTmdbConfiguration();
 
     public void setTmdbConfiguration(TmdbConfiguration configuration);
@@ -36,6 +44,10 @@ public interface MoviesState extends BaseState {
     public PersonWrapper getPerson(String id);
 
     public static class PopularChangedEvent {}
+
+    public static class InTheatresChangedEvent {}
+
+    public static class UpcomingChangedEvent {}
 
     public static class TmdbConfigurationChangedEvent {}
 

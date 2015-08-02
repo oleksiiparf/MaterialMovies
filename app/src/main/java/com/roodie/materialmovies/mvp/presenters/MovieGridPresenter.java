@@ -5,12 +5,14 @@ import android.util.Log;
 
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.mvp.views.BaseMovieListView;
+import com.roodie.materialmovies.mvp.views.UiView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.state.ApplicationState;
 import com.roodie.model.state.BaseState;
 import com.roodie.model.tasks.BaseMovieRunnable;
+import com.roodie.model.tasks.FetchInTheatresRunnable;
 import com.roodie.model.tasks.FetchPopularRunnable;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.Injector;
@@ -81,7 +83,12 @@ public class MovieGridPresenter extends BasePresenter {
     @Subscribe
     public void onPopularChanged(ApplicationState.PopularChangedEvent event) {
         Log.d(LOG_TAG, "Popular changed");
-        populateUi();
+        populateUiFromQueryType(UiView.MovieQueryType.POPULAR);
+    }
+
+    @Subscribe
+    public void onInTheatresChanged(ApplicationState.InTheatresChangedEvent event) {
+        populateUiFromQueryType(UiView.MovieQueryType.IN_THEATERS);
     }
 
     @Subscribe
@@ -127,6 +134,9 @@ public class MovieGridPresenter extends BasePresenter {
         return paginatedResult != null && paginatedResult.page < paginatedResult.totalPages;
     }
 
+    /**
+     * Fetch popular movies task
+     */
     private void fetchPopular(final int callingId, final int page) {
         executeTask(new FetchPopularRunnable(callingId, page));
     }
@@ -141,22 +151,43 @@ public class MovieGridPresenter extends BasePresenter {
         if (popular == null || MoviesCollections.isEmpty(popular.items)) {
             fetchPopular(callingId, TMDB_FIRST_PAGE);
         } else {
-            populateUi();
+            populateUiFromQueryType(UiView.MovieQueryType.POPULAR);
         }
     }
 
-    public void  populateUi(){
+    /**
+     * Fetch now playing movies task
+     */
+    private void fetchNowPlayingIfNeeded(final int callingId) {
+        ApplicationState.MoviePaginatedResult nowPlaying = mState.getNowPlaying();
+        if (nowPlaying == null || MoviesCollections.isEmpty(nowPlaying.items)) {
+            fetchNowPlaying(callingId, TMDB_FIRST_PAGE);
+        }
+    }
+
+    private void fetchNowPlaying(final int callingId, final int page) {
+        executeTask(new FetchInTheatresRunnable(callingId, page));
+    }
+
+    public void  populateUiFromQueryType(UiView.MovieQueryType queryType){
             Log.d(LOG_TAG, "populateUi: " + mMovieGridView.getClass().getSimpleName());
         List<MovieWrapper> items = null;
-        ApplicationState.MoviePaginatedResult popular = mState.getPopular();
-        if (popular != null) {
-            items = popular.items;
+        switch (queryType) {
+            case POPULAR:
+                ApplicationState.MoviePaginatedResult popular = mState.getPopular();
+                if (popular != null) {
+                    items = popular.items;
+                }
+                if (items == null) {
+                    mMovieGridView.setItems(null);
+                } else  {
+                    mMovieGridView.setItems(createListItemList(items));
+                }
+                break;
+            case IN_THEATERS:
+                break;
         }
-        if (items == null) {
-            mMovieGridView.setItems(null);
-        } else  {
-            mMovieGridView.setItems(createListItemList(items));
-        }
+
 
     }
 
