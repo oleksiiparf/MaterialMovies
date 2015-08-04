@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +23,14 @@ public abstract class BaseTabFragment extends BaseFragment {
 
     private static final String SAVE_SELECTED_TAB = "selected_tab";
 
+    private static final String LOG_TAG = BaseTabFragment.class.getSimpleName();
+
+
     private ViewPager mViewPager;
     private TabLayout mSlidingTabStrip;
     private TabPagerAdapter mAdapter;
 
-    private int mCurrentItem;
+    private int mCurrentItem = 0;
 
     @Nullable
     @Override
@@ -37,9 +40,6 @@ public abstract class BaseTabFragment extends BaseFragment {
         mAdapter = new TabPagerAdapter(getChildFragmentManager());
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        mViewPager.setOffscreenPageLimit(1);
-
-       // mViewPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.spacing_minor));
 
         mSlidingTabStrip = (TabLayout) view.findViewById(R.id.tabs);
 
@@ -55,6 +55,12 @@ public abstract class BaseTabFragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(SAVE_SELECTED_TAB, mCurrentItem);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -78,19 +84,19 @@ public abstract class BaseTabFragment extends BaseFragment {
     protected void setFragments(List<Fragment> fragments) {
         mAdapter.setFragments(fragments);
         mViewPager.setAdapter(mAdapter);
-        //mViewPager.setCurrentItem(mCurrentItem);
+        mViewPager.setCurrentItem(mCurrentItem);
         mSlidingTabStrip.setupWithViewPager(mViewPager);
     }
 
     protected  abstract String getTabTitle(int position);
 
-    protected class TabPagerAdapter extends FragmentPagerAdapter {
+    protected class TabPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final ArrayList<Fragment> mFragments = new ArrayList<>();
+        private final ArrayList<Fragment> mFragments;
 
         public TabPagerAdapter(FragmentManager fm) {
             super(fm);
-           // mFragments = new ArrayList<>();
+            mFragments = new ArrayList<>();
         }
 
        void setFragments(List<Fragment> fragments)  {
@@ -101,7 +107,7 @@ public abstract class BaseTabFragment extends BaseFragment {
 
         @Override
         public Fragment getItem(int position) {
-            return mFragments.get(position);
+                return mFragments.get(position);
         }
 
 

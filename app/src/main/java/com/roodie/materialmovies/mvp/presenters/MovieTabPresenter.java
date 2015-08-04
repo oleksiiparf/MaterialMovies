@@ -51,8 +51,8 @@ public class MovieTabPresenter extends BasePresenter {
     }
 
     private void populateMovieTabsUi() {
-            mView.setupTabs(UiView.MovieTab.POPULAR, UiView.MovieTab.UPCOMING);
-            //mView.setupTabs(UiView.MovieTab.POPULAR, UiView.MovieTab.IN_THEATRES, UiView.MovieTab.UPCOMING);
+           // mView.setupTabs(UiView.MovieTab.UPCOMING);
+            mView.setupTabs(UiView.MovieTab.POPULAR, UiView.MovieTab.IN_THEATRES, UiView.MovieTab.UPCOMING);
 
     }
 
