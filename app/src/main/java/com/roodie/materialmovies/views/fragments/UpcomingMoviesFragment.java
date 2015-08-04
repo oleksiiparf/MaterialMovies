@@ -16,4 +16,5 @@ public class UpcomingMoviesFragment extends MovieGridFragment {
     public boolean isModal() {
         return false;
     }
+
 }

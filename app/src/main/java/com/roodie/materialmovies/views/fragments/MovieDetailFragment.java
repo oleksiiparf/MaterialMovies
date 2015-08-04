@@ -202,7 +202,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         return MovieQueryType.MOVIE_DETAIL;
     }
 
-
     /**
      * MovieDetailView
      */

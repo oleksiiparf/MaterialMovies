@@ -63,4 +63,5 @@ public class ShowsFragment extends BaseFragment implements MovieView {
     public boolean isModal() {
         return false;
     }
+
 }

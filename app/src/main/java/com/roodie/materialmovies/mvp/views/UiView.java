@@ -12,6 +12,9 @@ public interface UiView {
 
     public enum MovieQueryType {
         POPULAR,
+        UPCOMING,
+        IN_THEATERS,
+        MOVIES_TAB,
         SHOWS,
         MOVIE_DETAIL,
         MOVIE_RELATED,
@@ -38,6 +41,10 @@ public interface UiView {
                     return false;
             }
         }
+    }
+
+    public static enum MovieTab {
+        POPULAR, IN_THEATRES, UPCOMING
     }
 
 }

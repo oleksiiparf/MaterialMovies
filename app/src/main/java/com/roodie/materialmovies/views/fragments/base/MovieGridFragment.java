@@ -31,8 +31,6 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     protected MovieGridPresenter mMovieGridPresenter;
     private MovieGridAdapter mMovieGridAdapter;
 
-    private static final String ARG_PRESENTER = "presenter";
-
     private static final String LOG_TAG = MovieGridFragment.class.getSimpleName();
 
 
@@ -45,55 +43,44 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
         setListAdapter(mMovieGridAdapter);
     }
 
-
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mMovieGridPresenter = MMoviesApplication.from(activity.getApplicationContext()).getGridPresenter();
+        System.out.println("Presenter: " + mMovieGridPresenter);
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(LOG_TAG, "####  On Pause");
-       // mMovieGridPresenter.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "####  On Resume");
-        mMovieGridPresenter.onResume();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(LOG_TAG, "####  On Detach");
+        mMovieGridPresenter.detachUi(this);
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(LOG_TAG, "####  On Destroy");
-        //mMovieGridPresenter.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(LOG_TAG, "####  On Stop");
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    public static String getArgument() {
-        return ARG_PRESENTER;
     }
 
     @Override
@@ -102,7 +89,7 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
             case R.id.menu_about:
                 return false;
             case R.id.menu_refresh:
-                mMovieGridPresenter.refresh();
+                mMovieGridPresenter.refresh(this);
                 return true;
         }
         return false;
@@ -126,14 +113,13 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
 
         final int spacing = getResources().getDimensionPixelSize(R.dimen.movie_grid_spacing);
         getListView().setPadding(spacing, spacing, spacing, spacing);
-        mMovieGridPresenter.attachView(this);
-        mMovieGridPresenter.initialize();
+        mMovieGridPresenter.attachUi(this);
     }
 
     @Override
     protected boolean onScrolledToBottom() {
         if (hasPresenter()) {
-            getPresenter().onScrolledToBottom();
+            getPresenter().onScrolledToBottom(this);
             return true;
         }
         return false;
@@ -144,7 +130,8 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
        if (hasPresenter()) {
 
            ListItem<MovieWrapper> item =  (ListItem<MovieWrapper>) l.getItemAtPosition(position);
-           Log.d(LOG_TAG, "List item clicked  " + item.getListItem().getTitle());
+          // Log.d(LOG_TAG, "List item clicked  " + item.getListItem().getTitle());
+           Log.d(LOG_TAG, getQueryType() + " clicked");
            if (item.getListType() == ListItem.TYPE_ITEM) {
                showMovieDetail(item.getListItem(),
                       null);
@@ -208,13 +195,4 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
         return null;
     }
 
-    @Override
-    public boolean isModal() {
-        return false;
-    }
-
-    @Override
-    public MovieQueryType getQueryType() {
-        return MovieQueryType.POPULAR;
-    }
 }

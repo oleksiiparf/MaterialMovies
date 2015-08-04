@@ -98,7 +98,7 @@ public class MovieDetailPresenter extends BasePresenter {
     public void populateUi(BaseState.BaseArgumentEvent event) {
         Preconditions.checkNotNull(event, "event cannot be null");
 
-        Log.d(LOG_TAG, "populateUI: " + mMoviesView.getClass().getSimpleName());
+        Log.d(LOG_TAG, "populateUi: " + mMoviesView.getClass().getSimpleName());
 
         final MovieWrapper movie = mState.getMovie(mMoviesView.getRequestParameter());
 

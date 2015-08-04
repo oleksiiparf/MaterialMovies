@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.google.common.base.Preconditions;
+import com.roodie.materialmovies.mvp.presenters.MovieGridPresenter;
 import com.roodie.materialmovies.mvp.presenters.MovieTabPresenter;
 import com.roodie.materialmovies.util.StringUtils;
 import com.roodie.materialmovies.views.MMoviesApplication;
@@ -21,7 +22,7 @@ public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresen
 
     private MovieTabPresenter mPresenter;
 
-    //private MovieGridPresenter mGridPresenter;
+    private MovieGridPresenter mGridPresenter;
 
 
     private MovieTab[] mTabs;
@@ -30,7 +31,7 @@ public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresen
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getMovieTabsPresenter();
-       // mGridPresenter = MMoviesApplication.from(activity.getApplicationContext()).getGridPresenter();
+        mGridPresenter = MMoviesApplication.from(activity.getApplicationContext()).getGridPresenter();
     }
 
     @Override
@@ -38,21 +39,20 @@ public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresen
         super.onViewCreated(view, savedInstanceState);
         mPresenter.attachView(this);
         mPresenter.initialize();
-        //setupTabs(UiView.MovieTab.POPULAR, UiView.MovieTab.IN_THEATRES, UiView.MovieTab.UPCOMING);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mPresenter.onResume();
-       // mGridPresenter.onResume();
+        mGridPresenter.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        mGridPresenter.onPause();
         mPresenter.onPause();
-        //mGridPresenter.onPause();
     }
 
     @Override
@@ -110,7 +110,6 @@ public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresen
     private Fragment createFragmentForTab(MovieTab tab) {
         switch (tab) {
             case POPULAR:
-               // return PopularMoviesFragment.newInstance(mGridPresenter);
                 return new PopularMoviesFragment();
             case IN_THEATRES:
                 return new InTheatresMoviesFragment();

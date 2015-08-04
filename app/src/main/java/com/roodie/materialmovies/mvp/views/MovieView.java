@@ -15,4 +15,5 @@ public interface MovieView extends UiView {
     void showSecondaryLoadingProgress(boolean visible);
 
     String getRequestParameter();
+
 }
