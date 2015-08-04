@@ -30,7 +30,7 @@ public abstract class BaseTabFragment extends BaseFragment {
     private TabLayout mSlidingTabStrip;
     private TabPagerAdapter mAdapter;
 
-    private int mCurrentItem = 0;
+    private int mCurrentItem;
 
     @Nullable
     @Override
@@ -40,8 +40,15 @@ public abstract class BaseTabFragment extends BaseFragment {
         mAdapter = new TabPagerAdapter(getChildFragmentManager());
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        mViewPager.setAdapter(mAdapter);
 
         mSlidingTabStrip = (TabLayout) view.findViewById(R.id.tabs);
+        mSlidingTabStrip.post(new Runnable() {
+            @Override
+            public void run() {
+                mSlidingTabStrip.setupWithViewPager(mViewPager);
+            }
+        });
 
 
         if (savedInstanceState != null) {
@@ -83,9 +90,7 @@ public abstract class BaseTabFragment extends BaseFragment {
 
     protected void setFragments(List<Fragment> fragments) {
         mAdapter.setFragments(fragments);
-        mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(mCurrentItem);
-        mSlidingTabStrip.setupWithViewPager(mViewPager);
     }
 
     protected  abstract String getTabTitle(int position);
