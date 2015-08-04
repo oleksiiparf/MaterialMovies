@@ -21,9 +21,13 @@ import com.roodie.model.util.MoviesCollections;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 
 /**
@@ -31,18 +35,19 @@ import javax.inject.Inject;
  */
 
 
+@Singleton
 public class MovieGridPresenter extends BasePresenter {
 
     private static final String LOG_TAG = MovieGridPresenter.class.getSimpleName();
 
-    private MovieGridView mMovieGridView;
+    private final Set<MovieGridView> mUis;
+    private final Set<MovieGridView> mUnmodifiableUis;
+
     private final BackgroundExecutor mExecutor;
     private final ApplicationState mState;
     private final Injector mInjector;
 
     private static final int TMDB_FIRST_PAGE = 1;
-
-    private boolean attached = false;
 
     @Inject
     public MovieGridPresenter(ApplicationState moviesState,
@@ -51,44 +56,81 @@ public class MovieGridPresenter extends BasePresenter {
         mState = Preconditions.checkNotNull(moviesState, "mState can not be null");
         mExecutor = Preconditions.checkNotNull(executor, "executor cannot be null");
         mInjector = Preconditions.checkNotNull(injector, "injector cannot be null");
-
+        mUis = new CopyOnWriteArraySet<>();
+        mUnmodifiableUis = Collections.unmodifiableSet(mUis);
     }
 
     @Override
     public void initialize() {
+    }
 
-        checkViewAlreadySetted();
-        //on ui attached
-        switch (mMovieGridView.getQueryType()) {
+    private void onUiAttached(final MovieGridView ui) {
+        final UiView.MovieQueryType queryType = ui.getQueryType();
+
+        final int callingId = getId(ui);
+
+        switch (queryType) {
             case POPULAR:
-                fetchPopularIfNeeded(1);
+                fetchPopularIfNeeded(callingId);
                 break;
             case IN_THEATERS:
-                fetchNowPlayingIfNeeded(1);
+                fetchNowPlayingIfNeeded(callingId);
                 break;
             case UPCOMING:
-                fetchUpcomingIfNeeded(1);
+                fetchUpcomingIfNeeded(callingId);
                 break;
         }
+
     }
 
     @Override
     public void onResume() {
-        System.out.println("####  Registered " + this);
         mState.registerForEvents(this);
     }
 
     @Override
     public void onPause() {
-        System.out.println("####  Unregistered " + this);
         mState.unregisterForEvents(this);
     }
 
-    public void attachView (MovieGridView view) {
+    public synchronized final void attachUi(MovieGridView view) {
         Preconditions.checkNotNull(view, "View cannot be null");
-        this.mMovieGridView = view;
-        attached = true;
+        Preconditions.checkState(!mUis.contains(view), "UI is already attached");
+        mUis.add(view);
+        onUiAttached(view);
+        populateUi(view);
+    }
 
+    public synchronized final void detachUi(MovieGridView view) {
+        Preconditions.checkArgument(view != null, "ui cannot be null");
+        Preconditions.checkState(mUis.contains(view), "ui is not attached");
+        mUis.remove(view);
+    }
+
+    protected final Set<MovieGridView> getUis() {
+        return mUnmodifiableUis;
+    }
+
+    protected int getId(MovieGridView view) {
+        return view.hashCode();
+    }
+
+    protected synchronized MovieGridView findUi(final int id) {
+        for (MovieGridView ui : mUis) {
+            if (getId(ui) == id) {
+                return ui;
+            }
+        }
+        return null;
+    }
+
+    private MovieGridView findUiFromQueryType(UiView.MovieQueryType queryType) {
+        for (MovieGridView ui : getUis()) {
+            if (ui.getQueryType() == queryType) {
+                return ui;
+            }
+        }
+        return null;
     }
 
     @Subscribe
@@ -112,63 +154,58 @@ public class MovieGridPresenter extends BasePresenter {
     @Subscribe
     public void onNetworkError(BaseState.OnErrorEvent event) {
         Log.d(LOG_TAG, "On Network error");
+        MovieGridView ui = findUi(event.callingId);
 
-        if (mMovieGridView != null && null != event.error) {
-            mMovieGridView.showError(event.error);
+        if (ui != null && null != event.error) {
+            ui.showError(event.error);
         }
     }
 
     @Subscribe
     public void onLoadingProgressVisibilityChanged(BaseState.ShowLoadingProgressEvent event) {
         Log.d(LOG_TAG, "Loading progress visibility changed");
-        if (attached) {
+        MovieGridView ui = findUi(event.callingId);
+        if (ui != null) {
             if (event.secondary) {
-                mMovieGridView.showSecondaryLoadingProgress(event.show);
+                ui.showSecondaryLoadingProgress(event.show);
             } else {
-                mMovieGridView.showLoadingProgress(event.show);
+                ui.showLoadingProgress(event.show);
             }
         }
     }
 
-    public void refresh() {
-        switch (mMovieGridView.getQueryType()) {
+    public void refresh(MovieGridView ui) {
+        switch (ui.getQueryType()) {
             case POPULAR:
-                fetchPopular(1);
+                fetchPopular(getId(ui));
                 break;
             case UPCOMING:
-                fetchUpcoming(1);
+                fetchUpcoming(getId(ui));
                 break;
-            case  IN_THEATERS:
-                fetchNowPlaying(1);
+            case IN_THEATERS:
+                fetchNowPlaying(getId(ui));
                 break;
         }
-
     }
 
-
-    private void checkViewAlreadySetted() {
-      Preconditions.checkState(attached = true, "View not attached");
-    }
-
-    public void onScrolledToBottom(){
+    public void onScrolledToBottom(MovieGridView ui){
         ApplicationState.MoviePaginatedResult result;
 
-        switch (mMovieGridView.getQueryType()) {
+        switch (ui.getQueryType()) {
             case POPULAR:
                 result = mState.getPopular();
                 if (canFetchNextPage(result)) {
-                    fetchPopular(1, result.page + 1);
+                    fetchPopular(getId(ui), result.page + 1);
                 }
                 break;
 
             case UPCOMING:
                 result = mState.getUpcoming();
                 if (canFetchNextPage(result)) {
-                    fetchUpcoming(1, result.page + 1);
+                    fetchUpcoming(getId(ui), result.page + 1);
                 }
                 break;
         }
-
     }
 
     private boolean canFetchNextPage(ApplicationState.PaginatedResult<?> paginatedResult) {
@@ -191,8 +228,6 @@ public class MovieGridPresenter extends BasePresenter {
         ApplicationState.MoviePaginatedResult popular = mState.getPopular();
         if (popular == null || MoviesCollections.isEmpty(popular.items)) {
             fetchPopular(callingId, TMDB_FIRST_PAGE);
-        } else {
-            populateUiFromQueryType(UiView.MovieQueryType.POPULAR);
         }
     }
 
@@ -234,8 +269,17 @@ public class MovieGridPresenter extends BasePresenter {
         executeTask(new FetchUpcomingRunnable(callingId, page));
     }
 
-    public void  populateUiFromQueryType(UiView.MovieQueryType queryType){
-            Log.d(LOG_TAG, "populateUi: " + mMovieGridView.getClass().getSimpleName());
+    private final void populateUiFromQueryType(UiView.MovieQueryType queryType) {
+        MovieGridView ui = findUiFromQueryType(queryType);
+        if (ui != null) {
+            populateUi(ui);
+        }
+    }
+
+    private void populateUi(final MovieGridView ui){
+            Log.d(LOG_TAG, "populateUi: " + ui.getClass().getSimpleName());
+        final UiView.MovieQueryType queryType = ui.getQueryType();
+
         List<MovieWrapper> items = null;
         switch (queryType) {
             case POPULAR:
@@ -259,12 +303,10 @@ public class MovieGridPresenter extends BasePresenter {
         }
 
         if (items == null) {
-            mMovieGridView.setItems(null);
+            ui.setItems(null);
         } else  {
-            mMovieGridView.setItems(createListItemList(items));
+            ui.setItems(createListItemList(items));
         }
-
-
     }
 
     private <T extends ListItem<T>> List<ListItem<T>> createListItemList(final List<T> items) {
@@ -282,38 +324,16 @@ public class MovieGridPresenter extends BasePresenter {
         mExecutor.execute(task);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MovieGridPresenter that = (MovieGridPresenter) o;
-
-        if (attached != that.attached) return false;
-        if (mMovieGridView != null ? !mMovieGridView.equals(that.mMovieGridView) : that.mMovieGridView != null)
-            return false;
-        if (mExecutor != null ? !mExecutor.equals(that.mExecutor) : that.mExecutor != null)
-            return false;
-        if (mState != null ? !mState.equals(that.mState) : that.mState != null) return false;
-        return !(mInjector != null ? !mInjector.equals(that.mInjector) : that.mInjector != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = mMovieGridView != null ? mMovieGridView.hashCode() : 0;
-        result = 31 * result + (mExecutor != null ? mExecutor.hashCode() : 0);
-        result = 31 * result + (mState != null ? mState.hashCode() : 0);
-        result = 31 * result + (mInjector != null ? mInjector.hashCode() : 0);
-        result = 31 * result + (attached ? 1 : 0);
-        return result;
-    }
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("");
+        final StringBuffer sb = new StringBuffer("{");
         sb.append("hashcode").append(hashCode());
         sb.append('}');
+        for (MovieGridView ui : mUnmodifiableUis){
+            sb.append("view : " + getId(ui) + ",");
+        }
+
         return sb.toString();
     }
 
