@@ -54,6 +54,8 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
     private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
+    private static final String KEY_MOVIE_SAVE_STATE = "movie_on_save_state";
+
     private MovieDetailPresenter mPresenter;
     private DetailAdapter mAdapter;
     private MovieWrapper mMovie;
@@ -93,7 +95,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // MMoviesApplication.from(getActivity()).inject(this);
         setHasOptionsMenu(true);
     }
 
@@ -102,6 +103,20 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         super.onAttach(activity);
         mContext = activity.getApplicationContext();
         mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getDetailMoviePresenter();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KEY_MOVIE_SAVE_STATE, mMovie);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            setMovie((MovieWrapper) savedInstanceState.getSerializable(KEY_MOVIE_SAVE_STATE));
+        }
     }
 
     @Nullable

@@ -16,6 +16,7 @@ import com.uwetrottmann.tmdb.entities.SpokenLanguage;
 import com.uwetrottmann.tmdb.entities.Video;
 import com.uwetrottmann.tmdb.entities.Videos;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,7 +27,7 @@ import static com.roodie.model.util.TimeUtils.isPastStartingPoint;
 /**
  * Created by Roodie on 07.07.2015.
  */
-public class MovieWrapper extends BasicWrapper<MovieWrapper> {
+public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializable {
 
     public static final int NOT_SET = 0;
     public static final int TYPE_TMDB = 1;

@@ -63,7 +63,6 @@ public abstract class BaseDetailFragment extends BaseFragment {
         return mTitleContainer != null;
     }
 
-
     /**
      * BaseViewHolder
      *

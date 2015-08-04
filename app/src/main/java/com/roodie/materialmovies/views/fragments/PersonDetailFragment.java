@@ -40,6 +40,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
 
     private static final String LOG_TAG = PersonDetailFragment.class.getSimpleName();
     private static final String KEY_PERSON_ID = "person_id";
+    private static final String KEY_PERSON_SAVE_STATE = "person_on_save_state";
 
     private PersonPresenter mPresenter;
     private PersonWrapper mPerson;
@@ -70,8 +71,21 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // MMoviesApplication.from(getActivity()).inject(this);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KEY_PERSON_SAVE_STATE, mPerson);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null){
+           setPerson((PersonWrapper) savedInstanceState.getSerializable(KEY_PERSON_SAVE_STATE));
+        }
     }
 
     @Override

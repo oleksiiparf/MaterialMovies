@@ -4,6 +4,7 @@ import com.uwetrottmann.tmdb.entities.CastMember;
 import com.uwetrottmann.tmdb.entities.CrewMember;
 import com.uwetrottmann.tmdb.entities.Person;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * Created by Roodie on 07.07.2015.
  */
-public class PersonWrapper extends  BasicWrapper<PersonWrapper> {
+public class PersonWrapper extends  BasicWrapper<PersonWrapper> implements Serializable {
 
     Integer tmdbId;
     String name;
