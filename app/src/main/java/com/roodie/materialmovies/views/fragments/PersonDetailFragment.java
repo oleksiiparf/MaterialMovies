@@ -8,6 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -42,13 +45,17 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     private static final String KEY_PERSON_ID = "person_id";
     private static final String KEY_PERSON_SAVE_STATE = "person_on_save_state";
 
+    private MenuItem mTmdbPersonItem;
+    private MenuItem mSearchItem;
+
+    private boolean isEnableSearch = false;
+
     private PersonPresenter mPresenter;
     private PersonWrapper mPerson;
     private final ArrayList<PersonItems> mItems = new ArrayList<>();
 
     private MMoviesImageView personImagePoster;
     private TextView personName;
-   // private RecyclerViewHeader mHeader;
 
     private DetailAdapter mAdapter;
     private CastCreditsAdapter mCastCreditAdapter;
@@ -110,11 +117,6 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
             display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
         }
 
-       // mHeader = (RecyclerViewHeader) view.findViewById(R.id.header);
-//
-       // if (mHeader != null) {
-       //     mHeader.attachTo(getRecyclerView(), true);
-       // }
         personImagePoster = (MMoviesImageView) view.findViewById(R.id.imageview_person);
         personName = (TextView) view.findViewById(R.id.textview_person_name);
 
@@ -139,6 +141,29 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     public void onDetach() {
         super.onDetach();
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.person_menu, menu);
+        mSearchItem =  menu.findItem(R.id.menu_action_person_web_search);
+        mSearchItem.setEnabled(isEnableSearch);
+        mSearchItem.setVisible(isEnableSearch);
+        mTmdbPersonItem = menu.findItem(R.id.menu_action_person_tmdb);
+        mTmdbPersonItem.setEnabled(isEnableSearch);
+        mTmdbPersonItem.setVisible(isEnableSearch);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        isEnableSearch = mPerson != null && !TextUtils.isEmpty(
+                mPerson.getName());
+        mSearchItem.setEnabled(isEnableSearch);
+        mSearchItem.setVisible(isEnableSearch);
+
+        mTmdbPersonItem.setEnabled(isEnableSearch);
+        mTmdbPersonItem.setVisible(isEnableSearch);
+        super.onPrepareOptionsMenu(menu);
     }
 
     public PersonPresenter getPresenter() {
@@ -175,6 +200,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     @Override
     public void setPerson(PersonWrapper person) {
         mPerson = person;
+        getActivity().invalidateOptionsMenu();
         populateUi();
         getRecyclerView().setAdapter(mAdapter);
     }

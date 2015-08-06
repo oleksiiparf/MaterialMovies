@@ -1,20 +1,26 @@
 package com.roodie.materialmovies.views;
 
+import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
+import com.roodie.materialmovies.util.TmdbUtils;
 import com.roodie.materialmovies.views.activities.MovieActivity;
 import com.roodie.materialmovies.views.activities.MovieImagesActivity;
 import com.roodie.materialmovies.views.activities.PersonActivity;
@@ -25,6 +31,8 @@ import com.roodie.materialmovies.views.fragments.MoviesTabFragment;
 import com.roodie.materialmovies.views.fragments.PersonDetailFragment;
 import com.roodie.materialmovies.views.fragments.ShowsFragment;
 import com.roodie.model.Display;
+import com.roodie.model.entities.MovieWrapper;
+import com.roodie.model.entities.PersonWrapper;
 
 /**
  * Created by Roodie on 27.06.2015.
@@ -90,7 +98,7 @@ public class MMoviesDisplay implements Display {
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
             ab.setHomeButtonEnabled(true);
-            ab.setHomeAsUpIndicator(show ? R.drawable.ic_back : R.drawable.ic_menu);
+            ab.setHomeAsUpIndicator(show ? R.drawable.ic_clear_white_24dp : R.drawable.ic_menu);
         }
     }
 
@@ -196,6 +204,8 @@ public class MMoviesDisplay implements Display {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("http://www.youtube.com/watch?v=" + id));
 
+        mActivity.startActivity(intent);
+
     }
 
     @Override
@@ -228,5 +238,70 @@ public class MMoviesDisplay implements Display {
     @Override
     public void showPersonDetailFragment(String id) {
             showFragmentFromDrawer(PersonDetailFragment.newInstance(id));
+    }
+
+    @Override
+    public void shareMovie(int movieId, String movieTitle) {
+        String message = mActivity.getString(R.string.share_checkout, movieTitle) + " "
+                + TmdbUtils.buildMovieUrl(movieId);
+        startShareIntentChooser(message, R.string.share_movie);
+    }
+
+    @Override
+    public void startShareIntentChooser(String message, @StringRes int titleResId) {
+        ShareCompat.IntentBuilder ib = ShareCompat.IntentBuilder.from(mActivity);
+        ib.setText(message);
+        ib.setChooserTitle(titleResId);
+        ib.setType("text/plain");
+        try {
+            ib.startChooser();
+        } catch (ActivityNotFoundException e) {
+            // no activity available to handle the intent
+            Toast.makeText(mActivity, R.string.app_not_available, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void openTmdbMovie(MovieWrapper movie) {
+        openTmdbUrl(TmdbUtils.buildMovieUrl(movie.getTmdbId()));
+    }
+
+    @Override
+    public void openTmdbPerson(PersonWrapper person) {
+        openTmdbUrl(TmdbUtils.buildPersonUrl(person.getTmdbId()));
+    }
+
+    @Override
+    public void openTmdbUrl(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        tryStartActivity(intent, true);
+    }
+
+    @Override
+    public boolean tryStartActivity(Intent intent, boolean displayError) {
+        boolean handled = false;
+
+        if (intent.resolveActivity(mActivity.getPackageManager()) != null) {
+            try {
+                mActivity.startActivity(intent);
+                handled = true;
+            } catch (ActivityNotFoundException exception) {
+
+            }
+        }
+
+        if (displayError && !handled) {
+            Toast.makeText(mActivity, R.string.app_not_available, Toast.LENGTH_LONG).show();
+        }
+        return handled;
+    }
+
+    @Override
+    public void performWebSearch(String query) {
+        Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+        intent.putExtra(SearchManager.QUERY, query);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        tryStartActivity(intent, true);
     }
 }

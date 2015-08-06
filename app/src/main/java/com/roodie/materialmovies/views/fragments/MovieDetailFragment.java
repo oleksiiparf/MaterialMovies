@@ -61,6 +61,12 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     private MovieWrapper mMovie;
     private final ArrayList<DetailItemType> mItems = new ArrayList<>();
 
+    private MenuItem mYoutubeItem;
+    private MenuItem mShareItem;
+    private MenuItem mWebSearchItem;
+    boolean isEnableYoutube = false;
+    boolean isEnableShare = false;
+
     private CollapsingToolbarLayout mCollapsingToolbar;
     private MMoviesImageView mFanartImageView;
     private TextView mTitleTextView;
@@ -159,7 +165,35 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.movie_detail, menu);
+        mYoutubeItem = menu.findItem(R.id.menu_open_youtube);
+        mYoutubeItem.setEnabled(isEnableYoutube);
+        mYoutubeItem.setVisible(isEnableYoutube);
+
+        mShareItem = menu.findItem(R.id.menu_movie_share);
+        mShareItem.setEnabled(isEnableShare);
+        mShareItem.setVisible(isEnableShare);
+
+        mWebSearchItem = menu.findItem(R.id.menu_action_movie_websearch);
+        mWebSearchItem.setEnabled(isEnableShare);
+        mWebSearchItem.setVisible(isEnableShare);
     }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        isEnableYoutube = (mMovie != null && !MoviesCollections.isEmpty(mMovie.getTrailers()));
+        mYoutubeItem.setEnabled(isEnableYoutube);
+        mYoutubeItem.setVisible(isEnableYoutube);
+
+        isEnableShare = mMovie != null && !TextUtils.isEmpty(
+                mMovie.getTitle());
+        mShareItem.setEnabled(isEnableShare);
+        mShareItem.setVisible(isEnableShare);
+
+        mWebSearchItem.setEnabled(isEnableShare);
+        mWebSearchItem.setVisible(isEnableShare);
+        super.onPrepareOptionsMenu(menu);
+    }
+
 
     @Override
     public void onPause() {
@@ -176,9 +210,36 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_refresh: {
-                mPresenter.refresh();
+        Display display = getDisplay();
+        if (display != null) {
+            switch (item.getItemId()) {
+                case R.id.menu_refresh: {
+                    mPresenter.refresh();
+                    return true;
+                }
+                case R.id.menu_movie_share: {
+                    if (mMovie.getTmdbId() != null) {
+                        display.shareMovie(mMovie.getTmdbId(), mMovie.getTitle());
+                    }
+                }
+                return true;
+                case R.id.menu_open_youtube: {
+                    if (mMovie != null && !MoviesCollections.isEmpty(mMovie.getTrailers())) {
+                      playTrailer();
+                    }
+                }
+                return true;
+                case R.id.menu_open_tmdb: {
+                    if (mMovie.getTmdbId() != null) {
+                        display.openTmdbMovie(mMovie);
+                    }
+                }
+                return true;
+                case R.id.menu_action_movie_websearch: {
+                    if (mMovie.getTitle() != null) {
+                        display.performWebSearch(mMovie.getTitle());
+                    }
+                }
                 return true;
             }
         }
@@ -224,6 +285,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     @Override
     public void setMovie(MovieWrapper movie) {
         mMovie = movie;
+        getActivity().invalidateOptionsMenu();
         populateUi();
         getRecyclerView().setAdapter(mAdapter);
     }
@@ -263,16 +325,14 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     }
 
     @Override
-    public void playTrailer(TrailerWrapper trailer) {
-        Preconditions.checkNotNull(trailer, "trailer cannot be null");
-        Preconditions.checkNotNull(trailer.getId(), "trailer id cannot be null");
-
+    public void playTrailer() {
         final Display display = getDisplay();
         if (display != null) {
-            switch (trailer.getSource()) {
-                case YOUTUBE:
+            for (TrailerWrapper trailer : mMovie.getTrailers()) {
+                if (trailer.getSource().equals(TrailerWrapper.Source.YOUTUBE)) {
                     display.playYoutubeVideo(trailer.getId());
-                    break;
+                    return;
+                }
             }
         }
     }
@@ -352,10 +412,11 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
         mItems.add(DetailItemType.DETAILS);
 
-        if (!MoviesCollections.isEmpty(mMovie.getTrailers())){
-            mItems.add(DetailItemType.TRAILERS);
-        }
-
+        /**
+         *  if (!MoviesCollections.isEmpty(mMovie.getTrailers())){
+         *  mItems.add(DetailItemType.TRAILERS);
+         *  }
+         */
 
         if (!MoviesCollections.isEmpty(mMovie.getCast())) {
             mItems.add(DetailItemType.CAST);
@@ -1076,7 +1137,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 public void onClick(View v) {
                     TrailerWrapper trailer = (TrailerWrapper) v.getTag();
                     if (trailer != null) {
-                        playTrailer(trailer);
+                        playTrailer();
                     }
                 }
             };

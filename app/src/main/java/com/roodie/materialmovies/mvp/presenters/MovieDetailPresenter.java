@@ -8,7 +8,6 @@ import com.roodie.materialmovies.mvp.views.MovieView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
-import com.roodie.model.entities.TrailerWrapper;
 import com.roodie.model.state.ApplicationState;
 import com.roodie.model.state.BaseState;
 import com.roodie.model.state.MoviesState;
@@ -183,7 +182,7 @@ public class MovieDetailPresenter extends BasePresenter {
 
         void showMovieDetail(MovieWrapper movie, Bundle bundle);
 
-        void playTrailer(TrailerWrapper trailer);
+        void playTrailer();
 
         void showPersonDetail(PersonWrapper person, Bundle bundle);
 

@@ -16,7 +16,12 @@
 
 package com.roodie.model;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
+
+import com.roodie.model.entities.MovieWrapper;
+import com.roodie.model.entities.PersonWrapper;
 
 public interface Display {
 
@@ -65,6 +70,20 @@ public interface Display {
     public void setStatusBarColor(float scroll);
 
     public void setSupportActionBar(Object toolbar, boolean handleBackground);
+
+    public void shareMovie(int movieId, String movieTitle);
+
+    public void startShareIntentChooser(String message, @StringRes int titleResId);
+
+    public void openTmdbMovie(MovieWrapper movie);
+
+    public void openTmdbPerson(PersonWrapper person);
+
+    public void openTmdbUrl(String url);
+
+    public boolean tryStartActivity(Intent intent, boolean displayError);
+
+    public void performWebSearch(String query);
 
 
 }
