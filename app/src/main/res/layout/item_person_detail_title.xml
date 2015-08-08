@@ -9,13 +9,13 @@
               android:animateLayoutChanges="true"
               android:baselineAligned="false">
 
-        <TextView
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
                 android:id="@+id/textview_subtitle_1"
                 style="@style/Widget.MMovies.Person.Detail.Subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-        <TextView
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
               android:id="@+id/textview_subtitle_2"
               style="@style/Widget.MMovies.Person.Detail.Subtitle"
               android:layout_width="wrap_content"

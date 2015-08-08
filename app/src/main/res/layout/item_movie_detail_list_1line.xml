@@ -15,7 +15,7 @@
         android:layout_height="@dimen/movie_list_small_image_width"
         android:layout_gravity="center_vertical" />
 
-    <TextView
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
         android:id="@+id/title"
         style="@style/Widget.MMovies.Movie.List.Title"
         android:layout_width="match_parent"

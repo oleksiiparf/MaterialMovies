@@ -5,7 +5,7 @@
     <item
         android:id="@+id/menu_open_youtube"
         android:icon="@drawable/ic_youtube_play_white_24dp"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:title="@string/trailer_movie" />
     <item
         android:id="@+id/menu_movie_share"

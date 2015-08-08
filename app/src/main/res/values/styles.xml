@@ -1,0 +1,189 @@
+<resources>
+
+    <style name="Widget.MMovies.ActionBar.Progress" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:minHeight">36dip</item>
+        <item name="android:maxHeight">36dip</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Grid.Title" parent="android:Widget">
+        <item name="font">lobster</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin_half</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin_half</item>
+        <item name="android:paddingTop">@dimen/activity_vertical_margin</item>
+        <item name="android:gravity">center|left</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:background">#AA000000</item>
+
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.CardItem.Title" parent="android:Widget">
+        <item name="font">roboto_condensed</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.CardItem.Subtitle" parent="Widget.MMovies.Movie.CardItem.Title">
+        <item name="android:textSize">13dp</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Trailer.Title" parent="android:Widget">
+        <item name="font">roboto_condensed_bold</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:padding">@dimen/spacing_minor</item>
+        <item name="android:lines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:background">@drawable/black_translucent_gradient</item>
+        <item name="android:gravity">bottom|left</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.List.Title" parent="android:Widget">
+        <item name="font">roboto_condensed</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.List.Subtitle" parent="android:Widget">
+        <item name="font">roboto_condensed</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">?android:textColorTertiary</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Summary.Title" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:maxLines">2</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Summary.Subtitle" parent="android:Widget">
+        <item name="font">roboto_condensed</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">?android:textColorTertiary</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Summary.Trailer" parent="android:Widget">
+        <item name="font">roboto_condensed_bold</item>
+        <item name="android:textSize">@dimen/trailer_text_size</item>
+        <item name="android:textColor">?android:textColorTertiary</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.List.SectionHeader" parent="android:Widget">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:padding">@dimen/spacing_major</item>
+        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+
+    <style name="Widget.MMovies.Person.Detail.Title"
+        parent="Widget.MMovies.Movie.Detail.Title">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:gravity">bottom|left</item>
+    </style>
+
+    <style name="Widget.MMovies.Person.Detail.Subtitle" parent="android:Widget">
+        <item name="font">roboto_condensed</item>
+        <item name="android:textSize">@dimen/person_detail_subtitle_textsize</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Detail.Title" parent="android:Widget">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Detail.Tagline" parent="android:Widget">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Detail.SectionHeader" parent="android:Widget">
+        <item name="android:textSize">18dp</item>
+        <item name="android:padding">@dimen/spacing_micro</item>
+        <item name="android:paddingLeft">@dimen/spacing_major</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Detail.Summary" parent="android:Widget">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="collapsed_maxLines">@integer/default_summary_maxlines</item>
+    </style>
+
+    <style name="Widget.MMovies.Person.Detail.Biography" parent="android:Widget">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Detail.Ratings.Title" parent="android:Widget">
+        <item name="font">roboto_light</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Detail.Ratings.Votes" parent="android:Widget">
+        <item name="font">roboto_condensed_bold</item>
+        <item name="android:textSize">24dp</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Detail.Rating.Description" parent="android:Widget">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Drawer.Checkin.Header" parent="android:Widget">
+        <item name="font">roboto_condensed_bold</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">?android:attr/textColorSecondaryInverse</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Drawer.AddAccount" parent="android:Widget">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+
+    <style name="Widget.MMovies.Movie.Drawer.Checkin.Title" parent="android:Widget">
+        <item name="font">roboto_condensed</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+    </style>
+
+    <style name="Widget.MMovies.ProgressBar" parent="android:Widget.Holo.Light.ProgressBar.Horizontal">
+        <item name="android:minHeight">4dp</item>
+        <item name="android:maxHeight">4dp</item>
+    </style>
+
+    <style name="TextAppearance.MMovies.Tab" parent="TextAppearance.AppCompat.Body2">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/tab_text</item>
+    </style>
+
+    <style name="Widget.MMovies.Toolbar" parent="Widget.AppCompat.Toolbar">
+    <item name="android:background">?attr/colorPrimary</item>
+    <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    <item name="contentInsetStart">24dp</item>
+</style>
+
+    <style name="Widget.MMovies.Toolbar.Transparent" parent="Widget.MMovies.Toolbar">
+        <item name="android:background">@null</item>
+    </style>
+
+</resources>

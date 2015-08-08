@@ -1,7 +1,10 @@
 package com.roodie.model.tasks;
 
+import android.util.Log;
+
 import com.roodie.model.network.NetworkCallRunnable;
 import com.roodie.model.network.NetworkError;
+import com.roodie.model.state.ApplicationState;
 import com.roodie.model.state.AsyncDatabaseHelper;
 import com.roodie.model.state.BaseState;
 import com.roodie.model.state.EntitityMapper;
@@ -20,7 +23,10 @@ import retrofit.RetrofitError;
  */
 public abstract class BaseMovieRunnable<R> extends NetworkCallRunnable<R> {
 
-    @Inject MoviesState mMoviesState;
+    public static final String LOG_TAG = BaseMovieRunnable.class.getSimpleName();
+
+    @Inject
+    ApplicationState mState;
 
     @Inject Lazy<Tmdb> mTmdbClient;
     @Inject Lazy<Bus> mEventBus;

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<merge xmlns:android="http://schemas.android.com/apk/res/android" >
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
         android:id="@android:id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/spacing_micro"
         android:layout_gravity="center_vertical"
+        app:font="roboto_condensed_bold"
         android:text="Sample1"
          />
 
@@ -16,12 +18,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 
-    <TextView
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
         android:id="@android:id/text2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:drawablePadding="@dimen/spacing_micro"
+        app:font="roboto_condensed"
         android:text="Sample2"
          />
 

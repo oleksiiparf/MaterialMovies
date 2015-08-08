@@ -36,7 +36,7 @@ import com.roodie.materialmovies.R;
  *
  * @author Grantland Chew <grantlandchew@gmail.com>
  */
-public class AutofitTextView extends TextView {
+public class AutofitTextView extends MMoviesTextView {
 
     private static final String TAG = "AutoFitTextView";
 

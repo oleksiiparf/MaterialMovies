@@ -7,18 +7,6 @@
     android:baselineAligned="false"
     android:orientation="vertical">
 
-
-
-    <com.roodie.materialmovies.views.custom_views.AutofitTextView
-        android:id="@+id/textview_tagline"
-        style="@style/Widget.MMovies.Movie.Detail.Tagline"
-        android:layout_width="fill_parent"
-        android:gravity="center_vertical"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/spacing_major"
-   />
-
     <LinearLayout
         android:orientation="horizontal"
         android:gravity="center_vertical"
@@ -41,12 +29,51 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="top"
             android:orientation="vertical"
+            android:padding="@dimen/spacing_major"
             android:layout_marginRight="4.0dip"
             android:layout_weight="1.0">
 
+            <TextView
+                android:id="@+id/textview_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:textAppearance="@style/Widget.MMovies.Movie.Summary.Title"
+                android:text="Title"/>
+
+            <TextView
+                android:id="@+id/textview_genres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginBottom="@dimen/spacing_major"
+                android:textAppearance="@style/Widget.MMovies.Movie.Summary.Subtitle"
+                android:text="genre1 | genre2"/>
+
             <include layout="@layout/include_rating_bar" />
+
+            <com.roodie.materialmovies.views.custom_views.AutofitTextView
+                android:id="@+id/textview_tagline"
+                style="@style/Widget.MMovies.Movie.Detail.Tagline"
+                android:layout_marginTop="@dimen/spacing_major"
+                android:layout_marginBottom="@dimen/spacing_major"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+
+                />
+
+            <include
+                android:id="@+id/play_trailer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                layout="@layout/item_movie_summary_trailer"
+                android:layout_gravity="bottom">
+
+            </include>
+
         </LinearLayout>
 
 

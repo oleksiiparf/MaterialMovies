@@ -31,19 +31,19 @@ public class FetchMovieCreditsRunnable extends BaseMovieRunnable<Credits> {
 
     @Override
     public void onSuccess(Credits result) {
-        MovieWrapper movie = mMoviesState.getMovie(mId);
+        MovieWrapper movie = mState.getMovie(mId);
 
         if (movie != null) {
             if (!MoviesCollections.isEmpty(result.cast)) {
                 //Cast list should be mapped due to entity mapper
-                List<MovieCreditWrapper> cast = getEntityMapper().mapCredits(result.cast);
+                List<MovieCreditWrapper> cast = getEntityMapper().mapCastCredits(result.cast);
                 Collections.sort(cast);
                 movie.setCast(cast);
             }
 
             if (!MoviesCollections.isEmpty(result.crew)) {
                 //Crew list should be mapped due to entity mapper
-                List<MovieCreditWrapper> crew = getEntityMapper().mapCredits(result.crew);
+                List<MovieCreditWrapper> crew = getEntityMapper().mapCrewCredits(result.crew);
                 Collections.sort(crew);
                 movie.setCrew(crew);
             }
@@ -57,7 +57,7 @@ public class FetchMovieCreditsRunnable extends BaseMovieRunnable<Credits> {
     public void onError(RetrofitError re) {
         super.onError(re);
 
-        MovieWrapper movie  = mMoviesState.getMovie(mId);
+        MovieWrapper movie  = mState.getMovie(mId);
         if (movie != null) {
             getEventBus().post(new MoviesState.MovieCastItemsUpdatedEvent(getCallingId(), movie));
         }

@@ -1,12 +1,15 @@
 package com.roodie.materialmovies.modules.library;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.qualifiers.AppContext;
 import com.roodie.materialmovies.qualifiers.FilesDirectory;
 
 import java.io.File;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -29,6 +32,11 @@ public class ContextProvider {
     @Provides @FilesDirectory
     public File providePrivateFileDirectory() {
         return mAppContext.getFilesDir();
+    }
+
+    @Provides @Singleton
+    public AssetManager provideAssetManager() {
+        return mAppContext.getAssets();
     }
 
 }

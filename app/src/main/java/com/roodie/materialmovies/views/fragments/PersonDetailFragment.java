@@ -361,7 +361,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
             holder.personImage.loadProfile(mPerson);
-            holder.personName.setText(mPerson.getName());
+           // holder.personName.setText(mPerson.getName());
         }
 
         @Override
@@ -372,13 +372,11 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         class ViewHolder extends RecyclerView.ViewHolder {
 
             MMoviesImageView personImage;
-            TextView personName;
 
             public ViewHolder(View view) {
                 super(view);
                 personImage = (MMoviesImageView) view.findViewById(R.id.imageview_person);
-                personName = (TextView) view.findViewById(R.id.textview_person_name);
-            }
+                }
         }
     }
 

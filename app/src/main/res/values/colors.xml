@@ -7,11 +7,15 @@
 
     <color name="movie_placeholder">#ff4e5d64</color>
 
+    <color name="summary_divider">#ff4e5d64</color>
+
     <color name="side_menu_background">#FF202020</color>
 
     <color name="dark_gray">#FF333333</color>
     <color name="light_gray">#FFDDDDDD</color>
     <color name="mid_gray">#FFAAAAAA</color>
+
+    <color name="white">#ffffffff</color> <!-- primary text dark -->
 
     <color name="primary_color_translucent">#998BC34A</color>
     <color name="primary_color">#363F44</color>

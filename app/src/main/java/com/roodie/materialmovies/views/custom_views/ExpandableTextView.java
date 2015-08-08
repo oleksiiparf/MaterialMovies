@@ -25,7 +25,7 @@ import android.widget.TextView;
 import com.roodie.materialmovies.R;
 
 
-public class ExpandableTextView extends TextView implements View.OnClickListener {
+public class ExpandableTextView extends MMoviesTextView implements View.OnClickListener {
 
     private int mCollapsedMaxLines;
     private boolean mExpanded;

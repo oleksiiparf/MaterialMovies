@@ -21,19 +21,19 @@
           android:layout_marginRight="@dimen/spacing_major"
           android:layout_gravity="center_vertical">
 
-        <TextView
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
               android:id="@+id/title"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               style="@style/Widget.MMovies.Movie.List.Title" />
 
-        <TextView
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
               android:id="@+id/subtitle_1"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               style="@style/Widget.MMovies.Movie.List.Subtitle" />
 
-        <TextView
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
               android:id="@+id/subtitle_2"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"

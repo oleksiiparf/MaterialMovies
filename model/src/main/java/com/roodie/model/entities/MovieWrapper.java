@@ -227,7 +227,7 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
             for (int i = 0, z = list.size(); i < z; i++) {
                 sb.append(list.get(i).name);
                 if (i < z - 1) {
-                    sb.append(", ");
+                    sb.append(" | ");
                 }
             }
             return sb.toString();

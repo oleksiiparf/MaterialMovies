@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.MMovies.ActionBar.Progress" parent="@android:style/Widget.Material.Light.ProgressBar" />
+
+    <style name="Widget.MMovies.ProgressBar" parent="android:Widget.Material.Light.ProgressBar.Horizontal">
+        <item name="android:minHeight">4dp</item>
+        <item name="android:maxHeight">4dp</item>
+    </style>
+
+    <style name="Widget.MMovies.RatingBar" parent="android:Widget.Material.Light.RatingBar" />
+
+
+</resources>

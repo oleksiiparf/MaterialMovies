@@ -27,7 +27,7 @@ public class FetchMovieTrailersRunnable extends BaseMovieRunnable<Videos> {
 
     @Override
     public void onSuccess(Videos result) {
-        MovieWrapper movie = mMoviesState.getMovie(mId);
+        MovieWrapper movie = mState.getMovie(mId);
 
         if (movie != null) {
             movie.updateVideos(result);
@@ -40,7 +40,7 @@ public class FetchMovieTrailersRunnable extends BaseMovieRunnable<Videos> {
     public void onError(RetrofitError re) {
         super.onError(re);
 
-        MovieWrapper movie = mMoviesState.getMovie(mId);
+        MovieWrapper movie = mState.getMovie(mId);
         if (movie != null) {
             getEventBus().post(new MoviesState.MovieVideosItemsUpdatedEvent(getCallingId(), movie));
         }

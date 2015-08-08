@@ -22,10 +22,13 @@
     <dimen name="item_movie_width">196dp</dimen>
     <dimen name="item_movie_height">248dp</dimen>
 
-    <dimen name="spacing_micro">4dp</dimen>
-    <dimen name="spacing_minor">8dp</dimen>
-    <dimen name="spacing_major">16dp</dimen>
-    <dimen name="spacing_massive">24dp</dimen>
+    <dimen name="spacing_micro">2dp</dimen>
+    <dimen name="spacing_minor">4dp</dimen>
+    <dimen name="spacing_major">8dp</dimen>
+    <dimen name="spacing_massive">16dp</dimen>
+    <dimen name="spacing_huge">24dp</dimen>
+
+    <dimen name="trailer_text_size">16dp</dimen>
 
     <dimen name="drawer_login_height">180dp</dimen>
     <dimen name="drawer_side_menu_width">304dp</dimen>

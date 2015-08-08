@@ -33,7 +33,7 @@ public class FetchPersonCreditsRunnable extends BaseMovieRunnable<PersonCredits>
 
     @Override
     public void onSuccess(PersonCredits result) {
-        PersonWrapper person = mMoviesState.getPerson(mId);
+        PersonWrapper person = mState.getPerson(mId);
 
         // TODO
         if (person != null) {
@@ -60,7 +60,7 @@ public class FetchPersonCreditsRunnable extends BaseMovieRunnable<PersonCredits>
     @Override
     public void onError(RetrofitError re) {
         super.onError(re);
-        PersonWrapper person = mMoviesState.getPerson(mId);
+        PersonWrapper person = mState.getPerson(mId);
         if (person != null) {
             getEventBus().post(new MoviesState.PersonChangedEvent(getCallingId(), person));
         }

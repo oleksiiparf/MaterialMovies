@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -70,8 +71,10 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     private CollapsingToolbarLayout mCollapsingToolbar;
     private MMoviesImageView mFanartImageView;
     private TextView mTitleTextView;
+    private TextView mGenresTextView;
     private AutofitTextView mTaglineTextView;
     private MMoviesImageView mPosterImageView;
+    private LinearLayout mTrailerButton;
     private ArcProgress mRatingBar;
     private TextView mVotesTextView;
 
@@ -143,21 +146,34 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
         mCollapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.backdrop_toolbar);
         mFanartImageView = (MMoviesImageView) view.findViewById(R.id.imageview_fanart);
-
-
-        mTitleTextView = (TextView) view.findViewById(R.id.textview_title);
-        mTaglineTextView = (AutofitTextView) view.findViewById(R.id.textview_tagline);
-        mPosterImageView = (MMoviesImageView) view.findViewById(R.id.imageview_poster);
-        if (mPosterImageView != null) {
-            mPosterImageView.setOnClickListener(new View.OnClickListener() {
+        if (mFanartImageView != null) {
+            mFanartImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showMovieImages(mMovie);
                 }
             });
         }
+
+        mTitleTextView = (TextView) view.findViewById(R.id.textview_title);;
+        mGenresTextView = (TextView) view.findViewById(R.id.textview_genres);
+        mTaglineTextView = (AutofitTextView) view.findViewById(R.id.textview_tagline);
+        mPosterImageView = (MMoviesImageView) view.findViewById(R.id.imageview_poster);
+
         mRatingBar = (ArcProgress) view.findViewById(R.id.rating_bar);
         mVotesTextView = (TextView) view.findViewById(R.id.textview_votes);
+        mTrailerButton = (LinearLayout) view.findViewById(R.id.trailer_container);
+        if (mTrailerButton != null) {
+            onPrepareTrailerButton(mTrailerButton);
+            mTrailerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mMovie != null && !MoviesCollections.isEmpty(mMovie.getTrailers())) {
+                        playTrailer();
+                    }
+                }
+            });
+        }
         mPresenter.attachView(this);
         mPresenter.initialize();
     }
@@ -192,6 +208,14 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         mWebSearchItem.setEnabled(isEnableShare);
         mWebSearchItem.setVisible(isEnableShare);
         super.onPrepareOptionsMenu(menu);
+    }
+
+    public void onPrepareTrailerButton(LinearLayout layout) {
+        isEnableYoutube = (mMovie != null && !MoviesCollections.isEmpty(mMovie.getTrailers()));
+        //for (int i = 0; i < mTrailerButton.getChildCount(); i++) {
+           // View view = mTrailerButton.getChildAt(i);
+          //  layout.setEnabled(isEnableYoutube);
+       // }
     }
 
 
@@ -286,6 +310,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     public void setMovie(MovieWrapper movie) {
         mMovie = movie;
         getActivity().invalidateOptionsMenu();
+        onPrepareTrailerButton(mTrailerButton);
         populateUi();
         getRecyclerView().setAdapter(mAdapter);
     }
@@ -394,7 +419,8 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         }
 
         if (hasTitleContainer() && mTitleTextView != null) {
-            mTitleTextView.setText(mMovie.getTitle());
+            mTitleTextView.setText(mMovie.getTitle() + " (" + mMovie.getYear() + ")");
+            mGenresTextView.setText(mMovie.getGenres());
             mTaglineTextView.setText(mMovie.getTagline());
             mPosterImageView.loadPoster(mMovie);
 
@@ -541,15 +567,10 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
             holder.taglineTextView.setText(mMovie.getTagline());
+            holder.title.setText(mMovie.getTitle() + " (" + mMovie.getYear() + ")");
+            holder.genres.setText(mMovie.getGenres());
             String mImageBaseUrl = TmdbSettings.getImageBaseUrl(mContext)
                     + TmdbSettings.POSTER_SIZE_SPEC_W154;
-
-            holder.posterImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showMovieImages(mMovie);
-                }
-            });
 
             Picasso.with(mContext)
                     .load(mImageBaseUrl + mMovie.getPosterUrl())
@@ -560,7 +581,17 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             holder.ratingBar.setMax(100);
             holder.ratingBar.setProgress(mMovie.getAverageRatingPercent());
             holder.votes.setText(String.valueOf(mMovie.getRatingVotes()));
+            onPrepareTrailerButton(holder.trailerButton);
+            holder.trailerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mMovie != null && !MoviesCollections.isEmpty(mMovie.getTrailers())) {
+                        playTrailer();
+                    }
+                }
+            });
         }
+
 
         @Override
         public int getItemCount() {
@@ -569,18 +600,26 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
-            TextView taglineTextView;
+            AutofitTextView taglineTextView;
+            TextView title;
+            TextView genres;
             ImageView posterImageView;
             ArcProgress ratingBar;
             TextView votes;
+            LinearLayout trailerButton;
+
 
             public ViewHolder(View view) {
                 super(view);
 
-                taglineTextView = (TextView) view.findViewById(R.id.textview_tagline);
+                title = (TextView) view.findViewById(R.id.textview_title);
+                genres = (TextView) view.findViewById(R.id.textview_genres);
+                taglineTextView = (AutofitTextView) view.findViewById(R.id.textview_tagline);
                 posterImageView = (ImageView)view.findViewById(R.id.imageview_poster);
                 ratingBar = (ArcProgress) view.findViewById(R.id.rating_bar);
                 votes = (TextView) view.findViewById(R.id.textview_votes);
+                trailerButton = (LinearLayout) view.findViewById(R.id.trailer_container);
+
             }
         }
     }

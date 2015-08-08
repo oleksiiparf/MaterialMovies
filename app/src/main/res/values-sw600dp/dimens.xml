@@ -1,0 +1,53 @@
+<resources>
+    <!-- Example customization of dimensions originally defined in res/values/dimens.xml
+         (such as screen margins) for screens with more than 820dp of available width. This
+         would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
+    <dimen name="activity_vertical_margin">32dp</dimen>
+    <dimen name="activity_vertical_margin_half">16dp</dimen>
+    <dimen name="activity_vertical_margin_double">64dp</dimen>
+    <dimen name="activity_vertical_margin_double_double">128dp</dimen>
+
+    <dimen name="activity_horizontal_margin">64dp</dimen>
+    <dimen name="activity_horizontal_margin_half">16dp</dimen>
+    <dimen name="activity_horizontal_margin_double">64dp</dimen>
+    <dimen name="activity_horizontal_margin_double_double">128dp</dimen>
+
+    <dimen name="activity_movies_margins">10dp</dimen>
+
+    <dimen name="item_movie_width">190dp</dimen>
+    <dimen name="item_movie_height">300dp</dimen>
+
+    <dimen name="trailer_text_size">20dp</dimen>
+
+    <dimen name="spacing_micro">4dp</dimen>
+    <dimen name="spacing_minor">8dp</dimen>
+    <dimen name="spacing_major">16dp</dimen>
+    <dimen name="spacing_massive">24dp</dimen>
+    <dimen name="spacing_huge">56dp</dimen>
+
+    <dimen name="insets">5dp</dimen>
+
+    <dimen name="drawer_side_menu_width">400dp</dimen>
+    <dimen name="drawer_user_text_size">16dp</dimen>
+    <dimen name="drawer_movie_checkin_poster_width">68dp</dimen>
+    <!-- Should be movie_detail_poster_width * 1.6 -->
+    <dimen name="drawer_movie_checkin_poster_height">110dp</dimen>
+    <dimen name="drawer_account_avatar_width">60dp</dimen>
+    <dimen name="drawer_account_avatar_height">60dp</dimen>
+
+    <dimen name="detail_card_height">175dp</dimen>
+    <dimen name="detail_card_item_width">110dp</dimen>
+
+
+    <dimen name="movie_detail_fanart_height">276dp</dimen>
+
+    <dimen name="movie_detail_title_textsize">32dp</dimen>
+    <dimen name="movie_detail_tagline_textsize">18dp</dimen>
+    <dimen name="movie_detail_summary_textsize">18dp</dimen>
+
+    <dimen name="movie_list_image_width">80dp</dimen>
+    <dimen name="movie_list_item_height">120dp</dimen>
+
+    <dimen name="movie_grid_item_width">140dp</dimen>
+    <dimen name="movie_grid_item_height">224dp</dimen>
+</resources>

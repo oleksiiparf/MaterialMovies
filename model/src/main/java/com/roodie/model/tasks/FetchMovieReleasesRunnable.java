@@ -32,7 +32,7 @@ public class FetchMovieReleasesRunnable extends BaseMovieRunnable<Releases>{
     @Override
     public void onSuccess(Releases result) {
         final String countryCode = mCountryProvider.getTwoLetterCountryCode();
-        MovieWrapper movie = mMoviesState.getMovie(mId);
+        MovieWrapper movie = mState.getMovie(mId);
         if (movie != null) {
 
             movie.updateReleases(result, countryCode);

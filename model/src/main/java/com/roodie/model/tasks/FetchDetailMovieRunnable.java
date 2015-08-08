@@ -59,11 +59,11 @@ public class FetchDetailMovieRunnable extends  BaseMovieRunnable<Movie> {
         }
 
         if (result.credits != null && !MoviesCollections.isEmpty(result.credits.cast)){
-            movie.setCast(getEntityMapper().mapCredits(result.credits.cast));
+            movie.setCast(getEntityMapper().mapCastCredits(result.credits.cast));
         }
 
         if (result.credits != null && !MoviesCollections.isEmpty(result.credits.crew)){
-            movie.setCrew(getEntityMapper().mapCredits(result.credits.crew));
+            movie.setCrew(getEntityMapper().mapCrewCredits(result.credits.crew));
         }
 
         getDbHelper().put(movie);
@@ -73,7 +73,7 @@ public class FetchDetailMovieRunnable extends  BaseMovieRunnable<Movie> {
     @Override
     public void onError(RetrofitError re) {
         if (re.getResponse() != null && re.getResponse().getStatus() == 404) {
-            MovieWrapper movie = mMoviesState.getMovie(mId);
+            MovieWrapper movie = mState.getMovie(mId);
             if (movie != null) {
                 getDbHelper().put(movie);
                 getEventBus()

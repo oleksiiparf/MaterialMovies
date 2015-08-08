@@ -13,6 +13,7 @@ import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.settings.DisplaySettings;
 import com.roodie.materialmovies.settings.TmdbSettings;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
+import com.roodie.materialmovies.views.custom_views.MMoviesTextView;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
 

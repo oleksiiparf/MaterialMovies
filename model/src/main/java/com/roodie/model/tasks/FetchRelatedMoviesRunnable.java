@@ -32,7 +32,7 @@ public class FetchRelatedMoviesRunnable extends BaseMovieRunnable<MovieResultsPa
 
     @Override
     public void onSuccess(MovieResultsPage result) {
-        MovieWrapper movie = mMoviesState.getMovie(String.valueOf(mId));
+        MovieWrapper movie = mState.getMovie(String.valueOf(mId));
 
         if (movie != null) {
             List<MovieWrapper> movies = new ArrayList<>(result.results.size());
@@ -49,7 +49,7 @@ public class FetchRelatedMoviesRunnable extends BaseMovieRunnable<MovieResultsPa
     public void onError(RetrofitError re) {
         super.onError(re);
 
-        MovieWrapper movie = mMoviesState.getMovie(String.valueOf(mId));
+        MovieWrapper movie = mState.getMovie(String.valueOf(mId));
         if (movie != null) {
             getEventBus().post(new MoviesState.MovieRelatedItemsUpdatedEvent(
                     getCallingId(), movie));

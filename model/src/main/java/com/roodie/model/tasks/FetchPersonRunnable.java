@@ -1,12 +1,10 @@
 package com.roodie.model.tasks;
 
-import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.state.MoviesState;
 import com.roodie.model.util.MoviesCollections;
 import com.uwetrottmann.tmdb.entities.AppendToResponse;
-import com.uwetrottmann.tmdb.entities.Movie;
 import com.uwetrottmann.tmdb.entities.Person;
 
 import com.uwetrottmann.tmdb.entities.PersonCastCredit;
@@ -15,7 +13,6 @@ import com.uwetrottmann.tmdb.enumerations.AppendToResponseItem;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import retrofit.RetrofitError;
@@ -70,7 +67,7 @@ public class FetchPersonRunnable extends BaseMovieRunnable<Person> {
     public void onError(RetrofitError re) {
         super.onError(re);
 
-        PersonWrapper person = mMoviesState.getPerson(mId);
+        PersonWrapper person = mState.getPerson(mId);
         if (person != null) {
             getEventBus().post(new MoviesState.PersonChangedEvent(getCallingId(), person));
         }
