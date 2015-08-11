@@ -201,18 +201,22 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
     public void setPerson(PersonWrapper person) {
         mPerson = person;
         getActivity().invalidateOptionsMenu();
-        populateUi();
+        mAdapter = populateUi();
         getRecyclerView().setAdapter(mAdapter);
     }
 
 
     @Override
-    public void showMovieDetail(PersonCreditWrapper credit, Bundle bundle) {
+    public void showMovieDetail(PersonCreditWrapper credit, View view) {
         Preconditions.checkNotNull(credit, "credit cannot be null");
+
+        int[] startingLocation = new int[2];
+        view.getLocationOnScreen(startingLocation);
+        startingLocation[0] += view.getWidth() / 2;
 
         Display display = getDisplay();
         if (display != null) {
-            display.startMovieDetailActivity(String.valueOf(credit.getId()), bundle);
+            display.startMovieDetailActivity(String.valueOf(credit.getId()), startingLocation);
         }
     }
 
@@ -275,9 +279,9 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         return false;
     }
 
-    private void populateUi() {
+    private DetailAdapter populateUi() {
         if (mPerson == null) {
-            return;
+            return null;
         }
 
         if (personImagePoster != null) {
@@ -304,7 +308,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
             mItems.add(PersonItems.CREDITS_CREW);
         }
 
-        mAdapter = createRecyclerAdapter(mItems);
+        return createRecyclerAdapter(mItems);
     }
 
     /**
@@ -697,8 +701,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
                     if (hasPresenter()) {
                         PersonCreditWrapper credit = (PersonCreditWrapper) view.getTag();
                         if (credit != null && credit != null) {
-                            showMovieDetail(credit,
-                                    null);
+                            showMovieDetail(credit, view);
                         }
                     }
                 }
@@ -727,8 +730,7 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
                     if (hasPresenter()) {
                         PersonCreditWrapper credit = (PersonCreditWrapper) view.getTag();
                         if (credit != null && credit != null) {
-                            showMovieDetail(credit,
-                                    null);
+                            showMovieDetail(credit, view);
                         }
                     }
                 }

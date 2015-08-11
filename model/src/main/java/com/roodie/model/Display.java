@@ -27,6 +27,8 @@ public interface Display {
 
     public static final String PARAM_ID = "_id";
 
+    public static final String PARAM_LOCATION = "_location";
+
     public void showMovies();
 
     public void showShows();
@@ -35,9 +37,9 @@ public interface Display {
 
     public void showAbout();
 
-    public void startMovieDetailActivity(String movieId, Bundle bundle);
+    public void startMovieDetailActivity(String movieId, int[] startingLocation);
 
-    public void showMovieDetailFragment(String movieId);
+    public void showMovieDetailFragment(String movieId, int[] startingLocation);
 
     public void startMovieImagesActivity(String movieId);
 

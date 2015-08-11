@@ -2,6 +2,7 @@ package com.roodie.materialmovies.mvp.presenters;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.mvp.views.MovieView;
@@ -48,7 +49,7 @@ public class MovieDetailPresenter extends BasePresenter {
 
     @Subscribe
     public void onMovieDetailChanged(MoviesState.MovieInformationUpdatedEvent event) {
-        populateUi(event);
+        populateUi();
         checkDetailMovieResult(event.callingId, event.item);
     }
 
@@ -94,9 +95,7 @@ public class MovieDetailPresenter extends BasePresenter {
     }
 
 
-    public void populateUi(BaseState.BaseArgumentEvent event) {
-        Preconditions.checkNotNull(event, "event cannot be null");
-
+    public void populateUi() {
         Log.d(LOG_TAG, "populateUi: " + mMoviesView.getClass().getSimpleName());
 
         final MovieWrapper movie = mState.getMovie(mMoviesView.getRequestParameter());
@@ -158,6 +157,8 @@ public class MovieDetailPresenter extends BasePresenter {
             } else {
                 fetchDetailMovieFromTmdb(callingId, Integer.valueOf(movie.getImdbId()));
             }
+        } else {
+            populateUi();
         }
     }
 
@@ -180,7 +181,7 @@ public class MovieDetailPresenter extends BasePresenter {
 
         void setMovie(MovieWrapper movie);
 
-        void showMovieDetail(MovieWrapper movie, Bundle bundle);
+        void showMovieDetail(MovieWrapper movie, View view);
 
         void playTrailer();
 

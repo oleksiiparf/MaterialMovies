@@ -1,7 +1,7 @@
 package com.roodie.materialmovies.mvp.presenters;
 
-import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.mvp.views.BaseMovieListView;
@@ -339,6 +339,6 @@ public class MovieGridPresenter extends BasePresenter {
 
     public interface MovieGridView extends BaseMovieListView<MovieWrapper> {
 
-        void showMovieDetail(MovieWrapper movie, Bundle bundle);
+        void showMovieDetail(MovieWrapper movie, View view);
     }
 }

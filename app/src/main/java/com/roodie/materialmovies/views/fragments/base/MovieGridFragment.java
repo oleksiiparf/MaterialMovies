@@ -105,14 +105,15 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        final int spacing = getResources().getDimensionPixelSize(R.dimen.movie_grid_spacing);
+        getListView().setPadding(spacing, spacing, spacing, spacing);
+
         //set actionbar up navigation
         final Display display = getDisplay();
         if (!isModal()) {
             display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
         }
-
-        final int spacing = getResources().getDimensionPixelSize(R.dimen.movie_grid_spacing);
-        getListView().setPadding(spacing, spacing, spacing, spacing);
         mMovieGridPresenter.attachUi(this);
     }
 
@@ -133,8 +134,7 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
           // Log.d(LOG_TAG, "List item clicked  " + item.getListItem().getTitle());
            Log.d(LOG_TAG, getQueryType() + " clicked");
            if (item.getListType() == ListItem.TYPE_ITEM) {
-               showMovieDetail(item.getListItem(),
-                      null);
+               showMovieDetail(item.getListItem(), v);
            }
        }
     }
@@ -181,15 +181,20 @@ public abstract class MovieGridFragment extends ListFragment<GridView> implement
     }
 
     @Override
-    public void showMovieDetail(MovieWrapper movie, Bundle bundle){
+    public void showMovieDetail(MovieWrapper movie,  View view){
         Preconditions.checkNotNull(movie, "movie cannot be null");
+        int[] startingLocation = new int[2];
+        view.getLocationOnScreen(startingLocation);
+        startingLocation[0] += view.getWidth() / 2;
+
         Display display = getDisplay();
         if (display != null) {
             if (movie.getTmdbId() != null) {
-                display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), bundle);
+                display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), startingLocation);
             }
         }
     }
+
     @Override
     public String getRequestParameter() {
         return null;

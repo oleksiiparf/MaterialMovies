@@ -19,9 +19,9 @@
 
     <dimen name="trailer_text_size">20dp</dimen>
 
-    <dimen name="spacing_micro">4dp</dimen>
-    <dimen name="spacing_minor">8dp</dimen>
-    <dimen name="spacing_major">16dp</dimen>
+    <dimen name="spacing_micro">8dp</dimen>
+    <dimen name="spacing_minor">16dp</dimen>
+    <dimen name="spacing_major">24dp</dimen>
     <dimen name="spacing_massive">24dp</dimen>
     <dimen name="spacing_huge">56dp</dimen>
 
@@ -50,4 +50,5 @@
 
     <dimen name="movie_grid_item_width">140dp</dimen>
     <dimen name="movie_grid_item_height">224dp</dimen>
+    <dimen name="movie_grid_item_font_size">18dp</dimen>
 </resources>

@@ -3,8 +3,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/movie_grid_item_height"
-    android:clipChildren="false">
+    android:layout_height="@dimen/movie_grid_item_height">
 
     <com.roodie.materialmovies.views.custom_views.MMoviesImageView
         android:id="@+id/poster"

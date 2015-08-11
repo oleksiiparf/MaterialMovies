@@ -1,7 +1,7 @@
 package com.roodie.materialmovies.mvp.presenters;
 
-import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.mvp.views.MovieView;
@@ -49,7 +49,7 @@ public class PersonPresenter extends BasePresenter {
     @Subscribe
     public void onPersonInfoChanged(MoviesState.PersonChangedEvent event) {
         Log.d(LOG_TAG, "On Person Changed info");
-        populateUi(event);
+        populateUi();
     }
 
 
@@ -102,6 +102,8 @@ public class PersonPresenter extends BasePresenter {
         PersonWrapper person = mState.getPerson(id);
         if (person == null || !person.isFetchedCredits()) {
             fetchPerson(callingId, Integer.parseInt(id));
+        } else {
+            populateUi();
         }
     }
 
@@ -114,8 +116,7 @@ public class PersonPresenter extends BasePresenter {
         mExecutor.execute(task);
     }
 
-    public void populateUi(MoviesState.PersonChangedEvent event) {
-        Preconditions.checkNotNull(event, "event cannot be null");
+    public void populateUi() {
 
         final PersonWrapper person = mState.getPerson(mPersonView.getRequestParameter());
         Log.d(LOG_TAG, "Populate ui: " + mPersonView.getQueryType().toString());
@@ -131,9 +132,10 @@ public class PersonPresenter extends BasePresenter {
 
     public interface PersonView extends MovieView {
 
+
         void setPerson(PersonWrapper person);
 
-        void showMovieDetail(PersonCreditWrapper credit, Bundle bundle);
+        void showMovieDetail(PersonCreditWrapper credit, View view);
 
         void showPersonCreditsDialog(MovieQueryType queryType);
     }

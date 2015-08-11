@@ -103,15 +103,17 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
-    public void startMovieDetailActivity(String movieId, Bundle bundle) {
+    public void startMovieDetailActivity(String movieId, int[] startingLocation) {
         Intent intent = new Intent(mActivity, MovieActivity.class);
         intent.putExtra(PARAM_ID, movieId);
-        startActivity(intent, bundle);
+        intent.putExtra(PARAM_LOCATION, startingLocation);
+        startActivity(intent, null);
+        mActivity.overridePendingTransition(0,0);
     }
 
     @Override
-    public void showMovieDetailFragment(String movieId) {
-        showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId));
+    public void showMovieDetailFragment(String movieId, int[] startingLocation ) {
+        showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId, startingLocation));
     }
 
     @Override

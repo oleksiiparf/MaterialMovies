@@ -19,7 +19,7 @@ public class MovieActivity extends BaseActivity {
     @Override
     protected void handleIntent(Intent intent, Display display) {
       if (!display.hasMainFragment()) {
-          display.showMovieDetailFragment(intent.getStringExtra(Display.PARAM_ID));
+          display.showMovieDetailFragment(intent.getStringExtra(Display.PARAM_ID), intent.getIntArrayExtra(Display.PARAM_LOCATION));
       }
     }
 }

@@ -10,10 +10,7 @@ import android.widget.TextView;
 
 import com.google.common.base.Objects;
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.settings.DisplaySettings;
-import com.roodie.materialmovies.settings.TmdbSettings;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
-import com.roodie.materialmovies.views.custom_views.MMoviesTextView;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
 
@@ -32,20 +29,11 @@ public class MovieGridAdapter extends BaseAdapter {
 
     private List<ListItem<MovieWrapper>> mItems;
 
-    private String mImageBaseUrl;
 
     public MovieGridAdapter(Activity activity) {
         this.mActivity = activity;
         mLayoutInflater = mActivity.getLayoutInflater();
         this.mContext = mActivity.getApplicationContext();
-
-        if (DisplaySettings.isHighDestinyScreen(mContext)) {
-            mImageBaseUrl = TmdbSettings.getImageBaseUrl(mContext)
-                    + TmdbSettings.POSTER_SIZE_SPEC_W342;
-        } else {
-            mImageBaseUrl = TmdbSettings.getImageBaseUrl(mContext)
-                    + TmdbSettings.POSTER_SIZE_SPEC_W154;
-        }
 
     }
 

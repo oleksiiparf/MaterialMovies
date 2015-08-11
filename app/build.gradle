@@ -54,6 +54,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.afollestad:material-dialogs:0.7.7.0'
     compile 'com.github.chrisbanes.photoview:library:1.2.+'
+    compile 'com.github.asyl.animation:arcanimator:1.0.0'
+    compile 'com.github.ozodrukh:CircularReveal:1.0.4@aar'
 
     apt 'com.squareup.dagger:dagger-compiler:1.2.+'
 

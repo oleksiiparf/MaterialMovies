@@ -8,6 +8,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +16,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -23,6 +29,8 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.base.Preconditions;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.MovieDetailPresenter;
 import com.roodie.materialmovies.settings.TmdbSettings;
@@ -48,6 +56,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.codetail.animation.SupportAnimator;
+import io.codetail.animation.ViewAnimationUtils;
+
 /**
  * Created by Roodie on 27.06.2015.
  */
@@ -55,18 +66,35 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
     private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
+    private static final String KEY_REVEAL_START_LOCATION = "reveal_start_location";
     private static final String KEY_MOVIE_SAVE_STATE = "movie_on_save_state";
+
+    final static AccelerateInterpolator ACCELERATE = new AccelerateInterpolator();
+    final static Interpolator INTERPOLATOR = new DecelerateInterpolator();
+    final static AccelerateDecelerateInterpolator ACCELERATE_DECELERATE = new AccelerateDecelerateInterpolator();
+
+    private static final int ANIMATION_DELAY = 150;
+    long animationDelay = ANIMATION_DELAY + 2 * 30;
 
     private MovieDetailPresenter mPresenter;
     private DetailAdapter mAdapter;
     private MovieWrapper mMovie;
     private final ArrayList<DetailItemType> mItems = new ArrayList<>();
 
+    private int endAnimationX, endAnimationY;
+    private   int startAnimationPairBottom;
+
     private MenuItem mYoutubeItem;
     private MenuItem mShareItem;
     private MenuItem mWebSearchItem;
     boolean isEnableYoutube = false;
     boolean isEnableShare = false;
+
+    private FrameLayout mAnimationLayout;
+    private LinearLayout mSummaryContainer;
+
+    private LinearLayout mSummaryRoot;
+    private LinearLayout mRatingBarContainer;
 
     private CollapsingToolbarLayout mCollapsingToolbar;
     private MMoviesImageView mFanartImageView;
@@ -95,6 +123,18 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
         Bundle bundle = new Bundle();
         bundle.putString(QUERY_MOVIE_ID, movieId);
+        MovieDetailFragment fragment = new MovieDetailFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    public static MovieDetailFragment newInstance(String movieId, int[] startingLocation) {
+        Preconditions.checkArgument(movieId != null, "MovieId can not be null");
+
+        Bundle bundle = new Bundle();
+        bundle.putString(QUERY_MOVIE_ID, movieId);
+        bundle.putIntArray(KEY_REVEAL_START_LOCATION, startingLocation);
         MovieDetailFragment fragment = new MovieDetailFragment();
         fragment.setArguments(bundle);
 
@@ -138,6 +178,11 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        final int[] startingLocation = getStartingLocation();
+
+        endAnimationX = startingLocation[0];
+        endAnimationY = startingLocation[1];
+
         //set actionbar up navigation
         final Display display = getDisplay();
         if (!isModal()) {
@@ -155,7 +200,14 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             });
         }
 
-        mTitleTextView = (TextView) view.findViewById(R.id.textview_title);;
+        mAnimationLayout = (FrameLayout) view.findViewById(R.id.transaction_container);
+        mSummaryContainer = (LinearLayout) view.findViewById(R.id.container_layout);
+
+        mSummaryRoot = (LinearLayout) view.findViewById(R.id.summary_root);
+        mRatingBarContainer = (LinearLayout) view.findViewById(R.id.rating_bar_container);
+
+
+        mTitleTextView = (TextView) view.findViewById(R.id.textview_title);
         mGenresTextView = (TextView) view.findViewById(R.id.textview_genres);
         mTaglineTextView = (AutofitTextView) view.findViewById(R.id.textview_tagline);
         mPosterImageView = (MMoviesImageView) view.findViewById(R.id.imageview_poster);
@@ -174,8 +226,57 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 }
             });
         }
+
         mPresenter.attachView(this);
-        mPresenter.initialize();
+        //mPresenter.initialize();
+
+        mAnimationLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                startingSircleAnimation();
+            }
+        });
+    }
+
+    private void startingSircleAnimation() {
+        mAnimationLayout.setVisibility(View.VISIBLE);
+
+        float finalRadius = Math.max(mAnimationLayout.getWidth(), mAnimationLayout.getHeight()) * 1.5f;
+
+        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(mAnimationLayout, endAnimationX, endAnimationY, 20 / 2f,
+                finalRadius);
+        animator.setDuration(500);
+        animator.setInterpolator(ACCELERATE);
+        animator.addListener(new SimpleListener() {
+            @Override
+            public void onAnimationEnd() {
+                raisingUpAnimation();
+            }
+        });
+        animator.start();
+    }
+
+
+    private void raisingUpAnimation(){
+        startAnimationPairBottom = mAnimationLayout.getBottom();
+        ObjectAnimator objectAnimator = ObjectAnimator.ofInt(mAnimationLayout, "bottom", mAnimationLayout.getBottom(), mAnimationLayout.getTop() + dpToPx(100));
+        objectAnimator.addListener(new SimpleListener() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                //  appearRed();
+                mAnimationLayout.setVisibility(View.GONE);
+                mPresenter.initialize();
+
+            }
+        });
+        objectAnimator.setInterpolator(ACCELERATE_DECELERATE);
+        objectAnimator.start();
+    }
+
+
+    public int dpToPx(int dp){
+        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     @Override
@@ -218,6 +319,27 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
        // }
     }
 
+    /**
+     * Animations
+     */
+
+    private void animateSummary() {
+       // mSummaryRoot.setTranslationY(-mSummaryRoot.getHeight());
+       // mPosterImageView.setTranslationY(-mPosterImageView.getHeight());
+        mSummaryContainer.setTranslationY(-mSummaryContainer.getHeight());
+        //mFanartImageView.setTranslationY(-mFanartImageView.getHeight());
+        //mRatingBarContainer.setAlpha(0);
+
+        //mSummaryRoot.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(INTERPOLATOR);
+        mSummaryContainer.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(INTERPOLATOR);
+        //mPosterImageView.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(INTERPOLATOR);
+        //mRatingBarContainer.animate().alpha(1).setDuration(200).setStartDelay(400).setInterpolator(INTERPOLATOR).start();
+    }
+
+    private void animateFanart() {
+        mFanartImageView.setTranslationY(-mFanartImageView.getHeight());
+        mFanartImageView.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(INTERPOLATOR);
+    }
 
     @Override
     public void onPause() {
@@ -297,6 +419,11 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         return getArguments().getString(QUERY_MOVIE_ID);
     }
 
+    public int[] getStartingLocation() {
+        return getArguments().getIntArray(KEY_REVEAL_START_LOCATION);
+    }
+
+
     @Override
     public MovieQueryType getQueryType() {
         return MovieQueryType.MOVIE_DETAIL;
@@ -309,20 +436,34 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     @Override
     public void setMovie(MovieWrapper movie) {
         mMovie = movie;
+        mAdapter = populateUi();
+        getRecyclerView().setAdapter(mAdapter);
         getActivity().invalidateOptionsMenu();
         onPrepareTrailerButton(mTrailerButton);
-        populateUi();
-        getRecyclerView().setAdapter(mAdapter);
+
+        getRecyclerView().setVisibility(View.VISIBLE);
+        if (mSummaryContainer != null) {
+            mSummaryContainer.setVisibility(View.VISIBLE);
+            //mPosterImageView.setVisibility(View.VISIBLE);
+            animateFanart();
+            animateSummary();
+        }
+
+
+
     }
 
     @Override
-    public void showMovieDetail(MovieWrapper movie, Bundle bundle) {
+    public void showMovieDetail(MovieWrapper movie, View view) {
         Preconditions.checkNotNull(movie, "movie cannot be null");
+        int[] startingLocation = new int[2];
+        view.getLocationOnScreen(startingLocation);
+        startingLocation[0] += view.getWidth() / 2;
 
         Display display = getDisplay();
         if (display != null) {
             if (movie.getTmdbId() != null) {
-                display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), bundle);
+                display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), startingLocation);
             }
         }
     }
@@ -404,9 +545,9 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         return mAdapter;
     }
 
-    private void populateUi() {
+    private DetailAdapter populateUi() {
         if (mMovie == null) {
-            return;
+            return null;
         }
         mItems.clear();
 
@@ -456,7 +597,8 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             mItems.add(DetailItemType.RELATED);
         }
 
-        mAdapter = createRecyclerAdapter(mItems);
+
+        return createRecyclerAdapter(mItems);
 
     }
 
@@ -477,12 +619,13 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     public class DetailAdapter extends  EnumListDetailAdapter<DetailItemType> {
         List<BaseViewHolder> mItems;
 
+
         public DetailAdapter() {
         }
 
         public DetailAdapter(List<DetailItemType> items) {
             mItems = new ArrayList<>(items.size());
-            for (DetailItemType item : items) {
+            for(DetailItemType item : items) {
                 switch (item) {
                     case TITLE:
                         mItems.add(new MovieTitleBinder(this));
@@ -509,6 +652,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             addAllBinder(mItems);
         }
 
+
     }
 
     /**
@@ -529,7 +673,18 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
-             holder.summary.setText(mMovie.getOverview());
+            holder.summary.setText(mMovie.getOverview());
+
+            holder.summary.setScaleY(0);
+            holder.summary.setScaleX(0);
+
+            holder.summary.animate()
+                    .scaleY(1)
+                    .scaleX(1)
+                    .setDuration(200)
+                    .setInterpolator(INTERPOLATOR)
+                    .setStartDelay(animationDelay)
+                    .start();
         }
 
         @Override
@@ -590,6 +745,17 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                     }
                 }
             });
+
+            holder.container.setScaleY(0);
+            holder.container.setScaleX(0);
+
+            holder.container.animate()
+                    .scaleY(1)
+                    .scaleX(1)
+                    .setDuration(200)
+                    .setInterpolator(INTERPOLATOR)
+                    .setStartDelay(animationDelay)
+                    .start();
         }
 
 
@@ -600,6 +766,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
+            LinearLayout container;
             AutofitTextView taglineTextView;
             TextView title;
             TextView genres;
@@ -612,6 +779,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             public ViewHolder(View view) {
                 super(view);
 
+                container = (LinearLayout) view.findViewById(R.id.container_layout);
                 title = (TextView) view.findViewById(R.id.textview_title);
                 genres = (TextView) view.findViewById(R.id.textview_genres);
                 taglineTextView = (AutofitTextView) view.findViewById(R.id.textview_tagline);
@@ -688,6 +856,18 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             } else {
                 holder.languageLayout.setVisibility(View.GONE);
             }
+
+            holder.container.setScaleY(0);
+            holder.container.setScaleX(0);
+
+            holder.container.animate()
+                    .scaleY(1)
+                    .scaleX(1)
+                    .setDuration(200)
+                    .setInterpolator(INTERPOLATOR)
+                    .setStartDelay(animationDelay)
+                    .start();
+
         }
 
         @Override
@@ -697,6 +877,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
+            MovieDetailCardLayout container;
             MovieDetailInfoLayout runtimeLayout;
             MovieDetailInfoLayout certificationLayout;
             MovieDetailInfoLayout genreLayout;
@@ -707,6 +888,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             public ViewHolder(View view) {
                 super(view);
 
+                container = (MovieDetailCardLayout) view.findViewById(R.id.movie_detail_card_details);
                 runtimeLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_runtime);
                 certificationLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_certification);
                 genreLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_genres);
@@ -767,6 +949,18 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
             }
             viewRecycler.clearRecycledViews();
+
+
+            cardLayout.setScaleY(0);
+            cardLayout.setScaleX(0);
+
+            cardLayout.animate()
+                    .scaleY(1)
+                    .scaleX(1)
+                    .setDuration(200)
+                    .setInterpolator(INTERPOLATOR)
+                    .setStartDelay(animationDelay)
+                    .start();
         }
 
         @Override
@@ -835,6 +1029,17 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
             }
             viewRecycler.clearRecycledViews();
+
+            cardLayout.setScaleY(0);
+            cardLayout.setScaleX(0);
+
+            cardLayout.animate()
+                    .scaleY(1)
+                    .scaleX(1)
+                    .setDuration(200)
+                    .setInterpolator(INTERPOLATOR)
+                    .setStartDelay(animationDelay)
+                    .start();
         }
 
         @Override
@@ -903,6 +1108,17 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
             }
             viewRecycler.clearRecycledViews();
+
+            cardLayout.setScaleY(0);
+            cardLayout.setScaleX(0);
+
+            cardLayout.animate()
+                    .scaleY(1)
+                    .scaleX(1)
+                    .setDuration(200)
+                    .setInterpolator(INTERPOLATOR)
+                    .setStartDelay(animationDelay)
+                    .start();
         }
 
         @Override
@@ -1104,8 +1320,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             this.mItemOnClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   showMovieDetail((MovieWrapper) v.getTag(),
-                           null);
+                   showMovieDetail((MovieWrapper) v.getTag(), v);
                 }
             };
 
@@ -1256,5 +1471,40 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     @Override
     protected void setSupportActionBar(Toolbar toolbar) {
        setSupportActionBar(toolbar, false);
+    }
+
+    private static class SimpleListener implements SupportAnimator.AnimatorListener, ObjectAnimator.AnimatorListener{
+
+        @Override
+        public void onAnimationStart() {
+        }
+
+        @Override
+        public void onAnimationEnd() {
+        }
+
+        @Override
+        public void onAnimationCancel() {
+        }
+
+        @Override
+        public void onAnimationRepeat() {
+        }
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+        }
     }
 }
