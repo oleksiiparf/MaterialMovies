@@ -33,6 +33,13 @@ public class ShowsFragment extends BaseFragment implements MovieView {
         return inflater.inflate(R.layout.fragment_shows, container, false);
     }
 
+    @Override
+    public void updateDisplayTitle(String title) {
+        Display display = getDisplay();
+        if (display != null) {
+            display.setActionBarTitle(title);
+        }
+    }
 
     @Override
     public void showError(NetworkError error) {

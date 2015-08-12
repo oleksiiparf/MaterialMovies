@@ -205,6 +205,13 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         getRecyclerView().setAdapter(mAdapter);
     }
 
+    @Override
+    public void updateDisplayTitle(String title) {
+        Display display = getDisplay();
+        if (display != null) {
+            display.setActionBarTitle(title);
+        }
+    }
 
     @Override
     public void showMovieDetail(PersonCreditWrapper credit, View view) {

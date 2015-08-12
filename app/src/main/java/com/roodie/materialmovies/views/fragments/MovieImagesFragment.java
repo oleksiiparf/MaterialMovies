@@ -18,6 +18,7 @@ import com.roodie.materialmovies.mvp.presenters.MovieImagesPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.fragments.base.BaseFragment;
+import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.network.NetworkError;
 
@@ -131,6 +132,14 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
     @Override
     public String getRequestParameter() {
         return getArguments().getString(MOVIE_ID);
+    }
+
+    @Override
+    public void updateDisplayTitle(String title) {
+        Display display = getDisplay();
+        if (display != null) {
+            display.setActionBarTitle(title);
+        }
     }
 
     @Override

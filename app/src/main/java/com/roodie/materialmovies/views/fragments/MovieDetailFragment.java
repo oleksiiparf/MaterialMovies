@@ -360,17 +360,9 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
      */
 
     private void animateSummary() {
-       // mSummaryRoot.setTranslationY(-mSummaryRoot.getHeight());
-       // mPosterImageView.setTranslationY(-mPosterImageView.getHeight());
-        mSummaryContainer.setTranslationY(-mSummaryContainer.getHeight());
-        //mFanartImageView.setTranslationY(-mFanartImageView.getHeight());
-        //mRatingBarContainer.setAlpha(0);
-
-        //mSummaryRoot.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(INTERPOLATOR);
-        mSummaryContainer.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(INTERPOLATOR);
-        //mPosterImageView.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(INTERPOLATOR);
-        //mRatingBarContainer.animate().alpha(1).setDuration(200).setStartDelay(400).setInterpolator(INTERPOLATOR).start();
-    }
+     mSummaryContainer.setTranslationY(-mSummaryContainer.getHeight());
+     mSummaryContainer.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(INTERPOLATOR);
+  }
 
     private void animateFanart() {
         mFanartImageView.setTranslationY(-mFanartImageView.getHeight());
@@ -438,6 +430,14 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     /**
      * MovieView
      */
+    @Override
+    public void updateDisplayTitle(String title) {
+        Display display = getDisplay();
+        if (display != null) {
+            display.setActionBarTitle(title);
+        }
+    }
+
     @Override
     public void showError(NetworkError error) {
 

@@ -123,6 +123,7 @@ public class PersonPresenter extends BasePresenter {
         switch (mPersonView.getQueryType()) {
             case PERSON_DETAIL:
                 if (person != null) {
+                    mPersonView.updateDisplayTitle(person.getName());
                     mPersonView.setPerson(person);
                 }
                 break;

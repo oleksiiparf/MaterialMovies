@@ -11,6 +11,7 @@ import com.roodie.materialmovies.mvp.presenters.MovieTabPresenter;
 import com.roodie.materialmovies.util.StringUtils;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.fragments.base.BaseTabFragment;
+import com.roodie.model.Display;
 import com.roodie.model.network.NetworkError;
 
 import java.util.ArrayList;
@@ -53,6 +54,14 @@ public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresen
         super.onPause();
         mGridPresenter.onPause();
         mPresenter.onPause();
+    }
+
+    @Override
+    public void updateDisplayTitle(String title) {
+        Display display = getDisplay();
+        if (display != null) {
+            display.setActionBarTitle(title);
+        }
     }
 
     @Override

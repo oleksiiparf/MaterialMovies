@@ -16,4 +16,6 @@ public interface MovieView extends UiView {
 
     String getRequestParameter();
 
+    void updateDisplayTitle(String title);
+
 }

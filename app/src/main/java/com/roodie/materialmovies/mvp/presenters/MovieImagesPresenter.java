@@ -3,6 +3,7 @@ package com.roodie.materialmovies.mvp.presenters;
 import android.util.Log;
 
 import com.google.common.base.Preconditions;
+import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.MovieView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
 import com.roodie.model.entities.MovieWrapper;
@@ -13,6 +14,7 @@ import com.roodie.model.tasks.FetchMovieImagesRunnable;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.Injector;
 import com.roodie.model.util.MoviesCollections;
+import com.roodie.model.util.StringFetcher;
 import com.squareup.otto.Subscribe;
 
 import java.util.Collections;
@@ -32,16 +34,19 @@ public class MovieImagesPresenter extends BasePresenter {
     private final ApplicationState mState;
     private final BackgroundExecutor mExecutor;
     private final Injector mInjector;
+    private final StringFetcher mFetcher;
 
     private boolean attached = false;
 
     @Inject
     public MovieImagesPresenter(ApplicationState applicationState,
                                 @GeneralPurpose BackgroundExecutor executor,
-                                Injector injector) {
+                                Injector injector,
+                                StringFetcher fetcher) {
         mState = Preconditions.checkNotNull(applicationState, "mState can not be null");
         mExecutor = Preconditions.checkNotNull(executor, "executor cannot be null");
         mInjector = Preconditions.checkNotNull(injector, "injector cannot be null");
+        mFetcher = Preconditions.checkNotNull(fetcher, "fetcher cannot be null");
     }
 
     @Subscribe
@@ -72,6 +77,7 @@ public class MovieImagesPresenter extends BasePresenter {
         Preconditions.checkNotNull(view, "View cannot be null");
         this.mView = view;
         attached = true;
+        mView.updateDisplayTitle(mFetcher.getString(R.string.images_movies));
     }
 
     private void checkViewAlreadySetted() {

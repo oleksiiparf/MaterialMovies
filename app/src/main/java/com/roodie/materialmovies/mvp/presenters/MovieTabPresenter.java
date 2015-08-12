@@ -1,9 +1,11 @@
 package com.roodie.materialmovies.mvp.presenters;
 
 import com.google.common.base.Preconditions;
+import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.MovieView;
 import com.roodie.materialmovies.mvp.views.UiView;
 import com.roodie.model.state.ApplicationState;
+import com.roodie.model.util.StringFetcher;
 
 import javax.inject.Inject;
 
@@ -15,18 +17,25 @@ public class MovieTabPresenter extends BasePresenter {
     MoviesTabView mView;
 
     private final ApplicationState mState;
+    private final StringFetcher mStringFetcher;
 
     private boolean attached = false;
 
     @Inject
-    public MovieTabPresenter(ApplicationState state) {
+    public MovieTabPresenter(ApplicationState state,
+                             StringFetcher stringFetcher) {
         mState = Preconditions.checkNotNull(state, "state can not be null");
+        mStringFetcher = Preconditions.checkNotNull(stringFetcher, "stringFetcher cannot be null");
     }
 
     public void attachView(MoviesTabView view) {
         Preconditions.checkNotNull(view, "View cannot be null");
         this.mView = view;
         attached = true;
+
+        if (!view.isModal()) {
+            mView.updateDisplayTitle(mStringFetcher.getString(R.string.movies_title));
+        }
     }
 
     @Override

@@ -5,10 +5,12 @@ import android.content.Context;
 import com.roodie.materialmovies.qualifiers.AppContext;
 import com.roodie.materialmovies.qualifiers.Database;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
+import com.roodie.materialmovies.util.AndroidStringFetcher;
 import com.roodie.materialmovies.util.MMoviesBackgroundExecutor;
 import com.roodie.materialmovies.util.MMoviesCountryProvider;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.CountryProvider;
+import com.roodie.model.util.StringFetcher;
 import com.squareup.otto.Bus;
 
 import java.util.concurrent.Executors;
@@ -47,6 +49,11 @@ public class UtilProvider {
     @Provides @Singleton @Database
     public BackgroundExecutor provideDatabaseThreadExecutor() {
         return new MMoviesBackgroundExecutor(Executors.newSingleThreadExecutor());
+    }
+
+    @Provides @Singleton
+    public StringFetcher provideStringFetcher(@AppContext Context context) {
+        return new AndroidStringFetcher(context);
     }
 
 

@@ -146,6 +146,10 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
     }
 
     @Override
+    public void updateDisplayTitle(String title) {
+    }
+
+    @Override
     public void showError(NetworkError error) {
         setGridShown(true);
 

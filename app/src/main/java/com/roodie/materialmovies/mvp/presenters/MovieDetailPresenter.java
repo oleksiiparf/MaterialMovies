@@ -103,6 +103,7 @@ public class MovieDetailPresenter extends BasePresenter {
         switch (mMoviesView.getQueryType()) {
             case MOVIE_DETAIL:
                 if (movie != null) {
+                    mMoviesView.updateDisplayTitle(movie.getTitle());
                     mMoviesView.setMovie(movie);
                 }
                 break;
