@@ -71,6 +71,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
     final static AccelerateInterpolator ACCELERATE = new AccelerateInterpolator();
     final static Interpolator INTERPOLATOR = new DecelerateInterpolator();
+    final static DecelerateInterpolator DECELERATE = new DecelerateInterpolator();
     final static AccelerateDecelerateInterpolator ACCELERATE_DECELERATE = new AccelerateDecelerateInterpolator();
 
     private static final int ANIMATION_DELAY = 150;
@@ -166,6 +167,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         if (savedInstanceState != null) {
             setMovie((MovieWrapper) savedInstanceState.getSerializable(KEY_MOVIE_SAVE_STATE));
         }
+
     }
 
     @Nullable
@@ -233,12 +235,16 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         mAnimationLayout.post(new Runnable() {
             @Override
             public void run() {
-                startingSircleAnimation();
+                if (mSummaryContainer != null) {
+                    mSummaryContainer.setVisibility(View.GONE);
+                }
+                mFanartImageView.setVisibility(View.GONE);
+                startSircleAnimation();
             }
         });
     }
 
-    private void startingSircleAnimation() {
+    private void startSircleAnimation() {
         mAnimationLayout.setVisibility(View.VISIBLE);
 
         float finalRadius = Math.max(mAnimationLayout.getWidth(), mAnimationLayout.getHeight()) * 1.5f;
@@ -250,14 +256,14 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         animator.addListener(new SimpleListener() {
             @Override
             public void onAnimationEnd() {
-                raisingUpAnimation();
+                raiseUpAnimation();
             }
         });
         animator.start();
     }
 
 
-    private void raisingUpAnimation(){
+    private void raiseUpAnimation(){
         startAnimationPairBottom = mAnimationLayout.getBottom();
         ObjectAnimator objectAnimator = ObjectAnimator.ofInt(mAnimationLayout, "bottom", mAnimationLayout.getBottom(), mAnimationLayout.getTop() + dpToPx(100));
         objectAnimator.addListener(new SimpleListener() {
@@ -272,6 +278,36 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         objectAnimator.setInterpolator(ACCELERATE_DECELERATE);
         objectAnimator.start();
     }
+
+    private void comeDownAnimation(){
+        ObjectAnimator objectAnimator = ObjectAnimator.ofInt(mAnimationLayout, "bottom", mAnimationLayout.getBottom(), startAnimationPairBottom);
+        objectAnimator.addListener(new SimpleListener() {
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                disappearBackgroundAnimation();
+            }
+        });
+        objectAnimator.setInterpolator(ACCELERATE_DECELERATE);
+        objectAnimator.start();
+    }
+
+    private void disappearBackgroundAnimation(){
+        float finalRadius = Math.max(mAnimationLayout.getWidth(), mAnimationLayout.getHeight()) * 1.5f;
+
+        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(mAnimationLayout, endAnimationX, endAnimationY,
+                finalRadius, 10);
+        animator.setDuration(500);
+        animator.addListener(new SimpleListener() {
+            @Override
+            public void onAnimationEnd() {
+                mAnimationLayout.setVisibility(View.INVISIBLE);
+            }
+        });
+        animator.setInterpolator(DECELERATE);
+        animator.start();
+    }
+
+
 
 
     public int dpToPx(int dp){
@@ -354,6 +390,8 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         mPresenter.onResume();
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Display display = getDisplay();
@@ -389,8 +427,9 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 return true;
             }
         }
-        return false;
+        return super.onOptionsItemSelected(item);
     }
+
 
     public MovieDetailPresenter getPresenter() {
         return mPresenter;
@@ -442,15 +481,12 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         onPrepareTrailerButton(mTrailerButton);
 
         getRecyclerView().setVisibility(View.VISIBLE);
+        mFanartImageView.setVisibility(View.VISIBLE);
+        animateFanart();
         if (mSummaryContainer != null) {
             mSummaryContainer.setVisibility(View.VISIBLE);
-            //mPosterImageView.setVisibility(View.VISIBLE);
-            animateFanart();
             animateSummary();
         }
-
-
-
     }
 
     @Override

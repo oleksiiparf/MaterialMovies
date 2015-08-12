@@ -108,7 +108,6 @@ public class MMoviesDisplay implements Display {
         intent.putExtra(PARAM_ID, movieId);
         intent.putExtra(PARAM_LOCATION, startingLocation);
         startActivity(intent, null);
-        mActivity.overridePendingTransition(0,0);
     }
 
     @Override
