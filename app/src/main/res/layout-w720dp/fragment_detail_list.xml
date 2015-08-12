@@ -22,6 +22,14 @@
             android:layout_weight="3.5"
             android:layout_height="match_parent">
 
+            <io.codetail.widget.RevealFrameLayout
+                android:id="@+id/transaction_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_primary_default"
+                android:visibility="invisible">
+            </io.codetail.widget.RevealFrameLayout>
+
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

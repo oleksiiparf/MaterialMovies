@@ -25,7 +25,7 @@ import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
-import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
+import com.roodie.materialmovies.views.fragments.base.BaseAnimationFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * Created by Roodie on 28.06.2015.
  */
-public class PersonDetailFragment extends BaseDetailFragment implements PersonPresenter.PersonView {
+public class PersonDetailFragment extends BaseAnimationFragment implements PersonPresenter.PersonView {
 
     private static final String LOG_TAG = PersonDetailFragment.class.getSimpleName();
     private static final String KEY_PERSON_ID = "person_id";
@@ -69,6 +69,18 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         Bundle bundle = new Bundle();
         bundle.putString(KEY_PERSON_ID, personId);
 
+        PersonDetailFragment fragment = new PersonDetailFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    public static PersonDetailFragment newInstance(String personId, int[] startingLocation) {
+        Preconditions.checkArgument(!TextUtils.isEmpty(personId), "personId cannot be empty");
+
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_PERSON_ID, personId);
+        bundle.putIntArray(KEY_REVEAL_START_LOCATION, startingLocation);
         PersonDetailFragment fragment = new PersonDetailFragment();
         fragment.setArguments(bundle);
 
@@ -110,7 +122,12 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+
+        final int[] startingLocation = getStartingLocation();
+
+        setEndAnimationX(startingLocation[0]);
+        setEndAnimationY(startingLocation[1]);
+
         //set actionbar up navigation
         final Display display = getDisplay();
         if (!isModal()) {
@@ -121,6 +138,21 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         personName = (TextView) view.findViewById(R.id.textview_person_name);
 
         mPresenter.attachView(this);
+        super.onViewCreated(view, savedInstanceState);
+        //mPresenter.initialize();
+    }
+
+    @Override
+    protected void setUpVisibility() {
+        if (personImagePoster != null && personName != null) {
+            personImagePoster.setVisibility(View.GONE);
+            personName.setVisibility(View.GONE);
+
+        }
+    }
+
+    @Override
+    protected void initializePresenter() {
         mPresenter.initialize();
     }
 
@@ -174,7 +206,9 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         return mPresenter != null;
     }
 
-
+    public int[] getStartingLocation() {
+        return getArguments().getIntArray(KEY_REVEAL_START_LOCATION);
+    }
     private enum PersonItems  {
         HEADER,
         TITLE,                        //(R.layout.item_person_detail_title)
@@ -203,6 +237,19 @@ public class PersonDetailFragment extends BaseDetailFragment implements PersonPr
         getActivity().invalidateOptionsMenu();
         mAdapter = populateUi();
         getRecyclerView().setAdapter(mAdapter);
+        if (personImagePoster != null && personName != null) {
+            personImagePoster.setVisibility(View.VISIBLE);
+            personName.setVisibility(View.VISIBLE);
+            animatePoster();
+        }
+    }
+
+    private void animatePoster() {
+        personImagePoster.setTranslationY(-personImagePoster.getHeight());
+        personName.setAlpha(0);
+
+        personImagePoster.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(getInterpolator());
+        personName.animate().alpha(1).setDuration(200).setStartDelay(400).setInterpolator(getInterpolator()).start();
     }
 
     @Override

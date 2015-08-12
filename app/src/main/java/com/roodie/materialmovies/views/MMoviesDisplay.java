@@ -116,6 +116,31 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
+    public void startPersonDetailActivity(String id, Bundle bundle) {
+        Intent intent = new Intent(mActivity, PersonActivity.class);
+        intent.putExtra(PARAM_ID, id);
+        startActivity(intent, bundle);
+    }
+
+    @Override
+    public void showPersonDetailFragment(String id) {
+        showFragmentFromDrawer(PersonDetailFragment.newInstance(id));
+    }
+
+    @Override
+    public void startPersonDetailActivity(String id, int[] startingLocation) {
+        Intent intent = new Intent(mActivity, PersonActivity.class);
+        intent.putExtra(PARAM_ID, id);
+        intent.putExtra(PARAM_LOCATION, startingLocation);
+        startActivity(intent, null);
+    }
+
+    @Override
+    public void showPersonDetailFragment(String id, int[] startingLocation) {
+        showFragmentFromDrawer(PersonDetailFragment.newInstance(id, startingLocation));
+    }
+
+    @Override
     public void startMovieImagesActivity(String movieId) {
         Intent intent = new Intent(mActivity, MovieImagesActivity.class);
         intent.putExtra(PARAM_ID, movieId);
@@ -192,13 +217,6 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
-    public void startPersonDetailActivity(String id, Bundle bundle) {
-        Intent intent = new Intent(mActivity, PersonActivity.class);
-        intent.putExtra(PARAM_ID, id);
-        startActivity(intent, bundle);
-    }
-
-    @Override
     public void playYoutubeVideo(String id) {
         Preconditions.checkNotNull(id, "id cannot be null");
 
@@ -234,11 +252,6 @@ public class MMoviesDisplay implements Display {
         if (mCanChangeToolbarBackground && mToolbar != null) {
             mToolbar.setBackgroundColor(color);
         }
-    }
-
-    @Override
-    public void showPersonDetailFragment(String id) {
-            showFragmentFromDrawer(PersonDetailFragment.newInstance(id));
     }
 
     @Override

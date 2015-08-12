@@ -41,6 +41,14 @@ public interface Display {
 
     public void showMovieDetailFragment(String movieId, int[] startingLocation);
 
+    public void startPersonDetailActivity(String id, Bundle bundle);
+
+    public void showPersonDetailFragment(String id);
+
+    public void startPersonDetailActivity(String id, int[] startingLocation);
+
+    public void showPersonDetailFragment(String id, int[]startingLocation);
+
     public void startMovieImagesActivity(String movieId);
 
     public void showMovieImagesFragment(String movieId);
@@ -60,10 +68,6 @@ public interface Display {
     public boolean popEntireFragmentBackStack();
 
     public void finishActivity();
-
-    public void startPersonDetailActivity(String id, Bundle bundle);
-
-    public void showPersonDetailFragment(String id);
 
     public void playYoutubeVideo(String id);
 

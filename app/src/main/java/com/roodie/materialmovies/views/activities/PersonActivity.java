@@ -18,7 +18,7 @@ public class PersonActivity extends  BaseActivity {
     @Override
     protected void handleIntent(Intent intent, Display display) {
         if (!display.hasMainFragment()) {
-            display.showPersonDetailFragment(intent.getStringExtra(Display.PARAM_ID));
+            display.showPersonDetailFragment(intent.getStringExtra(Display.PARAM_ID), intent.getIntArrayExtra(Display.PARAM_LOCATION));
         }
     }
 }

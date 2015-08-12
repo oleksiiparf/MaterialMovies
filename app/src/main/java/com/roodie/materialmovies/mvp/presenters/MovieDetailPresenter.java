@@ -188,6 +188,8 @@ public class MovieDetailPresenter extends BasePresenter {
 
         void showPersonDetail(PersonWrapper person, Bundle bundle);
 
+        void showPersonDetail(PersonWrapper person, View view);
+
         void showMovieImages(MovieWrapper movie);
 
         void showMovieCreditsDialog(MovieQueryType queryType);

@@ -22,8 +22,11 @@ import java.util.List;
  */
 public abstract class BaseDetailFragment extends BaseFragment {
 
+
+
     protected RecyclerView mRecyclerView;
     private LinearLayout mTitleContainer;
+
 
 
     private Context mContext;
@@ -51,17 +54,24 @@ public abstract class BaseDetailFragment extends BaseFragment {
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-
         mTitleContainer = (LinearLayout) view.findViewById(R.id.container_layout);
     }
+
+
 
     protected RecyclerView getRecyclerView() {
         return mRecyclerView;
     }
 
+
+
     public boolean hasTitleContainer() {
         return mTitleContainer != null;
     }
+
+    protected abstract void setUpVisibility();
+
+    protected abstract void initializePresenter();
 
     /**
      * BaseViewHolder
@@ -293,4 +303,6 @@ public abstract class BaseDetailFragment extends BaseFragment {
             return getDataBinder(e.ordinal());
         }
     }
+
+
 }

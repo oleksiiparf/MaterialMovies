@@ -26,6 +26,20 @@
             android:layout_weight="5"
             android:layout_height="match_parent">
 
+            <io.codetail.widget.RevealFrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <io.codetail.widget.RevealFrameLayout
+                android:id="@+id/transaction_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_primary_default"
+                android:visibility="invisible">
+            </io.codetail.widget.RevealFrameLayout>
+
+            </io.codetail.widget.RevealFrameLayout>
+
             <com.roodie.materialmovies.views.custom_views.MMoviesImageView
                 android:id="@+id/imageview_person"
                 android:layout_width="match_parent"

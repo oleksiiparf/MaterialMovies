@@ -8,7 +8,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,10 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -29,8 +24,6 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.base.Preconditions;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.ObjectAnimator;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.MovieDetailPresenter;
 import com.roodie.materialmovies.settings.TmdbSettings;
@@ -41,7 +34,7 @@ import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
-import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
+import com.roodie.materialmovies.views.fragments.base.BaseAnimationFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieCreditWrapper;
 import com.roodie.model.entities.MovieWrapper;
@@ -56,23 +49,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import io.codetail.animation.SupportAnimator;
-import io.codetail.animation.ViewAnimationUtils;
-
 /**
  * Created by Roodie on 27.06.2015.
  */
-public class MovieDetailFragment extends BaseDetailFragment implements MovieDetailPresenter.MovieDetailView {
+public class MovieDetailFragment extends BaseAnimationFragment implements MovieDetailPresenter.MovieDetailView {
 
     private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
-    private static final String KEY_REVEAL_START_LOCATION = "reveal_start_location";
     private static final String KEY_MOVIE_SAVE_STATE = "movie_on_save_state";
 
-    final static AccelerateInterpolator ACCELERATE = new AccelerateInterpolator();
-    final static Interpolator INTERPOLATOR = new DecelerateInterpolator();
-    final static DecelerateInterpolator DECELERATE = new DecelerateInterpolator();
-    final static AccelerateDecelerateInterpolator ACCELERATE_DECELERATE = new AccelerateDecelerateInterpolator();
 
     private static final int ANIMATION_DELAY = 150;
     long animationDelay = ANIMATION_DELAY + 2 * 30;
@@ -82,8 +67,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     private MovieWrapper mMovie;
     private final ArrayList<DetailItemType> mItems = new ArrayList<>();
 
-    private int endAnimationX, endAnimationY;
-    private   int startAnimationPairBottom;
+
 
     private MenuItem mYoutubeItem;
     private MenuItem mShareItem;
@@ -91,11 +75,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
     boolean isEnableYoutube = false;
     boolean isEnableShare = false;
 
-    private FrameLayout mAnimationLayout;
     private LinearLayout mSummaryContainer;
-
-    private LinearLayout mSummaryRoot;
-    private LinearLayout mRatingBarContainer;
 
     private CollapsingToolbarLayout mCollapsingToolbar;
     private MMoviesImageView mFanartImageView;
@@ -178,12 +158,13 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
         final int[] startingLocation = getStartingLocation();
 
-        endAnimationX = startingLocation[0];
-        endAnimationY = startingLocation[1];
+        //endAnimationX = startingLocation[0];
+        //endAnimationY = startingLocation[1];
+        setEndAnimationX(startingLocation[0]);
+        setEndAnimationY(startingLocation[1]);
 
         //set actionbar up navigation
         final Display display = getDisplay();
@@ -205,9 +186,6 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
         mAnimationLayout = (FrameLayout) view.findViewById(R.id.transaction_container);
         mSummaryContainer = (LinearLayout) view.findViewById(R.id.container_layout);
 
-        mSummaryRoot = (LinearLayout) view.findViewById(R.id.summary_root);
-        mRatingBarContainer = (LinearLayout) view.findViewById(R.id.rating_bar_container);
-
 
         mTitleTextView = (TextView) view.findViewById(R.id.textview_title);
         mGenresTextView = (TextView) view.findViewById(R.id.textview_genres);
@@ -228,91 +206,22 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 }
             });
         }
-
         mPresenter.attachView(this);
+        super.onViewCreated(view, savedInstanceState);
         //mPresenter.initialize();
-
-        mAnimationLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mSummaryContainer != null) {
-                    mSummaryContainer.setVisibility(View.GONE);
-                }
-                mFanartImageView.setVisibility(View.GONE);
-                startSircleAnimation();
-            }
-        });
     }
 
-    private void startSircleAnimation() {
-        mAnimationLayout.setVisibility(View.VISIBLE);
-
-        float finalRadius = Math.max(mAnimationLayout.getWidth(), mAnimationLayout.getHeight()) * 1.5f;
-
-        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(mAnimationLayout, endAnimationX, endAnimationY, 20 / 2f,
-                finalRadius);
-        animator.setDuration(500);
-        animator.setInterpolator(ACCELERATE);
-        animator.addListener(new SimpleListener() {
-            @Override
-            public void onAnimationEnd() {
-                raiseUpAnimation();
-            }
-        });
-        animator.start();
+    @Override
+    protected void setUpVisibility() {
+        if (mSummaryContainer != null) {
+            mSummaryContainer.setVisibility(View.GONE);
+        }
+        mFanartImageView.setVisibility(View.GONE);
     }
 
-
-    private void raiseUpAnimation(){
-        startAnimationPairBottom = mAnimationLayout.getBottom();
-        ObjectAnimator objectAnimator = ObjectAnimator.ofInt(mAnimationLayout, "bottom", mAnimationLayout.getBottom(), mAnimationLayout.getTop() + dpToPx(100));
-        objectAnimator.addListener(new SimpleListener() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                //  appearRed();
-                mAnimationLayout.setVisibility(View.GONE);
-                mPresenter.initialize();
-
-            }
-        });
-        objectAnimator.setInterpolator(ACCELERATE_DECELERATE);
-        objectAnimator.start();
-    }
-
-    private void comeDownAnimation(){
-        ObjectAnimator objectAnimator = ObjectAnimator.ofInt(mAnimationLayout, "bottom", mAnimationLayout.getBottom(), startAnimationPairBottom);
-        objectAnimator.addListener(new SimpleListener() {
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                disappearBackgroundAnimation();
-            }
-        });
-        objectAnimator.setInterpolator(ACCELERATE_DECELERATE);
-        objectAnimator.start();
-    }
-
-    private void disappearBackgroundAnimation(){
-        float finalRadius = Math.max(mAnimationLayout.getWidth(), mAnimationLayout.getHeight()) * 1.5f;
-
-        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(mAnimationLayout, endAnimationX, endAnimationY,
-                finalRadius, 10);
-        animator.setDuration(500);
-        animator.addListener(new SimpleListener() {
-            @Override
-            public void onAnimationEnd() {
-                mAnimationLayout.setVisibility(View.INVISIBLE);
-            }
-        });
-        animator.setInterpolator(DECELERATE);
-        animator.start();
-    }
-
-
-
-
-    public int dpToPx(int dp){
-        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    @Override
+    protected void initializePresenter() {
+        mPresenter.initialize();
     }
 
     @Override
@@ -361,12 +270,12 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
 
     private void animateSummary() {
      mSummaryContainer.setTranslationY(-mSummaryContainer.getHeight());
-     mSummaryContainer.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(INTERPOLATOR);
+     mSummaryContainer.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(getInterpolator());
   }
 
     private void animateFanart() {
         mFanartImageView.setTranslationY(-mFanartImageView.getHeight());
-        mFanartImageView.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(INTERPOLATOR);
+        mFanartImageView.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(getInterpolator());
     }
 
     @Override
@@ -525,6 +434,23 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
             display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), bundle);
         }
     }
+
+    @Override
+    public void showPersonDetail(PersonWrapper person, View view) {
+        Preconditions.checkNotNull(person, "person cannot be null");
+        Preconditions.checkNotNull(person.getTmdbId(), "person id cannot be null");
+
+        int[] startingLocation = new int[2];
+        view.getLocationOnScreen(startingLocation);
+        startingLocation[0] += view.getWidth() / 2;
+
+        Display display = getDisplay();
+        if (display != null) {
+            display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), startingLocation);
+        }
+
+    }
+
 
     @Override
     public void playTrailer() {
@@ -718,7 +644,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                     .scaleY(1)
                     .scaleX(1)
                     .setDuration(200)
-                    .setInterpolator(INTERPOLATOR)
+                    .setInterpolator(getInterpolator())
                     .setStartDelay(animationDelay)
                     .start();
         }
@@ -789,7 +715,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                     .scaleY(1)
                     .scaleX(1)
                     .setDuration(200)
-                    .setInterpolator(INTERPOLATOR)
+                    .setInterpolator(getInterpolator())
                     .setStartDelay(animationDelay)
                     .start();
         }
@@ -900,7 +826,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                     .scaleY(1)
                     .scaleX(1)
                     .setDuration(200)
-                    .setInterpolator(INTERPOLATOR)
+                    .setInterpolator(getInterpolator())
                     .setStartDelay(animationDelay)
                     .start();
 
@@ -994,7 +920,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                     .scaleY(1)
                     .scaleX(1)
                     .setDuration(200)
-                    .setInterpolator(INTERPOLATOR)
+                    .setInterpolator(getInterpolator())
                     .setStartDelay(animationDelay)
                     .start();
         }
@@ -1073,7 +999,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                     .scaleY(1)
                     .scaleX(1)
                     .setDuration(200)
-                    .setInterpolator(INTERPOLATOR)
+                    .setInterpolator(getInterpolator())
                     .setStartDelay(animationDelay)
                     .start();
         }
@@ -1152,7 +1078,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                     .scaleY(1)
                     .scaleX(1)
                     .setDuration(200)
-                    .setInterpolator(INTERPOLATOR)
+                    .setInterpolator(getInterpolator())
                     .setStartDelay(animationDelay)
                     .start();
         }
@@ -1297,7 +1223,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 public void onClick(View v) {
                     MovieCreditWrapper cast = (MovieCreditWrapper) v.getTag();
                     if (cast != null) {
-                       showPersonDetail(cast.getPerson(), null);
+                       showPersonDetail(cast.getPerson(), v);
                     }
                 }
             });
@@ -1325,7 +1251,7 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
                 public void onClick(View v) {
                     MovieCreditWrapper cast = (MovieCreditWrapper) v.getTag();
                     if (cast != null) {
-                        showPersonDetail(cast.getPerson(), null);
+                        showPersonDetail(cast.getPerson(), v);
                     }
                 }
             });
@@ -1509,38 +1435,5 @@ public class MovieDetailFragment extends BaseDetailFragment implements MovieDeta
        setSupportActionBar(toolbar, false);
     }
 
-    private static class SimpleListener implements SupportAnimator.AnimatorListener, ObjectAnimator.AnimatorListener{
 
-        @Override
-        public void onAnimationStart() {
-        }
-
-        @Override
-        public void onAnimationEnd() {
-        }
-
-        @Override
-        public void onAnimationCancel() {
-        }
-
-        @Override
-        public void onAnimationRepeat() {
-        }
-
-        @Override
-        public void onAnimationStart(Animator animation) {
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animation) {
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animation) {
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animation) {
-        }
-    }
 }
