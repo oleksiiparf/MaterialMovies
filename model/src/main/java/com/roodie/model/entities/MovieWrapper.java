@@ -13,7 +13,6 @@ import com.uwetrottmann.tmdb.entities.Image;
 import com.uwetrottmann.tmdb.entities.Movie;
 import com.uwetrottmann.tmdb.entities.Releases;
 import com.uwetrottmann.tmdb.entities.SpokenLanguage;
-import com.uwetrottmann.tmdb.entities.Video;
 import com.uwetrottmann.tmdb.entities.Videos;
 
 import java.io.Serializable;
@@ -171,7 +170,7 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         if (!MoviesCollections.isEmpty(videos.results)) {
             final ArrayList<TrailerWrapper> philmMovieVideos = new ArrayList<>();
 
-            for (Video video : videos.results) {
+            for (Videos.Video video : videos.results) {
                 if (TrailerWrapper.isValid(video)) {
                     final TrailerWrapper philmMovieVideo = new TrailerWrapper();
                     philmMovieVideo.set(video);

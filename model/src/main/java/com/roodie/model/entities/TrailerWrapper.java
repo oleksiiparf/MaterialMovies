@@ -1,6 +1,7 @@
 package com.roodie.model.entities;
 
-import com.uwetrottmann.tmdb.entities.Video;
+
+import com.uwetrottmann.tmdb.entities.Videos;
 
 /**
  * Created by Roodie on 25.06.2015.
@@ -24,7 +25,7 @@ public class TrailerWrapper extends BasicWrapper<TrailerWrapper> {
     private String mName;
     private Type mType;
 
-    public void set(Video video) {
+    public void set(Videos.Video video) {
         if (SOURCE_YOUTUBE.equalsIgnoreCase(video.site)) {
             mSource = Source.YOUTUBE;
         } else {
@@ -54,7 +55,7 @@ public class TrailerWrapper extends BasicWrapper<TrailerWrapper> {
         return mType;
     }
 
-    public static boolean isValid(Video video) {
+    public static boolean isValid(Videos.Video video) {
         return SOURCE_YOUTUBE.equalsIgnoreCase(video.site) && video.key != null;
     }
 }

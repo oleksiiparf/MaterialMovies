@@ -1,4 +1,4 @@
-package com.roodie.model.state;
+package com.roodie.materialmovies.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.common.base.Preconditions;
 import com.roodie.model.entities.MovieWrapper;
+import com.roodie.model.state.DatabaseHelper;
 import com.uwetrottmann.tmdb.entities.Movie;
 
 import java.util.Collection;
@@ -20,9 +21,9 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 /**
  * Created by Roodie on 24.06.2015.
  */
-public class MMoiveSQLiteOpenHelper extends SQLiteOpenHelper implements DatabaseHelper {
+public class MMovieSQLiteOpenHelper extends SQLiteOpenHelper implements DatabaseHelper {
 
-    private static String LOG_TAG = MMoiveSQLiteOpenHelper.class.getSimpleName();
+    private static String LOG_TAG = MMovieSQLiteOpenHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "mMovie.db";
     private static final int DATABASE_VERSION = 1;
@@ -33,7 +34,7 @@ public class MMoiveSQLiteOpenHelper extends SQLiteOpenHelper implements Database
 
     private boolean mIsClosed;
 
-    public MMoiveSQLiteOpenHelper(Context context) {
+    public MMovieSQLiteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

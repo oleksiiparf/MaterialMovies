@@ -1,6 +1,5 @@
 package com.roodie.model.tasks;
 
-import android.util.Log;
 
 import com.roodie.model.network.NetworkCallRunnable;
 import com.roodie.model.network.NetworkError;
@@ -8,7 +7,6 @@ import com.roodie.model.state.ApplicationState;
 import com.roodie.model.state.AsyncDatabaseHelper;
 import com.roodie.model.state.BaseState;
 import com.roodie.model.state.EntitityMapper;
-import com.roodie.model.state.MoviesState;
 import com.roodie.model.util.CountryProvider;
 import com.squareup.otto.Bus;
 import com.uwetrottmann.tmdb.Tmdb;

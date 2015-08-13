@@ -5,10 +5,14 @@ import android.text.TextUtils;
 import com.google.common.base.Preconditions;
 import com.roodie.model.util.MoviesCollections;
 import com.uwetrottmann.tmdb.entities.Genre;
+import com.uwetrottmann.tmdb.entities.TvShowComplete;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+//import com.uwetrottmann.tmdb.entities.TvShowComplete;
 
 /**
  * Created by Roodie on 13.08.2015.
@@ -37,6 +41,9 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
     int ratingVotes;
     float popularity;
 
+    String status;
+    String type;
+
     int amountOfEpisodes;
     int amountOfSeasons;
 
@@ -52,7 +59,7 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
     public ShowWrapper() {
     }
 
-    public void setFromShow(TvShow show) {
+  public void setFromShow(TvShowComplete show) {
         Preconditions.checkNotNull(show, "Show cannot be null");
 
         tmdbId = show.id;
@@ -94,6 +101,8 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         ratingPercent = unbox(ratingPercent, show.vote_average);
         ratingVotes = unbox(ratingVotes, show.vote_count);
 
+        popularity = roundPopularity(show.popularity, 1);
+
         if (show.number_of_seasons != null) {
             amountOfSeasons = show.number_of_seasons;
         }
@@ -104,6 +113,14 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
         if (show.genres != null) {
             genres = getGenresString(show.genres);
+        }
+
+        if (!TextUtils.isEmpty(show.status)) {
+            status = show.status;
+        }
+
+        if (!TextUtils.isEmpty(show.type)) {
+            type = show.type;
         }
 
     }
@@ -132,6 +149,12 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
             return sb.toString();
         }
         return null;
+    }
+
+    public static float roundPopularity(double d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Double.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
     }
 
     public Long getDbId() {
