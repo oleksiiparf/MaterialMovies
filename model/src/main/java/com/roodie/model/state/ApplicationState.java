@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import com.roodie.model.controllers.DrawerMenuItem;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
+import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.entities.TmdbConfiguration;
 import com.squareup.otto.Bus;
 
@@ -25,12 +26,16 @@ public  class ApplicationState implements BaseState, MoviesState {
     private Map<String, MovieWrapper> mTmdbIdMovies;
     private Map<String, MovieWrapper> mImdbIdMovies;
     private Map<String, PersonWrapper> mPeople;
+    private Map<String, ShowWrapper> mShows;
 
     private String popularString = "Popular";
 
-    private MoviePaginatedResult mPopular;
-    private MoviePaginatedResult mNowPlaying;
-    private MoviePaginatedResult mUpcoming;
+    private MoviePaginatedResult mPopularMovies;
+    private MoviePaginatedResult mNowPlayingMovies;
+    private MoviePaginatedResult mUpcomingMovies;
+
+    private ShowPaginatedResult mPopularShows;
+    private ShowPaginatedResult mOnTheAirShows;
 
     private TmdbConfiguration mConfiguration;
 
@@ -40,6 +45,7 @@ public  class ApplicationState implements BaseState, MoviesState {
         this.mEventBus = Preconditions.checkNotNull(mEventBus, "eventBus cannot be null");
         mTmdbIdMovies = new ArrayMap<>(INITIAL_MOVIE_MAP_CAPACITY);
         mImdbIdMovies = new ArrayMap<>(INITIAL_MOVIE_MAP_CAPACITY);
+        mShows = new ArrayMap<>(INITIAL_MOVIE_MAP_CAPACITY);
         mPeople = new ArrayMap<>();
     }
 
@@ -88,32 +94,32 @@ public  class ApplicationState implements BaseState, MoviesState {
     }
 
     @Override
-    public MoviePaginatedResult getPopular() {
-        return mPopular;
+    public MoviePaginatedResult getPopularMovies() {
+        return mPopularMovies;
     }
 
     @Override
-    public void setPopular(MoviePaginatedResult popular) {
-        mPopular = popular;
-        mEventBus.post(new PopularChangedEvent());
+    public void setPopularMovies(MoviePaginatedResult popular) {
+        mPopularMovies = popular;
+        mEventBus.post(new PopularMoviesChangedEvent());
     }
 
     public MoviePaginatedResult getNowPlaying() {
-        return mNowPlaying;
+        return mNowPlayingMovies;
     }
 
     public void setNowPlaying(MoviePaginatedResult mNowPlaying) {
-        this.mNowPlaying = mNowPlaying;
-        mEventBus.post(new InTheatresChangedEvent());
+        this.mNowPlayingMovies = mNowPlaying;
+        mEventBus.post(new InTheatresMoviesChangedEvent());
     }
 
     public MoviePaginatedResult getUpcoming() {
-        return mUpcoming;
+        return mUpcomingMovies;
     }
 
     public void setUpcoming(MoviePaginatedResult mUpcoming) {
-        this.mUpcoming = mUpcoming;
-        mEventBus.post(new UpcomingChangedEvent());
+        this.mUpcomingMovies = mUpcoming;
+        mEventBus.post(new UpcomingMoviesChangedEvent());
     }
 
     @Override
@@ -156,6 +162,43 @@ public  class ApplicationState implements BaseState, MoviesState {
             movie = mImdbIdMovies.get(id);
         }
         return movie;
+    }
+
+    @Override
+    public Map<String, ShowWrapper> getTmdbShows() {
+        return mShows;
+    }
+
+    @Override
+    public ShowWrapper getShow(String id) {
+        return mShows.get(id);
+    }
+
+    @Override
+    public ShowWrapper getShow(int id) {
+        return getShow(String.valueOf(id));
+    }
+
+    @Override
+    public ShowPaginatedResult getPopularShows() {
+        return mPopularShows;
+    }
+
+    @Override
+    public void setPopularShows(ShowPaginatedResult popular) {
+        this.mPopularShows = popular;
+        mEventBus.post(new PopularShowsChangeEvent());
+    }
+
+    @Override
+    public ShowPaginatedResult getOnTheAirShows() {
+        return mOnTheAirShows;
+    }
+
+    @Override
+    public void setOnTheAirShows(ShowPaginatedResult onTheAir) {
+        this.mOnTheAirShows = onTheAir;
+        mEventBus.post(new OnTheAirShowsChangeListener());
     }
 }
 

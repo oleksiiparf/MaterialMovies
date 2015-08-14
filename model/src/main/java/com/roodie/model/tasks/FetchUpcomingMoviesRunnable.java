@@ -8,9 +8,9 @@ import retrofit.RetrofitError;
 /**
  * Created by Roodie on 02.08.2015.
  */
-public class FetchUpcomingRunnable  extends BasePaginatedMovieRunnable {
+public class FetchUpcomingMoviesRunnable extends BasePaginatedMovieRunnable {
 
-    public FetchUpcomingRunnable(int callingId, int page) {
+    public FetchUpcomingMoviesRunnable(int callingId, int page) {
         super(callingId, page);
     }
 

@@ -6,10 +6,12 @@ import com.google.common.base.Preconditions;
 import com.roodie.model.entities.MovieCreditWrapper;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
+import com.roodie.model.entities.ShowWrapper;
 import com.uwetrottmann.tmdb.entities.CastMember;
 import com.uwetrottmann.tmdb.entities.CrewMember;
 import com.uwetrottmann.tmdb.entities.Movie;
 import com.uwetrottmann.tmdb.entities.Person;
+import com.uwetrottmann.tmdb.entities.TvShowComplete;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,6 +58,19 @@ public class EntitityMapper {
 
     void putPersonEntity(PersonWrapper entity) {
         mMoviesState.getPeople().put(String.valueOf(entity.getTmdbId()), entity);
+    }
+
+    ShowWrapper getShowEntity(String id) {
+        return mMoviesState.getTmdbShows().get(id);
+    }
+
+    ShowWrapper getShowEntity(int id) {
+        return getShowEntity(String.valueOf(id));
+    }
+
+
+    void putShowEntity(ShowWrapper entity) {
+        mMoviesState.getTmdbShows().put(String.valueOf(entity.getTmdbId()), entity);
     }
 
     /*
@@ -132,7 +147,6 @@ public class EntitityMapper {
         return item;
     }
 
-
     /*
     Wrap Movie to MovieWrapper
      */
@@ -152,6 +166,27 @@ public class EntitityMapper {
         putMovieEntity(movie);
 
         return movie;
+    }
+
+    /*
+    Wrap TvShowComplete to ShowWrapper
+     */
+    public ShowWrapper map(TvShowComplete entity) {
+        ShowWrapper show = getShowEntity(String.valueOf(entity.id));
+
+        if (show == null && entity.id != null) {
+            show = getShowEntity(entity.id);
+        }
+
+        if (show == null) {
+            // No show, so create one
+            show = new ShowWrapper();
+        }
+        // We already have a movie, so just update it wrapped value
+        show.setFromShow(entity);
+        putShowEntity(show);
+
+        return show;
     }
 
 

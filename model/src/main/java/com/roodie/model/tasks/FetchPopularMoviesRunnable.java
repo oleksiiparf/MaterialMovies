@@ -8,9 +8,9 @@ import retrofit.RetrofitError;
 /**
  * Created by Roodie on 24.06.2015.
  */
-public class FetchPopularRunnable extends BasePaginatedMovieRunnable {
+public class FetchPopularMoviesRunnable extends BasePaginatedMovieRunnable {
 
-    public FetchPopularRunnable(int callingId, int mPage) {
+    public FetchPopularMoviesRunnable(int callingId, int mPage) {
         super(callingId, mPage);
     }
 
@@ -23,11 +23,11 @@ public class FetchPopularRunnable extends BasePaginatedMovieRunnable {
 
     @Override
     protected ApplicationState.MoviePaginatedResult getResultFromState() {
-        return mState.getPopular();
+        return mState.getPopularMovies();
     }
 
     @Override
     protected void updateState(ApplicationState.MoviePaginatedResult result) {
-        mState.setPopular(result);
+        mState.setPopularMovies(result);
     }
 }

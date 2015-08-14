@@ -2,6 +2,7 @@ package com.roodie.model.state;
 
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
+import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.entities.TmdbConfiguration;
 
 import java.util.Map;
@@ -15,15 +16,21 @@ public interface MoviesState extends BaseState {
 
     public Map<String, MovieWrapper> getImdbIdMovies();
 
+    public Map<String, ShowWrapper> getTmdbShows();
+
+    public ShowWrapper getShow(String id);
+
+    public ShowWrapper getShow(int id);
+
     public MovieWrapper getMovie(String id);
 
     public MovieWrapper getMovie(int id);
 
     public void putMovie(MovieWrapper movie);
 
-    public MoviePaginatedResult getPopular();
+    public MoviePaginatedResult getPopularMovies();
 
-    public void setPopular(MoviePaginatedResult popular);
+    public void setPopularMovies(MoviePaginatedResult popular);
 
     public MoviePaginatedResult getNowPlaying();
 
@@ -32,6 +39,14 @@ public interface MoviesState extends BaseState {
     public MoviePaginatedResult getUpcoming();
 
     public void setUpcoming(MoviePaginatedResult upcoming);
+
+    public ShowPaginatedResult getPopularShows();
+
+    public void setPopularShows(ShowPaginatedResult popular);
+
+    public ShowPaginatedResult getOnTheAirShows();
+
+    public void setOnTheAirShows(ShowPaginatedResult onTheAir);
 
     public TmdbConfiguration getTmdbConfiguration();
 
@@ -43,11 +58,15 @@ public interface MoviesState extends BaseState {
 
     public PersonWrapper getPerson(String id);
 
-    public static class PopularChangedEvent {}
+    public static class PopularMoviesChangedEvent {}
 
-    public static class InTheatresChangedEvent {}
+    public static class InTheatresMoviesChangedEvent {}
 
-    public static class UpcomingChangedEvent {}
+    public static class UpcomingMoviesChangedEvent {}
+
+    public static class PopularShowsChangeEvent {}
+
+    public static class OnTheAirShowsChangeListener {}
 
     public static class TmdbConfigurationChangedEvent {}
 
@@ -87,6 +106,16 @@ public interface MoviesState extends BaseState {
         }
     }
 
+    public static class ShowCastItemsUpdatedEvent extends BaseArgumentEvent<ShowWrapper> {
+        public ShowCastItemsUpdatedEvent(int callingId, ShowWrapper item) {
+            super(callingId, item);
+        }
+    }
+
+
+
+
+
     public static class PersonChangedEvent extends BaseArgumentEvent<PersonWrapper> {
         public PersonChangedEvent(int callingId, PersonWrapper item) {
             super(callingId, item);
@@ -100,5 +129,10 @@ public interface MoviesState extends BaseState {
 
     public class PersonPaginatedResult extends PaginatedResult<PersonWrapper> {
     }
+
+    public class ShowPaginatedResult extends PaginatedResult<ShowWrapper> {
+
+    }
+
 
 }

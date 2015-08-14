@@ -11,10 +11,11 @@ import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.state.ApplicationState;
 import com.roodie.model.state.BaseState;
+import com.roodie.model.state.MoviesState;
 import com.roodie.model.tasks.BaseMovieRunnable;
 import com.roodie.model.tasks.FetchInTheatresRunnable;
-import com.roodie.model.tasks.FetchPopularRunnable;
-import com.roodie.model.tasks.FetchUpcomingRunnable;
+import com.roodie.model.tasks.FetchPopularMoviesRunnable;
+import com.roodie.model.tasks.FetchUpcomingMoviesRunnable;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.Injector;
 import com.roodie.model.util.MoviesCollections;
@@ -134,19 +135,19 @@ public class MovieGridPresenter extends BasePresenter {
     }
 
     @Subscribe
-    public void onPopularChanged(ApplicationState.PopularChangedEvent event) {
+    public void onPopularChanged(MoviesState.PopularMoviesChangedEvent event) {
         Log.d(LOG_TAG, "Popular changed");
         populateUiFromQueryType(UiView.MovieQueryType.POPULAR);
     }
 
     @Subscribe
-    public void onInTheatresChanged(ApplicationState.InTheatresChangedEvent event) {
+    public void onInTheatresChanged(MoviesState.InTheatresMoviesChangedEvent event) {
         Log.d(LOG_TAG, "In Theatres changed");
         populateUiFromQueryType(UiView.MovieQueryType.IN_THEATERS);
     }
 
     @Subscribe
-    public void onUpcomingChanged(ApplicationState.UpcomingChangedEvent event) {
+    public void onUpcomingChanged(MoviesState.UpcomingMoviesChangedEvent event) {
         Log.d(LOG_TAG, "Upcoming changed");
         populateUiFromQueryType(UiView.MovieQueryType.UPCOMING);
     }
@@ -193,7 +194,7 @@ public class MovieGridPresenter extends BasePresenter {
 
         switch (ui.getQueryType()) {
             case POPULAR:
-                result = mState.getPopular();
+                result = mState.getPopularMovies();
                 if (canFetchNextPage(result)) {
                     fetchPopular(getId(ui), result.page + 1);
                 }
@@ -216,16 +217,16 @@ public class MovieGridPresenter extends BasePresenter {
      * Fetch popular movies task
      */
     private void fetchPopular(final int callingId, final int page) {
-        executeTask(new FetchPopularRunnable(callingId, page));
+        executeTask(new FetchPopularMoviesRunnable(callingId, page));
     }
 
     private void fetchPopular(final int callingId) {
-        mState.setPopular(null);
+        mState.setPopularMovies(null);
         fetchPopular(callingId, TMDB_FIRST_PAGE);
     }
 
     private void fetchPopularIfNeeded(final int callingId) {
-        ApplicationState.MoviePaginatedResult popular = mState.getPopular();
+        ApplicationState.MoviePaginatedResult popular = mState.getPopularMovies();
         if (popular == null || MoviesCollections.isEmpty(popular.items)) {
             fetchPopular(callingId, TMDB_FIRST_PAGE);
         }
@@ -266,7 +267,7 @@ public class MovieGridPresenter extends BasePresenter {
     }
 
     private void fetchUpcoming(final int callingId, final int page) {
-        executeTask(new FetchUpcomingRunnable(callingId, page));
+        executeTask(new FetchUpcomingMoviesRunnable(callingId, page));
     }
 
     private final void populateUiFromQueryType(UiView.MovieQueryType queryType) {
@@ -283,7 +284,7 @@ public class MovieGridPresenter extends BasePresenter {
         List<MovieWrapper> items = null;
         switch (queryType) {
             case POPULAR:
-                ApplicationState.MoviePaginatedResult popular = mState.getPopular();
+                ApplicationState.MoviePaginatedResult popular = mState.getPopularMovies();
                 if (popular != null) {
                     items = popular.items;
                 }
