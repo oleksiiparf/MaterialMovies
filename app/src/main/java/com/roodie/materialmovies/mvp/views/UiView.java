@@ -11,10 +11,11 @@ public interface UiView {
     boolean isModal();
 
     public enum MovieQueryType {
-        POPULAR,
-        UPCOMING,
-        IN_THEATERS,
+        POPULAR_MOVIES,
+        UPCOMING_MOVIES,
+        IN_THEATERS_MOVIES,
         MOVIES_TAB,
+        SHOWS_TAB,
         SHOWS,
         MOVIE_DETAIL,
         MOVIE_RELATED,
@@ -24,6 +25,8 @@ public interface UiView {
         PERSON_DETAIL,
         PERSON_CREDITS_CAST,
         PERSON_CREDITS_CREW,
+        POPULAR_SHOWS,
+        ON_THE_AIR_SHOWS,
         NONE;
 
         public boolean showUpNavigation() {
@@ -43,8 +46,12 @@ public interface UiView {
         }
     }
 
-    public static enum MovieTab {
+    public static enum MovieTabs {
         POPULAR, IN_THEATRES, UPCOMING
+    }
+
+    public static enum ShowTabs {
+        POPULAR, ON_THE_AIR
     }
 
 }

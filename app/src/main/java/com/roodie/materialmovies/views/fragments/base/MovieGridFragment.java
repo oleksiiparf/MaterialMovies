@@ -41,7 +41,7 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mMovieGridPresenter = MMoviesApplication.from(activity.getApplicationContext()).getGridPresenter();
+        mMovieGridPresenter = MMoviesApplication.from(activity.getApplicationContext()).getMovieGridPresenter();
         System.out.println("Presenter: " + mMovieGridPresenter);
     }
 

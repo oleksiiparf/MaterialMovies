@@ -31,7 +31,7 @@ public interface Display {
 
     public void showMovies();
 
-    public void showShows();
+    public void showTvShows();
 
     public void showSettings();
 

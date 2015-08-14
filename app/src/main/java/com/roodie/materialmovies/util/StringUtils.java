@@ -9,7 +9,7 @@ import com.roodie.model.network.NetworkError;
  */
 public class StringUtils {
 
-    public static int getStringResId(NetworkError error) {
+    public static int getMoviesStringResId(NetworkError error) {
         switch (error) {
             case NOT_FOUND_TMDB:
                 return R.string.error_movie_not_found_tmdb;
@@ -21,7 +21,7 @@ public class StringUtils {
         }
     }
 
-    public static int getStringResId(UiView.MovieTab tab) {
+    public static int getMoviesStringResId(UiView.MovieTabs tab) {
         switch (tab) {
             case POPULAR:
                 return R.string.popular_title;
@@ -29,6 +29,16 @@ public class StringUtils {
                 return R.string.in_theatres_title;
             case UPCOMING:
                 return R.string.upcoming_title;
+        }
+        return 0;
+    }
+
+    public static int getShowsStringResId(UiView.ShowTabs tab) {
+        switch (tab) {
+            case POPULAR:
+                return R.string.popular_title;
+            case ON_THE_AIR:
+                return R.string.on_the_air_title;
         }
         return 0;
     }

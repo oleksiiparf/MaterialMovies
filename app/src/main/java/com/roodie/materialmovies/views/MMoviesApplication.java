@@ -13,6 +13,8 @@ import com.roodie.materialmovies.mvp.presenters.MovieGridPresenter;
 import com.roodie.materialmovies.mvp.presenters.MovieImagesPresenter;
 import com.roodie.materialmovies.mvp.presenters.MovieTabPresenter;
 import com.roodie.materialmovies.mvp.presenters.PersonPresenter;
+import com.roodie.materialmovies.mvp.presenters.ShowGridPresenter;
+import com.roodie.materialmovies.mvp.presenters.ShowTabPresenter;
 import com.roodie.model.util.Injector;
 
 import javax.inject.Inject;
@@ -28,7 +30,10 @@ public class MMoviesApplication extends Application implements Injector {
         return (MMoviesApplication) context.getApplicationContext();
     }
 
-    @Inject MovieGridPresenter mGridPresenter;
+    @Inject MovieGridPresenter mMovieGridPresenter;
+
+    @Inject
+    ShowGridPresenter mShowGridPresenter;
 
     @Inject
     MovieDetailPresenter mDetailMoviePresenter;
@@ -41,6 +46,9 @@ public class MMoviesApplication extends Application implements Injector {
 
     @Inject
     MovieTabPresenter mMovieTabsPresenter;
+
+    @Inject
+    ShowTabPresenter mShowTabsPresenter;
 
     private ObjectGraph mObjectGraph;
 
@@ -67,8 +75,8 @@ public class MMoviesApplication extends Application implements Injector {
         mObjectGraph.inject(object);
     }
 
-    public MovieGridPresenter getGridPresenter() {
-        return mGridPresenter;
+    public MovieGridPresenter getMovieGridPresenter() {
+        return mMovieGridPresenter;
     }
 
     public MovieDetailPresenter getDetailMoviePresenter() {
@@ -85,5 +93,13 @@ public class MMoviesApplication extends Application implements Injector {
 
     public MovieTabPresenter getMovieTabsPresenter() {
         return mMovieTabsPresenter;
+    }
+
+    public ShowTabPresenter getShowTabsPresenter() {
+        return mShowTabsPresenter;
+    }
+
+    public ShowGridPresenter getShowGridPresenter() {
+        return mShowGridPresenter;
     }
 }

@@ -6,8 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.google.common.base.Preconditions;
-import com.roodie.materialmovies.mvp.presenters.MovieGridPresenter;
-import com.roodie.materialmovies.mvp.presenters.MovieTabPresenter;
+import com.roodie.materialmovies.mvp.presenters.ShowGridPresenter;
+import com.roodie.materialmovies.mvp.presenters.ShowTabPresenter;
 import com.roodie.materialmovies.util.StringUtils;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.fragments.base.BaseTabFragment;
@@ -17,27 +17,27 @@ import com.roodie.model.network.NetworkError;
 import java.util.ArrayList;
 
 /**
- * Created by Roodie on 02.08.2015.
+ * Created by Roodie on 01.08.2015.
  */
-public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresenter.MoviesTabView {
+public class ShowsTabFragment extends BaseTabFragment implements ShowTabPresenter.ShowsTabView {
 
-    private MovieTabPresenter mPresenter;
+    private ShowTabPresenter mPresenter;
 
-    private MovieGridPresenter mGridPresenter;
+    private ShowGridPresenter mGridPresenter;
 
-
-    private MovieTabs[] mTabs;
+    private ShowTabs[] mTabs;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getMovieTabsPresenter();
-        mGridPresenter = MMoviesApplication.from(activity.getApplicationContext()).getMovieGridPresenter();
+        mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getShowTabsPresenter();
+        mGridPresenter = MMoviesApplication.from(activity.getApplicationContext()).getShowGridPresenter();
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mPresenter.attachView(this);
         mPresenter.initialize();
     }
@@ -56,6 +56,7 @@ public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresen
         mPresenter.onPause();
     }
 
+
     @Override
     public void updateDisplayTitle(String title) {
         Display display = getDisplay();
@@ -65,22 +66,7 @@ public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresen
     }
 
     @Override
-    public boolean isModal() {
-        return false;
-    }
-
-    @Override
-    public MovieQueryType getQueryType() {
-        return MovieQueryType.MOVIES_TAB;
-    }
-
-    @Override
-    public String getRequestParameter() {
-        return null;
-    }
-
-    @Override
-    public void showSecondaryLoadingProgress(boolean visible) {
+    public void showError(NetworkError error) {
 
     }
 
@@ -90,12 +76,27 @@ public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresen
     }
 
     @Override
-    public void showError(NetworkError error) {
+    public void showSecondaryLoadingProgress(boolean visible) {
 
     }
 
     @Override
-    public void setupTabs(MovieTabs... tabs) {
+    public String getRequestParameter() {
+        return null;
+    }
+
+    @Override
+    public MovieQueryType getQueryType() {
+        return MovieQueryType.SHOWS_TAB;
+    }
+
+    @Override
+    public boolean isModal() {
+        return false;
+    }
+
+    @Override
+    public void setupTabs(ShowTabs... tabs) {
         Preconditions.checkNotNull(tabs, "tabs cannot be null");
         mTabs = tabs;
 
@@ -111,22 +112,18 @@ public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresen
     @Override
     protected String getTabTitle(int position) {
         if (mTabs != null) {
-            return getString(StringUtils.getMoviesStringResId(mTabs[position]));
+            return getString(StringUtils.getShowsStringResId(mTabs[position]));
         }
         return null;
     }
 
-    private Fragment createFragmentForTab(MovieTabs tab) {
+    private Fragment createFragmentForTab(ShowTabs tab) {
         switch (tab) {
             case POPULAR:
-                return new PopularMoviesFragment();
-            case IN_THEATRES:
-                return new InTheatresMoviesFragment();
-            case UPCOMING:
-                return new UpcomingMoviesFragment();
+                return new PopularShowsFragment();
+            case ON_THE_AIR:
+                return new OnTheAirShowsFragment();
         }
         return null;
     }
-
-
 }

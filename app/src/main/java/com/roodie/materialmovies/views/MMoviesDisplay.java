@@ -29,7 +29,7 @@ import com.roodie.materialmovies.views.fragments.MovieDetailFragment;
 import com.roodie.materialmovies.views.fragments.MovieImagesFragment;
 import com.roodie.materialmovies.views.fragments.MoviesTabFragment;
 import com.roodie.materialmovies.views.fragments.PersonDetailFragment;
-import com.roodie.materialmovies.views.fragments.ShowsFragment;
+import com.roodie.materialmovies.views.fragments.ShowsTabFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
@@ -79,8 +79,8 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
-    public void showShows() {
-        showFragmentFromDrawer(new ShowsFragment());
+    public void showTvShows() {
+        showFragmentFromDrawer(new ShowsTabFragment());
     }
 
     @Override

@@ -10,11 +10,11 @@ import com.roodie.model.util.StringFetcher;
 import javax.inject.Inject;
 
 /**
- * Created by Roodie on 02.08.2015.
+ * Created by Roodie on 14.08.2015.
  */
-public class MovieTabPresenter extends BasePresenter {
+public class ShowTabPresenter extends BasePresenter {
 
-    MoviesTabView mView;
+    ShowsTabView mView;
 
     private final ApplicationState mState;
     private final StringFetcher mStringFetcher;
@@ -22,19 +22,19 @@ public class MovieTabPresenter extends BasePresenter {
     private boolean attached = false;
 
     @Inject
-    public MovieTabPresenter(ApplicationState state,
+    public ShowTabPresenter(ApplicationState state,
                              StringFetcher stringFetcher) {
         mState = Preconditions.checkNotNull(state, "state can not be null");
         mStringFetcher = Preconditions.checkNotNull(stringFetcher, "stringFetcher cannot be null");
     }
 
-    public void attachView(MoviesTabView view) {
+    public void attachView(ShowsTabView view) {
         Preconditions.checkNotNull(view, "View cannot be null");
         this.mView = view;
         attached = true;
 
         if (!view.isModal()) {
-            mView.updateDisplayTitle(mStringFetcher.getString(R.string.movies_title));
+            mView.updateDisplayTitle(mStringFetcher.getString(R.string.shows_title));
         }
     }
 
@@ -60,12 +60,12 @@ public class MovieTabPresenter extends BasePresenter {
     }
 
     private void populateMovieTabsUi() {
-           // mView.setupTabs(UiView.MovieTabs.UPCOMING_MOVIES);
-            mView.setupTabs(UiView.MovieTabs.POPULAR, UiView.MovieTabs.IN_THEATRES, UiView.MovieTabs.UPCOMING);
+        // mView.setupTabs(UiView.MovieTabs.UPCOMING_MOVIES);
+        mView.setupTabs(UiView.ShowTabs.POPULAR, UiView.ShowTabs.ON_THE_AIR);
 
     }
 
-    public interface MoviesTabView extends MovieView {
-        void setupTabs(MovieTabs... tabs);
+    public interface ShowsTabView extends MovieView {
+        void setupTabs(ShowTabs... tabs);
     }
 }
