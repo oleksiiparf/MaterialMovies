@@ -198,7 +198,7 @@ public  class ApplicationState implements BaseState, MoviesState {
     @Override
     public void setOnTheAirShows(ShowPaginatedResult onTheAir) {
         this.mOnTheAirShows = onTheAir;
-        mEventBus.post(new OnTheAirShowsChangeListener());
+        mEventBus.post(new OnTheAirShowsChangeEvent());
     }
 }
 

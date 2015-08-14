@@ -16,7 +16,7 @@ public class InTheatresMoviesFragment extends MovieGridFragment {
 
     @Override
     public MovieQueryType getQueryType() {
-        return MovieQueryType.IN_THEATERS;
+        return MovieQueryType.IN_THEATERS_MOVIES;
     }
 
     @Override

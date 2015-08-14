@@ -16,7 +16,7 @@ public class PopularMoviesFragment extends MovieGridFragment  {
 
     @Override
     public MovieQueryType getQueryType() {
-        return MovieQueryType.POPULAR ;
+        return MovieQueryType.POPULAR_MOVIES;
     }
 
 }

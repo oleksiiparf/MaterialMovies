@@ -9,7 +9,7 @@ public class UpcomingMoviesFragment extends MovieGridFragment {
 
     @Override
     public MovieQueryType getQueryType() {
-        return MovieQueryType.UPCOMING;
+        return MovieQueryType.UPCOMING_MOVIES;
     }
 
     @Override

@@ -66,7 +66,7 @@ public interface MoviesState extends BaseState {
 
     public static class PopularShowsChangeEvent {}
 
-    public static class OnTheAirShowsChangeListener {}
+    public static class OnTheAirShowsChangeEvent {}
 
     public static class TmdbConfigurationChangedEvent {}
 
