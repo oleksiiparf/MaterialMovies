@@ -60,7 +60,6 @@ public class ShowTabPresenter extends BasePresenter {
     }
 
     private void populateMovieTabsUi() {
-        // mView.setupTabs(UiView.MovieTabs.UPCOMING_MOVIES);
         mView.setupTabs(UiView.ShowTabs.POPULAR, UiView.ShowTabs.ON_THE_AIR);
 
     }

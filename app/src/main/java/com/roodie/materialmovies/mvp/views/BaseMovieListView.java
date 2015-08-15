@@ -11,4 +11,6 @@ public interface BaseMovieListView<E> extends MovieView {
 
     void setItems(List<ListItem<E>> items);
 
+    String getTitle();
+
 }

@@ -38,6 +38,8 @@ abstract class BaseGridPresenter<R extends BaseMovieListView> extends BasePresen
 
     protected abstract void populateUi(final R ui);
 
+    public abstract String getUiTitle(R ui);
+
     public synchronized final void attachUi(R view) {
         Preconditions.checkNotNull(view, "View cannot be null");
         Preconditions.checkState(!mUis.contains(view), "UI is already attached");

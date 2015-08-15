@@ -3,6 +3,7 @@ package com.roodie.materialmovies.mvp.presenters;
 import android.util.Log;
 
 import com.google.common.base.Preconditions;
+import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.BaseMovieListView;
 import com.roodie.materialmovies.mvp.views.UiView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
@@ -16,6 +17,7 @@ import com.roodie.model.tasks.FetchPopularShowsRunnable;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.Injector;
 import com.roodie.model.util.MoviesCollections;
+import com.roodie.model.util.StringFetcher;
 import com.squareup.otto.Subscribe;
 
 import java.util.List;
@@ -35,15 +37,19 @@ public class ShowGridPresenter extends BaseGridPresenter<ShowGridPresenter.ShowG
     private final BackgroundExecutor mExecutor;
     private final ApplicationState mState;
     private final Injector mInjector;
+    private final StringFetcher mStringFetcher;
 
     @Inject
     public ShowGridPresenter(ApplicationState moviesState,
                               @GeneralPurpose BackgroundExecutor executor,
-                              Injector injector) {
+                              Injector injector,
+                             StringFetcher stringFetcher) {
         super();
         mState = Preconditions.checkNotNull(moviesState, "mState can not be null");
         mExecutor = Preconditions.checkNotNull(executor, "executor cannot be null");
         mInjector = Preconditions.checkNotNull(injector, "injector cannot be null");
+        mStringFetcher = Preconditions.checkNotNull(stringFetcher, "stringFetcher cannot be null");
+
 
     }
 
@@ -134,7 +140,9 @@ public class ShowGridPresenter extends BaseGridPresenter<ShowGridPresenter.ShowG
         switch (ui.getQueryType()) {
             case POPULAR_SHOWS:
                 result = mState.getPopularShows();
+                Log.d(LOG_TAG, result.toString());
                 if (canFetchNextPage(result)) {
+                    Log.d(LOG_TAG,"Fetching page " + result.page + 1 );
                     fetchPopular(getId(ui), result.page + 1);
                 }
                 break;
@@ -212,6 +220,17 @@ public class ShowGridPresenter extends BaseGridPresenter<ShowGridPresenter.ShowG
         } else  {
             ui.setItems(createListItemList(items));
         }
+    }
+
+    @Override
+    public String getUiTitle(ShowGridView ui) {
+        switch (ui.getQueryType()) {
+            case POPULAR_SHOWS:
+                return mStringFetcher.getString(R.string.popular_title);
+            case ON_THE_AIR_SHOWS:
+                return mStringFetcher.getString(R.string.on_the_air_title);
+        }
+        return null;
     }
 
     private <R> void executeTask(BaseMovieRunnable<R> task) {

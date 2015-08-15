@@ -9,6 +9,9 @@
     <dimen name="movie_grid_item_width">175dp</dimen>
     <dimen name="movie_grid_item_height">280dp</dimen>
 
+    <dimen name="show_grid_item_width">350dp</dimen>
+    <dimen name="show_grid_item_height">200dp</dimen>
+
     <dimen name="trailer_text_size">20dp</dimen>
 
     <dimen name="detail_card_height">200dp</dimen>

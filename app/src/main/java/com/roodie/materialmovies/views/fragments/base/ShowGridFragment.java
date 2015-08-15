@@ -10,28 +10,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.mvp.presenters.MovieGridPresenter;
+import com.roodie.materialmovies.mvp.presenters.ShowGridPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
-import com.roodie.materialmovies.views.adapters.MovieGridAdapter;
+import com.roodie.materialmovies.views.adapters.ShowGridAdapter;
 import com.roodie.materialmovies.views.custom_views.RecyclerInsetsDecoration;
 import com.roodie.model.Display;
 import com.roodie.model.entities.ListItem;
-import com.roodie.model.entities.MovieWrapper;
+import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.network.NetworkError;
 
 import java.util.List;
 
 /**
- * Created by Roodie on 29.06.2015.
+ * Created by Roodie on 15.08.2015.
  */
-public abstract class MovieGridFragment extends BaseGridFragment implements MovieGridPresenter.MovieGridView{
+public abstract class ShowGridFragment extends BaseGridFragment implements ShowGridPresenter.ShowGridView {
 
-    protected MovieGridPresenter mMovieGridPresenter;
-    private MovieGridAdapter mMovieGridAdapter;
+    protected ShowGridPresenter mPresenter;
+    private ShowGridAdapter mShowsAdapter;
 
-    private static final String LOG_TAG = MovieGridFragment.class.getSimpleName();
+    private static final String LOG_TAG = ShowGridFragment.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,56 +41,36 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mMovieGridPresenter = MMoviesApplication.from(activity.getApplicationContext()).getMovieGridPresenter();
-        System.out.println("Presenter: " + mMovieGridPresenter);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
+        mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getShowGridPresenter();
+        Log.d(LOG_TAG, "Presenter: " + mPresenter);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mMovieGridPresenter.detachUi(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+        mPresenter.detachUi(this);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-       super.onCreateOptionsMenu(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_refresh:
-                mMovieGridPresenter.refresh(this);
+                mPresenter.refresh(this);
                 return true;
         }
         return false;
     }
 
     @Override
-    public void setItems(List<ListItem<MovieWrapper>> listItems) {
-        mMovieGridAdapter = new MovieGridAdapter(listItems);
-        mMovieGridAdapter.setClickListener(this);
-        getRecyclerView().setAdapter(mMovieGridAdapter);
+    public void setItems(List<ListItem<ShowWrapper>> listItems) {
+        mShowsAdapter = new ShowGridAdapter(listItems);
+        mShowsAdapter.setClickListener(this);
+        getRecyclerView().setAdapter(mShowsAdapter);
     }
 
     @Override
@@ -103,9 +82,8 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
         if (!isModal()) {
             display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
         }
-        mMovieGridPresenter.attachUi(this);
+        mPresenter.attachUi(this);
     }
-
 
     @Override
     public void initializeReceicler() {
@@ -122,25 +100,12 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
         return false;
     }
 
-    @Override
-    public void onClick(View view, int position) {
-        if (hasPresenter()) {
-
-            ListItem<MovieWrapper> item = mMovieGridAdapter.getItem(position);
-            // Log.d(LOG_TAG, "List item clicked  " + item.getListItem().getTitle());
-            Log.d(LOG_TAG, getQueryType() + " clicked");
-            if (item.getListType() == ListItem.TYPE_ITEM) {
-                showMovieDetail(item.getListItem(), view);
-            }
-        }
-    }
-
     protected final boolean hasPresenter() {
-        return mMovieGridPresenter != null;
+        return mPresenter != null;
     }
 
-    public MovieGridPresenter getPresenter() {
-        return mMovieGridPresenter;
+    public ShowGridPresenter getPresenter() {
+        return mPresenter;
     }
 
     @Override
@@ -162,6 +127,14 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
     }
 
     @Override
+    public String getTitle() {
+        if (hasPresenter()) {
+            return getPresenter().getUiTitle(this);
+        }
+        return null;
+    }
+
+    @Override
     public void showLoadingProgress(boolean visible) {
         if (visible) {
             setGridShown(false);
@@ -173,29 +146,6 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
     @Override
     public void showSecondaryLoadingProgress(boolean visible) {
         setSecondaryProgressShown(visible);
-    }
-
-    @Override
-    public String getTitle() {
-        if (hasPresenter()) {
-            getPresenter().getUiTitle(this);
-        }
-        return null;
-    }
-
-    @Override
-    public void showMovieDetail(MovieWrapper movie,View view){
-        Preconditions.checkNotNull(movie, "movie cannot be null");
-        int[] startingLocation = new int[2];
-        view.getLocationOnScreen(startingLocation);
-        startingLocation[0] += view.getWidth() / 2;
-
-        Display display = getDisplay();
-        if (display != null) {
-            if (movie.getTmdbId() != null) {
-                display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), startingLocation);
-            }
-        }
     }
 
     @Override
@@ -216,9 +166,12 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
                     .findFirstVisibleItemPosition();
 
             if((visibleItemCount + pastVisibleItems) >= totalItemCount) {
-              onScrolledToBottom();
+                onScrolledToBottom();
             }
         }
     };
 
+    @Override
+    public void onClick(View view, int position) {
+    }
 }

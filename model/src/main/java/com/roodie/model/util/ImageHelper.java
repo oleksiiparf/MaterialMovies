@@ -23,6 +23,7 @@ import com.google.common.base.Verify;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
+import com.roodie.model.entities.ShowWrapper;
 
 import java.net.URLEncoder;
 
@@ -45,6 +46,19 @@ public class ImageHelper {
     }
 
     public static String getPosterUrl(final MovieWrapper movie, final int width, final int height) {
+        String url = null;
+
+        if (!TextUtils.isEmpty(movie.getPosterUrl())) {
+            url = buildTmdbPosterUrl(movie.getPosterUrl(),
+                    width, RESIZE_ALL);
+        }
+
+        Verify.verifyNotNull(url);
+
+        return RESIZE_ALL ? getResizedUrl(url, width, height) : url;
+    }
+
+    public static String getPosterUrl(final ShowWrapper movie, final int width, final int height) {
         String url = null;
 
         if (!TextUtils.isEmpty(movie.getPosterUrl())) {

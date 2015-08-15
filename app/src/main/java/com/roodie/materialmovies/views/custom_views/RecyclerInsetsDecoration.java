@@ -15,7 +15,7 @@ public class RecyclerInsetsDecoration extends RecyclerView.ItemDecoration {
     private int mSpacing;
 
     public RecyclerInsetsDecoration(Context context) {
-        mSpacing = context.getResources().getDimensionPixelSize(R.dimen.movie_grid_spacing);
+        mSpacing = context.getResources().getDimensionPixelSize(R.dimen.grid_spacing);
     }
 
     @Override

@@ -16,6 +16,7 @@ import com.roodie.materialmovies.drawable.RoundedDrawable;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
+import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.util.ImageHelper;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -101,11 +102,29 @@ public class MMoviesImageView extends ImageView {
 
     public void loadPoster(MovieWrapper movie, OnLoadedListener listener) {
         if (movie.hasPosterUrl()) {
-            setImageHandler(new PosterHandler(movie, listener));
+            setImageHandler(new MoviePosterHandler(movie, listener));
         } else {
             reset();
         }
     }
+
+    /**
+     * Set show poster handler
+     */
+    public void loadPoster(ShowWrapper show) {
+        loadPoster(show, null);
+    }
+
+    public void loadPoster(ShowWrapper show, OnLoadedListener listener) {
+        if (show.hasPosterUrl()) {
+            setImageHandler(new ShowPosterHandler(show, listener));
+        } else {
+            reset();
+        }
+    }
+
+
+
 
     /**
      * Set person credit poster handler
@@ -230,14 +249,27 @@ public class MMoviesImageView extends ImageView {
     }
 
     //MoviePosterHandler
-    private class PosterHandler extends ImageHandler<MovieWrapper> {
+    private class MoviePosterHandler extends ImageHandler<MovieWrapper> {
 
-        public PosterHandler(MovieWrapper mObject, OnLoadedListener mListener) {
+        public MoviePosterHandler(MovieWrapper mObject, OnLoadedListener mListener) {
             super(mObject, mListener);
         }
 
         @Override
         protected String buildUrl(MovieWrapper object, ImageView imageView) {
+            return ImageHelper.getPosterUrl(object, imageView.getWidth(), imageView.getHeight());
+        }
+    }
+
+    //ShowPosterHandler
+    private class ShowPosterHandler extends ImageHandler<ShowWrapper> {
+
+        public ShowPosterHandler(ShowWrapper mObject, OnLoadedListener mListener) {
+            super(mObject, mListener);
+        }
+
+        @Override
+        protected String buildUrl(ShowWrapper object, ImageView imageView) {
             return ImageHelper.getPosterUrl(object, imageView.getWidth(), imageView.getHeight());
         }
     }

@@ -6,11 +6,11 @@
         <item
             android:id="@+id/menu_movies"
             android:icon="@drawable/ic_play_circle"
-            android:title="Movies" />
+            android:title="@string/category_movies" />
         <item
             android:id="@+id/menu_shows"
             android:icon="@drawable/ic_emoticon_cool"
-            android:title="Shows" />
+            android:title="@string/category_shows" />
 
         </group>
 
@@ -18,11 +18,11 @@
         <item
             android:id="@+id/menu_settings"
             android:icon="@drawable/ic_settings"
-            android:title="Settings" />
+            android:title="@string/category_settings" />
 
         <item
             android:id="@+id/menu_about"
-            android:title="About"
+            android:title="@string/category_about"
             android:icon="@drawable/ic_alert_circle"/>
     </group>
 

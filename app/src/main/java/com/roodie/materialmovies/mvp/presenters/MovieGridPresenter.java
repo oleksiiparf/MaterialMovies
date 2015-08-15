@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.common.base.Preconditions;
+import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.BaseMovieListView;
 import com.roodie.materialmovies.mvp.views.UiView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
@@ -18,6 +19,7 @@ import com.roodie.model.tasks.FetchUpcomingMoviesRunnable;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.Injector;
 import com.roodie.model.util.MoviesCollections;
+import com.roodie.model.util.StringFetcher;
 import com.squareup.otto.Subscribe;
 
 import java.util.List;
@@ -40,16 +42,19 @@ public class MovieGridPresenter extends BaseGridPresenter<MovieGridPresenter.Mov
     private final BackgroundExecutor mExecutor;
     private final ApplicationState mState;
     private final Injector mInjector;
+    private final StringFetcher mStringFetcher;
 
 
     @Inject
     public MovieGridPresenter(ApplicationState moviesState,
                               @GeneralPurpose BackgroundExecutor executor,
-                              Injector injector) {
+                              Injector injector,
+                              StringFetcher stringFetcher) {
         super();
         mState = Preconditions.checkNotNull(moviesState, "mState can not be null");
         mExecutor = Preconditions.checkNotNull(executor, "executor cannot be null");
         mInjector = Preconditions.checkNotNull(injector, "injector cannot be null");
+        mStringFetcher = Preconditions.checkNotNull(stringFetcher, "stringFetcher cannot be null");
 
     }
 
@@ -57,7 +62,6 @@ public class MovieGridPresenter extends BaseGridPresenter<MovieGridPresenter.Mov
     public void initialize() {
 
     }
-
 
     @Override
     protected void onUiAttached(final MovieGridView ui) {
@@ -154,7 +158,9 @@ public class MovieGridPresenter extends BaseGridPresenter<MovieGridPresenter.Mov
         switch (ui.getQueryType()) {
             case POPULAR_MOVIES:
                 result = mState.getPopularMovies();
+                Log.d(LOG_TAG, result.toString());
                 if (canFetchNextPage(result)) {
+                    Log.d(LOG_TAG, "Fetching page " + result.page + 1);
                     fetchPopular(getId(ui), result.page + 1);
                 }
                 break;
@@ -261,6 +267,19 @@ public class MovieGridPresenter extends BaseGridPresenter<MovieGridPresenter.Mov
         } else  {
             ui.setItems(createListItemList(items));
         }
+    }
+
+    @Override
+    public String getUiTitle(MovieGridView ui) {
+        switch (ui.getQueryType()) {
+            case POPULAR_MOVIES:
+                return mStringFetcher.getString(R.string.popular_title);
+            case IN_THEATERS_MOVIES:
+                return mStringFetcher.getString(R.string.in_theatres_title);
+            case UPCOMING_MOVIES:
+                return mStringFetcher.getString(R.string.upcoming_title);
+        }
+        return null;
     }
 
     private <R> void executeTask(BaseMovieRunnable<R> task) {
