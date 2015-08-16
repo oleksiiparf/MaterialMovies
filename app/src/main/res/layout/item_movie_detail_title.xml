@@ -53,7 +53,7 @@
                 android:textAppearance="@style/Widget.MMovies.Movie.Summary.Subtitle"
                 android:text="genre1 | genre2"/>
 
-            <include layout="@layout/include_rating_bar" />
+            <include layout="@layout/item_detail_rating" />
 
             <com.roodie.materialmovies.views.custom_views.AutofitTextView
                 android:id="@+id/textview_tagline"

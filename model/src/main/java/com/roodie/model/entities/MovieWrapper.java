@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.roodie.model.util.TimeUtils.isPastStartingPoint;
 
@@ -61,7 +62,8 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
     String tmdbReleasedCountryCode;
 
     int tmdbRatingPercent;
-    int tmdbRatingVotes;
+    int tmdbRatingVotesAmount;
+    Double tmdbRatingVoteAverage;
 
     int tmdbRuntime;
 
@@ -134,7 +136,11 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         tmdbBudget = unbox(tmdbBudget, movie.budget);
 
         tmdbRatingPercent = unbox(tmdbRatingPercent, movie.vote_average);
-        tmdbRatingVotes = unbox(tmdbRatingVotes, movie.vote_count);
+        tmdbRatingVotesAmount = unbox(tmdbRatingVotesAmount, movie.vote_count);
+
+        if (movie.vote_average != null) {
+            tmdbRatingVoteAverage = movie.vote_average;
+        }
 
         if (!TextUtils.isEmpty(movie.backdrop_path)) {
             tmdbBackdropUrl = movie.backdrop_path;
@@ -334,10 +340,6 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         return tmdbRuntime;
     }
 
-    public int getRatingVotes() {
-        return tmdbRatingVotes;
-    }
-
     public int getRatingPercent() {
         return tmdbRatingPercent;
     }
@@ -390,6 +392,16 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         return tmdbId;
     }
 
+    public String getRatingVoteAverage() {
+        return tmdbRatingVoteAverage == null || tmdbRatingVoteAverage == 0 ? "--"
+                : String.format(Locale.getDefault(), "%.1f", tmdbRatingVoteAverage);
+    }
+
+    public int getRatingVotes() {
+
+        return tmdbRatingVotesAmount;
+    }
+
     public String getImdbId() {
         return imdbId;
     }
@@ -397,7 +409,7 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
     public int getAverageRatingPercent() {
         if ( tmdbRatingPercent > 0) {
             return IntUtils.weightedAverage(
-                    tmdbRatingPercent, tmdbRatingVotes);
+                    tmdbRatingPercent, tmdbRatingVotesAmount);
         } else {
             return tmdbRatingPercent;
         }

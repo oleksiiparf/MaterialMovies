@@ -1,55 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/containerRatings"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:background="?attr/selectableItemBackground">
 
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-<LinearLayout
-    android:id="@+id/rating_bar_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/left_bar"
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+        android:id="@+id/text_view_rating_value"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical"
-        android:gravity="center" >
+        android:layout_height="wrap_content"
+        android:text="@string/placeholder_rating"
+        android:textAppearance="@style/Widget.MMovies.Movie.Rating.Title"
+        tools:text="9.6" />
 
-        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-            android:id="@+id/textview_votes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MMovies.Movie.Detail.Ratings.Votes"
-            android:text="322"
-           />
-
-        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-            android:id="@+id/textview_votes_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/movie_detail_votes"
-            style="@style/Widget.MMovies.Movie.Detail.Ratings.Title"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/right_bar"
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+        android:id="@+id/text_view_rating_range"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/spacing_huge"
-        android:orientation="vertical"
-        android:gravity="center"
-       >
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/default_padding"
+        android:layout_alignBaseline="@+id/text_view_rating_value"
+        android:layout_toRightOf="@+id/text_view_rating_value"
+        android:text="@string/tvdb_range"
+        android:textAppearance="@style/Widget.MMovies.Movie.Rating.Subtitle" />
 
-        <com.roodie.materialmovies.views.custom_views.ArcProgress
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/rating_bar"
-            android:layout_width="80dip"
-            android:layout_height="80dip"
-            app:arc_bottom_text="GLOBAL"/>
-    </LinearLayout>
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+        android:id="@+id/text_view_rating_votes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/text_view_rating_value"
+        android:layout_toRightOf="@id/text_view_rating_range"
+        android:text="@string/no_rating"
+        tools:text="1234 votes"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textAppearance="@style/Widget.MMovies.Movie.Rating.Subtitle" />
 
-</LinearLayout>
-</merge>
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+        android:id="@+id/text_view_rating_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-4dp"
+        android:layout_below="@+id/text_view_rating_value"
+        android:text="@string/tmdb"
+        android:textAppearance="@style/Widget.MMovies.Movie.Rating.Subtitle" />
+
+</RelativeLayout>

@@ -18,6 +18,10 @@
 
     <dimen name="activity_movies_margins">@dimen/activity_horizontal_margin</dimen>
 
+    <!-- Material text sizes -->
+    <dimen name="text_size_default_sg">14sp</dimen>
+    <dimen name="text_size_caption_sg">16sp</dimen>
+
     <dimen name="insets">1dp</dimen>
     <dimen name="item_movie_width">196dp</dimen>
     <dimen name="item_movie_height">248dp</dimen>

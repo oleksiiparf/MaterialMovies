@@ -2,13 +2,16 @@ package com.roodie.materialmovies.views.fragments.base;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.ShowGridPresenter;
@@ -36,6 +39,12 @@ public abstract class ShowGridFragment extends BaseGridFragment implements ShowG
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.show_view_recycler, container, false);
     }
 
     @Override
@@ -68,9 +77,7 @@ public abstract class ShowGridFragment extends BaseGridFragment implements ShowG
 
     @Override
     public void setItems(List<ListItem<ShowWrapper>> listItems) {
-        mShowsAdapter = new ShowGridAdapter(listItems);
-        mShowsAdapter.setClickListener(this);
-        getRecyclerView().setAdapter(mShowsAdapter);
+         mShowsAdapter.setItems(listItems);
     }
 
     @Override
@@ -88,6 +95,9 @@ public abstract class ShowGridFragment extends BaseGridFragment implements ShowG
     @Override
     public void initializeReceicler() {
         getRecyclerView().addItemDecoration(new RecyclerInsetsDecoration(getActivity().getApplicationContext()));
+        mShowsAdapter = new ShowGridAdapter(null);
+        mShowsAdapter.setClickListener(this);
+        getRecyclerView().setAdapter(mShowsAdapter);
         getRecyclerView().setOnScrollListener(recyclerScrollListener);
     }
 

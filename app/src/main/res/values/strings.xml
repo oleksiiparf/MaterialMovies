@@ -35,6 +35,19 @@
     <string name="trailer_movie">Trailer</string>
     <string name="trailers_movies">Trailers</string>
     <string name="biography">Biography</string>
+    <string name="placeholder_rating">--</string>
+    <string name="tvdb_range">/10</string>
+    <string name="no_rating">n/a</string>
+
+    <!-- Tmdb ratings -->
+    <plurals name="votes">
+        <item quantity="zero">%d votes</item>
+        <item quantity="one">%d vote</item>
+        <item quantity="two">%d votes</item>
+        <item quantity="few">%d votes</item>
+        <item quantity="many">%d votes</item>
+        <item quantity="other">%d votes</item>
+    </plurals>
 
 
     <!-- Menu items -->

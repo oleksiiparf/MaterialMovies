@@ -66,6 +66,19 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="Widget.MMovies.Movie.Rating.Subtitle" parent="android:Widget">
+        <item name="font">roboto_condensed_bold</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">@dimen/text_size_caption_sg</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Rating.Title" parent="android:Widget">
+        <item name="font">roboto_condensed_bold</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">38sp</item>
+    </style>
+
+
     <style name="Widget.MMovies.Movie.List.Title" parent="android:Widget">
         <item name="font">roboto_condensed</item>
         <item name="android:textSize">16dp</item>
