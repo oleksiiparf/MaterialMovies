@@ -26,7 +26,11 @@ public class MovieActivity extends BaseActivity {
     @Override
     protected void handleIntent(Intent intent, Display display) {
       if (!display.hasMainFragment()) {
-          display.showMovieDetailFragment(intent.getStringExtra(Display.PARAM_ID), intent.getIntArrayExtra(Display.PARAM_LOCATION), getTransationName());
-      }
+          if (intent.getIntArrayExtra(Display.PARAM_LOCATION) != null) {
+              display.showMovieDetailFragmentByAnimation(intent.getStringExtra(Display.PARAM_ID), intent.getIntArrayExtra(Display.PARAM_LOCATION), intent.getStringExtra(Display.PARAM_IMAGE));
+          } else {
+              display.showMovieDetailFragmentBySharedElements(intent.getStringExtra(Display.PARAM_ID), intent.getStringExtra(Display.PARAM_IMAGE));
+          }
+          }
     }
 }

@@ -40,13 +40,17 @@ public interface Display {
 
     public void showAbout();
 
-    public void startMovieDetailActivity(String movieId, int[] startingLocation);
+    public void startMovieDetailActivityByAnimation(String movieId, int[] startingLocation);
 
-    public void showMovieDetailFragment(String movieId, int[] startingLocation);
+    public void showMovieDetailFragmentByAnimation(String movieId, int[] startingLocation);
 
-    public void startMovieDetailActivity(String movieId, View view, String imageUrl, int[] startingLocation);
+    public void startMovieDetailActivityByAnimation(String movieId, View view, String imageUrl, int[] startingLocation);
 
-    public void showMovieDetailFragment(String movieId, int[] startingLocation, String imageUrl);
+    public void showMovieDetailFragmentByAnimation(String movieId, int[] startingLocation, String imageUrl);
+
+    public void startMovieDetailActivityBySharedElements(String movieId, View view, String imageUrl);
+
+    public void showMovieDetailFragmentBySharedElements(String movieId, String imageUrl);
 
     public void startPersonDetailActivity(String id, Bundle bundle);
 

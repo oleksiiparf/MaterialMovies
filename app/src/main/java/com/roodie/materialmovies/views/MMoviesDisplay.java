@@ -105,7 +105,7 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
-    public void startMovieDetailActivity(String movieId, int[] startingLocation) {
+    public void startMovieDetailActivityByAnimation(String movieId, int[] startingLocation) {
         Intent intent = new Intent(mActivity, MovieActivity.class);
         intent.putExtra(PARAM_ID, movieId);
         intent.putExtra(PARAM_LOCATION, startingLocation);
@@ -113,25 +113,42 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
-    public void showMovieDetailFragment(String movieId, int[] startingLocation ) {
+    public void showMovieDetailFragmentByAnimation(String movieId, int[] startingLocation) {
         showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId, startingLocation));
     }
 
 
     @Override
-    public void startMovieDetailActivity(String movieId, View view, String imageUrl, int[] startingLocation) {
+    public void startMovieDetailActivityByAnimation(String movieId, View view, String imageUrl, int[] startingLocation) {
         ActivityOptionsCompat options =
                 ActivityOptionsCompat.makeSceneTransitionAnimation(
                         mActivity, view, PARAM_IMAGE);
         Intent intent = new Intent(mActivity, MovieActivity.class);
         intent.putExtra(PARAM_ID, movieId);
+        intent.putExtra(PARAM_IMAGE, imageUrl);
         intent.putExtra(PARAM_LOCATION, startingLocation);
         startActivity(intent, options.toBundle());
     }
 
     @Override
-    public void showMovieDetailFragment(String movieId,int[] startingLocation, String imageUrl) {
+    public void showMovieDetailFragmentByAnimation(String movieId, int[] startingLocation, String imageUrl) {
         showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId, startingLocation, imageUrl));
+    }
+
+    @Override
+    public void startMovieDetailActivityBySharedElements(String movieId, View view, String imageUrl) {
+        ActivityOptionsCompat options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        mActivity, view, PARAM_IMAGE);
+        Intent intent = new Intent(mActivity, MovieActivity.class);
+        intent.putExtra(PARAM_ID, movieId);
+        intent.putExtra(PARAM_IMAGE, imageUrl);
+        startActivity(intent, options.toBundle());
+    }
+
+    @Override
+    public void showMovieDetailFragmentBySharedElements(String movieId, String imageUrl) {
+        showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId, imageUrl));
     }
 
     @Override

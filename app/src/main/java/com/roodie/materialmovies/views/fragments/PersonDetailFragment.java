@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,6 +32,7 @@ import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.network.NetworkError;
 import com.roodie.model.util.MoviesCollections;
+import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -123,11 +125,6 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        final int[] startingLocation = getStartingLocation();
-
-        setEndAnimationX(startingLocation[0]);
-        setEndAnimationY(startingLocation[1]);
-
         //set actionbar up navigation
         final Display display = getDisplay();
         if (!isModal()) {
@@ -149,6 +146,28 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
             personName.setVisibility(View.GONE);
 
         }
+    }
+
+    @Override
+    protected void configureEnterTransition() {
+        if (personImagePoster != null) {
+            ViewCompat.setTransitionName(personImagePoster, KEY_IMAGE_URL);
+            Picasso.with(getActivity().getApplicationContext()).load(getImageUrl()).into(personImagePoster);
+        }
+        initializePresenter();
+    }
+
+    @Override
+    protected void configureEnterAnimation() {
+        final int[] startingLocation = getStartingLocation();
+
+        setEndAnimationX(startingLocation[0]);
+        setEndAnimationY(startingLocation[1]);
+        super.configureEnterAnimation();
+    }
+
+    public String getImageUrl() {
+        return getArguments().getString(KEY_IMAGE_URL);
     }
 
     @Override
@@ -270,7 +289,7 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
 
         Display display = getDisplay();
         if (display != null) {
-            display.startMovieDetailActivity(String.valueOf(credit.getId()), startingLocation);
+            display.startMovieDetailActivityByAnimation(String.valueOf(credit.getId()), startingLocation);
         }
     }
 

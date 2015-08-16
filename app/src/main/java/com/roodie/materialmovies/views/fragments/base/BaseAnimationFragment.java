@@ -1,5 +1,7 @@
 package com.roodie.materialmovies.views.fragments.base;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
@@ -23,6 +25,8 @@ import io.codetail.animation.ViewAnimationUtils;
 public abstract class BaseAnimationFragment extends BaseDetailFragment {
 
     protected static final String KEY_REVEAL_START_LOCATION = "reveal_start_location";
+    protected static final String KEY_VIEW = "image_view";
+    protected static final String KEY_IMAGE_URL = "_image";
 
     protected FrameLayout mAnimationLayout;
 
@@ -37,20 +41,36 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         mAnimationLayout = (FrameLayout) view.findViewById(R.id.transaction_container);
+        mAnimationLayout.setVisibility(View.GONE);
+
+        initiaizeStartAnimation();
+    }
+
+
+    private void initiaizeStartAnimation() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            configureEnterTransition ();
+        } else {
+            configureEnterAnimation ();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    protected abstract void configureEnterTransition();
+
+    protected void configureEnterAnimation() {
+
         mAnimationLayout.post(new Runnable() {
             @Override
             public void run() {
                 setUpVisibility();
-                startSircleAnimation();
+                startCircleAnimation();
             }
-
         });
     }
 
-
-    private void startSircleAnimation() {
+    private void startCircleAnimation() {
         mAnimationLayout.setVisibility(View.VISIBLE);
 
         float finalRadius = Math.max(mAnimationLayout.getWidth(), mAnimationLayout.getHeight()) * 1.5f;

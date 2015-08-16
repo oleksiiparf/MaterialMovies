@@ -6,6 +6,18 @@
 
 <include layout="@layout/include_toolbar"></include>
 
+    <io.codetail.widget.RevealFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <io.codetail.widget.RevealFrameLayout
+            android:id="@+id/transaction_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_primary_default"
+            android:visibility="invisible"/>
+    </io.codetail.widget.RevealFrameLayout>
+
 <LinearLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent"
@@ -16,18 +28,6 @@
         android:layout_width="0px"
         android:layout_weight="2"
         android:layout_height="match_parent">
-
-        <io.codetail.widget.RevealFrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <io.codetail.widget.RevealFrameLayout
-                android:id="@+id/transaction_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/color_primary_default"
-                android:visibility="invisible">
-            </io.codetail.widget.RevealFrameLayout>
 
 
         <ScrollView
@@ -54,7 +54,6 @@
 
         </ScrollView>
 
-        </io.codetail.widget.RevealFrameLayout>
 
     </LinearLayout>
 

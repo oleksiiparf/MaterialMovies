@@ -29,7 +29,6 @@ import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.MovieDetailPresenter;
 import com.roodie.materialmovies.settings.TmdbSettings;
 import com.roodie.materialmovies.views.MMoviesApplication;
-import com.roodie.materialmovies.views.custom_views.ArcProgress;
 import com.roodie.materialmovies.views.custom_views.AutofitTextView;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
@@ -86,10 +85,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     private AutofitTextView mTaglineTextView;
     private MMoviesImageView mPosterImageView;
     private LinearLayout mTrailerButton;
-    private ArcProgress mRatingBar;
     private RatingBarLayout mRatingBarLayout;
-    private TextView mVotesTextView;
-
 
     private Context mContext;
 
@@ -102,11 +98,12 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
     private static final String QUERY_MOVIE_ID = "movie_id";
 
-    public static MovieDetailFragment newInstance(String movieId) {
-        Preconditions.checkArgument(movieId != null, "MovieId can not be null");
+    public static MovieDetailFragment newInstance(String movieId, String imageUrl) {
+        Preconditions.checkArgument(imageUrl != null, "ImageUrl can not be null");
 
         Bundle bundle = new Bundle();
         bundle.putString(QUERY_MOVIE_ID, movieId);
+        bundle.putString(KEY_IMAGE_URL, imageUrl);
         MovieDetailFragment fragment = new MovieDetailFragment();
         fragment.setArguments(bundle);
 
@@ -175,13 +172,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        final int[] startingLocation = getStartingLocation();
-
-        //endAnimationX = startingLocation[0];
-        //endAnimationY = startingLocation[1];
-        setEndAnimationX(startingLocation[0]);
-        setEndAnimationY(startingLocation[1]);
-
         //set actionbar up navigation
         final Display display = getDisplay();
         if (!isModal()) {
@@ -207,12 +197,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         mGenresTextView = (TextView) view.findViewById(R.id.textview_genres);
         mTaglineTextView = (AutofitTextView) view.findViewById(R.id.textview_tagline);
         mPosterImageView = (MMoviesImageView) view.findViewById(R.id.imageview_poster);
-        if (mPosterImageView != null) {
-            ViewCompat.setTransitionName(mPosterImageView, getImageUrl());
-            Picasso.with(getActivity().getApplicationContext()).load(getImageUrl()).into(mPosterImageView);
-
-        }
-
         mRatingBarLayout = (RatingBarLayout)view.findViewById(R.id.rating_bar);
         //mRatingBar = (ArcProgress) view.findViewById(R.id.rating_bar);
         //mVotesTextView = (TextView) view.findViewById(R.id.textview_votes);
@@ -232,7 +216,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         }
         mPresenter.attachView(this);
         super.onViewCreated(view, savedInstanceState);
-        mPresenter.initialize();
+        //mPresenter.initialize();
     }
 
     @Override
@@ -241,6 +225,26 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             mSummaryContainer.setVisibility(View.GONE);
         }
         mFanartImageView.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void configureEnterTransition() {
+        System.out.println("Configure enter transition");
+        if (mPosterImageView != null) {
+            ViewCompat.setTransitionName(mPosterImageView, KEY_IMAGE_URL);
+            Picasso.with(getActivity().getApplicationContext()).load(getImageUrl()).into(mPosterImageView);
+        }
+        initializePresenter();
+    }
+
+    @Override
+    protected void configureEnterAnimation() {
+        System.out.println("Configure enter animation");
+        final int[] startingLocation = getStartingLocation();
+
+        setEndAnimationX(startingLocation[0]);
+        setEndAnimationY(startingLocation[1]);
+        super.configureEnterAnimation();
     }
 
     @Override
@@ -420,10 +424,11 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         getRecyclerView().setVisibility(View.VISIBLE);
         mFanartImageView.setVisibility(View.VISIBLE);
         //animateFanart();
-        //if (mSummaryContainer != null) {
-        //    mSummaryContainer.setVisibility(View.VISIBLE);
-         //   animateSummary();
-        //}
+
+        if (mSummaryContainer != null) {
+            mSummaryContainer.setVisibility(View.VISIBLE);
+            //animateSummary();
+            }
     }
 
     @Override
@@ -436,7 +441,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         Display display = getDisplay();
         if (display != null) {
             if (movie.getTmdbId() != null) {
-                display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), startingLocation);
+                display.startMovieDetailActivityByAnimation(String.valueOf(movie.getTmdbId()), startingLocation);
             }
         }
     }
@@ -553,7 +558,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             mTitleTextView.setText(mMovie.getTitle() + " (" + mMovie.getYear() + ")");
             mGenresTextView.setText(mMovie.getGenres());
             mTaglineTextView.setText(mMovie.getTagline());
-            //mPosterImageView.loadPoster(mMovie);
+            mPosterImageView.loadPoster(mMovie);
             mRatingBarLayout.setRatingVotes(mMovie.getRatingVotes());
             mRatingBarLayout.setRatingValue(mMovie.getRatingVoteAverage());
             mRatingBarLayout.setRatingRange(10);
