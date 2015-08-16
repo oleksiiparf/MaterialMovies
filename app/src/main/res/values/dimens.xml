@@ -47,7 +47,7 @@
 
     <dimen name="show_grid_spacing">2dp</dimen>
     <dimen name="show_grid_item_width">130dp</dimen>
-    <dimen name="show_grid_item_height">200dp</dimen>
+    <dimen name="show_grid_item_height">150dp</dimen>
     <dimen name="show_grid_two_line_bar_height">68dp</dimen>
     <dimen name="show_grid_single_line_bar_height">48dp</dimen>
     <dimen name="show_grid_item_text_padding">16dp</dimen>

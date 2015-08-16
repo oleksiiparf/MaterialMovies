@@ -1,5 +1,6 @@
 package com.roodie.materialmovies.views.adapters;
 
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,12 +62,22 @@ public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.Movi
     }
 
     @Override
-    public void onBindViewHolder(MovieViewHolder holder, int position) {
+    public void onBindViewHolder(final MovieViewHolder holder, int position) {
         final MovieWrapper movie = getItem(position).getListItem();
 
         holder.title.setText(movie.getTitle());
         //load poster
-        holder.poster.loadPoster(movie);
+        holder.poster.loadPoster(movie, new MMoviesImageView.OnLoadedListener() {
+            @Override
+            public void onSuccess(MMoviesImageView imageView, Bitmap bitmap, String imageUrl) {
+                holder.poster.setTag(imageUrl);
+            }
+
+            @Override
+            public void onError(MMoviesImageView imageView) {
+
+            }
+        });
 
     }
 
@@ -88,7 +99,7 @@ public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.Movi
 
          @Override
          public void onClick(View v) {
-             onClickListener.onClick(v, getPosition());
+             onClickListener.onClick(poster, getPosition());
          }
      }
 

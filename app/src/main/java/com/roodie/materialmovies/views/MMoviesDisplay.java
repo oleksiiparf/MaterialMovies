@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.common.base.Preconditions;
@@ -113,6 +115,23 @@ public class MMoviesDisplay implements Display {
     @Override
     public void showMovieDetailFragment(String movieId, int[] startingLocation ) {
         showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId, startingLocation));
+    }
+
+
+    @Override
+    public void startMovieDetailActivity(String movieId, View view, String imageUrl, int[] startingLocation) {
+        ActivityOptionsCompat options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        mActivity, view, PARAM_IMAGE);
+        Intent intent = new Intent(mActivity, MovieActivity.class);
+        intent.putExtra(PARAM_ID, movieId);
+        intent.putExtra(PARAM_LOCATION, startingLocation);
+        startActivity(intent, options.toBundle());
+    }
+
+    @Override
+    public void showMovieDetailFragment(String movieId,int[] startingLocation, String imageUrl) {
+        showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId, startingLocation, imageUrl));
     }
 
     @Override

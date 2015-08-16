@@ -22,7 +22,7 @@
     </style>
 
     <style name="Widget.MMovies.Show.Grid.Title" parent="android:Widget">
-        <item name="font">roboto_light</item>
+        <item name="font">roboto_condensed_bold</item>
         <item name="android:textSize">@dimen/show_grid_item_title_size</item>
         <item name="android:paddingLeft">@dimen/activity_vertical_margin</item>
         <item name="android:paddingTop">@dimen/activity_vertical_margin</item>
@@ -34,7 +34,7 @@
     </style>
 
     <style name="Widget.MMovies.Show.Grid.Subtitle" parent="android:Widget">
-        <item name="font">roboto_condensed</item>
+        <item name="font">roboto_condensed_bold</item>
         <item name="android:textSize">@dimen/show_grid_item_subtitle_size</item>
         <item name="android:paddingLeft">@dimen/activity_vertical_margin</item>
         <item name="android:gravity">center|left</item>

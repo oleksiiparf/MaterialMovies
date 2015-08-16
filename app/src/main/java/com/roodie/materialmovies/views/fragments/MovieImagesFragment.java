@@ -173,7 +173,7 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
 
             imageView.loadBackdrop(image, new MMoviesImageView.OnLoadedListener() {
                 @Override
-                public void onSuccess(MMoviesImageView imageView, Bitmap bitmap) {
+                public void onSuccess(MMoviesImageView imageView, Bitmap bitmap, String imageUrl) {
                     progressBar.setVisibility(View.GONE);
                     attacher.update();
                 }

@@ -47,6 +47,8 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
     int amountOfEpisodes;
     int amountOfSeasons;
 
+    boolean isLiked = false;
+
     transient long lastFullFetchFromTmdbStarted;
     transient long lastFullFetchFromTmdbCompleted;
 
@@ -252,6 +254,14 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     public void setSeasons(List<SeasonWrapper> seasons) {
         this.seasons = seasons;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean isLiked) {
+        this.isLiked = isLiked;
     }
 
     private boolean needFullFetch() {

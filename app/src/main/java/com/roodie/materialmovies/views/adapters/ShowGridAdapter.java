@@ -1,10 +1,17 @@
 package com.roodie.materialmovies.views.adapters;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -23,6 +30,9 @@ import java.util.List;
 public class ShowGridAdapter extends RecyclerView.Adapter<ShowGridAdapter.ShowViewHolder> {
 
     private static final String LOG_TAG = ShowGridAdapter.class.getName();
+
+    private static final AccelerateInterpolator ACCELERATE_INTERPOLATOR = new AccelerateInterpolator();
+    private static final OvershootInterpolator OVERSHOOT_INTERPOLATOR = new OvershootInterpolator(4);
 
     private RecyclerItemClickListener mClickListener;
 
@@ -56,6 +66,7 @@ public class ShowGridAdapter extends RecyclerView.Adapter<ShowGridAdapter.ShowVi
         return mItems.get(position);
     }
 
+
     @Override
     public ShowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grid_show, parent, false);
@@ -67,12 +78,25 @@ public class ShowGridAdapter extends RecyclerView.Adapter<ShowGridAdapter.ShowVi
         final ShowWrapper show = getItem(position).getListItem();
 
         holder.title.setText(show.getTitle());
-        holder.subtitle.setText(show.getGenres());
-        //load poster
+        holder.subtitle.setText("" + show.getPopularity());
+
         holder.poster.loadPoster(show, new MMoviesImageView.OnLoadedListener() {
             @Override
-            public void onSuccess(MMoviesImageView imageView, Bitmap bitmap) {
-                //holder.containerBar.change background
+            public void onSuccess(MMoviesImageView imageView, Bitmap bitmap, String imageUrl) {
+                holder.poster.setTag(imageUrl);
+                Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(Palette palette) {
+                        Palette.Swatch primary = palette.getVibrantSwatch();
+
+                        if (primary == null) {
+                            primary = palette.getMutedSwatch();
+                        }
+
+                        final int primaryAccent = primary.getRgb();
+                        holder.containerBar.setBackgroundColor(primaryAccent);
+                    }
+                });
             }
 
             @Override
@@ -80,6 +104,56 @@ public class ShowGridAdapter extends RecyclerView.Adapter<ShowGridAdapter.ShowVi
 
             }
         });
+
+        updateHeartButton(show, holder, false);
+        holder.like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateHeartButton(show, holder, true);
+            }
+        });
+
+    }
+
+    private void updateHeartButton(final ShowWrapper show, final ShowViewHolder holder, boolean animated) {
+        if (animated) {
+            if (!show.isLiked()) {
+                show.setLiked(true);
+
+                AnimatorSet animatorSet = new AnimatorSet();
+                ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.like, "rotation", 0f, 360f);
+                rotationAnim.setDuration(300);
+                rotationAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
+
+                ObjectAnimator bounceAnimX = ObjectAnimator.ofFloat(holder.like, "scaleX", 0.2f, 1f);
+                bounceAnimX.setDuration(300);
+                bounceAnimX.setInterpolator(OVERSHOOT_INTERPOLATOR);
+
+                ObjectAnimator bounceAnimY = ObjectAnimator.ofFloat(holder.like, "scaleY", 0.2f, 1f);
+                bounceAnimY.setDuration(300);
+                bounceAnimY.setInterpolator(OVERSHOOT_INTERPOLATOR);
+                bounceAnimY.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        holder.like.setImageResource(R.drawable.ic_heart_red);
+                    }
+                });
+
+                animatorSet.play(rotationAnim);
+                animatorSet.play(bounceAnimX).with(bounceAnimY).after(rotationAnim);
+
+                animatorSet.start();
+            } else {
+                show.setLiked(false);
+                holder.like.setImageResource(R.drawable.ic_heart_white_24dp);
+            }
+        } else {
+            if (show.isLiked()) {
+                holder.like.setImageResource(R.drawable.ic_heart_red);
+            } else {
+                holder.like.setImageResource(R.drawable.ic_heart_white_24dp);
+            }
+        }
 
     }
 
@@ -107,7 +181,15 @@ public class ShowGridAdapter extends RecyclerView.Adapter<ShowGridAdapter.ShowVi
 
         @Override
         public void onClick(View v) {
-            onClickListener.onClick(v, getPosition());
+            final int viewId = v.getId();
+            switch (viewId) {
+                case R.id.item_show_container :
+                    onClickListener.onClick(v, getPosition());
+                    break;
+            }
+
         }
+
+
     }
 }

@@ -27,6 +27,7 @@ public class BaseActivity extends ActionBarActivity {
     protected Display mDisplay;
     private NavigationView mNavigationView;
     private MMoviesImageView mUserProfilePhoto;
+    protected String mTransationName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +100,7 @@ public class BaseActivity extends ActionBarActivity {
                                     getDisplay().showMovies();
                                     break;
                                 case R.id.menu_shows:
-                                    getDisplay().showShows();
+                                    getDisplay().showTvShows();
                                     break;
                                 case R.id.menu_settings:
                                     getDisplay().showSettings();
@@ -179,6 +180,14 @@ public class BaseActivity extends ActionBarActivity {
 
     public DrawerLayout getDrawerLayout() {
         return mDrawerLayout;
+    }
+
+    public String getTransationName() {
+        return mTransationName;
+    }
+
+    public void setTransationName(String mTransationName) {
+        this.mTransationName = mTransationName;
     }
 
     @Override

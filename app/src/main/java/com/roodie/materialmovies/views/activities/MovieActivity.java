@@ -1,6 +1,7 @@
 package com.roodie.materialmovies.views.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.roodie.materialmovies.R;
 import com.roodie.model.Display;
@@ -17,9 +18,15 @@ public class MovieActivity extends BaseActivity {
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setTransationName(getDisplay().PARAM_IMAGE);
+    }
+
+    @Override
     protected void handleIntent(Intent intent, Display display) {
       if (!display.hasMainFragment()) {
-          display.showMovieDetailFragment(intent.getStringExtra(Display.PARAM_ID), intent.getIntArrayExtra(Display.PARAM_LOCATION));
+          display.showMovieDetailFragment(intent.getStringExtra(Display.PARAM_ID), intent.getIntArrayExtra(Display.PARAM_LOCATION), getTransationName());
       }
     }
 }

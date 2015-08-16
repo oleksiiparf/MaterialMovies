@@ -19,6 +19,7 @@ package com.roodie.model;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
+import android.view.View;
 
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
@@ -28,6 +29,8 @@ public interface Display {
     public static final String PARAM_ID = "_id";
 
     public static final String PARAM_LOCATION = "_location";
+
+    public static final String PARAM_IMAGE = "_image";
 
     public void showMovies();
 
@@ -40,6 +43,10 @@ public interface Display {
     public void startMovieDetailActivity(String movieId, int[] startingLocation);
 
     public void showMovieDetailFragment(String movieId, int[] startingLocation);
+
+    public void startMovieDetailActivity(String movieId, View view, String imageUrl, int[] startingLocation);
+
+    public void showMovieDetailFragment(String movieId, int[] startingLocation, String imageUrl);
 
     public void startPersonDetailActivity(String id, Bundle bundle);
 

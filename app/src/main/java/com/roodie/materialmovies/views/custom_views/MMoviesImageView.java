@@ -32,7 +32,7 @@ public class MMoviesImageView extends ImageView {
 
     public interface OnLoadedListener {
 
-        public void onSuccess(MMoviesImageView imageView, Bitmap bitmap);
+        public void onSuccess(MMoviesImageView imageView, Bitmap bitmap, String imageUrl);
 
         public void onError(MMoviesImageView imageView);
     }
@@ -343,7 +343,7 @@ public class MMoviesImageView extends ImageView {
             setImageBitmapImpl(bitmap);
             if (mImageHandler != null) {
                 if (mImageHandler.mListener != null) {
-                    mImageHandler.mListener.onSuccess(MMoviesImageView.this, bitmap);
+                    mImageHandler.mListener.onSuccess(MMoviesImageView.this, bitmap, mImageHandler.getImageUrl(MMoviesImageView.this));
                 }
                 mImageHandler.markAsFinished();
             }

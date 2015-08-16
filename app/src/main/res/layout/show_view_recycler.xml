@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
->
+    >
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -30,20 +30,20 @@
         android:layout_height="fill_parent">
 
 
-    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-        android:id="@+id/empty_text_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:padding="@dimen/spacing_major"
-       />
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/empty_text_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:padding="@dimen/spacing_major"
+            />
 
         <com.roodie.materialmovies.views.custom_views.AutofitRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:clipToPadding="false"
-            android:columnWidth="@dimen/movie_grid_item_width"
-            >
+            android:columnWidth="@dimen/show_grid_item_width"
+            android:layout_gravity="center_horizontal">
 
         </com.roodie.materialmovies.views.custom_views.AutofitRecyclerView>
     </FrameLayout>
