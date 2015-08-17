@@ -5,7 +5,9 @@
     <View
         android:id="@+id/divider_above"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dip"
+        android:layout_marginLeft="30.0dip"
+        android:layout_marginRight="30.0dip"
         android:background="@color/summary_divider"
         />
 
@@ -14,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/spacing_minor"
-        android:gravity="left|center_horizontal"
+        android:gravity="center_horizontal"
         android:clickable="true"
         android:focusable="true"
         android:background="?android:attr/selectableItemBackground"
@@ -38,7 +40,9 @@
     <View
         android:id="@+id/divider_below"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dip"
+        android:layout_marginLeft="30.0dip"
+        android:layout_marginRight="30.0dip"
         android:background="@color/summary_divider"
         />
 

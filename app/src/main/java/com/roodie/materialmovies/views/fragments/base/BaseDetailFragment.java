@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.roodie.materialmovies.R;
 
@@ -25,7 +25,7 @@ public abstract class BaseDetailFragment extends BaseFragment {
 
 
     protected RecyclerView mRecyclerView;
-    private LinearLayout mTitleContainer;
+    private RelativeLayout mTitleContainer;
 
 
 
@@ -54,7 +54,7 @@ public abstract class BaseDetailFragment extends BaseFragment {
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        mTitleContainer = (LinearLayout) view.findViewById(R.id.container_layout);
+        mTitleContainer = (RelativeLayout) view.findViewById(R.id.container_layout);
     }
 
 

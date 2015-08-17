@@ -9,6 +9,9 @@
 
     <color name="summary_divider">#ff4e5d64</color>
 
+    <color name="transparent">#00000000</color>
+    <color name="semi_transparent">#88676767</color>
+
     <color name="side_menu_background">#FF202020</color>
 
     <color name="dark_gray">#FF333333</color>

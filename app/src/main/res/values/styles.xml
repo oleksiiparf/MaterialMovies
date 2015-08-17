@@ -217,7 +217,7 @@
     <item name="contentInsetStart">24dp</item>
 </style>
 
-    <style name="Widget.MMovies.Toolbar.Transparent" parent="Widget.MMovies.Toolbar">
+    <style name="Widget.MMovies.Toolbar.Transparent" >
         <item name="android:background">@null</item>
     </style>
 

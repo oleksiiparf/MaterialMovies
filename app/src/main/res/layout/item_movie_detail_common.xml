@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/transparent"/>
+
+    <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+        android:id="@+id/imageview_fanart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:fitsSystemWindows="true"
+        app:layout_collapseMode="parallax" />
+
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll_container_movie"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/transparent"
+        android:paddingLeft="16dip"
+        android:paddingRight="16dip"
+        android:scrollbars="none">
+
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="15.0dip">
+
+
+            <LinearLayout
+                android:id="@+id/ln_transparent"
+                android:layout_width="fill_parent"
+                android:layout_height="250.0dip"
+                android:orientation="horizontal" />
+
+            <RelativeLayout
+                android:id="@+id/summary_root"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ln_transparent"
+                android:background="@color/semi_transparent"
+                android:layout_marginTop="-20.0dip"
+                android:fitsSystemWindows="true"
+                android:paddingBottom="20.0dip">
+
+                <LinearLayout
+                    android:id="@+id/title_root"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="0px"
+                        android:layout_weight="1.0"
+                        android:layout_height="wrap_content">
+
+                    </View>
+
+                    <LinearLayout
+                        android:layout_width="0px"
+                        android:layout_weight="1.0"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="top"
+                        android:orientation="vertical"
+                        android:padding="@dimen/spacing_minor"
+                        android:layout_marginRight="4.0dip">
+
+                        <TextView
+                            android:id="@+id/textview_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center_vertical"
+                            android:textAppearance="@style/Widget.MMovies.Movie.Summary.Title"
+                            android:text="Title"/>
+
+                        <include layout="@layout/item_detail_rating" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/separator"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.5dip"
+                    android:layout_below="@id/title_root"
+                    android:layout_marginLeft="30.0dip"
+                    android:layout_marginRight="30.0dip"
+                    android:layout_marginTop="15.0dip"
+                    android:background="@color/summary_divider"
+
+                    android:orientation="vertical" />
+
+
+                <LinearLayout
+                    android:id="@+id/summary_container"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/separator"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/item_movie_detail_summary" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/summary_container"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/item_movie_summary_trailer" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+                android:id="@+id/imageview_poster"
+                android:layout_gravity="center_vertical"
+                android:layout_width="@dimen/movie_detail_poster_width"
+                android:layout_height="@dimen/movie_detail_poster_height"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="110.0dip"
+
+                android:cropToPadding="true"
+                android:scaleType="fitXY" />
+
+        </RelativeLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/like_fab"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                app:layout_anchor="@id/summary_root"
+                app:layout_anchorGravity="top|right|end"
+                android:src="@drawable/ic_visibility_white"
+                android:layout_margin="@dimen/fab_margin"
+                android:clickable="true"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    </ScrollView>
+
+
+
+</RelativeLayout>
+
+
+

@@ -5,6 +5,9 @@
     <dimen name="activity_horizontal_margin_double">32dp</dimen>
     <dimen name="activity_horizontal_margin_double_double">64dp</dimen>
 
+    <dimen name="basic_container_padding">8.0dip</dimen>
+    <dimen name="basic_container_padding_minus_card_half_spacing">4.0dip</dimen>
+
     <dimen name="title_summary_item_padding_bottom">15.0dip</dimen>
     <dimen name="title_summary_item_margin_bottom">16.0dip</dimen>
 
