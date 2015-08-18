@@ -32,7 +32,7 @@ public class BaseActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setCustomTheme();
         setContentView(getContentViewLayoutId());
 
         mCardContainer = findViewById(R.id.card_container);
@@ -40,7 +40,6 @@ public class BaseActivity extends ActionBarActivity {
 
         mDisplay = new  MMoviesDisplay(this, mDrawerLayout);
         handleIntent(getIntent(), getDisplay());
-
 
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
 
@@ -50,6 +49,20 @@ public class BaseActivity extends ActionBarActivity {
             setupHeader();
         }
     }
+
+    protected void setCustomTheme() {
+        // set a theme based on user preference
+            switch (SettingsActivity.THEME) {
+                case R.style.Theme_MMovies_Light :
+                    setTheme(R.style.Theme_MMovies_Light);
+                case R.style.Theme_MMovies_Dark :
+                    setTheme(R.style.Theme_MMovies_Dark);
+                case R.style.Theme_MMovies__Green :
+                    setTheme(R.style.Theme_MMovies__Green);
+
+        }
+    }
+
 
     protected void handleIntent(Intent intent, Display display) {
     }

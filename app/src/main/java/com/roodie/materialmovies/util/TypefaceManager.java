@@ -17,6 +17,10 @@ public class TypefaceManager {
     private static final String ROBOTO_CONDENSED = "RobotoCondensed-Regular.ttf";
     private static final String ROBOTO_CONDENSED_BOLD = "RobotoCondensed-Bold.ttf";
     private static final String ROBOTO_CONDENSED_LIGHT = "RobotoCondensed-Light.ttf";
+    private static final String DIN_REGULAR = "DINPro-Regular.ttf";
+    private static final String DIN_MEDIUM = "DINPro-Medium.ttf";
+    private static final String DIN_LIGHT = "DINPro-Light.ttf";
+    private static final String DIN_ULTRA_LIGHT = "DINNextLTPro-UltraLight.ttf";
     private static final String ROBOTO_SLAB = "RobotoSlab-Regular.ttf";
 
     private static final String ROBOTO_LIGHT_NATIVE_FONT_FAMILY = "sans-serif-light";
@@ -53,6 +57,21 @@ public class TypefaceManager {
 
     public Typeface getRobotoCondensedLight() {
         return getTypeface(ROBOTO_CONDENSED_LIGHT);
+    }
+
+    public Typeface getDinLight() {
+        return getTypeface(DIN_LIGHT);
+    }
+
+    public Typeface getDinRegular() {
+        return getTypeface(DIN_REGULAR);
+    }
+    public Typeface getDinMedium() {
+        return getTypeface(DIN_MEDIUM);
+    }
+
+    public Typeface getDinUltraLight() {
+        return getTypeface(DIN_ULTRA_LIGHT);
     }
 
     public Typeface getRobotoSlab() {

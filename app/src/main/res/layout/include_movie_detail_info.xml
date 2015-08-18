@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/spacing_micro"
         android:layout_gravity="center_vertical"
+        android:textColor="?mmTextColorPrimary"
         app:font="roboto_condensed_bold"
         android:text="Sample1"
          />
@@ -23,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:textColor="?mmTextColorPrimary"
         android:drawablePadding="@dimen/spacing_micro"
         app:font="roboto_condensed"
         android:text="Sample2"

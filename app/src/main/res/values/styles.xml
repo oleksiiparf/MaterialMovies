@@ -5,6 +5,10 @@
         <item name="android:maxHeight">36dip</item>
     </style>
 
+    <style name="Widget.MMovies.TextView" parent="android:Widget">
+        <item name="android:textColor">?mmTextColorPrimary</item>
+    </style>
+
     <style name="Widget.MMovies.Movie.Grid.Title" parent="android:Widget">
         <item name="font">lobster</item>
         <item name="android:textSize">@dimen/movie_grid_item_font_size</item>
@@ -77,13 +81,13 @@
 
     <style name="Widget.MMovies.Movie.Rating.Subtitle" parent="android:Widget">
         <item name="font">roboto_condensed_bold</item>
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textColor">?mmTextColorPrimary</item>
         <item name="android:textSize">@dimen/text_size_caption_sg</item>
     </style>
 
     <style name="Widget.MMovies.Movie.Rating.Title" parent="android:Widget">
         <item name="font">roboto_condensed_bold</item>
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textColor">?mmTextColorPrimary</item>
         <item name="android:textSize">38sp</item>
     </style>
 
@@ -91,23 +95,25 @@
     <style name="Widget.MMovies.Movie.List.Title" parent="android:Widget">
         <item name="font">roboto_condensed</item>
         <item name="android:textSize">16dp</item>
+        <item name="android:textColor">?mmTextColorPrimary</item>
         <item name="android:maxLines">1</item>
     </style>
 
     <style name="Widget.MMovies.Movie.List.Subtitle" parent="android:Widget">
         <item name="font">roboto_condensed</item>
         <item name="android:textSize">14dp</item>
-        <item name="android:textColor">?android:textColorTertiary</item>
+        <item name="android:textColor">?mmTextColorSecondary</item>
     </style>
 
     <style name="Widget.MMovies.Movie.Summary.Title" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textColor">?mmTextColorPrimary</item>
         <item name="android:maxLines">2</item>
     </style>
 
     <style name="Widget.MMovies.Movie.Summary.Subtitle" parent="android:Widget">
         <item name="font">roboto_condensed</item>
         <item name="android:textSize">18dp</item>
-        <item name="android:textColor">?android:textColorTertiary</item>
+        <item name="android:textColor">?mmTextColorPrimary</item>
     </style>
 
     <style name="Widget.MMovies.Movie.Summary.Trailer" parent="android:Widget">
@@ -148,6 +154,7 @@
 
     <style name="Widget.MMovies.Movie.Detail.Tagline" parent="android:Widget">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+        <item name="android:textColor">?mmTextColorPrimary</item>
         <item name="android:maxLines">4</item>
         <item name="android:ellipsize">end</item>
     </style>
@@ -161,8 +168,13 @@
     <style name="Widget.MMovies.Movie.Detail.Summary" parent="android:Widget">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:textColor">?mmTextColorPrimary</item>
+        <item name="android:background">?mmBackgroundColorSecondary</item>
         <item name="collapsed_maxLines">@integer/default_summary_maxlines</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Detail.Summary.Scroll" parent="Widget.MMovies.Movie.Detail.Summary">
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="Widget.MMovies.Person.Detail.Biography" parent="android:Widget">
@@ -232,6 +244,57 @@
 
     <style name="Widget.MMovies.Movie.FAB" parent="android:Widget">
         <item name="android:color">@color/color_primary_default</item>
+    </style>
+
+    <style name="CardView">
+        <item name="cardBackgroundColor">@color/cardview_light_background</item>
+        <item name="cardCornerRadius">@dimen/cardview_default_radius</item>
+        <item name="cardElevation">@dimen/cardview_default_elevation</item>
+        <item name="cardMaxElevation">@dimen/cardview_default_elevation</item>
+        <item name="cardUseCompatPadding">false</item>
+        <item name="cardPreventCornerOverlap">true</item>
+    </style>
+
+    <style name="CardView.Dark" parent="@style/CardView">
+        <item name="cardBackgroundColor">@color/cardview_dark_background</item>
+    </style>
+    <style name="CardView.Light" parent="@style/CardView">
+        <item name="cardBackgroundColor">@color/cardview_light_background</item>
+    </style>
+
+    <style name="Widget.MMovies.TextAppearance" parent="android:Widget">
+        <item name="android:textColor">?mmTextColorPrimary</item>
+        <item name="font">din_regular</item>
+    </style>
+
+    <style name="Widget.MMovies.TextAppearance.PrimaryText" parent="Widget.MMovies.TextAppearance">
+        <item name="android:textSize">16.0sp</item>
+        <item name="font">din_medium</item>
+    </style>
+    <style name="Widget.MMovies.TextAppearance.PrimaryText.Large"
+        parent="Widget.MMovies.TextAppearance.PrimaryText">
+        <item name="android:textSize">22.0sp</item>
+        <item name="font">din_light</item>
+    </style>
+    <style name="Widget.MMovies.TextAppearance.SecondaryText"
+        parent="Widget.MMovies.TextAppearance">
+        <item name="android:textSize">14.0sp</item>
+        <item name="android:textColor">?mmTextColorSecondary</item>
+    </style>
+    <style name="Widget.MMovies.TextAppearance.SecondaryText.Negative"
+        parent="Widget.MMovies.TextAppearance.SecondaryText">
+        <item name="android:textColor">@color/mm_red</item>
+    </style>
+
+    <style name="Widget.MMovies.TextAppearance.SecondaryText.Positive"
+        parent="Widget.MMovies.TextAppearance.SecondaryText">
+        <item name="android:textColor">@color/mm_green</item>
+    </style>
+
+    <style name="Widget.MMovies.TextAppearance.Button" parent="Widget.MMovies.TextAppearance">
+        <item name="android:textColor">@color/mm_white_1</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="font">din_medium</item>
     </style>
 
 

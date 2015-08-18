@@ -48,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private static final String KEY_ABOUT = "about";
 
-    public static @StyleRes int THEME = R.style.Theme_MMovies;
+    public static @StyleRes int THEME = R.style.Theme_MMovies_Light;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

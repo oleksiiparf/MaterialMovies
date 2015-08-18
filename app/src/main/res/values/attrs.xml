@@ -32,6 +32,10 @@
         <enum name="roboto_condensed_light" value="4" />
         <enum name="roboto_condensed_bold" value="5" />
         <enum name="roboto_slab" value="6" />
+        <enum name="din_regular" value="7" />
+        <enum name="din_medium" value="8" />
+        <enum name="din_light" value="9" />
+        <enum name="din_ultra_light" value="10" />
     </attr>
 
     <attr name="title" format="string|reference" />
@@ -64,6 +68,33 @@
 
     <declare-styleable name="MMoviesTheme">
         <attr name="grey_shade" format="color|reference" />
+        <attr name="mmBackgroundColorPrimary" format="color|reference" />
+        <attr name="mmBackgroundColorSecondary" format="color|reference" />
+        <attr name="mmButtonTextColorBorderlessGreen" format="color|reference" />
+        <attr name="mmButtonTextColorBorderlessRed" format="color|reference" />
+        <attr name="mmRevealBackgroundColor" format="color|reference" />
+
+        <attr name="mmTextColorPrimary" format="color|reference" />
+        <attr name="mmTextColorSecondary" format="color|reference" />
+        <attr name="mmTextColorPrimaryInverse" format="color|reference" />
+        <attr name="mmTextColorSecondaryInverse" format="color|reference" />
+        <attr name="mmIconTintColorPrimary" format="color|reference" />
+        <attr name="mmRadioButtonTextColor" format="color|reference" />
+        <attr name="mmStaleColor" format="color|reference" />
+        <attr name="mmPinDotColor" format="color|reference" />
+        <attr name="mmOnboardingQuestionTextColor" format="color|reference" />
+
+        <attr name="mmRoundedBackgroundMiddle" format="reference" />
+        <attr name="mmRoundedBackgroundBottom" format="reference" />
+        <attr name="mmRoundedBackgroundTop" format="reference" />
+
+        <attr name="mmNavDrawerImage" format="reference" />
+        <attr name="mmRadioButtonDrawable" format="reference" />
+        <attr name="mmWavePatternDrawable" format="reference" />
+        <attr name="mmOnboardingNavBarBackground" format="reference" />
+
+
+
     </declare-styleable>
 
     <declare-styleable name="ExpandableTextView">

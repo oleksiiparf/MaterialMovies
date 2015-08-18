@@ -9,7 +9,7 @@
         android:id="@+id/animation_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/color_primary_default"
+        android:background="?colorPrimary"
         android:visibility="invisible"/>
 
 

@@ -15,7 +15,7 @@
         <io.codetail.widget.RevealFrameLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@android:color/transparent">
+            android:background="?mmRevealBackgroundColor">
 
             <include layout="@layout/include_movie_detail_minor"/>
 

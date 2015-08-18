@@ -16,21 +16,79 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="Theme.MMovies" parent="Base.Theme.MMovies">
+    <style name="Theme.MMovies.Light" parent="Base.Theme.MMovies">
         <item name="android:textColorHighlight">@color/primary_color_translucent</item>
-        <item name="grey_shade">@color/light_gray</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="colorPrimary">@color/color_primary_default</item>
-        <item name="colorPrimaryDark">@color/color_primary_dark_default</item>
-        <item name="colorAccent">@color/accent_color</item>
+        <item name="android:windowBackground">?mmBackgroundColorPrimary</item>
+        <item name="mmTextColorPrimary">@color/mm_black_1</item>
+        <item name="mmTextColorSecondary">@color/mm_gray_1</item>
+        <item name="mmTextColorPrimaryInverse">@color/mm_white_1</item>
+        <item name="mmTextColorSecondaryInverse">@color/mm_gray_2</item>
+        <item name="mmBackgroundColorPrimary">@color/mm_white_2</item>
+        <item name="mmBackgroundColorSecondary">@color/mm_white_1</item>
+        <item name="mmNavDrawerImage">@drawable/nav_drawer_illustration_day</item>
+        <item name="mmRoundedBackgroundTop">@drawable/rounded_background_top_day</item>
+        <item name="mmRoundedBackgroundMiddle">@drawable/rounded_background_middle_day</item>
+        <item name="mmRoundedBackgroundBottom">@drawable/rounded_background_bottom_day</item>
+        <item name="mmIconTintColorPrimary">@color/mm_gray_1</item>
+        <item name="mmButtonTextColorBorderlessGreen">@color/button_selector_borderless_day_green</item>
+        <item name="mmButtonTextColorBorderlessRed">@color/button_selector_borderless_day_red</item>
+        <item name="mmRadioButtonDrawable">@drawable/radio_button_background_day</item>
+        <item name="mmRadioButtonTextColor">@color/radio_button_selector_day</item>
+        <item name="mmWavePatternDrawable">@drawable/wave_background_day</item>
+        <item name="mmStaleColor">@color/mm_gray_1</item>
+        <item name="mmPinDotColor">@color/mm_gray_1</item>
+        <item name="mmOnboardingNavBarBackground">@drawable/onboarding_light_selectable_item_background</item>
+        <item name="mmRevealBackgroundColor">@color/mm_white_1</item>
+        <item name="colorPrimary">@color/mm_green</item>
+        <item name="colorPrimaryDark">@color/mm_dark_green</item>
+        <item name="colorAccent">@color/mm_green</item>
+    </style>
 
+    <style name="Theme.MMovies.Dark" parent="Base.Theme.MMovies">
+        <item name="android:textColorHighlight">@color/primary_color_translucent</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">?mmBackgroundColorPrimary</item>
+        <item name="android:listDivider">@drawable/list_divider_night</item>
+        <item name="mmTextColorPrimary">@color/mm_white_1</item>
+        <item name="mmTextColorSecondary">@color/mm_gray_2</item>
+        <item name="mmTextColorPrimaryInverse">@color/mm_black_1</item>
+        <item name="mmTextColorSecondaryInverse">@color/mm_gray_1</item>
+        <item name="mmBackgroundColorPrimary">@color/mm_black_1</item>
+        <item name="mmBackgroundColorSecondary">@color/mm_black_2</item>
+        <item name="mmNavDrawerImage">@drawable/nav_drawer_illustration_night</item>
+        <item name="mmRoundedBackgroundTop">@drawable/rounded_background_top_night</item>
+        <item name="mmRoundedBackgroundMiddle">@drawable/rounded_background_middle_night</item>
+        <item name="mmRoundedBackgroundBottom">@drawable/rounded_background_bottom_night</item>
+        <item name="mmIconTintColorPrimary">@color/mm_gray_2</item>
+        <item name="mmButtonTextColorBorderlessGreen">@color/button_selector_borderless_night_green</item>
+        <item name="mmButtonTextColorBorderlessRed">@color/button_selector_borderless_night_red</item>
+        <item name="mmRadioButtonDrawable">@drawable/radio_button_background_night</item>
+        <item name="mmRadioButtonTextColor">@color/radio_button_selector_night</item>
+        <item name="mmWavePatternDrawable">@drawable/wave_background_night</item>
+        <item name="mmStaleColor">@color/mm_gray_2</item>
+        <item name="mmPinDotColor">@color/mm_white_1</item>
+        <item name="mmOnboardingQuestionTextColor">@color/onboarding_question_selector_night</item>
+        <item name="mmOnboardingNavBarBackground">@drawable/black_selectable_item_background</item>
+        <item name="mmRevealBackgroundColor">@color/mm_black_1</item>
+        <item name="colorPrimary">@color/mm_green</item>
+        <item name="colorPrimaryDark">@color/mm_dark_green</item>
+        <item name="colorAccent">@color/mm_green</item>
+    </style>
+
+    <style name="Theme.MMovies..Green" parent="Theme.MMovies.Dark">
+        <item name="android:windowBackground">@color/mm_green</item>
+        <item name="colorControlNormal">@color/white_hint_color</item>
+        <item name="colorControlActivated">@color/mm_white_1</item>
+        <item name="mmWavePatternDrawable">@drawable/wave_background_green</item>
+        <item name="colorControlHighlight">@color/mm_white_1</item>
     </style>
 
     <style name="Theme.MMovies.Images" parent="Base.Theme.MMovies.Dark">
         <item name="android:windowBackground">@android:color/black</item>
     </style>
 
-    <style name="Theme.Philm.Framed" parent="Theme.MMovies">
+    <style name="Theme.Philm.Framed" parent="Theme.MMovies.Light">
         <item name="windowActionBarOverlay">false</item>
     </style>
 

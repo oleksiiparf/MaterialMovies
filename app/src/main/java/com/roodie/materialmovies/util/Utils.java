@@ -64,11 +64,14 @@ public class Utils {
     public static synchronized void updateTheme(String themeIndex) {
         int theme = Integer.valueOf(themeIndex);
         switch (theme) {
-            case 1:
-                SettingsActivity.THEME = R.style.Theme_MMovies;
+            case 0:
+                SettingsActivity.THEME = R.style.Theme_MMovies_Light;
                 break;
-            default:
-                SettingsActivity.THEME = R.style.Theme_MMovies;
+            case 1:
+                SettingsActivity.THEME = R.style.Theme_MMovies_Dark;
+                break;
+            case 2:
+                SettingsActivity.THEME = R.style.Theme_MMovies__Green;
                 break;
         }
     }

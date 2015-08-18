@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/nav_drawer_account_header"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:clickable="true">
+
+    <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+        android:id="@+id/profile_image"
+        android:background="@color/mm_green"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="?mmNavDrawerImage"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true" />
+
+    <LinearLayout android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_major">
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:textAppearance="@style/Widget.MMovies.TextAppearance.PrimaryText"
+            android:id="@+id/username_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User"/>
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:textAppearance="@style/Widget.MMovies.TextAppearance.PrimaryText"
+            android:id="@+id/email_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="email@gmail.com"/>
+    </LinearLayout>
+
+
+</FrameLayout>

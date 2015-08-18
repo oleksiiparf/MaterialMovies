@@ -16,23 +16,23 @@
           android:layout_gravity="center_vertical" />
 
     <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:layout_marginLeft="56dp"
-          android:layout_gravity="center_vertical">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="56dp"
+        android:layout_gravity="center_vertical">
 
         <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-              android:id="@+id/title"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              style="@style/Widget.MMovies.Movie.List.Title" />
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MMovies.Movie.List.Title" />
 
         <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-              android:id="@+id/subtitle_1"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              style="@style/Widget.MMovies.Movie.List.Subtitle" />
+            android:id="@+id/subtitle_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MMovies.Movie.List.Subtitle" />
 
     </LinearLayout>
 

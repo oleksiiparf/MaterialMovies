@@ -53,7 +53,7 @@
               android:id="@+id/subtitle_2"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              style="@style/Widget.MMovies.Movie.List.Subtitle" />
+            style="@style/Widget.MMovies.Movie.List.Subtitle" />
 
     </LinearLayout>
 

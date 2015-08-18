@@ -23,5 +23,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="56dp"
         android:maxLines="2" />
+    <!-- style="@style/Widget.MMovies.Movie.List.Title"
+     style="Widget.MMovies.TextAppearance.PrimaryText"-->
 
 </FrameLayout>

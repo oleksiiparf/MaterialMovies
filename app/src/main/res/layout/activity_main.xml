@@ -22,13 +22,13 @@
         android:id="@+id/navigation_view"
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
-        android:background="#ffffff"
-        mmovies:itemIconTint="#8b8b8b"
-        mmovies:itemTextColor="#666666"
+        android:background="?mmWavePatternDrawable"
+        mmovies:itemIconTint="?mmTextColorSecondary"
+        mmovies:itemTextColor="?mmTextColorPrimary"
         android:layout_gravity="start"
-        mmovies:headerLayout="@layout/include_drawer_profile"
-        mmovies:menu="@menu/drawer_view"/>
-
+        mmovies:headerLayout="@layout/include_account_header"
+        mmovies:menu="@menu/drawer_view"
+        />
 
 
 </android.support.v4.widget.DrawerLayout>
