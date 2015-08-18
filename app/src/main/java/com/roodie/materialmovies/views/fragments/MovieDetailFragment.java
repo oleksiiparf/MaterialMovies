@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -87,7 +86,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     private MMoviesImageView mPosterImageView;
     private LinearLayout mTrailerButton;
     private RatingBarLayout mRatingBarLayout;
-
     private Context mContext;
 
     private RelatedMoviesAdapter mRelatedMoviesAdapter;
@@ -181,7 +179,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
         mCollapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.backdrop_toolbar);
 
-        mAnimationLayout = (FrameLayout) view.findViewById(R.id.transaction_container);
         mSummaryContainer = (RelativeLayout) view.findViewById(R.id.container_layout);
         mFanartImageView = (MMoviesImageView) view.findViewById(R.id.imageview_fanart);
         mTitleTextView = (TextView) view.findViewById(R.id.textview_title);
@@ -199,8 +196,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                 @Override
                 public void onClick(View v) {
                     showMovieImages(mMovie);
-
-
                 }
             });
         } else {
@@ -213,11 +208,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             });
         }
 
-
         mRatingBarLayout = (RatingBarLayout)view.findViewById(R.id.rating_bar);
-        //mRatingBar = (ArcProgress) view.findViewById(R.id.rating_bar);
-        //mVotesTextView = (TextView) view.findViewById(R.id.textview_votes);
-
 
         mTrailerButton = (LinearLayout) view.findViewById(R.id.trailer_container);
         if (mTrailerButton != null) {
@@ -571,7 +562,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             mCollapsingToolbar.setTitle(mMovie.getTitle());
         }
 
-        if (hasTitleContainer() && mTitleTextView != null) {
+        if (hasLeftContainer()) {
             mTitleTextView.setText(mMovie.getTitle() + " (" + mMovie.getYear() + ")");
             mSummary.setText(mMovie.getOverview());
             mPosterImageView.loadPoster(mMovie);

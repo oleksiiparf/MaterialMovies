@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+
+    <io.codetail.widget.RevealFrameLayout
+        android:id="@+id/animation_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_primary_default"
+        android:visibility="invisible"/>
+
+
+    <include layout="@layout/include_image_star"/>
+
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+        android:id="@+id/confirmation_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Liked!!"
+        style="@style/Widget.MMovies.Movie.AnimationLayout.Title"
+        />
+
+
+</FrameLayout>

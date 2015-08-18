@@ -159,10 +159,10 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
 
     @Override
     protected void configureEnterAnimation() {
-        final int[] startingLocation = getStartingLocation();
+       // final int[] startingLocation = getStartingLocation();
 
-        setEndAnimationX(startingLocation[0]);
-        setEndAnimationY(startingLocation[1]);
+        //setEndAnimationX(startingLocation[0]);
+        //setEndAnimationY(startingLocation[1]);
         super.configureEnterAnimation();
     }
 

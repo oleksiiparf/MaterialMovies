@@ -66,6 +66,15 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="Widget.MMovies.Movie.AnimationLayout.Title" parent="android:Widget">
+        <item name="font">lobster</item>
+        <item name="android:layout_marginTop">60dp</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_gravity">center_horizontal|top</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
     <style name="Widget.MMovies.Movie.Rating.Subtitle" parent="android:Widget">
         <item name="font">roboto_condensed_bold</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
@@ -220,5 +229,10 @@
     <style name="Widget.MMovies.Toolbar.Transparent" >
         <item name="android:background">@null</item>
     </style>
+
+    <style name="Widget.MMovies.Movie.FAB" parent="android:Widget">
+        <item name="android:color">@color/color_primary_default</item>
+    </style>
+
 
 </resources>

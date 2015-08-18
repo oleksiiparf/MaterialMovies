@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.roodie.materialmovies.R;
 
@@ -25,7 +25,7 @@ public abstract class BaseDetailFragment extends BaseFragment {
 
 
     protected RecyclerView mRecyclerView;
-    private RelativeLayout mTitleContainer;
+    private LinearLayout mLeftContainer;
 
 
 
@@ -54,7 +54,7 @@ public abstract class BaseDetailFragment extends BaseFragment {
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        mTitleContainer = (RelativeLayout) view.findViewById(R.id.container_layout);
+        mLeftContainer = (LinearLayout) view.findViewById(R.id.left_container);
     }
 
 
@@ -65,8 +65,8 @@ public abstract class BaseDetailFragment extends BaseFragment {
 
 
 
-    public boolean hasTitleContainer() {
-        return mTitleContainer != null;
+    public boolean hasLeftContainer() {
+        return mLeftContainer != null;
     }
 
     protected abstract void setUpVisibility();

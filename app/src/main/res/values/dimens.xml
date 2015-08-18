@@ -35,6 +35,8 @@
     <dimen name="spacing_massive">24dp</dimen>
     <dimen name="spacing_huge">56dp</dimen>
 
+    <dimen name="fab_size">55dp</dimen>
+
     <dimen name="trailer_text_size">16dp</dimen>
 
     <dimen name="drawer_login_height">180dp</dimen>
