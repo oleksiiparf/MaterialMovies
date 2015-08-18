@@ -7,8 +7,8 @@
 
     <io.codetail.widget.RevealFrameLayout
         android:id="@+id/animation_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:background="@color/color_primary_default"
         android:visibility="invisible"/>
 

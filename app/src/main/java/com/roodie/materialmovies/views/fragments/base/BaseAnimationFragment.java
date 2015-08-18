@@ -99,21 +99,25 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
         endAnimationX = mAnimationContainer.getRight() / 2;
         endAnimationY = (int) (mAnimationContainer.getBottom() * 0.8f);
 
-
         System.out.println("Positions: " + startAnimationX +  ", " + startAnimationY + ", " + endAnimationX + ", " + endAnimationY);
 
-        ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(mFloatingButton, endAnimationX,
-                endAnimationY, 90, Side.RIGHT)
-                .setDuration(500);
+        if (endAnimationX == 0 && endAnimationY == 0) {
+            endAnimationX = (int) ViewUtils.centerX(mFloatingButton);
+            endAnimationY = (int) ViewUtils.centerY(mFloatingButton);
+            startCircleAnimation();
+        } else {
+            ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(mFloatingButton, endAnimationX,
+                    endAnimationY, 90, Side.RIGHT)
+                    .setDuration(500);
 
-        arcAnimator.addListener(new SimpleListener() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mFloatingButton.setVisibility(View.INVISIBLE);
-                startCircleAnimation();
-            }
-        });
-        arcAnimator.start();
+            arcAnimator.addListener(new SimpleListener() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    startCircleAnimation();
+                }
+            });
+            arcAnimator.start();
+        }
 
     }
 
@@ -134,23 +138,29 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
     }
 
     private void startCircleAnimation() {
+        mFloatingButton.setVisibility(View.INVISIBLE);
         mDataContainer.setVisibility(View.GONE);
         mAnimationContainer.setVisibility(View.VISIBLE);
         mAnimationLayout.setVisibility(View.VISIBLE);
 
-        float finalRadius = Math.max(mAnimationLayout.getWidth(), mAnimationLayout.getHeight()) * 1.5f;
-
-        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(mAnimationLayout, endAnimationX, endAnimationY, mFloatingButton.getWidth() / 2f,
-                finalRadius);
-        animator.setDuration(500);
-        animator.setInterpolator(ACCELERATE);
-        animator.addListener(new SimpleListener() {
+        mAnimationLayout.post(new Runnable() {
             @Override
-            public void onAnimationEnd() {
-                animateConfirmationView();
+            public void run() {
+                float finalRadius = Math.max(mAnimationLayout.getWidth(), mAnimationLayout.getHeight()) * 1.5f;
+
+                SupportAnimator animator = ViewAnimationUtils.createCircularReveal(mAnimationLayout, endAnimationX, endAnimationY, mFloatingButton.getWidth() / 2f,
+                        finalRadius);
+                animator.setDuration(500);
+                animator.setInterpolator(ACCELERATE);
+                animator.addListener(new SimpleListener() {
+                    @Override
+                    public void onAnimationEnd() {
+                        animateConfirmationView();
+                    }
+                });
+                animator.start();
             }
         });
-        animator.start();
     }
 
     private void animateConfirmationView() {
@@ -162,15 +172,15 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
 
             Animation rotate = AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
                     R.anim.appear_rotate);
-            rotate.setAnimationListener(new RotateAnimationListener() {
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    super.onAnimationEnd(animation);
-                    mAnimationStarImageView.setVisibility(View.GONE);
-                    mAnimationTextView.setVisibility(View.GONE);
-                    disappearBackgroundAnimation();
-                }
-            });
+        rotate.setAnimationListener(new RotateAnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                super.onAnimationEnd(animation);
+                mAnimationStarImageView.setVisibility(View.GONE);
+                mAnimationTextView.setVisibility(View.GONE);
+                disappearBackgroundAnimation();
+            }
+        });
             mAnimationStarImageView.startAnimation(rotate);
     }
 
@@ -195,10 +205,12 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
 
     private void returnFloatingButtonAnimation(){
         mFloatingButton.setVisibility(View.VISIBLE);
-        ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(mFloatingButton, startAnimationX,
-                startAnimationY, 90, Side.RIGHT)
-                .setDuration(500);
-        arcAnimator.start();
+        if (endAnimationX != startAnimationX && endAnimationY != startAnimationY) {
+            ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(mFloatingButton, startAnimationX,
+                    startAnimationY, 90, Side.RIGHT)
+                    .setDuration(500);
+            arcAnimator.start();
+        }
     }
 
     private void raiseUpAnimation(){
