@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+        android:id="@+id/year_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MMovies.Movie.List.Subtitle"
+        android:gravity="left"
+        android:layout_gravity="left" />
+
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/rating_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MMovies.Movie.List.Subtitle"
+            android:gravity="left"
+            android:layout_gravity="right"/>
+
+
+</LinearLayout>

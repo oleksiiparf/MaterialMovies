@@ -63,6 +63,9 @@
     <dimen name="show_grid_item_icon_size">24dp</dimen>
     <dimen name="show_grid_item_icon_padding">12dp</dimen>
 
+    <dimen name="show_card_item_icon_padding">24dp</dimen>
+    <dimen name="show_card_item_icon_padding_micro">8dp</dimen>
+
     <dimen name="show_grid_item_title_size">16dp</dimen>
     <dimen name="show_grid_item_subtitle_size">12dp</dimen>
 

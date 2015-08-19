@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:visibility="invisible">
+
+    <include
+        android:id="@+id/items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/item_show_card_items">
+
+    </include>
+
+    <include
+        android:id="@+id/short_information"
+        android:layout_below="@id/items"
+        android:layout_width="match_patent"
+        android:layout_height="wrap_content"
+        layout="@layout/item_show_card_summary"
+        >
+
+    </include>
+
+    <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+        android:id="@+id/show_cover_image"
+        android:layout_width="fill_parent"
+        android:layout_height="180.0dip"
+        android:layout_marginLeft="0.0dip"
+        android:scaleType="centerCrop"
+        android:layout_below="@id/short_information"/>
+
+    <com.roodie.materialmovies.views.custom_views.ExpandableTextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/summary_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/spacing_minor"
+        android:paddingLeft="@dimen/spacing_major"
+        android:paddingRight="@dimen/spacing_major"
+        android:paddingBottom="@dimen/spacing_minor"
+        style="@style/Widget.MMovies.Movie.Detail.Summary.Scroll"
+        android:layout_below="@id/show_cover_image"/>
+
+
+</RelativeLayout>
