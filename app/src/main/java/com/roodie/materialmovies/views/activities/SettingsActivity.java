@@ -48,10 +48,32 @@ public class SettingsActivity extends AppCompatActivity {
 
     private static final String KEY_ABOUT = "about";
 
-    public static @StyleRes int THEME = R.style.Theme_MMovies_Light;
+    public static @StyleRes int THEME;
+
+    public static void setTheme(Context context) {
+        int theme = MMoviesPreferences.getApplicationTheme(context);
+        switch (theme) {
+            case 0 :
+                THEME = R.style.Theme_MMovies_Light;
+                break;
+            case 1 :
+                THEME = R.style.Theme_MMovies_Dark;
+                break;
+            case 2 :
+                THEME = R.style.Theme_MMovies__Green;
+                break;
+            }
+        }
+
+
+    public static boolean hasTheme() {
+        return THEME != 0;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("On create settings");
         setTheme(SettingsActivity.THEME);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_singlepane);
@@ -108,7 +130,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (KEY_THEME.equals(preference.getKey())) {
-                    Utils.updateTheme((String) newValue);
+                    Utils.updateTheme(activity.getApplicationContext(), (String) newValue);
 
                     TaskStackBuilder.create(activity)
                             .addNextIntent(new Intent(activity, MainActivity.class))

@@ -61,17 +61,23 @@ public class Utils {
     /**
      * Sets the global app theme variable. Applied by all activities once they are created.
      */
-    public static synchronized void updateTheme(String themeIndex) {
+    public static synchronized void updateTheme(Context context, String themeIndex) {
         int theme = Integer.valueOf(themeIndex);
         switch (theme) {
-            case 0:
-                SettingsActivity.THEME = R.style.Theme_MMovies_Light;
-                break;
-            case 1:
+            case 1: {
                 SettingsActivity.THEME = R.style.Theme_MMovies_Dark;
+                MMoviesPreferences.setApplicationTheme(context, 1);
+            }
                 break;
-            case 2:
+            case 2: {
                 SettingsActivity.THEME = R.style.Theme_MMovies__Green;
+                MMoviesPreferences.setApplicationTheme(context, 2);
+            }
+                break;
+            default : {
+                SettingsActivity.THEME = R.style.Theme_MMovies_Light;
+                MMoviesPreferences.setApplicationTheme(context, 0);
+            }
                 break;
         }
     }

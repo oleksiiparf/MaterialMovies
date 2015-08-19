@@ -76,7 +76,7 @@
         <item name="colorAccent">@color/mm_green</item>
     </style>
 
-    <style name="Theme.MMovies..Green" parent="Theme.MMovies.Dark">
+    <style name="Theme.MMovies.Green" parent="Theme.MMovies.Dark">
         <item name="android:windowBackground">@color/mm_green</item>
         <item name="colorControlNormal">@color/white_hint_color</item>
         <item name="colorControlActivated">@color/mm_white_1</item>
