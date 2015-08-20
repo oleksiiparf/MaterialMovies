@@ -37,6 +37,8 @@ public  class ApplicationState implements BaseState, MoviesState {
     private ShowPaginatedResult mPopularShows;
     private ShowPaginatedResult mOnTheAirShows;
 
+    private SearchResult mSearchResult;
+
     private TmdbConfiguration mConfiguration;
 
     private DrawerMenuItem mSelectedSideMenuItem;
@@ -187,7 +189,7 @@ public  class ApplicationState implements BaseState, MoviesState {
     @Override
     public void setPopularShows(ShowPaginatedResult popular) {
         this.mPopularShows = popular;
-        mEventBus.post(new PopularShowsChangeEvent());
+        mEventBus.post(new PopularShowsChangedEvent());
     }
 
     @Override
@@ -198,7 +200,18 @@ public  class ApplicationState implements BaseState, MoviesState {
     @Override
     public void setOnTheAirShows(ShowPaginatedResult onTheAir) {
         this.mOnTheAirShows = onTheAir;
-        mEventBus.post(new OnTheAirShowsChangeEvent());
+        mEventBus.post(new OnTheAirShowsChangedEvent());
+    }
+
+    @Override
+    public SearchResult getSearchResult() {
+        return mSearchResult;
+    }
+
+    @Override
+    public void setSearchResult(SearchResult result) {
+        mSearchResult = result;
+        mEventBus.post(new SearchResultChangedEvent());
     }
 }
 

@@ -1,5 +1,6 @@
 package com.roodie.model.state;
 
+import com.google.common.base.Preconditions;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.ShowWrapper;
@@ -48,6 +49,10 @@ public interface MoviesState extends BaseState {
 
     public void setOnTheAirShows(ShowPaginatedResult onTheAir);
 
+    public void setSearchResult(SearchResult result);
+
+    public SearchResult getSearchResult();
+
     public TmdbConfiguration getTmdbConfiguration();
 
     public void setTmdbConfiguration(TmdbConfiguration configuration);
@@ -64,9 +69,11 @@ public interface MoviesState extends BaseState {
 
     public static class UpcomingMoviesChangedEvent {}
 
-    public static class PopularShowsChangeEvent {}
+    public static class PopularShowsChangedEvent {}
 
-    public static class OnTheAirShowsChangeEvent {}
+    public static class OnTheAirShowsChangedEvent {}
+
+    public static class SearchResultChangedEvent {}
 
     public static class TmdbConfigurationChangedEvent {}
 
@@ -113,15 +120,11 @@ public interface MoviesState extends BaseState {
     }
 
 
-
-
-
     public static class PersonChangedEvent extends BaseArgumentEvent<PersonWrapper> {
         public PersonChangedEvent(int callingId, PersonWrapper item) {
             super(callingId, item);
         }
     }
-
 
 
     public class MoviePaginatedResult extends PaginatedResult<MovieWrapper> {
@@ -133,6 +136,19 @@ public interface MoviesState extends BaseState {
     public class ShowPaginatedResult extends PaginatedResult<ShowWrapper> {
 
     }
+
+    public class SearchResult {
+        public final String query;
+        public MoviePaginatedResult movies;
+        public PersonPaginatedResult people;
+        public ShowPaginatedResult shows;
+
+        public SearchResult(String query) {
+            this.query = Preconditions.checkNotNull(query, "query cannot be null");
+        }
+    }
+
+
 
 
 }
