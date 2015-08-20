@@ -113,4 +113,6 @@
 
     <dimen name="fab_margin">16dp</dimen>
 
+    <dimen name="toolbar_elevation">4.0dip</dimen>
+
 </resources>

@@ -27,6 +27,10 @@ public interface UiView {
         PERSON_CREDITS_CREW,
         POPULAR_SHOWS,
         ON_THE_AIR_SHOWS,
+        SEARCH,
+        SEARCH_MOVIES,
+        SEARCH_SHOWS,
+        SEARCH_PEOPLE,
         NONE;
 
         public boolean showUpNavigation() {

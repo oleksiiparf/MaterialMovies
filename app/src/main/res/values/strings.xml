@@ -69,6 +69,9 @@
     <string name="share_checkout">Check out %s</string>
 
     <!-- Search -->
+    <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
+
     <string name="web_search">Web search</string>
 
     <string name="empty_network_error">%1$s could not be retrieved due to an network error. Check your internet connection and try again.</string>
@@ -84,6 +87,11 @@
 
     <string name="action_mark_liked">Mark as liked</string>
     <string name="action_mark_unliked">Mark as unliked</string>
+
+    <string name="search_hint">Search Material Movies</string>
+    <string name="search_hint_movies">Search movies</string>
+    <string name="search_hint_shows">Search tv shows</string>
+
 
 
     <string name="category_movies">Movies</string>

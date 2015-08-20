@@ -45,18 +45,18 @@ public class TmdbConfiguration {
                 && imagesProfileSizes != null;
     }
 
-    public void setFromTmdb(Configuration configuration) {
+    public void set(Configuration configuration) {
         Preconditions.checkNotNull(configuration, "configuration cannot be null");
 
         lastFetchTime = System.currentTimeMillis();
         imagesBaseUrl = configuration.images.base_url;
-        imagesBackdropSizes = convertTmdbImageSizes(configuration.images.backdrop_sizes);
-        imagesPosterSizes = convertTmdbImageSizes(configuration.images.poster_sizes);
-        imagesProfileSizes = convertTmdbImageSizes(configuration.images.profile_sizes);
+        imagesBackdropSizes = convertImageSizes(configuration.images.backdrop_sizes);
+        imagesPosterSizes = convertImageSizes(configuration.images.poster_sizes);
+        imagesProfileSizes = convertImageSizes(configuration.images.profile_sizes);
     }
 
 
-    private static int[] convertTmdbImageSizes(List<String> stringSizes) {
+    private static int[] convertImageSizes(List<String> stringSizes) {
         int[] intSizes = new int[stringSizes.size() - 1];
         for (int i = 0; i < intSizes.length; i++) {
             String size = stringSizes.get(i);
