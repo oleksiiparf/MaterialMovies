@@ -13,6 +13,7 @@ import com.roodie.materialmovies.mvp.presenters.MovieGridPresenter;
 import com.roodie.materialmovies.mvp.presenters.MovieImagesPresenter;
 import com.roodie.materialmovies.mvp.presenters.MovieTabPresenter;
 import com.roodie.materialmovies.mvp.presenters.PersonPresenter;
+import com.roodie.materialmovies.mvp.presenters.SearchPresenter;
 import com.roodie.materialmovies.mvp.presenters.ShowGridPresenter;
 import com.roodie.materialmovies.mvp.presenters.ShowTabPresenter;
 import com.roodie.model.util.Injector;
@@ -49,6 +50,9 @@ public class MMoviesApplication extends Application implements Injector {
 
     @Inject
     ShowTabPresenter mShowTabsPresenter;
+
+    @Inject
+    SearchPresenter mSearchPresenter;
 
     private ObjectGraph mObjectGraph;
 
@@ -101,5 +105,9 @@ public class MMoviesApplication extends Application implements Injector {
 
     public ShowGridPresenter getShowGridPresenter() {
         return mShowGridPresenter;
+    }
+
+    public SearchPresenter getSearchPresenter() {
+        return mSearchPresenter;
     }
 }
