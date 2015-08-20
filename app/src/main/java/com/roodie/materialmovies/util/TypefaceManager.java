@@ -17,10 +17,10 @@ public class TypefaceManager {
     private static final String ROBOTO_CONDENSED = "RobotoCondensed-Regular.ttf";
     private static final String ROBOTO_CONDENSED_BOLD = "RobotoCondensed-Bold.ttf";
     private static final String ROBOTO_CONDENSED_LIGHT = "RobotoCondensed-Light.ttf";
-    private static final String DIN_REGULAR = "DINPro-Regular.ttf";
-    private static final String DIN_MEDIUM = "DINPro-Medium.ttf";
-    private static final String DIN_LIGHT = "DINPro-Light.ttf";
-    private static final String DIN_ULTRA_LIGHT = "DINNextLTPro-UltraLight.ttf";
+    private static final String DIN_REGULAR = "DINPro-Regular.otf";
+    private static final String DIN_MEDIUM = "DINPro-Medium.otf";
+    private static final String DIN_LIGHT = "DINPro-Light.otf";
+    private static final String DIN_ULTRA_LIGHT = "DINNextLTPro-UltraLight.otf";
     private static final String ROBOTO_SLAB = "RobotoSlab-Regular.ttf";
 
     private static final String ROBOTO_LIGHT_NATIVE_FONT_FAMILY = "sans-serif-light";

@@ -17,7 +17,7 @@
         android:src="@drawable/abc_ic_ab_back_mtrl_am_alpha"
         android:tint="@color/mm_white_1" />
 
-    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+    <com.roodie.materialmovies.views.custom_views.MMoviesEditText
         android:id="@+id/search_edt"
         android:layout_width="0.0dip"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:lines="1"
         android:maxLength="14"
         android:textColor="@color/mm_white_1"
-        android:theme="@style/AppTheme.Green" />
+        android:theme="@style/Theme.MMovies.Green" />
 
     <ImageButton
         android:id="@+id/cancel_btn"

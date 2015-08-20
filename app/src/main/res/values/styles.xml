@@ -93,14 +93,14 @@
 
 
     <style name="Widget.MMovies.Movie.List.Title" parent="android:Widget">
-        <item name="font">roboto_condensed</item>
+        <item name="font">din_regular</item>
         <item name="android:textSize">16dp</item>
         <item name="android:textColor">?mmTextColorPrimary</item>
         <item name="android:maxLines">1</item>
     </style>
 
     <style name="Widget.MMovies.Movie.List.Subtitle" parent="android:Widget">
-        <item name="font">roboto_condensed</item>
+        <item name="font">din_light</item>
         <item name="android:textSize">14dp</item>
         <item name="android:textColor">?mmTextColorSecondary</item>
     </style>
