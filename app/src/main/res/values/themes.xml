@@ -40,9 +40,12 @@
         <item name="mmPinDotColor">@color/mm_gray_1</item>
         <item name="mmOnboardingNavBarBackground">@drawable/onboarding_light_selectable_item_background</item>
         <item name="mmRevealBackgroundColor">@color/mm_white_1</item>
+        <item name="mmShareIconItem">@drawable/ic_share_black_24dp</item>
+        <item name="mmStarIconItem">@drawable/ic_star_black_24dp</item>
         <item name="colorPrimary">@color/mm_green</item>
         <item name="colorPrimaryDark">@color/mm_dark_green</item>
         <item name="colorAccent">@color/mm_green</item>
+        <item name="mmDialogBackgroundColor">@color/material_dialog_light</item>
     </style>
 
     <style name="Theme.MMovies.Dark" parent="Base.Theme.MMovies">
@@ -70,10 +73,13 @@
         <item name="mmPinDotColor">@color/mm_white_1</item>
         <item name="mmOnboardingQuestionTextColor">@color/onboarding_question_selector_night</item>
         <item name="mmOnboardingNavBarBackground">@drawable/black_selectable_item_background</item>
+        <item name="mmShareIconItem">@drawable/ic_share_white_24dp</item>
+        <item name="mmStarIconItem">@drawable/ic_star_white_24dp</item>
         <item name="mmRevealBackgroundColor">@color/mm_black_1</item>
         <item name="colorPrimary">@color/mm_green</item>
         <item name="colorPrimaryDark">@color/mm_dark_green</item>
         <item name="colorAccent">@color/mm_green</item>
+        <item name="mmDialogBackgroundColor">@color/material_dialog_dark</item>
     </style>
 
     <style name="Theme.MMovies.Green" parent="Theme.MMovies.Dark">
@@ -82,6 +88,8 @@
         <item name="colorControlActivated">@color/mm_white_1</item>
         <item name="mmWavePatternDrawable">@drawable/wave_background_green</item>
         <item name="colorControlHighlight">@color/mm_white_1</item>
+        <item name="mmShareIconItem">@drawable/ic_share_grey_24dp</item>
+        <item name="mmStarIconItem">@drawable/ic_star_grey_24dp</item>
     </style>
 
     <style name="Theme.MMovies.Images" parent="Base.Theme.MMovies.Dark">

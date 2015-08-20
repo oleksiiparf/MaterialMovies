@@ -3,6 +3,7 @@ package com.roodie.model.entities;
 import android.text.TextUtils;
 
 import com.google.common.base.Preconditions;
+import com.roodie.model.util.IntUtils;
 import com.roodie.model.util.MoviesCollections;
 import com.uwetrottmann.tmdb.entities.Genre;
 import com.uwetrottmann.tmdb.entities.TvShowComplete;
@@ -262,6 +263,15 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     public void setLiked(boolean isLiked) {
         this.isLiked = isLiked;
+    }
+
+    public int getAverageRatingPercent() {
+        if ( ratingPercent > 0) {
+            return IntUtils.weightedAverage(
+                    ratingPercent, ratingVotes);
+        } else {
+            return ratingPercent;
+        }
     }
 
     private boolean needFullFetch() {

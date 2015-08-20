@@ -298,6 +298,13 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
+    public void shareTvShow(int showId, String showTitle) {
+        String message = mActivity.getString(R.string.share_checkout, showTitle) + " "
+                + TmdbUtils.buildTvShowUrl(showId);
+        startShareIntentChooser(message, R.string.share_tv_show);
+    }
+
+    @Override
     public void startShareIntentChooser(String message, @StringRes int titleResId) {
         ShareCompat.IntentBuilder ib = ShareCompat.IntentBuilder.from(mActivity);
         ib.setText(message);

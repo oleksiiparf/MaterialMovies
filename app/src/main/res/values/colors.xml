@@ -14,6 +14,12 @@
 
     <color name="side_menu_background">#FF202020</color>
 
+    #
+
+    <color name="material_dialog_dark">#363F44</color>
+    <color name="material_dialog_light">#EDEDED</color>
+
+
     <color name="dark_gray">#FF333333</color>
     <color name="light_gray">#FFDDDDDD</color>
     <color name="mid_gray">#FFAAAAAA</color>

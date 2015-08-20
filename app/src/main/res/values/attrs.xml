@@ -61,6 +61,11 @@
         <attr name="title" />
     </declare-styleable>
 
+    <declare-styleable name="TvShowDialogView">
+        <attr name="title" />
+        <attr name="android:background" />
+    </declare-styleable>
+
     <declare-styleable name="ForegroundLinearLayout">
         <attr name="android:foreground" />
         <attr name="android:foregroundGravity" />
@@ -76,6 +81,7 @@
 
         <attr name="mmTextColorPrimary" format="color|reference" />
         <attr name="mmTextColorSecondary" format="color|reference" />
+        <attr name="mmDialogBackgroundColor" format="color|reference" />
         <attr name="mmTextColorPrimaryInverse" format="color|reference" />
         <attr name="mmTextColorSecondaryInverse" format="color|reference" />
         <attr name="mmIconTintColorPrimary" format="color|reference" />
@@ -87,6 +93,10 @@
         <attr name="mmRoundedBackgroundMiddle" format="reference" />
         <attr name="mmRoundedBackgroundBottom" format="reference" />
         <attr name="mmRoundedBackgroundTop" format="reference" />
+
+        <attr name="mmShareIconItem" format="reference" />
+        <attr name="mmStarIconItem" format="reference" />
+
 
         <attr name="mmNavDrawerImage" format="reference" />
         <attr name="mmRadioButtonDrawable" format="reference" />

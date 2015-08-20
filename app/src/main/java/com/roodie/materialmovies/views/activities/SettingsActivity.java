@@ -60,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
                 THEME = R.style.Theme_MMovies_Dark;
                 break;
             case 2 :
-                THEME = R.style.Theme_MMovies__Green;
+                THEME = R.style.Theme_MMovies_Green;
                 break;
             }
         }

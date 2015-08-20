@@ -252,5 +252,8 @@ public class ShowGridPresenter extends BaseGridPresenter<ShowGridPresenter.ShowG
 
 
     public interface ShowGridView extends BaseMovieListView<ShowWrapper> {
+
+        void showTvShowDialog(ShowWrapper tvShow);
+
     }
 }

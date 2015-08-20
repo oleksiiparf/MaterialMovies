@@ -90,6 +90,8 @@ public interface Display {
 
     public void shareMovie(int movieId, String movieTitle);
 
+    public void shareTvShow(int showId, String showTitle);
+
     public void startShareIntentChooser(String message, @StringRes int titleResId);
 
     public void openTmdbMovie(MovieWrapper movie);

@@ -3,6 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/spacing_minor"
     android:gravity="center_horizontal">
 
     <ImageButton
@@ -11,8 +12,11 @@
         android:layout_height="@dimen/show_grid_item_icon_size"
         android:layout_margin="@dimen/show_card_item_icon_padding"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_heart_white_24dp"
+        android:src="?mmStarIconItem"
+
+
         android:layout_gravity="center_horizontal" />
+    <!-- android:src="?mmStarIconItem" -->
 
     <ImageButton
         android:id="@+id/share_button"
@@ -20,7 +24,8 @@
         android:layout_height="@dimen/show_grid_item_icon_size"
         android:layout_margin="@dimen/show_card_item_icon_padding"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_share_variant_white_24dp"
+        android:src="?mmShareIconItem"
         android:layout_gravity="center_horizontal" />
+    <!--    android:src="?mmShareIconItem" -->
 
 </LinearLayout>

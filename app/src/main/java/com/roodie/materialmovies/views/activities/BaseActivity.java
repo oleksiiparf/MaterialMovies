@@ -62,7 +62,7 @@ public class BaseActivity extends ActionBarActivity {
             } else if (SettingsActivity.THEME ==  R.style.Theme_MMovies_Dark) {
                     setTheme(R.style.Theme_MMovies_Dark);
             } else {
-                setTheme(R.style.Theme_MMovies__Green);
+                setTheme(R.style.Theme_MMovies_Green);
             }
 
         }

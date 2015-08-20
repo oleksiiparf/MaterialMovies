@@ -1,43 +1,51 @@
 package com.roodie.materialmovies.views.custom_views;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.roodie.materialmovies.R;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 /**
  * Created by Roodie on 20.08.2015.
  */
-public class TvShowInformationDialogView extends RelativeLayout implements Target {
+public class TvShowDialogView extends RelativeLayout {
 
-    private ImageButton mLikeButton;
-    private ImageButton mShareButton;
-    private TextView mYearTextView;
-    private TextView mRatingTextView;
-    private ImageView mCoverImageView;
-    private TextView mSummaryTextView;
+    private final ImageButton mLikeButton;
+    private final ImageButton mShareButton;
+    private final TextView mYearTextView;
+    private final TextView mRatingTextView;
+    private final MMoviesImageView mCoverImageView;
+    private final TextView mSummaryTextView;
 
+    public TvShowDialogView(Context context) {
+        this(context, null);
+    }
 
-    public TvShowInformationDialogView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public TvShowDialogView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public TvShowDialogView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+
         LayoutInflater.from(context).inflate(R.layout.item_show_dialog, this, true);
 
         mLikeButton = (ImageButton) findViewById(R.id.like_button);
         mShareButton = (ImageButton) findViewById(R.id.share_button);
+
         mYearTextView = (TextView) findViewById(R.id.year_text_view);
         mRatingTextView = (TextView) findViewById(R.id.rating_text_view);
-        mCoverImageView = (ImageView) findViewById(R.id.show_cover_image);
+
+        mCoverImageView = (MMoviesImageView) findViewById(R.id.show_cover_image);
         mSummaryTextView = (TextView) findViewById(R.id.summary_text_view);
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TvShowDialogView);
+        a.recycle();
 
     }
 
@@ -62,7 +70,7 @@ public class TvShowInformationDialogView extends RelativeLayout implements Targe
         return mRatingTextView;
     }
 
-    public ImageView getCoverImageView() {
+    public MMoviesImageView getCoverImageView() {
         return mCoverImageView;
     }
 
@@ -78,6 +86,7 @@ public class TvShowInformationDialogView extends RelativeLayout implements Targe
         return mShareButton;
     }
 
+    /*
     @Override
     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
         mRatingTextView.setCompoundDrawablesWithIntrinsicBounds(
@@ -94,4 +103,5 @@ public class TvShowInformationDialogView extends RelativeLayout implements Targe
     public void onPrepareLoad(Drawable placeHolderDrawable) {
         mRatingTextView.setCompoundDrawables(null, null, null, null);
     }
+    */
 }

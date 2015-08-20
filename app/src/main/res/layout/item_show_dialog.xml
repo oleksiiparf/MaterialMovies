@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="fill_parent"
     android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:visibility="invisible">
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+    <!--  android:background="?mmBackgroundColorPrimary"-->
+
 
     <include
         android:id="@+id/items"
@@ -17,11 +19,10 @@
 
     <include
         android:id="@+id/short_information"
-        android:layout_below="@id/items"
-        android:layout_width="match_patent"
+        android:layout_below="@+id/items"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/item_show_card_summary"
-        >
+        layout="@layout/item_show_card_summary">
 
     </include>
 
@@ -29,12 +30,10 @@
         android:id="@+id/show_cover_image"
         android:layout_width="fill_parent"
         android:layout_height="180.0dip"
-        android:layout_marginLeft="0.0dip"
         android:scaleType="centerCrop"
-        android:layout_below="@id/short_information"/>
+        android:layout_below="@+id/short_information"/>
 
     <com.roodie.materialmovies.views.custom_views.ExpandableTextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/summary_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,8 +41,8 @@
         android:paddingLeft="@dimen/spacing_major"
         android:paddingRight="@dimen/spacing_major"
         android:paddingBottom="@dimen/spacing_minor"
-        style="@style/Widget.MMovies.Movie.Detail.Summary.Scroll"
-        android:layout_below="@id/show_cover_image"/>
+        android:layout_below="@+id/show_cover_image"
+        style="@style/Widget.MMovies.Movie.Detail.Summary.Scroll"/>
 
 
 </RelativeLayout>

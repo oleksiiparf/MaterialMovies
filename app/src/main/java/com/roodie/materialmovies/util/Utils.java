@@ -70,7 +70,7 @@ public class Utils {
             }
                 break;
             case 2: {
-                SettingsActivity.THEME = R.style.Theme_MMovies__Green;
+                SettingsActivity.THEME = R.style.Theme_MMovies_Green;
                 MMoviesPreferences.setApplicationTheme(context, 2);
             }
                 break;
