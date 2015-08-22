@@ -107,6 +107,7 @@
         <attr name="mmWavePatternDrawable" format="reference" />
         <attr name="mmOnboardingNavBarBackground" format="reference" />
 
+        <attr name="drawableDropdown" format="reference" />
         <attr name="mmCardBackground" format="reference" />
 
 
@@ -157,5 +158,9 @@
         <attr name="android:textSize" />
         <attr name="android:textColor" />
     </declare-styleable>
+
+
+    <!-- Drawabe -->
+
 
 </resources>

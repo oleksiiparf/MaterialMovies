@@ -44,7 +44,7 @@ public abstract class BaseGridFragment extends BaseFragment implements RecyclerI
         mSecondaryProgressView.setVisibility(View.GONE);
         mListContainer = (FrameLayout) view.findViewById(R.id.conteiner);
         mGridShown = true;
-        initializeReceicler();
+        initializeRecycler();
     }
 
     @Override
@@ -57,7 +57,7 @@ public abstract class BaseGridFragment extends BaseFragment implements RecyclerI
         super.onResume();
     }
 
-    public abstract void initializeReceicler();
+    public abstract void initializeRecycler();
 
     @Override
     public void onDestroyView() {

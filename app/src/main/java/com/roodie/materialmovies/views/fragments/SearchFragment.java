@@ -142,21 +142,23 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
         ((ViewGroup)mSearchView.getParent()).removeView(mSearchView);
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mPresenter.detachView(this);
+    }
+
     private void configureToolbar(@NonNull Toolbar toolbar) {
 
         toolbar.setVisibility(View.GONE);
         ViewGroup localViewGroup = (ViewGroup) toolbar.getParent();
         int index = localViewGroup.indexOfChild(toolbar);
         if (mSearchView == null) {
-            //LayoutInflater mInflater = LayoutInflater.from(getActivity());
-
-            //mSearchView = mInflater.inflate(R.layout.include_searchview, null);
             mSearchView = LayoutInflater.from(getBaseActivity()).inflate(R.layout.include_searchview, localViewGroup, false);
         }
         localViewGroup.addView(mSearchView, index);
 
         mEditText = (EditText) mSearchView.findViewById(R.id.search_edt);
-        mEditText.setText("mi");
         mUpButton = (ImageButton) mSearchView.findViewById(R.id.up_button);
         mCancelButton = (ImageButton) mSearchView.findViewById(R.id.cancel_btn);
 
@@ -280,8 +282,6 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
     }
 
-
-
     @Override
     public MovieQueryType getQueryType() {
         return MovieQueryType.SEARCH;
@@ -338,6 +338,26 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
     @Override
     public void updateDisplayTitle(String title) {
 
+    }
+
+    public SearchPresenter getPresenter() {
+        return mPresenter;
+    }
+
+    @Override
+    public String getSubtitle() {
+        if (hasPresenter()) {
+            return getPresenter().getUiSubTitle();
+        }
+        return  null;
+    }
+
+    @Override
+    public String getTitle() {
+        if (hasPresenter()) {
+            return getPresenter().getUiTitle();
+        }
+        return  null;
     }
 
     private static class AutoCompleteTextViewReflector {
@@ -536,8 +556,10 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   // showMovieCreditsDialog(MovieQueryType.MOVIE_CAST);
-                   // show full list
+                    Display display = getDisplay();
+                    if (display != null) {
+                        display.showSearchMoviesFragment();
+                    }
                 }
             };
 
@@ -605,8 +627,10 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // showMovieCreditsDialog(MovieQueryType.MOVIE_CAST);
-                    // show full list
+                    Display display = getDisplay();
+                    if (display != null) {
+                        display.showSearchPeopleFragment();
+                    }
                 }
             };
 
@@ -676,8 +700,10 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // showMovieCreditsDialog(MovieQueryType.MOVIE_CAST);
-                    // show full list
+                    Display display = getDisplay();
+                    if (display != null) {
+                        display.showSearchTvShowsFragment();
+                    }
                 }
             };
 

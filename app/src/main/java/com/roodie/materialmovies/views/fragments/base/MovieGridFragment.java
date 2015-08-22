@@ -119,7 +119,7 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
 
 
     @Override
-    public void initializeReceicler() {
+    public void initializeRecycler() {
         getRecyclerView().addItemDecoration(new RecyclerInsetsDecoration(getActivity().getApplicationContext()));
         mMovieGridAdapter = new MovieGridAdapter(null);
         mMovieGridAdapter.setClickListener(this);
@@ -192,7 +192,7 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
     @Override
     public String getTitle() {
         if (hasPresenter()) {
-            getPresenter().getUiTitle(this);
+            return getPresenter().getUiTitle(this);
         }
         return null;
     }

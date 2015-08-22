@@ -9,17 +9,17 @@ public class AboutPresenter extends BasePresenter {
     }
 
     @Override
+    public void initialize() {
+
+    }
+
+    @Override
     public void onResume() {
 
     }
 
     @Override
-    protected void onInited() {
-        super.onInited();
-    }
+    public void onPause() {
 
-    @Override
-    protected void onPaused() {
-        super.onPaused();
     }
 }

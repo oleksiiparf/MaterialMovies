@@ -38,6 +38,7 @@ public  class ApplicationState implements BaseState, MoviesState {
     private ShowPaginatedResult mOnTheAirShows;
 
     private SearchResult mSearchResult;
+    private String mSearchQuery;
 
     private TmdbConfiguration mConfiguration;
 
@@ -212,6 +213,16 @@ public  class ApplicationState implements BaseState, MoviesState {
     public void setSearchResult(SearchResult result) {
         mSearchResult = result;
         mEventBus.post(new SearchResultChangedEvent());
+    }
+
+    @Override
+    public void setSearchQuery(String result) {
+        mSearchQuery = result;
+    }
+
+    @Override
+    public String getSearchQuery() {
+        return mSearchQuery;
     }
 }
 

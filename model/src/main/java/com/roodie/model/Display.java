@@ -106,5 +106,11 @@ public interface Display {
 
     public void showSearchFragment();
 
+    public void showSearchMoviesFragment();
+
+    public void showSearchPeopleFragment();
+
+    public void showSearchTvShowsFragment();
+
 
 }

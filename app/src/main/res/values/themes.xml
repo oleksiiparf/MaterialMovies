@@ -47,6 +47,7 @@
         <item name="colorAccent">@color/mm_green</item>
         <item name="mmDialogBackgroundColor">@color/material_dialog_light</item>
         <item name="mmCardBackground">@drawable/abc_dialog_material_background_light</item>
+        <item name="drawableDropdown">@drawable/ic_action_contextmenu_light</item>
     </style>
 
     <style name="Theme.MMovies.Dark" parent="Base.Theme.MMovies">
@@ -82,6 +83,7 @@
         <item name="colorAccent">@color/mm_green</item>
         <item name="mmDialogBackgroundColor">@color/material_dialog_dark</item>
         <item name="mmCardBackground">@drawable/abc_dialog_material_background_dark </item>
+        <item name="drawableDropdown">@drawable/ic_action_contextmenu</item>
     </style>
 
     <style name="Theme.MMovies.Green" parent="Theme.MMovies.Dark">

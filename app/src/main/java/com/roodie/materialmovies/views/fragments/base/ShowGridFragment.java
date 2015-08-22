@@ -103,7 +103,7 @@ public abstract class ShowGridFragment extends BaseGridFragment implements ShowG
     }
 
     @Override
-    public void initializeReceicler() {
+    public void initializeRecycler() {
         getRecyclerView().addItemDecoration(new RecyclerInsetsDecoration(getActivity().getApplicationContext()));
         mShowsAdapter = new ShowGridAdapter(null);
         mShowsAdapter.setClickListener(this);

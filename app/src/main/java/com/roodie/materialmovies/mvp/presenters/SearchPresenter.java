@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.common.base.Preconditions;
+import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.MovieView;
 import com.roodie.materialmovies.mvp.views.UiView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
@@ -21,6 +22,7 @@ import com.roodie.model.tasks.FetchSearchPeopleResult;
 import com.roodie.model.tasks.FetchSearchShowRunnable;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.Injector;
+import com.roodie.model.util.StringFetcher;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -44,16 +46,19 @@ public class SearchPresenter extends BasePresenter {
     private final BackgroundExecutor mExecutor;
     private final ApplicationState mState;
     private final Injector mInjector;
+    private final StringFetcher mStringFetcher;
 
     private boolean attached = false;
 
     @Inject
     public SearchPresenter(@GeneralPurpose BackgroundExecutor mExecutor,
                            ApplicationState mState,
-                           Injector mInjector) {
+                           Injector mInjector,
+                           StringFetcher stringFetcher) {
         this.mExecutor = Preconditions.checkNotNull(mExecutor, "mExecutor cannot be null");
         this.mState = Preconditions.checkNotNull(mState, "mState cannot be null");
         this.mInjector = Preconditions.checkNotNull(mInjector, "mInjector cannot be null");
+        mStringFetcher = Preconditions.checkNotNull(stringFetcher, "stringFetcher cannot be null");
     }
 
     @Subscribe
@@ -66,13 +71,22 @@ public class SearchPresenter extends BasePresenter {
 
     @Override
     public void initialize() {
-
+        if (mState.getSearchResult() != null) {
+            search(mState.getSearchResult().query);
+        }
     }
 
     public void attachView(SearchView view) {
         Preconditions.checkNotNull(view, "View cannot be null");
         this.mSearchView = view;
         attached = true;
+    }
+
+    public void detachView(SearchView view) {
+        Preconditions.checkArgument(view != null, "view cannot be null");
+       // Preconditions.checkState(mSearchView == view, "view is not attached");
+        mSearchView = null;
+        attached = false;
     }
 
     @Override
@@ -89,8 +103,40 @@ public class SearchPresenter extends BasePresenter {
         return view.hashCode();
     }
 
+    public void onScrolledToBottom() {
+
+        ApplicationState.SearchResult searchResult;
+
+        Log.d(LOG_TAG, "On scrolled to bottom");
+        switch (mSearchView.getQueryType()) {
+            case SEARCH_PEOPLE:
+                searchResult = mState.getSearchResult();
+                if (searchResult != null && canFetchNextPage(searchResult.people)) {
+                    fetchPeopleSearchResults(
+                            getId(mSearchView),
+                            searchResult.query,
+                            searchResult.people.page + 1);
+                }
+                break;
+            case SEARCH_MOVIES:
+                searchResult = mState.getSearchResult();
+                if (searchResult != null && canFetchNextPage(searchResult.movies)) {
+                    fetchMovieSearchResults(
+                            getId(mSearchView),
+                            searchResult.query,
+                            searchResult.movies.page + 1);
+                }
+                break;
+        }
+    }
+
+    private boolean canFetchNextPage(MoviesState.PaginatedResult<?> paginatedResult) {
+        return paginatedResult != null && paginatedResult.page < paginatedResult.totalPages;
+    }
+
     public void search(String query) {
         Log.d(LOG_TAG, "Performing search :" + query);
+        mState.setSearchQuery(query);
         switch (mSearchView.getQueryType()) {
             case SEARCH: {
                 Log.d(LOG_TAG, "Fetch common search results");
@@ -226,6 +272,22 @@ public class SearchPresenter extends BasePresenter {
 
     }
 
+    public String getUiTitle() {
+        return mState.getSearchQuery();
+    }
+
+    public String getUiSubTitle() {
+        switch (mSearchView.getQueryType()) {
+            case SEARCH_MOVIES:
+                return mStringFetcher.getString(R.string.movies_title);
+            case SEARCH_SHOWS:
+                return mStringFetcher.getString(R.string.shows_title);
+            case SEARCH_PEOPLE:
+                return mStringFetcher.getString(R.string.people_title);
+        }
+        return null;
+    }
+
     private <T extends ListItem<T>> List<ListItem<T>> createListItemList(final List<T> items) {
         Preconditions.checkNotNull(items, "items cannot be null");
         ArrayList<ListItem<T>> listItems = new ArrayList<>(items.size());
@@ -257,6 +319,10 @@ public class SearchPresenter extends BasePresenter {
         void showPersonDetail(PersonWrapper person, View view);
 
         void showTvShowDialog(ShowWrapper tvShow);
+
+        String getTitle();
+
+        String getSubtitle();
 
 
     }
