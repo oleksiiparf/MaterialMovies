@@ -9,7 +9,7 @@
     android:orientation="horizontal">
 
     <ImageButton
-        android:id="@id/up_button"
+        android:id="@+id/up_button"
         android:layout_width="56.0dip"
         android:layout_height="56.0dip"
         android:background="?selectableItemBackgroundBorderless"

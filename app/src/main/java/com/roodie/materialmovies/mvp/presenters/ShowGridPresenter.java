@@ -86,13 +86,13 @@ public class ShowGridPresenter extends BaseGridPresenter<ShowGridPresenter.ShowG
     }
 
     @Subscribe
-    public void onPopularChanged(MoviesState.PopularShowsChangeEvent event) {
+    public void onPopularChanged(MoviesState.PopularShowsChangedEvent event) {
         Log.d(LOG_TAG, "Popular changed");
         populateUiFromQueryType(UiView.MovieQueryType.POPULAR_SHOWS);
     }
 
     @Subscribe
-    public void onTheAirChanged(MoviesState.OnTheAirShowsChangeEvent event) {
+    public void onTheAirChanged(MoviesState.OnTheAirShowsChangedEvent event) {
         Log.d(LOG_TAG, "On the air changed");
         populateUiFromQueryType(UiView.MovieQueryType.ON_THE_AIR_SHOWS);
     }

@@ -104,5 +104,7 @@ public interface Display {
 
     public void performWebSearch(String query);
 
+    public void showSearchFragment();
+
 
 }

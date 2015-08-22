@@ -17,7 +17,7 @@
 
     <com.roodie.materialmovies.views.custom_views.MMoviesTextView
         android:id="@+id/title"
-        style="@style/Widget.MMovies.Movie.List.Title"
+        style="@style/Widget.MMovies.TextAppearance.PrimaryText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

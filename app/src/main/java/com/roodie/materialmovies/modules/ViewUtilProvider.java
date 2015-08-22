@@ -3,15 +3,12 @@ package com.roodie.materialmovies.modules;
 import android.content.res.AssetManager;
 
 import com.roodie.materialmovies.modules.library.ContextProvider;
-import com.roodie.materialmovies.modules.library.PersistanceProvider;
 import com.roodie.materialmovies.modules.library.UtilProvider;
-import com.roodie.materialmovies.util.MMoviesServiceUtils;
 import com.roodie.materialmovies.util.TypefaceManager;
-import com.roodie.materialmovies.views.adapters.MovieGridAdapter;
 import com.roodie.materialmovies.views.custom_views.AutofitTextView;
 import com.roodie.materialmovies.views.custom_views.ExpandableTextView;
+import com.roodie.materialmovies.views.custom_views.MMoviesEditText;
 import com.roodie.materialmovies.views.custom_views.MMoviesTextView;
-import com.roodie.model.util.AndroidPreferences;
 
 import javax.inject.Singleton;
 
@@ -30,7 +27,8 @@ import dagger.Provides;
         injects = {
                 MMoviesTextView.class,
                 AutofitTextView.class,
-                ExpandableTextView.class
+                ExpandableTextView.class,
+                MMoviesEditText.class
         }
 )
 

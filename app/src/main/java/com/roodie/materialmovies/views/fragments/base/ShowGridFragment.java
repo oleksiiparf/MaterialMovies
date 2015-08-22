@@ -78,6 +78,9 @@ public abstract class ShowGridFragment extends BaseGridFragment implements ShowG
             case R.id.menu_refresh:
                 mPresenter.refresh(this);
                 return true;
+            case  R.id.menu_search:
+                getDisplay().showSearchFragment();
+                return true;
         }
         return false;
     }

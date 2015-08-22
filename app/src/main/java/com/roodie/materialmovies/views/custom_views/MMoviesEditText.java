@@ -1,13 +1,11 @@
 package com.roodie.materialmovies.views.custom_views;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 
-import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.util.TypefaceManager;
 import com.roodie.materialmovies.views.MMoviesApplication;
 
@@ -35,11 +33,9 @@ public class MMoviesEditText extends AppCompatEditText {
 
         MMoviesApplication.from(context).inject(this);
 
-        if (!isInEditMode()) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MMoviesTextView);
+        if (isInEditMode())
+            return;
             setFont();
-            a.recycle();
-        }
     }
 
     public void setFont() {

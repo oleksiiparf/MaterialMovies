@@ -26,13 +26,13 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MMovies.Movie.List.Title" />
+            style="@style/Widget.MMovies.TextAppearance.PrimaryText" />
 
         <com.roodie.materialmovies.views.custom_views.MMoviesTextView
             android:id="@+id/subtitle_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MMovies.Movie.List.Subtitle" />
+            style="@style/Widget.MMovies.TextAppearance.SecondaryText" />
 
     </LinearLayout>
 

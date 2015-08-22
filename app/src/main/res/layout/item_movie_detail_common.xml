@@ -86,7 +86,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="left|center_vertical"
-                            android:textAppearance="@style/Widget.MMovies.Movie.Summary.Title"
+                            android:textAppearance="@style/Widget.MMovies.TextAppearance.PrimaryText.Large"
                             android:text="Title"/>
 
                         <include layout="@layout/item_detail_rating" />

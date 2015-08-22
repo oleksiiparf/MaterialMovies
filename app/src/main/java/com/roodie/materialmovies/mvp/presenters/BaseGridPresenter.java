@@ -50,7 +50,7 @@ abstract class BaseGridPresenter<R extends BaseMovieListView> extends BasePresen
 
     public synchronized final void detachUi(R view) {
         Preconditions.checkArgument(view != null, "ui cannot be null");
-        Preconditions.checkState(mUis.contains(view), "ui is not attached");
+        //Preconditions.checkState(mUis.contains(view), "ui is not attached");
         mUis.remove(view);
     }
 

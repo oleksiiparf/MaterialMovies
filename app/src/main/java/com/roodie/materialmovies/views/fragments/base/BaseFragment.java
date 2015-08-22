@@ -41,7 +41,7 @@ public class BaseFragment extends Fragment {
         setSupportActionBar(toolbar, true);
     }
 
-    protected final void setSupportActionBar(Toolbar toolbar, boolean handle) {
+    protected void setSupportActionBar(Toolbar toolbar, boolean handle) {
         ((BaseActivity) getActivity()).setSupportActionBar(toolbar, handle);
     }
 
@@ -51,5 +51,9 @@ public class BaseFragment extends Fragment {
 
     protected Display getDisplay() {
         return ((BaseActivity) getActivity()).getDisplay();
+    }
+
+    protected BaseActivity getBaseActivity() {
+        return (BaseActivity)getActivity();
     }
 }

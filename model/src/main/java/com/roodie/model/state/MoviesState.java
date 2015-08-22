@@ -6,6 +6,7 @@ import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.entities.TmdbConfiguration;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -137,7 +138,7 @@ public interface MoviesState extends BaseState {
 
     }
 
-    public class SearchResult {
+    public class SearchResult implements Serializable {
         public final String query;
         public MoviePaginatedResult movies;
         public PersonPaginatedResult people;

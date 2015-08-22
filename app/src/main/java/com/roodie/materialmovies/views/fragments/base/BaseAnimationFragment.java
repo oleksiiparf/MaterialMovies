@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.util.ViewUtils;
+import com.roodie.materialmovies.util.UiUtils;
 import com.roodie.materialmovies.views.custom_views.RotateAnimationListener;
 
 import io.codetail.animation.SupportAnimator;
@@ -93,8 +93,8 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
 
     @Override
     public void onClick(View v) {
-        startAnimationX = ViewUtils.centerX(mFloatingButton);
-        startAnimationY = ViewUtils.centerY(mFloatingButton);
+        startAnimationX = UiUtils.centerX(mFloatingButton);
+        startAnimationY = UiUtils.centerY(mFloatingButton);
 
         endAnimationX = mAnimationContainer.getRight() / 2;
         endAnimationY = (int) (mAnimationContainer.getBottom() * 0.8f);
@@ -102,8 +102,8 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
         System.out.println("Positions: " + startAnimationX +  ", " + startAnimationY + ", " + endAnimationX + ", " + endAnimationY);
 
         if (endAnimationX == 0 && endAnimationY == 0) {
-            endAnimationX = (int) ViewUtils.centerX(mFloatingButton);
-            endAnimationY = (int) ViewUtils.centerY(mFloatingButton);
+            endAnimationX = (int) UiUtils.centerX(mFloatingButton);
+            endAnimationY = (int) UiUtils.centerY(mFloatingButton);
             startCircleAnimation();
         } else {
             ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(mFloatingButton, endAnimationX,

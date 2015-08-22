@@ -59,6 +59,7 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
     @Override
     public void onPause() {
         super.onPause();
+        mMovieGridPresenter.detachUi(this);
     }
 
     @Override
@@ -69,7 +70,6 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
     @Override
     public void onDetach() {
         super.onDetach();
-        mMovieGridPresenter.detachUi(this);
     }
 
     @Override
@@ -84,7 +84,7 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-       super.onCreateOptionsMenu(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -93,6 +93,9 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
             case R.id.menu_refresh:
                 mMovieGridPresenter.refresh(this);
                 return true;
+            case  R.id.menu_search:
+                getDisplay().showSearchFragment();
+            return true;
         }
         return false;
     }

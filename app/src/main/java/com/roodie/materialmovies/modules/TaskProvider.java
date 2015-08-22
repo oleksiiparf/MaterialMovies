@@ -17,6 +17,9 @@ import com.roodie.model.tasks.FetchPersonRunnable;
 import com.roodie.model.tasks.FetchPopularMoviesRunnable;
 import com.roodie.model.tasks.FetchPopularShowsRunnable;
 import com.roodie.model.tasks.FetchRelatedMoviesRunnable;
+import com.roodie.model.tasks.FetchSearchMovieRunnable;
+import com.roodie.model.tasks.FetchSearchPeopleResult;
+import com.roodie.model.tasks.FetchSearchShowRunnable;
 import com.roodie.model.tasks.FetchUpcomingMoviesRunnable;
 
 import dagger.Module;
@@ -41,6 +44,9 @@ import dagger.Module;
                 FetchConfigurationRunnable.class,
                 FetchPopularShowsRunnable.class,
                 FetchOnTheAirShowsRunnable.class,
+                FetchSearchMovieRunnable.class,
+                FetchSearchPeopleResult.class,
+                FetchSearchShowRunnable.class
         },
         includes = {
                 PersistanceProvider.class,

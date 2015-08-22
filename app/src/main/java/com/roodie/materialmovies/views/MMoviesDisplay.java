@@ -31,6 +31,7 @@ import com.roodie.materialmovies.views.fragments.MovieDetailFragment;
 import com.roodie.materialmovies.views.fragments.MovieImagesFragment;
 import com.roodie.materialmovies.views.fragments.MoviesTabFragment;
 import com.roodie.materialmovies.views.fragments.PersonDetailFragment;
+import com.roodie.materialmovies.views.fragments.SearchFragment;
 import com.roodie.materialmovies.views.fragments.ShowsTabFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
@@ -360,5 +361,10 @@ public class MMoviesDisplay implements Display {
         intent.putExtra(SearchManager.QUERY, query);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         tryStartActivity(intent, true);
+    }
+
+    @Override
+    public void showSearchFragment() {
+        showFragmentFromDrawer(new SearchFragment());
     }
 }

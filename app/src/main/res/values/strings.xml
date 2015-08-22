@@ -6,6 +6,7 @@
     <!-- Main Menu -->
     <string name="movies_title">Movies</string>
     <string name="shows_title">Shows</string>
+    <string name="people_title">People</string>
     <string name="popular_title">Popular</string>
     <string name="trending_title">Trending</string>
     <string name="preferences">Settings</string>

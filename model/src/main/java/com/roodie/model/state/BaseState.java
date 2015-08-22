@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import com.roodie.model.controllers.DrawerMenuItem;
 import com.roodie.model.network.NetworkError;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public interface BaseState {
         }
     }
 
-    public abstract static class PaginatedResult<T> {
+    public abstract static class PaginatedResult<T> implements Serializable {
         public List<T> items;
         public int page;
         public int totalPages;

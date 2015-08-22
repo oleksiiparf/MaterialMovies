@@ -1,10 +1,14 @@
 package com.roodie.materialmovies.mvp.presenters;
 
 
+import android.util.Log;
+import android.view.View;
+
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.mvp.views.MovieView;
 import com.roodie.materialmovies.mvp.views.UiView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
+import com.roodie.model.entities.BasicWrapper;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
@@ -31,6 +35,7 @@ import javax.inject.Inject;
 public class SearchPresenter extends BasePresenter {
 
     private SearchView mSearchView;
+
 
     protected static final int TMDB_FIRST_PAGE = 1;
 
@@ -85,9 +90,12 @@ public class SearchPresenter extends BasePresenter {
     }
 
     public void search(String query) {
+        Log.d(LOG_TAG, "Performing search :" + query);
         switch (mSearchView.getQueryType()) {
-            case SEARCH:
+            case SEARCH: {
+                Log.d(LOG_TAG, "Fetch common search results");
                 fetchSearchResults(getId(mSearchView), query);
+            }
                 break;
             case SEARCH_MOVIES:
                 fetchMovieSearchResults(getId(mSearchView), query);
@@ -99,6 +107,10 @@ public class SearchPresenter extends BasePresenter {
                 fetchShowsSearchResults(getId(mSearchView), query);
                 break;
         }
+    }
+
+    public void clearSearch() {
+        mState.setSearchResult(null);
     }
 
     private void fetchSearchResults(final int callingId, String query) {
@@ -136,10 +148,11 @@ public class SearchPresenter extends BasePresenter {
     }
 
     public void populateUisFromQueryTypes(UiView.MovieQueryType... queryTypes) {
+        Log.d(LOG_TAG, "Populate uis from queries");
         final List<UiView.MovieQueryType> list = Arrays.asList(queryTypes);
 
         for (UiView.MovieQueryType type : list) {
-            if (mSearchView.getQueryType().equals(queryTypes)) {
+            if (mSearchView.getQueryType().equals(type)) {
                 populateUiFromQueryType(type);
                 break;
             }
@@ -150,8 +163,10 @@ public class SearchPresenter extends BasePresenter {
 
         if (mSearchView.getQueryType() == queryType) {
             switch (queryType) {
-                case SEARCH:
+                case SEARCH: {
+                    Log.d(LOG_TAG, "Populate search Ui");
                     populateSearchUi();
+                }
                     break;
                 case SEARCH_MOVIES:
                     populateSearchMovieUi();
@@ -185,9 +200,9 @@ public class SearchPresenter extends BasePresenter {
         }
 
         if (items == null) {
-            mSearchView.setMovieItems(null);
+            mSearchView.setItems(null);
         } else  {
-            mSearchView.setMovieItems(createListItemList(items));
+            mSearchView.setItems(createListItemList(items));
         }
     }
 
@@ -197,7 +212,7 @@ public class SearchPresenter extends BasePresenter {
 
         // Now carry on with list ui population
         if (searchResult != null && searchResult.people != null) {
-            mSearchView.setPersonItems(createListItemList(searchResult.people.items));
+            mSearchView.setItems(createListItemList(searchResult.people.items));
         }
     }
 
@@ -206,7 +221,7 @@ public class SearchPresenter extends BasePresenter {
         mSearchView.updateDisplayTitle(result != null ? result.query : null);
 
         if (result != null && result.shows != null) {
-            mSearchView.setTvShowItems(createListItemList(result.shows.items));
+            mSearchView.setItems(createListItemList(result.shows.items));
         }
 
     }
@@ -231,15 +246,18 @@ public class SearchPresenter extends BasePresenter {
         mExecutor.execute(task);
     }
 
-    public interface SearchView extends MovieView {
+    public interface SearchView<R extends BasicWrapper> extends MovieView {
 
         void setSearchResult(MoviesState.SearchResult result);
 
-        void setMovieItems(List<ListItem<MovieWrapper>> items);
+        void setItems(List<ListItem<R>> items);
 
-        void setPersonItems(List<ListItem<PersonWrapper>> items);
+        void showMovieDetail(MovieWrapper movie, View view);
 
-        void setTvShowItems(List<ListItem<ShowWrapper>> items);
+        void showPersonDetail(PersonWrapper person, View view);
+
+        void showTvShowDialog(ShowWrapper tvShow);
+
 
     }
 

@@ -237,7 +237,7 @@ public class MovieGridPresenter extends BaseGridPresenter<MovieGridPresenter.Mov
 
     @Override
     protected void populateUi(final MovieGridView ui){
-            Log.d(LOG_TAG, "populateUi: " + ui.getClass().getSimpleName());
+        Log.d(LOG_TAG, "populateUi: " + ui.getClass().getSimpleName());
         final UiView.MovieQueryType queryType = ui.getQueryType();
 
         List<MovieWrapper> items = null;

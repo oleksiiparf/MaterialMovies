@@ -92,29 +92,7 @@
     </style>
 
 
-    <style name="Widget.MMovies.Movie.List.Title" parent="android:Widget">
-        <item name="font">din_regular</item>
-        <item name="android:textSize">16dp</item>
-        <item name="android:textColor">?mmTextColorPrimary</item>
-        <item name="android:maxLines">1</item>
-    </style>
 
-    <style name="Widget.MMovies.Movie.List.Subtitle" parent="android:Widget">
-        <item name="font">din_light</item>
-        <item name="android:textSize">14dp</item>
-        <item name="android:textColor">?mmTextColorSecondary</item>
-    </style>
-
-    <style name="Widget.MMovies.Movie.Summary.Title" parent="TextAppearance.AppCompat.Headline">
-        <item name="android:textColor">?mmTextColorPrimary</item>
-        <item name="android:maxLines">2</item>
-    </style>
-
-    <style name="Widget.MMovies.Movie.Summary.Subtitle" parent="android:Widget">
-        <item name="font">roboto_condensed</item>
-        <item name="android:textSize">18dp</item>
-        <item name="android:textColor">?mmTextColorPrimary</item>
-    </style>
 
     <style name="Widget.MMovies.Movie.Summary.Trailer" parent="android:Widget">
         <item name="font">roboto_condensed_bold</item>
@@ -270,10 +248,12 @@
     <style name="Widget.MMovies.TextAppearance.PrimaryText" parent="Widget.MMovies.TextAppearance">
         <item name="android:textSize">16.0sp</item>
         <item name="font">din_medium</item>
+        <item name="android:maxLines">1</item>
     </style>
     <style name="Widget.MMovies.TextAppearance.PrimaryText.Large"
         parent="Widget.MMovies.TextAppearance.PrimaryText">
         <item name="android:textSize">22.0sp</item>
+        <item name="android:maxLines">2</item>
         <item name="font">din_light</item>
     </style>
     <style name="Widget.MMovies.TextAppearance.SecondaryText"
@@ -295,6 +275,30 @@
         <item name="android:textColor">@color/mm_white_1</item>
         <item name="android:textAllCaps">true</item>
         <item name="font">din_medium</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.List.Title" parent="android:Widget">
+        <item name="font">din_regular</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">?mmTextColorPrimary</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.List.Subtitle" parent="android:Widget">
+        <item name="font">din_light</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">?mmTextColorSecondary</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Summary.Title" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textColor">?mmTextColorPrimary</item>
+        <item name="android:maxLines">2</item>
+    </style>
+
+    <style name="Widget.MMovies.Movie.Summary.Subtitle" parent="android:Widget">
+        <item name="font">roboto_condensed</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">?mmTextColorPrimary</item>
     </style>
 
 

@@ -5,6 +5,8 @@
 
     <integer name="detail_card_max_items">3</integer>
 
+    <integer name="search_card_max_items">2</integer>
+
     <integer name="anim_trans_duration_millis">300</integer>
 
 </resources>
