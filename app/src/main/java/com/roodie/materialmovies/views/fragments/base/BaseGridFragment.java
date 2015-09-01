@@ -19,7 +19,9 @@ public abstract class BaseGridFragment extends BaseFragment implements RecyclerI
 
     private RecyclerView mRecyclerView;
     private TextView mStandardEmptyView;
-    private ProgressBar mProgressView;
+    private View mLoadingView;
+    private View mProgressView;
+    private ProgressBar mProgressBar;
     private ProgressBar mSecondaryProgressView;
     private FrameLayout mListContainer;
 
@@ -38,11 +40,14 @@ public abstract class BaseGridFragment extends BaseFragment implements RecyclerI
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mStandardEmptyView = (TextView) view.findViewById(R.id.empty_text_view);
-        mProgressView = (ProgressBar) view.findViewById(R.id.progress_bar);
-        mProgressView.setVisibility(View.GONE);
+        mStandardEmptyView.setVisibility(View.GONE);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         mSecondaryProgressView = (ProgressBar) view.findViewById(R.id.secondary_progress_bar);
         mSecondaryProgressView.setVisibility(View.GONE);
         mListContainer = (FrameLayout) view.findViewById(R.id.conteiner);
+        mLoadingView = view.findViewById(R.id.loading_view);
+        mLoadingView.setVisibility(View.GONE);
+        mProgressView = view.findViewById(R.id.progress_view);
         mGridShown = true;
 
         System.out.println("Toolbar = " + getToolbar() != null);
@@ -71,6 +76,9 @@ public abstract class BaseGridFragment extends BaseFragment implements RecyclerI
         if (mStandardEmptyView == null) {
             throw new IllegalStateException("Can't be used with a custom content view");
         }
+        mProgressView.setVisibility(View.GONE);
+        mLoadingView.setVisibility(View.VISIBLE);
+        mStandardEmptyView.setVisibility(View.VISIBLE);
         mStandardEmptyView.setText(text);
     }
 
@@ -90,7 +98,7 @@ public abstract class BaseGridFragment extends BaseFragment implements RecyclerI
      */
     private void setGridShown(boolean shown, boolean animate) {
         //ensureList();
-        if (mProgressView == null) {
+        if (mProgressBar == null) {
             throw new IllegalStateException("Can't be used with a custom content view");
         }
         if (mGridShown == shown) {
@@ -99,27 +107,31 @@ public abstract class BaseGridFragment extends BaseFragment implements RecyclerI
         mGridShown = shown;
         if (shown) {
             if (animate) {
-                mProgressView.startAnimation(AnimationUtils.loadAnimation(
+                mLoadingView.startAnimation(AnimationUtils.loadAnimation(
                         getActivity(), android.R.anim.fade_out));
                 mListContainer.startAnimation(AnimationUtils.loadAnimation(
                         getActivity(), android.R.anim.fade_in));
             } else {
-                mProgressView.clearAnimation();
+                mLoadingView.clearAnimation();
                 mListContainer.clearAnimation();
             }
             mProgressView.setVisibility(View.GONE);
+            mStandardEmptyView.setVisibility(View.VISIBLE);
+            mLoadingView.setVisibility(View.GONE);
             mListContainer.setVisibility(View.VISIBLE);
         } else {
             if (animate) {
-                mProgressView.startAnimation(AnimationUtils.loadAnimation(
+                mLoadingView.startAnimation(AnimationUtils.loadAnimation(
                         getActivity(), android.R.anim.fade_in));
                 mListContainer.startAnimation(AnimationUtils.loadAnimation(
                         getActivity(), android.R.anim.fade_out));
             } else {
-                mProgressView.clearAnimation();
+                mLoadingView.clearAnimation();
                 mListContainer.clearAnimation();
             }
             mProgressView.setVisibility(View.VISIBLE);
+            mStandardEmptyView.setVisibility(View.GONE);
+            mLoadingView.setVisibility(View.VISIBLE);
             mListContainer.setVisibility(View.GONE);
         }
     }

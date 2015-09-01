@@ -250,6 +250,11 @@
         <item name="font">din_medium</item>
         <item name="android:maxLines">1</item>
     </style>
+
+    <style name="Widget.MMovies.TextAppearance.PrimaryText.Small" parent="Widget.MMovies.TextAppearance.PrimaryText">
+        <item name="android:textSize">14.0sp</item>
+    </style>
+
     <style name="Widget.MMovies.TextAppearance.PrimaryText.Large"
         parent="Widget.MMovies.TextAppearance.PrimaryText">
         <item name="android:textSize">22.0sp</item>
