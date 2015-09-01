@@ -25,11 +25,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.MovieDetailPresenter;
 import com.roodie.materialmovies.settings.TmdbSettings;
 import com.roodie.materialmovies.views.MMoviesApplication;
+import com.roodie.materialmovies.views.activities.SettingsActivity;
 import com.roodie.materialmovies.views.custom_views.AutofitTextView;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
@@ -97,7 +99,9 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
     private static final String QUERY_MOVIE_ID = "movie_id";
 
+
     public static MovieDetailFragment newInstance(String movieId, String imageUrl) {
+        Preconditions.checkArgument(movieId != null, "movieId can not be null");
         Preconditions.checkArgument(imageUrl != null, "ImageUrl can not be null");
 
         Bundle bundle = new Bundle();
@@ -108,6 +112,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
         return fragment;
     }
+
 
     public static MovieDetailFragment newInstance(String movieId, int[] startingLocation) {
         Preconditions.checkArgument(movieId != null, "MovieId can not be null");
@@ -530,6 +535,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         new MaterialDialog.Builder(getActivity())
                 .title(mTitle)
                 .customView(list, wrapInScrollView)
+                .theme(SettingsActivity.THEME == R.style.Theme_MMovies_Light ? Theme.LIGHT : Theme.DARK)
                 .show();
     }
 
@@ -563,7 +569,11 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         }
 
         if (hasLeftContainer()) {
-            mTitleTextView.setText(mMovie.getTitle() + " (" + mMovie.getYear() + ")");
+            if (mMovie.getYear() > 0) {
+                mTitleTextView.setText(mMovie.getTitle() + " (" + mMovie.getYear() + ")");
+            } else {
+                mTitleTextView.setText(mMovie.getTitle());
+            }
             mSummary.setText(mMovie.getOverview());
             mPosterImageView.loadPoster(mMovie);
             mRatingBarLayout.setRatingVotes(mMovie.getRatingVotes());

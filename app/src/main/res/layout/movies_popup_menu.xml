@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Button
+        android:id="@+id/button_share"
+        style="@style/ContextMenuButton"
+        android:text="@string/share_movie" />
+
+    <Button
+        android:id="@+id/button_trailer"
+        style="@style/ContextMenuButton"
+        android:text="@string/trailer_movie" />
+
+    <Button
+        android:id="@+id/button_web_search"
+        style="@style/ContextMenuButton"
+        android:text="@string/menu_movie_websearch" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="?mmTextColorPrimary" />
+
+    <Button
+        android:id="@+id/button_cancel"
+        style="@style/ContextMenuButton"
+        android:text="@string/cancel" />
+
+</merge>

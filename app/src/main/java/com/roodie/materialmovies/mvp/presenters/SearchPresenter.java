@@ -30,10 +30,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by Roodie on 20.08.2015.
  */
+@Singleton
 public class SearchPresenter extends BasePresenter {
 
     private SearchView mSearchView;
@@ -80,6 +82,7 @@ public class SearchPresenter extends BasePresenter {
         Preconditions.checkNotNull(view, "View cannot be null");
         this.mSearchView = view;
         attached = true;
+        mSearchView.onUiAttached();
     }
 
     public void detachView(SearchView view) {
@@ -136,29 +139,30 @@ public class SearchPresenter extends BasePresenter {
 
     public void search(String query) {
         Log.d(LOG_TAG, "Performing search :" + query);
-        mState.setSearchQuery(query);
         switch (mSearchView.getQueryType()) {
             case SEARCH: {
                 Log.d(LOG_TAG, "Fetch common search results");
                 fetchSearchResults(getId(mSearchView), query);
-            }
                 break;
-            case SEARCH_MOVIES:
+            }
+            case SEARCH_MOVIES: {
                 fetchMovieSearchResults(getId(mSearchView), query);
                 break;
-            case SEARCH_PEOPLE:
+            }
+            case SEARCH_PEOPLE: {
                 fetchPeopleSearchResults(getId(mSearchView), query);
                 break;
-            case SEARCH_SHOWS:
+            }
+            case SEARCH_SHOWS: {
                 fetchShowsSearchResults(getId(mSearchView), query);
                 break;
+            }
         }
     }
 
     public void clearSearch() {
         mState.setSearchResult(null);
     }
-
     private void fetchSearchResults(final int callingId, String query) {
         mState.setSearchResult(new MoviesState.SearchResult(query));
         fetchMovieSearchResults(callingId, query, TMDB_FIRST_PAGE);
@@ -212,8 +216,8 @@ public class SearchPresenter extends BasePresenter {
                 case SEARCH: {
                     Log.d(LOG_TAG, "Populate search Ui");
                     populateSearchUi();
-                }
                     break;
+                }
                 case SEARCH_MOVIES:
                     populateSearchMovieUi();
                     break;
@@ -237,18 +241,8 @@ public class SearchPresenter extends BasePresenter {
         MoviesState.SearchResult result = mState.getSearchResult();
         mSearchView.updateDisplayTitle(result != null ? result.query : null);
 
-        // Now carry on with list ui population
-        List<MovieWrapper> items = null;
-
-        ApplicationState.MoviePaginatedResult popular = mState.getPopularMovies();
-        if (popular != null) {
-            items = popular.items;
-        }
-
-        if (items == null) {
-            mSearchView.setItems(null);
-        } else  {
-            mSearchView.setItems(createListItemList(items));
+        if (result != null && result.movies != null) {
+            mSearchView.setItems(createListItemList(result.movies.items));
         }
     }
 
@@ -273,7 +267,7 @@ public class SearchPresenter extends BasePresenter {
     }
 
     public String getUiTitle() {
-        return mState.getSearchQuery();
+        return mState.getSearchResult().query;
     }
 
     public String getUiSubTitle() {
@@ -319,6 +313,8 @@ public class SearchPresenter extends BasePresenter {
         void showPersonDetail(PersonWrapper person, View view);
 
         void showTvShowDialog(ShowWrapper tvShow);
+
+        void onUiAttached();
 
         String getTitle();
 

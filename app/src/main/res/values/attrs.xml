@@ -61,10 +61,6 @@
         <attr name="title" />
     </declare-styleable>
 
-    <declare-styleable name="SearchCardLayout">
-        <attr name="title" />
-    </declare-styleable>
-
     <declare-styleable name="TvShowDialogView">
         <attr name="title" />
         <attr name="android:background" />

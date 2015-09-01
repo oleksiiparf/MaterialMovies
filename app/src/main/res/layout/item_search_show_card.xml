@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_minor"
         android:layout_marginLeft="@dimen/spacing_minor"
         android:layout_marginRight="@dimen/spacing_minor"
-        app:cardBackgroundColor="?mmBackgroundColorSecondary">
+        app:cardBackgroundColor="?mmBackgroundColorSecondary"
+        android:foreground="?android:attr/selectableItemBackground">
 
         <LinearLayout
             android:id="@+id/card_content_holder"
@@ -29,5 +27,3 @@
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
-
-</FrameLayout>

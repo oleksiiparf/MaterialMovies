@@ -29,13 +29,13 @@ import com.roodie.materialmovies.views.activities.PersonActivity;
 import com.roodie.materialmovies.views.activities.SettingsActivity;
 import com.roodie.materialmovies.views.fragments.MovieDetailFragment;
 import com.roodie.materialmovies.views.fragments.MovieImagesFragment;
-import com.roodie.materialmovies.views.fragments.MovieSearchGridFragment;
 import com.roodie.materialmovies.views.fragments.MoviesTabFragment;
-import com.roodie.materialmovies.views.fragments.PeopleSearchGridFragment;
 import com.roodie.materialmovies.views.fragments.PersonDetailFragment;
 import com.roodie.materialmovies.views.fragments.SearchFragment;
+import com.roodie.materialmovies.views.fragments.SearchMoviesGridFragment;
+import com.roodie.materialmovies.views.fragments.SearchPeopleGridFragment;
+import com.roodie.materialmovies.views.fragments.SearchTvShowsGridFragment;
 import com.roodie.materialmovies.views.fragments.ShowsTabFragment;
-import com.roodie.materialmovies.views.fragments.TvShowSearchGridFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
@@ -373,16 +373,16 @@ public class MMoviesDisplay implements Display {
 
     @Override
     public void showSearchMoviesFragment() {
-        showFragment(new MovieSearchGridFragment());
+        showFragment(new SearchMoviesGridFragment());
     }
 
     @Override
     public void showSearchPeopleFragment() {
-        showFragment(new PeopleSearchGridFragment());
+        showFragment(new SearchPeopleGridFragment());
     }
 
     @Override
     public void showSearchTvShowsFragment() {
-        showFragment(new TvShowSearchGridFragment());
+        showFragment(new SearchTvShowsGridFragment());
     }
 }

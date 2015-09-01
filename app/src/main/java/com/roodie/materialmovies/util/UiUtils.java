@@ -1,6 +1,7 @@
 package com.roodie.materialmovies.util;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.view.View;
 import android.widget.Toast;
@@ -42,6 +43,11 @@ public class UiUtils {
     public static float centerY(View view){
         return ViewHelper.getY(view) + view.getHeight()/2;
     }
+
+    public static int dpToPx(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
 
 
 }

@@ -10,7 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.views.custom_views.RecyclerItemClickListener;
+import com.roodie.materialmovies.views.listeners.RecyclerItemClickListener;
 
 /**
  * Created by Roodie on 01.07.2015.
@@ -44,6 +44,8 @@ public abstract class BaseGridFragment extends BaseFragment implements RecyclerI
         mSecondaryProgressView.setVisibility(View.GONE);
         mListContainer = (FrameLayout) view.findViewById(R.id.conteiner);
         mGridShown = true;
+
+        System.out.println("Toolbar = " + getToolbar() != null);
         initializeRecycler();
     }
 

@@ -7,12 +7,14 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.drawable.RoundedDrawable;
+import com.roodie.materialmovies.util.AnimationUtils;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
@@ -29,6 +31,7 @@ public class MMoviesImageView extends ImageView {
 
     private ImageHandler mImageHandler;
     private boolean mAvatarMode = false;
+    private boolean mAutoFade = false;
 
     public interface OnLoadedListener {
 
@@ -43,6 +46,10 @@ public class MMoviesImageView extends ImageView {
 
     public void setAvatarMode(boolean mAvatarMode) {
         this.mAvatarMode = mAvatarMode;
+    }
+
+    public void setAutoFade(boolean autoFade) {
+        mAutoFade = autoFade;
     }
 
     private void reset() {
@@ -105,6 +112,7 @@ public class MMoviesImageView extends ImageView {
             setImageHandler(new MoviePosterHandler(movie, listener));
         } else {
             reset();
+            setImageResourceImpl(R.color.movie_placeholder);
         }
     }
 
@@ -120,6 +128,7 @@ public class MMoviesImageView extends ImageView {
             setImageHandler(new ShowPosterHandler(show, listener));
         } else {
             reset();
+            setImageResourceImpl(R.color.movie_placeholder);
         }
     }
 
@@ -259,6 +268,7 @@ public class MMoviesImageView extends ImageView {
         protected String buildUrl(MovieWrapper object, ImageView imageView) {
             return ImageHelper.getPosterUrl(object, imageView.getWidth(), imageView.getHeight());
         }
+
     }
 
     //ShowPosterHandler
@@ -272,6 +282,7 @@ public class MMoviesImageView extends ImageView {
         protected String buildUrl(ShowWrapper object, ImageView imageView) {
             return ImageHelper.getPosterUrl(object, imageView.getWidth(), imageView.getHeight());
         }
+
     }
 
     //CastProfileHandler
@@ -315,6 +326,10 @@ public class MMoviesImageView extends ImageView {
             return ImageHelper.getFanartUrl(movie, imageView.getWidth(), imageView.getHeight());
         }
 
+        @Override
+        int getPlaceholderDrawable() {
+            return R.color.mm_green;
+        }
     }
 
     private class MovieBackdropImageHandler extends ImageHandler<MovieWrapper.BackdropImage> {
@@ -340,7 +355,7 @@ public class MMoviesImageView extends ImageView {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
             //Log.d(LOG_TAG, "On bitmap loaded");
-            setImageBitmapImpl(bitmap);
+            setImageBitmapFromNetwork(bitmap, from);
             if (mImageHandler != null) {
                 if (mImageHandler.mListener != null) {
                     mImageHandler.mListener.onSuccess(MMoviesImageView.this, bitmap, mImageHandler.getImageUrl(MMoviesImageView.this));
@@ -371,6 +386,25 @@ public class MMoviesImageView extends ImageView {
     };
 
 
+    void setImageBitmapFromNetwork(final Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+        final boolean fade = mAutoFade && loadedFrom != Picasso.LoadedFrom.MEMORY;
+        final Drawable currentDrawable = getDrawable();
+
+        if (fade) {
+            if (currentDrawable == null || mImageHandler.getPlaceholderDrawable() != 0) {
+                // If we have no current drawable, or it is a placeholder drawable. Just fade in
+                setVisibility(View.INVISIBLE);
+                setImageBitmapImpl(bitmap);
+                AnimationUtils.Fade.show(this);
+            } else {
+                AnimationUtils.startCrossFade(this, currentDrawable,
+                        new BitmapDrawable(getResources(), bitmap));
+            }
+        } else {
+            setImageBitmapImpl(bitmap);
+        }
+    }
+
     void setImageBitmapImpl(final Bitmap bitmap) {
         if (mAvatarMode) {
             setImageDrawable(new RoundedDrawable(bitmap));
@@ -395,9 +429,6 @@ public class MMoviesImageView extends ImageView {
             setImageResource(resId);
         }
     }
-
-
-
 
 }
 

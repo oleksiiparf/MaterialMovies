@@ -52,6 +52,8 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
 
     String tmdbBackdropUrl;
 
+    Date releaseDate;
+
     int tmdbYear;
 
     boolean tmdbIsAdult;
@@ -123,6 +125,7 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         }
 
         if (movie.release_date != null && tmdbReleasedCountryCode == null) {
+            releaseDate = movie.release_date;
             tmdbReleasedTime = unbox(tmdbReleasedTime, movie.release_date);
         }
 
@@ -300,6 +303,10 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         this.related = related;
     }
 
+    public boolean hasTrailers() {
+        return trailers != null;
+    }
+
     public List<TrailerWrapper> getTrailers() {
         return trailers;
     }
@@ -366,6 +373,10 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
 
     public String getTmdbBackdropUrl() {
         return tmdbBackdropUrl;
+    }
+
+    public Date getReleaseDate() {
+        return releaseDate;
     }
 
     public String getPosterUrl() {

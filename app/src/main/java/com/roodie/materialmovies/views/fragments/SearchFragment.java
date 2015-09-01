@@ -112,11 +112,13 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "On create view");
         return inflater.inflate(R.layout.fragment_search_detail_list, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "On view created");
         super.onViewCreated(view, savedInstanceState);
         mPresenter.attachView(this);
         mPresenter.initialize();
@@ -124,28 +126,36 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
     @Override
     public void onResume() {
-        super.onResume();
-        mPresenter.onResume();
+        Log.d(LOG_TAG, "On resume");
 
         Toolbar toolbar = getToolbar();
         if (toolbar != null) {
             configureToolbar(toolbar);
         }
+        mPresenter.onResume();
+        super.onResume();
     }
 
     @Override
     public void onPause() {
-        super.onPause();
-        mPresenter.onPause();
+        Log.d(LOG_TAG, "On pause");
 
         getToolbar().setVisibility(View.GONE);
         ((ViewGroup)mSearchView.getParent()).removeView(mSearchView);
+        mPresenter.onPause();
+
+        super.onPause();
     }
 
     @Override
     public void onDetach() {
+        //mPresenter.detachView(this);
         super.onDetach();
-        mPresenter.detachView(this);
+    }
+
+    @Override
+    public void onUiAttached() {
+
     }
 
     private void configureToolbar(@NonNull Toolbar toolbar) {
@@ -411,13 +421,13 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
         Display display = getDisplay();
         if (display != null) {
             if (movie.getTmdbId() != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    System.out.println("Start by shared element");
-                    display.startMovieDetailActivityBySharedElements(String.valueOf(movie.getTmdbId()), view, (String) view.getTag());
-                } else {
+               // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //    System.out.println("Start by shared element");
+                //    display.startMovieDetailActivityBySharedElements(String.valueOf(movie.getTmdbId()), view, (String) view.getTag());
+               // } else {
                     System.out.println("Start by animation");
                     display.startMovieDetailActivityByAnimation(String.valueOf(movie.getTmdbId()), startingLocation);
-                }
+              //  }
             }
         }
     }

@@ -40,6 +40,11 @@ public abstract class SearchGridFragment<D extends BasicWrapper, E extends Recyc
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         mPresenter.onPause();
@@ -54,18 +59,24 @@ public abstract class SearchGridFragment<D extends BasicWrapper, E extends Recyc
     @Override
     public void onDetach() {
         super.onDetach();
-        mPresenter.detachView(this);
+        //mPresenter.detachView(this);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.movie_view_recycler, container, false);
+        return inflater.inflate(R.layout.search_view_recycler, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (getToolbar() != null) {
+            System.out.println("Toolbar != null");
+        } else {
+            System.out.println("Toolbar == null");
+        }
+        //getToolbar().setVisibility(View.VISIBLE);
         //set actionbar up navigation
         final Display display = getDisplay();
         if (!isModal()) {
@@ -91,6 +102,23 @@ public abstract class SearchGridFragment<D extends BasicWrapper, E extends Recyc
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onUiAttached() {
+
+        String title = getTitle();
+        String subtitle = getSubtitle();
+
+
+        final Display display = getDisplay();
+        if (display != null) {
+            if (!isModal()) {
+                display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
+            }
+            display.setActionBarTitle(title);
+            display.setActionBarSubtitle(subtitle);
+        }
     }
 
     protected final boolean hasPresenter() {
@@ -208,4 +236,8 @@ public abstract class SearchGridFragment<D extends BasicWrapper, E extends Recyc
         }
     };
 
+    @Override
+    public void onPopupMenuClick(View view, int position) {
+
+    }
 }

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.google.common.base.Objects;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
-import com.roodie.materialmovies.views.custom_views.RecyclerItemClickListener;
+import com.roodie.materialmovies.views.listeners.RecyclerItemClickListener;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.ShowWrapper;
 

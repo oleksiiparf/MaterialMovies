@@ -1,7 +1,6 @@
 package com.roodie.materialmovies.views.fragments.base;
 
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
@@ -20,17 +20,19 @@ import com.roodie.materialmovies.mvp.presenters.MovieGridPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.adapters.MovieGridAdapter;
 import com.roodie.materialmovies.views.custom_views.RecyclerInsetsDecoration;
+import com.roodie.materialmovies.views.listeners.MovieMenuItemClickListener;
 import com.roodie.model.Display;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.network.NetworkError;
+import com.roodie.model.util.MoviesCollections;
 
 import java.util.List;
 
 /**
  * Created by Roodie on 29.06.2015.
  */
-public abstract class MovieGridFragment extends BaseGridFragment implements MovieGridPresenter.MovieGridView{
+public abstract class MovieGridFragment extends BaseGridFragment implements MovieGridPresenter.MovieGridView {
 
     protected MovieGridPresenter mMovieGridPresenter;
     private MovieGridAdapter mMovieGridAdapter;
@@ -109,6 +111,11 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (getToolbar() != null) {
+            System.out.println("Toolbar != null");
+        } else {
+            System.out.println("Toolbar == null");
+        }
         //set actionbar up navigation
         final Display display = getDisplay();
         if (!isModal()) {
@@ -138,6 +145,8 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
 
     @Override
     public void onClick(View view, int position) {
+
+       // MovieContextMenuManager.getInstance().hideContextMenu();
         if (hasPresenter()) {
 
             ListItem<MovieWrapper> item = mMovieGridAdapter.getItem(position);
@@ -147,6 +156,27 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
                 showMovieDetail(item.getListItem(), view);
             }
         }
+    }
+
+    @Override
+    public void onPopupMenuClick(View view, int position) {
+        PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
+        popupMenu.inflate(R.menu.movie_popup_menu);
+
+        MovieWrapper movieWrapper = mMovieGridAdapter.getItem(position).getListItem();
+
+        // show/hide some menu items depending on movie information
+        Menu menu = popupMenu.getMenu();
+
+        menu.findItem(R.id.menu_action_web_search)
+                .setVisible(movieWrapper.getTitle() != null);
+
+        menu.findItem(R.id.menu_action_trailer)
+                .setVisible(movieWrapper != null && !MoviesCollections.isEmpty(movieWrapper.getTrailers()));
+
+        popupMenu.setOnMenuItemClickListener(
+                new MovieMenuItemClickListener(movieWrapper,getDisplay()));
+        popupMenu.show();
     }
 
     protected final boolean hasPresenter() {
@@ -208,16 +238,17 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
         Display display = getDisplay();
         if (display != null) {
             if (movie.getTmdbId() != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    System.out.println("Start by shared element");
-                    display.startMovieDetailActivityBySharedElements(String.valueOf(movie.getTmdbId()), view, (String) view.getTag());
-                } else {
+               // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //    System.out.println("Start by shared element");
+                 //   display.startMovieDetailActivityBySharedElements(String.valueOf(movie.getTmdbId()), view, (String) view.getTag());
+               // } else {
                     System.out.println("Start by animation");
                     display.startMovieDetailActivityByAnimation(String.valueOf(movie.getTmdbId()), startingLocation);
-                }
+               // }
             }
         }
     }
+
 
     @Override
     public String getRequestParameter() {
@@ -228,7 +259,6 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
             super.onScrolled(recyclerView, dx, dy);
 
             int visibleItemCount    = getRecyclerView().getLayoutManager().getChildCount();
@@ -241,5 +271,7 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
             }
         }
     };
+
+
 
 }

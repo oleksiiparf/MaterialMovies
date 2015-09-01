@@ -56,6 +56,7 @@ dependencies {
     compile 'com.github.chrisbanes.photoview:library:1.2.+'
     compile 'com.github.asyl.animation:arcanimator:1.0.0'
     compile 'com.github.ozodrukh:CircularReveal:1.0.4@aar'
+    compile 'com.jakewharton:butterknife:7.0.1'
 
     apt 'com.squareup.dagger:dagger-compiler:1.2.+'
 

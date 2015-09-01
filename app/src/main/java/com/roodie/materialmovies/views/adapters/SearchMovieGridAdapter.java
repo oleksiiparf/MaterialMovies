@@ -5,15 +5,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.common.base.Objects;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
-import com.roodie.materialmovies.views.custom_views.RecyclerItemClickListener;
+import com.roodie.materialmovies.views.listeners.RecyclerItemClickListener;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
 
+import java.text.DateFormat;
 import java.util.List;
 
 /**
@@ -22,6 +24,8 @@ import java.util.List;
 public class SearchMovieGridAdapter extends RecyclerView.Adapter<SearchMovieGridAdapter.MovieViewHolder> {
 
     private static final String LOG_TAG = SearchMovieGridAdapter.class.getName();
+
+    private DateFormat movieReleaseDate = DateFormat.getDateInstance(DateFormat.MEDIUM);
 
     private RecyclerItemClickListener mClickListener;
 
@@ -66,13 +70,33 @@ public class SearchMovieGridAdapter extends RecyclerView.Adapter<SearchMovieGrid
         final MovieWrapper movie = getItem(position).getListItem();
 
         holder.title.setText(movie.getTitle());
-        holder.subtitle1.setText(movie.getGenres());
-        holder.subtitle2.setText(String.valueOf(movie.getReleasedTime()));
+        holder.subtitle1.setText("movie.getGenres()");
+
+        if (movie.getReleaseDate() != null) {
+            holder.subtitle2.setText(movieReleaseDate.format(movie.getReleaseDate()));
+        } else {
+            holder.subtitle2.setText("");
+        }
+
         //load poster
         holder.poster.loadPoster(movie, new MMoviesImageView.OnLoadedListener() {
             @Override
             public void onSuccess(MMoviesImageView imageView, Bitmap bitmap, String imageUrl) {
                 holder.poster.setTag(imageUrl);
+                /*Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(Palette palette) {
+
+                        final Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
+                        final Palette.Swatch darkMutedSwatch = palette.getDarkMutedSwatch();
+
+                        final Palette.Swatch backgroundAndContentColors = (darkVibrantSwatch != null)
+                                ? darkVibrantSwatch : darkMutedSwatch;
+
+                        holder.container.setBackgroundColor(backgroundAndContentColors.getRgb());
+                    }
+                });
+                */
             }
 
             @Override
@@ -90,6 +114,7 @@ public class SearchMovieGridAdapter extends RecyclerView.Adapter<SearchMovieGrid
         TextView subtitle1;
         TextView subtitle2;
         MMoviesImageView poster;
+        ImageView contextMenu;
 
         public MovieViewHolder(View itemView, RecyclerItemClickListener listener) {
             super(itemView);
@@ -100,12 +125,22 @@ public class SearchMovieGridAdapter extends RecyclerView.Adapter<SearchMovieGrid
             title = (TextView) itemView.findViewById(R.id.title);
             subtitle1 = (TextView) itemView.findViewById(R.id.subtitle_1);
             subtitle2 = (TextView) itemView.findViewById(R.id.subtitle_2);
+            contextMenu = (ImageView) itemView.findViewById(R.id.context_menu);
+            contextMenu.setOnClickListener(this);
             this.onClickListener = listener;
         }
 
         @Override
         public void onClick(View v) {
-            onClickListener.onClick(poster, getPosition());
+            final int viewId=  v.getId();
+            switch (viewId) {
+                case R.id.card_content_holder :
+                    onClickListener.onClick(poster, getPosition());
+                    break;
+                case R.id.context_menu:
+                    onClickListener.onPopupMenuClick(contextMenu, getPosition());
+                    break;
+            }
         }
     }
 

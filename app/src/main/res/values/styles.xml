@@ -256,11 +256,18 @@
         <item name="android:maxLines">2</item>
         <item name="font">din_light</item>
     </style>
+
     <style name="Widget.MMovies.TextAppearance.SecondaryText"
         parent="Widget.MMovies.TextAppearance">
         <item name="android:textSize">14.0sp</item>
         <item name="android:textColor">?mmTextColorSecondary</item>
     </style>
+
+    <style name="Widget.MMovies.TextAppearance.SecondaryText.Small"
+        parent="Widget.MMovies.TextAppearance.SecondaryText">
+        <item name="android:textSize">12.0sp</item>
+    </style>
+
     <style name="Widget.MMovies.TextAppearance.SecondaryText.Negative"
         parent="Widget.MMovies.TextAppearance.SecondaryText">
         <item name="android:textColor">@color/mm_red</item>
@@ -290,6 +297,18 @@
         <item name="android:textColor">?mmTextColorSecondary</item>
     </style>
 
+    <style name="Widget.MMovies.TabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/Widget.MMovies.TabLayout.TextAppearance</item>
+
+    </style>
+
+    <style name="Widget.MMovies.TabLayout.TextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="font">din_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/mm_orange_a_400</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
     <style name="Widget.MMovies.Movie.Summary.Title" parent="TextAppearance.AppCompat.Headline">
         <item name="android:textColor">?mmTextColorPrimary</item>
         <item name="android:maxLines">2</item>
@@ -299,6 +318,23 @@
         <item name="font">roboto_condensed</item>
         <item name="android:textSize">18dp</item>
         <item name="android:textColor">?mmTextColorPrimary</item>
+    </style>
+
+    <style name="CardOverflow">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:src">@drawable/ic_menu_moreoverflow</item>
+    </style>
+
+    <style name="ContextMenuButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:textColor">?attr/mmTextColorPrimary</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
 

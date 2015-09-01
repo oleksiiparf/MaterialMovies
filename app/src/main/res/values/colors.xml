@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="theme_primary">#363F44</color>
-    <color name="theme_primary_dark">#ff1a1f23</color>
-    <color name="theme_accent">#E91C62</color>
 
     <color name="movie_placeholder">#ff4e5d64</color>
 
@@ -13,9 +10,6 @@
     <color name="semi_transparent">#88676767</color>
 
     <color name="side_menu_background">#FF202020</color>
-
-    #
-
     <color name="material_dialog_dark">#363F44</color>
     <color name="material_dialog_light">#EDEDED</color>
 
@@ -51,7 +45,7 @@
     <color name="grey_45">#73333333</color>
     <color name="grey_30">#4C333333</color>
 
-    <!-- robin -->
+
     <color name="abc_input_method_navigation_guard">@android:color/black</color>
     <color name="abc_search_url_text_normal">#ff7fa87f</color>
     <color name="abc_search_url_text_pressed">@android:color/black</color>
@@ -111,13 +105,6 @@
     <color name="hint_foreground_material_dark">@color/bright_foreground_disabled_material_dark</color>
     <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light</color>
     <color name="iav_bank_of_america">#ffd4001a</color>
-    <color name="iav_chase">#ff0f5ba7</color>
-    <color name="iav_citi">#ff000066</color>
-    <color name="iav_pnc">#fff48024</color>
-    <color name="iav_svb">#ff1b9fda</color>
-    <color name="iav_us_bank">#ff0c2074</color>
-    <color name="iav_usaa">#ff00365b</color>
-    <color name="iav_wells_fargo">#ffbb0826</color>
     <color name="link_text_material_dark">@color/material_deep_teal_200</color>
     <color name="link_text_material_light">@color/material_deep_teal_500</color>
     <color name="login_text_error_color">@color/mm_white_1</color>
@@ -159,6 +146,7 @@
     <color name="mm_neutral_400">#ff757577</color>
     <color name="mm_neutral_500">#ff303032</color>
     <color name="mm_neutral_600">#ff212124</color>
+    <color name="mm_orange_a_400">#FF9100</color>
     <color name="mm_red">#fff45531</color>
     <color name="mm_white_1">@color/mm_neutral_100</color>
     <color name="mm_white_2">@color/mm_neutral_200</color>

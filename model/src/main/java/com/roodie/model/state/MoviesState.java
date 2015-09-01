@@ -54,10 +54,6 @@ public interface MoviesState extends BaseState {
 
     public SearchResult getSearchResult();
 
-    public void setSearchQuery(String result);
-
-    public String getSearchQuery();
-
     public TmdbConfiguration getTmdbConfiguration();
 
     public void setTmdbConfiguration(TmdbConfiguration configuration);

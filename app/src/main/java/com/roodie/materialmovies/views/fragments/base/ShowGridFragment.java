@@ -256,4 +256,9 @@ public abstract class ShowGridFragment extends BaseGridFragment implements ShowG
             showTvShowDialog(item);
         }
     }
+
+    @Override
+    public void onPopupMenuClick(View view, int position) {
+
+    }
 }

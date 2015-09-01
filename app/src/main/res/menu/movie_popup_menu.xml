@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_action_share"
+        android:title="@string/share_movie" />
+    <item
+        android:id="@+id/menu_action_trailer"
+        android:title="@string/trailer_movie" />
+    <item
+        android:id="@+id/menu_action_web_search"
+        android:title="@string/menu_movie_websearch" />
+
+</menu>

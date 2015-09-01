@@ -1,53 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="88dp">
+    android:layout_height="88dp"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/context_menu"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_marginTop="1.0dip"
+        android:layout_marginRight="4.0dip"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        style="@style/CardOverflow"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:paddingBottom="24dp"
-        android:paddingLeft="28dp"
-        android:scaleType="centerInside"
-        android:src="?attr/drawableDropdown" />
+        tools:ignore="ContentDescription"/>
 
-
-    <TextView
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
-        android:textSize="16sp"
         android:ellipsize="end"
-        android:maxLines="2"
+        style="@style/Widget.MMovies.TextAppearance.PrimaryText"
         android:text="Title"/>
 
-    <TextView
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
         android:id="@+id/subtitle_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:textSize="14sp"
         android:ellipsize="end"
-        android:singleLine="true"
+        style="@style/Widget.MMovies.TextAppearance.SecondaryText"
         android:layout_below="@+id/title"
         android:text="genre1 | genre2" />
 
-    <TextView
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
         android:id="@+id/subtitle_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginBottom="8dp"
-        android:textSize="12sp"
         android:ellipsize="end"
-        android:singleLine="true"
+        style="@style/Widget.MMovies.TextAppearance.SecondaryText.Small"
         android:text="November 13, 2013"
         android:layout_alignParentBottom="true" />
 

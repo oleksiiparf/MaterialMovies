@@ -50,9 +50,12 @@
 
     <dimen name="movie_detail_login_title_textsize">26dp</dimen>
 
-    <dimen name="grid_spacing">2dp</dimen>
-    <dimen name="movie_grid_item_width">100dp</dimen>
-    <dimen name="movie_grid_item_height">170dp</dimen>
+    <dimen name="grid_spacing">4dip</dimen>
+    <dimen name="movie_grid_item_width">180dip</dimen>
+    <dimen name="movie_grid_item_height">200dip</dimen>
+
+    <dimen name="movie_grid_item_padding">3.0dip</dimen>
+
 
     <dimen name="search_item_width">190dp</dimen>
     <dimen name="search_item_height">240dp</dimen>

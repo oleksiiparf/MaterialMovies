@@ -43,6 +43,10 @@ public interface UiView {
                 case PERSON_DETAIL:
                 case PERSON_CREDITS_CAST:
                 case PERSON_CREDITS_CREW:
+                case SEARCH:
+                case SEARCH_MOVIES:
+                case SEARCH_SHOWS:
+                case SEARCH_PEOPLE:
                     return true;
                 default:
                     return false;

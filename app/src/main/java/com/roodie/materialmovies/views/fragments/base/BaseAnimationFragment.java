@@ -22,7 +22,7 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.util.UiUtils;
-import com.roodie.materialmovies.views.custom_views.RotateAnimationListener;
+import com.roodie.materialmovies.views.listeners.RotateAnimationListener;
 
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
