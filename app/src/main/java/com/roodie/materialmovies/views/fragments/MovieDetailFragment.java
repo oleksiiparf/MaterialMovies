@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -86,7 +87,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     private TextView mTitleTextView;
     private TextView mSummary;
     private MMoviesImageView mPosterImageView;
-    private LinearLayout mTrailerButton;
+    private Button mTrailerButton;
     private RatingBarLayout mRatingBarLayout;
     private Context mContext;
 
@@ -215,7 +216,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
         mRatingBarLayout = (RatingBarLayout)view.findViewById(R.id.rating_bar);
 
-        mTrailerButton = (LinearLayout) view.findViewById(R.id.trailer_container);
+        mTrailerButton = (Button) view.findViewById(R.id.trailer_button);
         if (mTrailerButton != null) {
             onPrepareTrailerButton(mTrailerButton);
             mTrailerButton.setOnClickListener(new View.OnClickListener() {
@@ -297,12 +298,9 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         super.onPrepareOptionsMenu(menu);
     }
 
-    public void onPrepareTrailerButton(LinearLayout layout) {
+    public void onPrepareTrailerButton(Button button) {
         isEnableYoutube = (mMovie != null && !MoviesCollections.isEmpty(mMovie.getTrailers()));
-        //for (int i = 0; i < mTrailerButton.getChildCount(); i++) {
-           // View view = mTrailerButton.getChildAt(i);
-          //  layout.setEnabled(isEnableYoutube);
-       // }
+        //button.setEnabled(isEnableYoutube);
     }
 
     /**
@@ -794,7 +792,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             TextView genres;
             ImageView posterImageView;
             RatingBarLayout ratingBarLayout;
-            LinearLayout trailerButton;
+            Button trailerButton;
 
 
             public ViewHolder(View view) {
@@ -806,7 +804,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                 taglineTextView = (AutofitTextView) view.findViewById(R.id.textview_tagline);
                 posterImageView = (ImageView)view.findViewById(R.id.imageview_poster);
                 ratingBarLayout = (RatingBarLayout)view.findViewById(R.id.rating_bar);
-                trailerButton = (LinearLayout) view.findViewById(R.id.trailer_container);
+                trailerButton = (Button) view.findViewById(R.id.trailer_button);
 
             }
         }

@@ -7,6 +7,7 @@ import com.roodie.materialmovies.modules.library.UtilProvider;
 import com.roodie.materialmovies.util.TypefaceManager;
 import com.roodie.materialmovies.views.custom_views.AutofitTextView;
 import com.roodie.materialmovies.views.custom_views.ExpandableTextView;
+import com.roodie.materialmovies.views.custom_views.MMoviesButton;
 import com.roodie.materialmovies.views.custom_views.MMoviesEditText;
 import com.roodie.materialmovies.views.custom_views.MMoviesTextView;
 
@@ -28,7 +29,8 @@ import dagger.Provides;
                 MMoviesTextView.class,
                 AutofitTextView.class,
                 ExpandableTextView.class,
-                MMoviesEditText.class
+                MMoviesEditText.class,
+                MMoviesButton.class
         }
 )
 

@@ -121,4 +121,13 @@
 
     <dimen name="toolbar_elevation">4.0dip</dimen>
 
+    <!-- Button-->
+    <dimen name="button_elevation">2.0dip</dimen>
+    <dimen name="button_inset_horizontal">4.0dip</dimen>
+    <dimen name="button_inset_vertical">6.0dip</dimen>
+    <dimen name="button_padding_horizontal">8.0dip</dimen>
+    <dimen name="button_padding_vertical">4.0dip</dimen>
+    <dimen name="button_pressed_z">2.0dip</dimen>
+    <dimen name="control_corner">2.0dip</dimen>
+
 </resources>

@@ -136,7 +136,15 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <include layout="@layout/item_movie_summary_trailer" />
+                    <com.roodie.materialmovies.views.custom_views.MMoviesButton
+                        android:id="@+id/trailer_button"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/spacing_major"
+                        android:layout_marginRight="@dimen/spacing_major"
+                        android:layout_marginTop="@dimen/spacing_minor"
+                        style="@style/Widget.MMovies.Button.Borderless"
+                        android:text="@string/trailer_movie" />
 
                 </LinearLayout>
 

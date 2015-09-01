@@ -31,6 +31,7 @@
         <item name="mmRoundedBackgroundMiddle">@drawable/rounded_background_middle_day</item>
         <item name="mmRoundedBackgroundBottom">@drawable/rounded_background_bottom_day</item>
         <item name="mmIconTintColorPrimary">@color/mm_gray_1</item>
+        <item name="mmButtonTextColorBorderlessWhite">@color/white</item>
         <item name="mmButtonTextColorBorderlessGreen">@color/button_selector_borderless_day_green</item>
         <item name="mmButtonTextColorBorderlessRed">@color/button_selector_borderless_day_red</item>
         <item name="mmRadioButtonDrawable">@drawable/radio_button_background_day</item>
@@ -66,6 +67,7 @@
         <item name="mmRoundedBackgroundMiddle">@drawable/rounded_background_middle_night</item>
         <item name="mmRoundedBackgroundBottom">@drawable/rounded_background_bottom_night</item>
         <item name="mmIconTintColorPrimary">@color/mm_gray_2</item>
+        <item name="mmButtonTextColorBorderlessWhite">@color/white</item>
         <item name="mmButtonTextColorBorderlessGreen">@color/button_selector_borderless_night_green</item>
         <item name="mmButtonTextColorBorderlessRed">@color/button_selector_borderless_night_red</item>
         <item name="mmRadioButtonDrawable">@drawable/radio_button_background_night</item>

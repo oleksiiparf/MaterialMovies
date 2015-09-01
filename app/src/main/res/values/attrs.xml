@@ -53,6 +53,14 @@
         <attr name="font" />
     </declare-styleable>
 
+    <declare-styleable name="MMoviesButton">
+        <attr name="font" />
+    </declare-styleable>
+
+    <declare-styleable name="MMoviesEditText">
+        <attr name="font" />
+    </declare-styleable>
+
     <declare-styleable name="MovieDetailInfoLayout">
         <attr name="title" />
     </declare-styleable>
@@ -75,6 +83,7 @@
         <attr name="grey_shade" format="color|reference" />
         <attr name="mmBackgroundColorPrimary" format="color|reference" />
         <attr name="mmBackgroundColorSecondary" format="color|reference" />
+        <attr name="mmButtonTextColorBorderlessWhite" format="color|reference" />
         <attr name="mmButtonTextColorBorderlessGreen" format="color|reference" />
         <attr name="mmButtonTextColorBorderlessRed" format="color|reference" />
         <attr name="mmRevealBackgroundColor" format="color|reference" />
