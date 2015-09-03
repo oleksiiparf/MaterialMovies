@@ -359,5 +359,42 @@
         <item name="android:background">@drawable/button_background_borderless</item>
     </style>
 
+    <style name="Widget.MMovies.NavBar.Bottom" parent="Widget.MMovies.TextAppearance">
+        <item name="android:textSize">15.0sp</item>
+        <item name="android:textColor">@color/white_hint_color</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/dark_green_selectable_item_background</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="font">din_medium</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="Widget.MMovies.TextAppearance.WelcomeScreen" parent="@style/Widget.MMovies.TextAppearance">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingLeft">@dimen/welcome_view_side_padding</item>
+        <item name="android:paddingRight">@dimen/welcome_view_side_padding</item>
+    </style>
+
+    <style name="Widget.MMovies.TextAppearance.WelcomeScreen.Primary" parent="@style/Widget.MMovies.TextAppearance.WelcomeScreen">
+        <item name="android:textSize">20.0sp</item>
+        <item name="android:textColor">@color/mm_white_1</item>
+        <item name="android:paddingTop">22.0dip</item>
+        <item name="android:paddingBottom">22.0dip</item>
+    </style>
+    <style name="Widget.MMovies.TextAppearance.WelcomeScreen.Secondary" parent="@style/Widget.MMovies.TextAppearance.WelcomeScreen">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textColor">@color/mm_white_1</item>
+        <item name="font">din_light</item>
+    </style>
+
+    <style name="Widget.MMovies.TextAppearance.WelcomeScreen.Button" parent="@style/Widget.MMovies.TextAppearance.WelcomeScreen">
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:textColor">#ff26a47b</item>
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="font">din_medium</item>
+    </style>
 
 </resources>

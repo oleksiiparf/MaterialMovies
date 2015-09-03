@@ -3,6 +3,15 @@
     <string name="title_film_detail">Film Detail</string>
     <string name="tmdb">TMDb</string>
 
+    <!-- Welcome items -->
+    <string name="welcome_to_mmovies">Welcome to MaterialMovies</string>
+    <string name="welcome_desc">Swipe to learn more.</string>
+    <string name="use_mmovies_title">Use MaterialMovies anywhere.</string>
+    <string name="use_mmovies_desc">Enjoy your favourite movies, TV shows anytime, anywhere.</string>
+    <string name="welcome_extras_title">Movie trailers, and other extras.</string>
+    <string name="welcome_extras_desc">Automatically get access to high quality online trailers and extras for the movies.</string>
+
+
     <!-- Main Menu -->
     <string name="movies_title">Movies</string>
     <string name="shows_title">Shows</string>
@@ -112,6 +121,9 @@
 
     <string name="settings_title">Settings</string>
     <string name="see_more">See more</string>
+
+    <string name="activity_continue">Continue</string>
+    <string name="activity_continue_with_caret">Continue   ❯</string>
 
     <!-- Appearance settings -->
     <string name="pref_appearance">Appearance</string>

@@ -9,4 +9,8 @@
 
     <integer name="anim_trans_duration_millis">300</integer>
 
+    <integer name="welcome_view_content_weight">5</integer>
+
+    <integer name="welcome_view_image_weight">4</integer>
+
 </resources>

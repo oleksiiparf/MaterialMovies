@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="0.0dip"
+        android:layout_weight="@integer/welcome_view_image_weight"
+        android:scaleType="center"
+        android:src="@drawable/mm_logo_large" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0.0dip"
+        android:layout_weight="@integer/welcome_view_content_weight"
+        android:orientation="vertical">
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            style="@style/Widget.MMovies.TextAppearance.WelcomeScreen.Primary"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_to_mmovies" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            style="@style/Widget.MMovies.TextAppearance.WelcomeScreen.Secondary"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/spacing_major"
+            android:paddingTop="@dimen/spacing_major"
+            android:text="@string/welcome_desc" />
+    </LinearLayout>
+</LinearLayout>
