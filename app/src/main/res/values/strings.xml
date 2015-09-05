@@ -13,6 +13,7 @@
 
 
     <!-- Main Menu -->
+    <string name="watchlist_title">Watchlist</string>
     <string name="movies_title">Movies</string>
     <string name="shows_title">Shows</string>
     <string name="people_title">People</string>

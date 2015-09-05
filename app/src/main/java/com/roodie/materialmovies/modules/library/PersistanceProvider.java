@@ -53,5 +53,4 @@ public class PersistanceProvider {
         return new AndroidFileManager(file);
     }
 
-
 }

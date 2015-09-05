@@ -368,7 +368,10 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
         if (personImagePoster == null && personName == null) {
             mItems.add(PersonItems.HEADER);
         }
-        mItems.add(PersonItems.TITLE);
+
+        if (mPerson.getAge() != null && mPerson.getDateOfBirth() != null && !TextUtils.isEmpty(mPerson.getPlaceOfBirth())) {
+            mItems.add(PersonItems.TITLE);
+        }
 
         if (!TextUtils.isEmpty(mPerson.getBiography())) {
             mItems.add(PersonItems.BIOGRAPHY);
@@ -519,11 +522,15 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
+
+            View container;
             TextView subtitle1;
             TextView subtitle2;
 
             public ViewHolder(View view) {
                 super(view);
+
+                container = view.findViewById(R.id.movie_detail_card_details);
                 subtitle1 = (TextView) view.findViewById(R.id.textview_subtitle_1);
                 subtitle2 = (TextView) view.findViewById(R.id.textview_subtitle_2);
             }

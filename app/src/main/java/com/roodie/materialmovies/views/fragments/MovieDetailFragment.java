@@ -33,7 +33,6 @@ import com.roodie.materialmovies.mvp.presenters.MovieDetailPresenter;
 import com.roodie.materialmovies.settings.TmdbSettings;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.activities.SettingsActivity;
-import com.roodie.materialmovies.views.custom_views.AutofitTextView;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout;
@@ -86,6 +85,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     private MMoviesImageView mFanartImageView;
     private TextView mTitleTextView;
     private TextView mSummary;
+    private TextView mTagline;
     private MMoviesImageView mPosterImageView;
     private Button mTrailerButton;
     private RatingBarLayout mRatingBarLayout;
@@ -189,6 +189,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         mFanartImageView = (MMoviesImageView) view.findViewById(R.id.imageview_fanart);
         mTitleTextView = (TextView) view.findViewById(R.id.textview_title);
         mSummary = (TextView) view.findViewById(R.id.textview_summary);
+        mTagline = (TextView) view.findViewById(R.id.textview_tagline);
         mPosterImageView = (MMoviesImageView) view.findViewById(R.id.imageview_poster);
         if (mPosterImageView != null) {
 
@@ -572,22 +573,29 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             } else {
                 mTitleTextView.setText(mMovie.getTitle());
             }
+
+            if (!TextUtils.isEmpty(mMovie.getTagline())) {
+                mTagline.setText(mMovie.getTagline());
+            } else {
+                mTagline.setHeight(0);
+            }
             mSummary.setText(mMovie.getOverview());
+
             mPosterImageView.loadPoster(mMovie);
+
             mRatingBarLayout.setRatingVotes(mMovie.getRatingVotes());
             mRatingBarLayout.setRatingValue(mMovie.getRatingVoteAverage());
             mRatingBarLayout.setRatingRange(10);
 
-            mItems.add(DetailItemType.TAGLINE);
 
         } else {
 
             mItems.add(DetailItemType.TITLE);
+
             if (!TextUtils.isEmpty(mMovie.getOverview())) {
-                mItems.add(DetailItemType.SUMMARY);
+                mItems.add(DetailItemType.DESCRIPTION);
             }
         }
-
 
         mItems.add(DetailItemType.DETAILS);
 
@@ -617,6 +625,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
      enum DetailItemType  {
         TITLE,          //(R.layout.item_movie_detail_title), includes poster, tagline and rating
         TAGLINE,        //(R.layout.iutem_movie_detail_tagline)
+        DESCRIPTION,    // R.lay.item_movie_detail_description
         DETAILS,        //(R.layout.item_movie_detail_details), include details
         SUMMARY,        //(R.layout.item_movie_detail_summary), includes description text, maybe
         TRAILERS,       //(R.layout.item_movie_detail_trailers), includes trailers
@@ -643,11 +652,8 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                     case TITLE:
                         mItems.add(new MovieTitleBinder(this));
                         break;
-                    case TAGLINE:
-                        mItems.add(new MovieTaglineBinder(this));
-                        break;
-                    case SUMMARY:
-                        mItems.add(new MovieSummaryBinder(this));
+                    case DESCRIPTION:
+                        mItems.add(new MovieDescriptionBinder(this));
                         break;
                     case DETAILS:
                         mItems.add(new MovieDetailsBinder(this));
@@ -671,36 +677,41 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
     }
 
-    /**
-     * MovieSummaryBinder
-     */
-    public class MovieSummaryBinder extends BaseViewHolder<MovieSummaryBinder.ViewHolder> {
 
-        public MovieSummaryBinder(BaseDetailAdapter dataBindAdapter) {
+    /**
+     * MovieDescriptionBinder
+     */
+    public class MovieDescriptionBinder extends BaseViewHolder<MovieDescriptionBinder.ViewHolder> {
+
+        public MovieDescriptionBinder(BaseDetailAdapter dataBindAdapter) {
             super(dataBindAdapter);
         }
 
         @Override
         public ViewHolder newViewHolder(ViewGroup parent) {
             View view = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.item_movie_detail_summary, parent, false);
+                    R.layout.item_movie_detail_description, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
+
+            holder.tagline.setText(mMovie.getTagline());
             holder.summary.setText(mMovie.getOverview());
 
-            holder.summary.setScaleY(0);
-            holder.summary.setScaleX(0);
 
-            holder.summary.animate()
+            holder.container.setScaleY(0);
+            holder.container.setScaleX(0);
+
+            holder.container.animate()
                     .scaleY(1)
                     .scaleX(1)
                     .setDuration(200)
                     .setInterpolator(getInterpolator())
                     .setStartDelay(animationDelay)
                     .start();
+
         }
 
         @Override
@@ -708,12 +719,17 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             return 1;
         }
 
-         class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder {
 
+            View container;
+            TextView tagline;
             TextView summary;
 
             public ViewHolder(View view) {
                 super(view);
+
+                container = view.findViewById(R.id.movie_detail_card_details);
+                tagline = (TextView) view.findViewById(R.id.textview_tagline);
                 summary = (TextView) view.findViewById(R.id.textview_summary);
             }
         }
@@ -737,7 +753,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
-            holder.taglineTextView.setText(mMovie.getTagline());
             holder.title.setText(mMovie.getTitle() + " (" + mMovie.getYear() + ")");
             holder.genres.setText(mMovie.getGenres());
             String mImageBaseUrl = TmdbSettings.getImageBaseUrl(mContext)
@@ -753,9 +768,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             holder.ratingBarLayout.setRatingValue(mMovie.getRatingVoteAverage());
             holder.ratingBarLayout.setRatingRange(10);
 
-            //holder.ratingBar.setMax(100);
-            //holder.ratingBar.setProgress(mMovie.getAverageRatingPercent());
-           // holder.votes.setText(String.valueOf(mMovie.getRatingVotes()));
             onPrepareTrailerButton(holder.trailerButton);
             holder.trailerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -787,7 +799,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         class ViewHolder extends RecyclerView.ViewHolder {
 
             LinearLayout container;
-            AutofitTextView taglineTextView;
             TextView title;
             TextView genres;
             ImageView posterImageView;
@@ -801,49 +812,10 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                 container = (LinearLayout) view.findViewById(R.id.container_layout);
                 title = (TextView) view.findViewById(R.id.textview_title);
                 genres = (TextView) view.findViewById(R.id.textview_genres);
-                taglineTextView = (AutofitTextView) view.findViewById(R.id.textview_tagline);
                 posterImageView = (ImageView)view.findViewById(R.id.imageview_poster);
                 ratingBarLayout = (RatingBarLayout)view.findViewById(R.id.rating_bar);
                 trailerButton = (Button) view.findViewById(R.id.trailer_button);
 
-            }
-        }
-    }
-
-    /**
-     * MovieTaglineBinder
-     */
-    public class MovieTaglineBinder extends BaseViewHolder<MovieTaglineBinder.ViewHolder> {
-
-        public MovieTaglineBinder(BaseDetailAdapter dataBindAdapter) {
-            super(dataBindAdapter);
-        }
-
-        @Override
-        public ViewHolder newViewHolder(ViewGroup parent) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.item_movie_detail_tagline, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void bindViewHolder(ViewHolder holder, int position) {
-            holder.tagline.setText(mMovie.getTagline());
-        }
-
-
-        @Override
-        public int getItemCount() {
-            return 1;
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-
-            TextView tagline;
-
-            public ViewHolder(View view) {
-                super(view);
-                tagline = (TextView) view.findViewById(R.id.textview_tagline);
             }
         }
     }

@@ -61,7 +61,7 @@
                 <LinearLayout
                     android:id="@+id/title_root"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <View
@@ -98,13 +98,13 @@
                 <LinearLayout
                     android:id="@+id/separator"
                     android:layout_width="fill_parent"
-                    android:layout_height="0.5dip"
+                    android:layout_height="1dp"
                     android:layout_below="@id/title_root"
-                    android:layout_marginLeft="30.0dip"
-                    android:layout_marginRight="30.0dip"
-                    android:layout_marginTop="15.0dip"
-                    android:background="@color/summary_divider"
-
+                    android:layout_marginLeft="@dimen/spacing_massive"
+                    android:layout_marginRight="@dimen/spacing_massive"
+                    android:layout_marginTop="@dimen/spacing_massive"
+                    android:layout_marginBottom="@dimen/spacing_massive"
+                    android:background="?mmTextColorPrimary"
                     android:orientation="vertical" />
 
 
@@ -116,14 +116,26 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
+                    <com.roodie.materialmovies.views.custom_views.AutofitTextView
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/textview_tagline"
+                        style="@style/Widget.MMovies.Movie.Detail.Tagline"
+                        android:layout_marginBottom="@dimen/spacing_major"
+                        android:paddingTop="@dimen/spacing_minor"
+                        android:paddingLeft="@dimen/spacing_massive"
+                        android:paddingRight="@dimen/spacing_massive"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+
                     <com.roodie.materialmovies.views.custom_views.ExpandableTextView
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/textview_summary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="@dimen/spacing_minor"
-                        android:paddingLeft="@dimen/spacing_major"
-                        android:paddingRight="@dimen/spacing_major"
+                        android:paddingLeft="@dimen/spacing_massive"
+                        android:paddingRight="@dimen/spacing_massive"
                         android:paddingBottom="@dimen/spacing_minor"
                         style="@style/Widget.MMovies.Movie.Detail.Summary.Scroll" />
 

@@ -81,7 +81,7 @@ public class PersonWrapper extends  BasicWrapper<PersonWrapper> implements Seria
         return dateOfDeath;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 

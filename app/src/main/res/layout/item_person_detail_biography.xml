@@ -2,21 +2,21 @@
 <com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:internal="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/person_detail_card_biography"
     internal:title="@string/biography">
 
-
-    <TextView
+    <com.roodie.materialmovies.views.custom_views.ExpandableTextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/textview_biography"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/keyline"
-        android:paddingRight="@dimen/keyline"
-        android:paddingBottom="@dimen/default_padding"
-        tools:text="Kiefer Sutherland  (born 21 December 1966) is a British-Canadian actor"
-        style="@style/Widget.MMovies.Person.Detail.Biography"/>
+        android:padding="@dimen/spacing_major"
+        android:paddingTop="@dimen/spacing_minor"
+        style="@style/Widget.MMovies.TextAppearance.PrimaryText"
+        app:font="din_regular" />
+
 
 </com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout>

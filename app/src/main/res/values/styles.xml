@@ -109,19 +109,18 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
-
     <style name="Widget.MMovies.Person.Detail.Title"
-        parent="Widget.MMovies.Movie.Detail.Title">
-        <item name="android:textColor">@android:color/white</item>
+        parent="Widget.MMovies.TextAppearance">
+        <item name="font">din_regular</item>
+        <item name="android:textSize">16.0sp</item>
         <item name="android:gravity">bottom|left</item>
     </style>
 
-    <style name="Widget.MMovies.Person.Detail.Subtitle" parent="android:Widget">
-        <item name="font">roboto_condensed</item>
-        <item name="android:textSize">@dimen/person_detail_subtitle_textsize</item>
+    <style name="Widget.MMovies.Person.Detail.Subtitle" parent="Widget.MMovies.TextAppearance">
+        <item name="font">din_regular</item>
+        <item name="android:textSize">16.0sp</item>
         <item name="android:maxLines">2</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="Widget.MMovies.Movie.Detail.Title" parent="android:Widget">
@@ -398,8 +397,9 @@
     </style>
 
     <style name="Widget.MMovies.DotIndicator" parent="android:Widget">
-        <item name="fillColor">#ff199c74</item>
-        <item name="pageColor">@android:color/transparent</item>
+        <item name="fillColor">@color/mm_white_1</item>
+        <item name="pageColor">#ff199c74</item>
+        <item name="strokeColor">#ff199c74</item>
 
     </style>
 

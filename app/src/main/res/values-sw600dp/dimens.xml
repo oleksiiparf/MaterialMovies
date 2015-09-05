@@ -19,9 +19,9 @@
 
     <dimen name="trailer_text_size">20dp</dimen>
 
-    <dimen name="spacing_micro">8dp</dimen>
-    <dimen name="spacing_minor">16dp</dimen>
-    <dimen name="spacing_major">24dp</dimen>
+    <dimen name="spacing_micro">4dp</dimen>
+    <dimen name="spacing_minor">8dp</dimen>
+    <dimen name="spacing_major">12dp</dimen>
     <dimen name="spacing_massive">24dp</dimen>
     <dimen name="spacing_huge">56dp</dimen>
 

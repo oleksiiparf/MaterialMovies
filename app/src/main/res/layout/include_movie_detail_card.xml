@@ -36,7 +36,6 @@
                         android:layout_gravity="right|center_vertical"
                         android:textAppearance="@style/TextAppearance.AppCompat.Button"
                         android:textColor="?attr/colorAccent" />
-
                 <TextView
                         android:id="@+id/textview_title"
                         android:layout_width="wrap_content"
@@ -47,6 +46,8 @@
                         android:textColor="?mmTextColorPrimary" />
 
             </FrameLayout>
+
+            <include android:id="@+id/divider" layout="@layout/include_divider" />
 
         </LinearLayout>
 

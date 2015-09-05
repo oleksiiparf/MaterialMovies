@@ -48,17 +48,21 @@ public abstract class BaseNavigationActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        super.onCreate(savedInstanceState);
+
         mCardContainer = findViewById(R.id.card_container);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        getDisplay().setDrawerLayout(this.mDrawerLayout);
 
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         mUserProfilePhoto = (MMoviesImageView) findViewById(R.id.profile_image);
+
         if (mNavigationView != null) {
             setupDrawerContent(mNavigationView);
             setupHeader();
         }
-        super.onCreate(savedInstanceState);
     }
 
     private void setupHeader() {
@@ -151,12 +155,6 @@ public abstract class BaseNavigationActivity extends BaseActivity {
         return false;
     }
 
-
-    @Override
-    protected void setDisplay() {
-        super.setDisplay();
-        getDisplay().setDrawerLayout(this.mDrawerLayout);
-    }
 
     protected Intent getParentIntent() {
         return NavUtils.getParentActivityIntent(this);

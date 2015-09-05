@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:padding="@dimen/spacing_minor"
-              android:background="@color/dark_gray"
-              android:animateLayoutChanges="true"
-              android:baselineAligned="false">
+
+<com.roodie.materialmovies.views.custom_views.MovieDetailCardLayoutWithoutTitle xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/movie_detail_card_details"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/card_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/spacing_major"
+        android:paddingRight="@dimen/spacing_major"
+        android:paddingBottom="@dimen/spacing_major">
+
 
         <com.roodie.materialmovies.views.custom_views.MMoviesTextView
                 android:id="@+id/textview_subtitle_1"
-                style="@style/Widget.MMovies.Person.Detail.Subtitle"
+                style="@style/Widget.MMovies.TextAppearance.PrimaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <com.roodie.materialmovies.views.custom_views.MMoviesTextView
               android:id="@+id/textview_subtitle_2"
-              style="@style/Widget.MMovies.Person.Detail.Subtitle"
+              style="@style/Widget.MMovies.TextAppearance.PrimaryText"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"/>
 
-</LinearLayout>
+    </LinearLayout>
+
+</com.roodie.materialmovies.views.custom_views.MovieDetailCardLayoutWithoutTitle>
