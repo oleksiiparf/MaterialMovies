@@ -27,6 +27,7 @@ import com.roodie.materialmovies.views.activities.MovieActivity;
 import com.roodie.materialmovies.views.activities.MovieImagesActivity;
 import com.roodie.materialmovies.views.activities.PersonActivity;
 import com.roodie.materialmovies.views.activities.SettingsActivity;
+import com.roodie.materialmovies.views.activities.WatchlistActivity;
 import com.roodie.materialmovies.views.fragments.MovieDetailFragment;
 import com.roodie.materialmovies.views.fragments.MovieImagesFragment;
 import com.roodie.materialmovies.views.fragments.MoviesTabFragment;
@@ -48,15 +49,22 @@ public class MMoviesDisplay implements Display {
     private static final String LOG_TAG = MMoviesDisplay.class.getSimpleName();
 
     private final ActionBarActivity mActivity;
-    private final DrawerLayout mDrawerLayout;
+    private  DrawerLayout mDrawerLayout;
 
     private Toolbar mToolbar;
     private boolean mCanChangeToolbarBackground;
 
+    public MMoviesDisplay(ActionBarActivity mActivity) {
+        this.mActivity = mActivity;
+    }
+
     public MMoviesDisplay(ActionBarActivity mActivity, DrawerLayout mDrawerLayout) {
         this.mActivity = Preconditions.checkNotNull(mActivity, "Activity can not be null");
         this.mDrawerLayout = mDrawerLayout;
+    }
 
+    public void setDrawerLayout(DrawerLayout drawerLayout) {
+        this.mDrawerLayout = drawerLayout;
     }
 
     private void showFragment(Fragment fragment) {
@@ -106,6 +114,12 @@ public class MMoviesDisplay implements Display {
             ab.setHomeButtonEnabled(true);
             ab.setHomeAsUpIndicator(show ? R.drawable.ic_clear_white_24dp : R.drawable.ic_menu);
         }
+    }
+
+    @Override
+    public void startWatchlistActivity() {
+        Intent intent = new Intent(mActivity, WatchlistActivity.class);
+        startActivity(intent, null);
     }
 
     @Override

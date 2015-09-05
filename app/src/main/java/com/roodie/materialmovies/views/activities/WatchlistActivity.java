@@ -10,7 +10,7 @@ import com.roodie.model.Display;
 /**
  * Created by Roodie on 27.06.2015.
  */
-public class MainActivity extends BaseActivity {
+public class WatchlistActivity extends BaseNavigationActivity {
 
 
     @Override
@@ -37,11 +37,13 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void handleIntent(Intent intent, Display display) {
-        if (Intent.ACTION_MAIN.equals(intent.getAction())) {
+        //if (Intent.ACTION_MAIN.equals(intent.getAction())) {
             if (!display.hasMainFragment()) {
              display.showMovies();
-               }
-        }
+               } else {
+                System.out.println("Hasnt main fragment");
+            }
+       // }
     }
 
 }

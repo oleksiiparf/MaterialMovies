@@ -12,6 +12,7 @@ public class MMoviesPreferences {
 
     public static final String KEY_ONLYWIFI = "com.roodie.materialmovies.autoupdatewlanonly";
     public static final String KEY_THEME = "com.roodie.materialmovies.theme";
+    public static final String KEY_FIRST_VISIT = "com.roodie.materialmovies.visit";
 
 
     public static boolean isLargeDataOverWifiOnly(Context mContext) {
@@ -28,6 +29,18 @@ public class MMoviesPreferences {
 
     public static void setApplicationTheme(Context mContext, int themeNumber) {
         PreferenceManager.getDefaultSharedPreferences(mContext).edit().putString(KEY_THEME, String.valueOf(themeNumber)).apply();
+    }
+
+    public static boolean getFirstVisitPerformed(Context mContext) {
+        return PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(KEY_FIRST_VISIT, false);
+    }
+
+    public static void setFirstVisitPerformed(Context mContext, boolean performed) {
+        PreferenceManager.getDefaultSharedPreferences(mContext).edit().putBoolean(KEY_FIRST_VISIT, performed).apply();
+    }
+
+    public static boolean isSetFirstVisitPerformed(Context mContext) {
+        return PreferenceManager.getDefaultSharedPreferences(mContext).contains(KEY_FIRST_VISIT);
     }
 
 

@@ -19,6 +19,7 @@ package com.roodie.model;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 
 import com.roodie.model.entities.MovieWrapper;
@@ -32,6 +33,8 @@ public interface Display {
 
     public static final String PARAM_IMAGE = "_image";
 
+    public void setDrawerLayout(DrawerLayout drawerLayout);
+
     public void showMovies();
 
     public void showTvShows();
@@ -39,6 +42,8 @@ public interface Display {
     public void showSettings();
 
     public void showAbout();
+
+    public void startWatchlistActivity();
 
     public void startMovieDetailActivityByAnimation(String movieId, int[] startingLocation);
 

@@ -133,7 +133,7 @@ public class SettingsActivity extends AppCompatActivity {
                     Utils.updateTheme(activity.getApplicationContext(), (String) newValue);
 
                     TaskStackBuilder.create(activity)
-                            .addNextIntent(new Intent(activity, MainActivity.class))
+                            .addNextIntent(new Intent(activity, WatchlistActivity.class))
                             .addNextIntent(intent)
                             .startActivities();
                 }

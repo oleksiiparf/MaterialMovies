@@ -1,5 +1,6 @@
 package com.roodie.materialmovies.views.activities;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -8,13 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.roodie.materialmovies.R;
+import com.roodie.materialmovies.util.MMoviesVisitManager;
+import com.roodie.materialmovies.views.custom_views.CirclePageIndicator;
+import com.roodie.model.Display;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * Created by Roodie on 03.09.2015.
  */
 public class WelcomeActivity extends BaseActivity {
+
+    //@Inject
+    MMoviesVisitManager mVisitManager;
 
     private static final int WELCOME_ACTIVITY_PAGER_SIZE = 3;
 
@@ -30,11 +38,53 @@ public class WelcomeActivity extends BaseActivity {
     @Bind({R.id.welcome_view_3})
     View mWelcomeViewPage3;
 
+    @Bind({R.id.welcome_pager_dot_indicator})
+    CirclePageIndicator mPageIndicator;
+
+
+    @Override
+    protected int getThemeResId() {
+        return R.style.Theme_MMovies_Green;
+    }
+
+    private void finishIfFirstVisitAlreadyPerformed() {
+        if (mVisitManager.isFirstVisitPerformed()) {
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mVisitManager = new MMoviesVisitManager(this);
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        WelcomePagerAdapter welcomePagerAdapter = new WelcomePagerAdapter();
+        this.mViewPager.setAdapter(welcomePagerAdapter);
+        this.mViewPager.setOffscreenPageLimit(WELCOME_ACTIVITY_PAGER_SIZE);
+        this.mPageIndicator.setViewPager(this.mViewPager);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        finishIfFirstVisitAlreadyPerformed();
+    }
+
+    @Override
+    protected void handleIntent(Intent intent, Display display) {
+        if (mVisitManager.isFirstVisitPerformed()) {
+            if (display != null) {
+                display.startWatchlistActivity();
+            }
+        }
+    }
+
+    @OnClick({R.id.continue_btn})
+    public void onContinueClicked() {
+        mVisitManager.recordFirstVisitPerformed();
+        if (getDisplay() != null) {
+            getDisplay().startWatchlistActivity();
+        }
     }
 
     @Override
@@ -49,7 +99,7 @@ public class WelcomeActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return WELCOME_ACTIVITY_PAGER_SIZE;
         }
 
         @Override

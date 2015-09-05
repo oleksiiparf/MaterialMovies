@@ -8,7 +8,7 @@ import com.roodie.model.Display;
 /**
  * Created by Roodie on 27.06.2015.
  */
-public class MovieImagesActivity extends BaseActivity {
+public class MovieImagesActivity extends BaseNavigationActivity {
 
     @Override
     protected Intent getParentIntent() {

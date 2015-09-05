@@ -9,7 +9,7 @@ import com.roodie.model.Display;
 /**
  * Created by Roodie on 27.06.2015.
  */
-public class MovieActivity extends BaseActivity {
+public class MovieActivity extends BaseNavigationActivity {
 
 
     @Override

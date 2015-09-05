@@ -397,4 +397,10 @@
         <item name="font">din_medium</item>
     </style>
 
+    <style name="Widget.MMovies.DotIndicator" parent="android:Widget">
+        <item name="fillColor">#ff199c74</item>
+        <item name="pageColor">@android:color/transparent</item>
+
+    </style>
+
 </resources>

@@ -10,7 +10,7 @@ import com.roodie.model.Display;
 /**
  * Created by Roodie on 14.08.2015.
  */
-public class ShowsActivity extends BaseActivity {
+public class ShowsActivity extends BaseNavigationActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -7,7 +7,7 @@
         android:id="@+id/viewpager"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@id/bottom_nav_bar">
+        android:layout_above="@+id/bottom_nav_bar">
 
         <include
             android:id="@+id/welcome_view_1"
@@ -22,6 +22,15 @@
             layout="@layout/include_welcome_view_3" />
 
     </android.support.v4.view.ViewPager>
+
+    <com.roodie.materialmovies.views.custom_views.CirclePageIndicator
+        android:id="@+id/welcome_pager_dot_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin_double"
+        android:layout_above="@+id/bottom_nav_bar"
+        android:layout_centerHorizontal="true"
+        style="@style/Widget.MMovies.DotIndicator"/>
 
     <FrameLayout
         android:id="@+id/bottom_nav_bar"
