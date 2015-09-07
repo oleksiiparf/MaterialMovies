@@ -113,7 +113,7 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(LOG_TAG, "On create view");
-        return inflater.inflate(R.layout.fragment_search_detail_list, container, false);
+        return inflater.inflate(R.layout.fragment_search_list, container, false);
     }
 
     @Override
@@ -421,12 +421,13 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
         Display display = getDisplay();
         if (display != null) {
             if (movie.getTmdbId() != null) {
+                display.startSearchDetailActivity(String.valueOf(movie.getTmdbId()), Display.SearchMediaType.MOVIES);
                // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 //    System.out.println("Start by shared element");
                 //    display.startMovieDetailActivityBySharedElements(String.valueOf(movie.getTmdbId()), view, (String) view.getTag());
                // } else {
-                    System.out.println("Start by animation");
-                    display.startMovieDetailActivityByAnimation(String.valueOf(movie.getTmdbId()), startingLocation);
+                //    System.out.println("Start by animation");
+                //    display.startMovieDetailActivityByAnimation(String.valueOf(movie.getTmdbId()), startingLocation);
               //  }
             }
         }
@@ -443,11 +444,28 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
         Display display = getDisplay();
         if (display != null) {
-            display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), startingLocation);
+           // display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), startingLocation);
+            display.startSearchDetailActivity(String.valueOf(person.getTmdbId()), Display.SearchMediaType.PEOPLE);
+
         }
 
     }
 
+    @Override
+    public void showTvShowDetail(ShowWrapper show, View view) {
+        Preconditions.checkNotNull(show, "show cannot be null");
+        Preconditions.checkNotNull(show.getTmdbId(), "show id cannot be null");
+
+        int[] startingLocation = new int[2];
+        view.getLocationOnScreen(startingLocation);
+        startingLocation[0] += view.getWidth() / 2;
+
+        Display display = getDisplay();
+        if (display != null) {
+            // display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), startingLocation);
+            display.startSearchDetailActivity(String.valueOf(show.getTmdbId()), Display.SearchMediaType.SHOWS);
+        }
+    }
 
     @Override
     public void showTvShowDialog(final ShowWrapper tvShow) {
@@ -563,15 +581,7 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
             cardLayout.setTitle(R.string.movies_title);
 
-            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Display display = getDisplay();
-                    if (display != null) {
-                        display.showSearchMoviesFragment();
-                    }
-                }
-            };
+            final View.OnClickListener seeMoreClickListener = new OnSearchItemClickListener(Display.SearchMediaType.MOVIES);
 
             final ViewRecycler viewRecycler = new ViewRecycler(holder.layout);
             viewRecycler.recycleViews();
@@ -634,15 +644,7 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
             cardLayout.setTitle(R.string.people_title);
 
-            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Display display = getDisplay();
-                    if (display != null) {
-                        display.showSearchPeopleFragment();
-                    }
-                }
-            };
+            final View.OnClickListener seeMoreClickListener = new OnSearchItemClickListener(Display.SearchMediaType.PEOPLE);
 
             final ViewRecycler viewRecycler = new ViewRecycler(holder.layout);
             viewRecycler.recycleViews();
@@ -707,15 +709,7 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
             cardLayout.setTitle(R.string.shows_title);
 
-            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Display display = getDisplay();
-                    if (display != null) {
-                        display.showSearchTvShowsFragment();
-                    }
-                }
-            };
+            final View.OnClickListener seeMoreClickListener = new OnSearchItemClickListener(Display.SearchMediaType.SHOWS);
 
             final ViewRecycler viewRecycler = new ViewRecycler(holder.layout);
             viewRecycler.recycleViews();
@@ -815,13 +809,7 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
             });
 
             view.setTag(mImageUrl);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(LOG_TAG, getQueryType() + " clicked");
-                    showMovieDetail(item, v);
-                }
-            });
+            view.setOnClickListener(new OnSearchItemClickListener(item.getTmdbId(), Display.SearchMediaType.MOVIES, imageView));
 
             return view;
         }
@@ -891,13 +879,8 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
             });
 
             view.setTag(mImageUrl);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(LOG_TAG, getQueryType() + " clicked");
-                    showPersonDetail(item, v);
-                }
-            });
+            view.setOnClickListener(new OnSearchItemClickListener(item.getTmdbId(), Display.SearchMediaType.PEOPLE, imageView));
+
 
 
             return view;
@@ -913,19 +896,10 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
      */
     private class TvShowAdapter extends BaseAdapter {
 
-        private final View.OnClickListener mItemOnClickListener;
         private final LayoutInflater mInflater;
 
         TvShowAdapter(LayoutInflater inflater) {
             mInflater = inflater;
-            mItemOnClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(LOG_TAG, getQueryType() + " clicked");
-                        showTvShowDialog((ShowWrapper) v.getTag());
-
-                }
-            };
         }
 
         @Override
@@ -967,7 +941,7 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
             imageView.loadPoster(item);
 
             view.setTag(item);
-            view.setOnClickListener(mItemOnClickListener);
+            view.setOnClickListener(new OnSearchItemClickListener(item.getTmdbId(), Display.SearchMediaType.PEOPLE, imageView));
 
             return view;
         }
@@ -996,5 +970,36 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
             mShowsAdapter = new TvShowAdapter(LayoutInflater.from(getActivity()));
         }
         return mShowsAdapter;
+    }
+
+    public  class OnSearchItemClickListener implements View.OnClickListener {
+
+        private final int mItemTmdbId;
+        private final Display.SearchMediaType queryType;
+        private final View view;
+
+        public OnSearchItemClickListener(int tmdbId, Display.SearchMediaType queryType, View view) {
+            this.mItemTmdbId = tmdbId;
+            this.queryType = queryType;
+            this.view = view;
+        }
+
+        public OnSearchItemClickListener(Display.SearchMediaType queryType) {
+            this(-1, queryType, null);
+        }
+
+        @Override
+        public void onClick(View v) {
+           // int[] startingLocation = new int[2];
+           // view.getLocationOnScreen(startingLocation);
+           // startingLocation[0] += view.getWidth() / 2;
+           // startingLocation[1] += view.getHeight() / 2;
+
+            Display display = getDisplay();
+            if (display != null) {
+                    display.startSearchDetailActivity(String.valueOf(mItemTmdbId), queryType);
+
+            }
+        }
     }
 }

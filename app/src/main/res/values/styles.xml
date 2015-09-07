@@ -100,9 +100,7 @@
         <item name="android:textColor">?android:textColorTertiary</item>
     </style>
 
-    <style name="Widget.MMovies.Movie.List.SectionHeader" parent="android:Widget">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
-        <item name="android:textColor">?attr/colorPrimary</item>
+    <style name="Widget.MMovies.Movie.List.SectionHeader" parent="Widget.MMovies.TextAppearance">
         <item name="android:textSize">14sp</item>
         <item name="android:padding">@dimen/spacing_major</item>
         <item name="android:background">?android:attr/colorBackground</item>

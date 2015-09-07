@@ -30,7 +30,7 @@ import javax.inject.Singleton;
  */
 
 @Singleton
-public class ShowGridPresenter extends BaseGridPresenter<ShowGridPresenter.ShowGridView> {
+public class ShowGridPresenter extends BaseListPresenter<ShowGridPresenter.ShowGridView> {
 
     private static final String LOG_TAG = ShowGridPresenter.class.getSimpleName();
 
@@ -41,8 +41,8 @@ public class ShowGridPresenter extends BaseGridPresenter<ShowGridPresenter.ShowG
 
     @Inject
     public ShowGridPresenter(ApplicationState moviesState,
-                              @GeneralPurpose BackgroundExecutor executor,
-                              Injector injector,
+                             @GeneralPurpose BackgroundExecutor executor,
+                             Injector injector,
                              StringFetcher stringFetcher) {
         super();
         mState = Preconditions.checkNotNull(moviesState, "mState can not be null");

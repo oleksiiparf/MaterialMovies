@@ -130,6 +130,15 @@ public class SearchPresenter extends BasePresenter {
                             searchResult.movies.page + 1);
                 }
                 break;
+            case SEARCH_SHOWS:
+                searchResult = mState.getSearchResult();
+                if (searchResult != null && canFetchNextPage(searchResult.shows)) {
+                    fetchShowsSearchResults(
+                            getId(mSearchView),
+                            searchResult.query,
+                            searchResult.shows.page + 1);
+                }
+                break;
         }
     }
 
@@ -311,6 +320,8 @@ public class SearchPresenter extends BasePresenter {
         void showMovieDetail(MovieWrapper movie, View view);
 
         void showPersonDetail(PersonWrapper person, View view);
+
+        void showTvShowDetail(ShowWrapper show, View view);
 
         void showTvShowDialog(ShowWrapper tvShow);
 

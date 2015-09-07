@@ -218,6 +218,11 @@ public abstract class SearchGridFragment<D extends BasicWrapper, E extends Recyc
         //TODO
     }
 
+    @Override
+    public void showTvShowDetail(ShowWrapper show, View view) {
+        //TODO
+    }
+
     private RecyclerView.OnScrollListener recyclerScrollListener = new RecyclerView.OnScrollListener() {
 
         @Override

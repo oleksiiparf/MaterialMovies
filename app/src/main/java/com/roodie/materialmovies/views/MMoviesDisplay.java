@@ -26,6 +26,7 @@ import com.roodie.materialmovies.util.TmdbUtils;
 import com.roodie.materialmovies.views.activities.MovieActivity;
 import com.roodie.materialmovies.views.activities.MovieImagesActivity;
 import com.roodie.materialmovies.views.activities.PersonActivity;
+import com.roodie.materialmovies.views.activities.SearchDetailActivity;
 import com.roodie.materialmovies.views.activities.SettingsActivity;
 import com.roodie.materialmovies.views.activities.WatchlistActivity;
 import com.roodie.materialmovies.views.fragments.MovieDetailFragment;
@@ -135,24 +136,6 @@ public class MMoviesDisplay implements Display {
         showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId, startingLocation));
     }
 
-
-    @Override
-    public void startMovieDetailActivityByAnimation(String movieId, View view, String imageUrl, int[] startingLocation) {
-        ActivityOptionsCompat options =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        mActivity, view, PARAM_IMAGE);
-        Intent intent = new Intent(mActivity, MovieActivity.class);
-        intent.putExtra(PARAM_ID, movieId);
-        intent.putExtra(PARAM_IMAGE, imageUrl);
-        intent.putExtra(PARAM_LOCATION, startingLocation);
-        startActivity(intent, options.toBundle());
-    }
-
-    @Override
-    public void showMovieDetailFragmentByAnimation(String movieId, int[] startingLocation, String imageUrl) {
-        showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId, startingLocation, imageUrl));
-    }
-
     @Override
     public void startMovieDetailActivityBySharedElements(String movieId, View view, String imageUrl) {
         ActivityOptionsCompat options =
@@ -170,16 +153,24 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
+    public void startMovieDetailActivity(String movieId, Bundle bundle) {
+        Intent intent = new Intent(mActivity, MovieActivity.class);
+        intent.putExtra(PARAM_ID, movieId);
+        startActivity(intent, bundle);
+    }
+
+    @Override
+    public void showMovieDetailFragment(String movieId) {
+        showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId));
+    }
+
+    @Override
     public void startPersonDetailActivity(String id, Bundle bundle) {
         Intent intent = new Intent(mActivity, PersonActivity.class);
         intent.putExtra(PARAM_ID, id);
         startActivity(intent, bundle);
     }
 
-    @Override
-    public void showPersonDetailFragment(String id) {
-        showFragmentFromDrawer(PersonDetailFragment.newInstance(id));
-    }
 
     @Override
     public void startPersonDetailActivity(String id, int[] startingLocation) {
@@ -398,5 +389,13 @@ public class MMoviesDisplay implements Display {
     @Override
     public void showSearchTvShowsFragment() {
         showFragment(new SearchTvShowsGridFragment());
+    }
+
+    @Override
+    public void startSearchDetailActivity(String id, SearchMediaType queryType) {
+        Intent intent = new Intent(mActivity, SearchDetailActivity.class);
+        intent.putExtra(PARAM_ID, Integer.valueOf(id));
+        intent.putExtra(PARAM_SEARCH_TYPE, queryType);
+        startActivity(intent, null);
     }
 }

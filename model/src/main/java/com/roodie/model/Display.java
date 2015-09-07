@@ -33,6 +33,12 @@ public interface Display {
 
     public static final String PARAM_IMAGE = "_image";
 
+    public static final String PARAM_SEARCH_TYPE = "_search_type";
+
+    public static enum SearchMediaType {
+        MOVIES, SHOWS, PEOPLE
+    }
+
     public void setDrawerLayout(DrawerLayout drawerLayout);
 
     public void showMovies();
@@ -47,19 +53,17 @@ public interface Display {
 
     public void startMovieDetailActivityByAnimation(String movieId, int[] startingLocation);
 
+    public void startMovieDetailActivityBySharedElements(String movieId, View view, String imageUrl);
+
+    public void startMovieDetailActivity(String movieId, Bundle bundle);
+
     public void showMovieDetailFragmentByAnimation(String movieId, int[] startingLocation);
 
-    public void startMovieDetailActivityByAnimation(String movieId, View view, String imageUrl, int[] startingLocation);
-
-    public void showMovieDetailFragmentByAnimation(String movieId, int[] startingLocation, String imageUrl);
-
-    public void startMovieDetailActivityBySharedElements(String movieId, View view, String imageUrl);
+    public void showMovieDetailFragment(String movieId);
 
     public void showMovieDetailFragmentBySharedElements(String movieId, String imageUrl);
 
     public void startPersonDetailActivity(String id, Bundle bundle);
-
-    public void showPersonDetailFragment(String id);
 
     public void startPersonDetailActivity(String id, int[] startingLocation);
 
@@ -117,5 +121,6 @@ public interface Display {
 
     public void showSearchTvShowsFragment();
 
+    public void startSearchDetailActivity(String id, SearchMediaType queryType);
 
 }

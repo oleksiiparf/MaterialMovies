@@ -62,4 +62,8 @@ public interface UiView {
         POPULAR, ON_THE_AIR
     }
 
+    public static enum SearchMediaType {
+        MOVIES, SHOWS, PEOPLE
+    }
+
 }

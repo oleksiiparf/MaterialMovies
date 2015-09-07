@@ -21,9 +21,11 @@ public class MovieActivity extends BaseNavigationActivity {
       if (!display.hasMainFragment()) {
           if (intent.getIntArrayExtra(Display.PARAM_LOCATION) != null) {
               display.showMovieDetailFragmentByAnimation(intent.getStringExtra(Display.PARAM_ID), intent.getIntArrayExtra(Display.PARAM_LOCATION));
-          } else {
+          } else if (intent.getStringExtra(Display.PARAM_IMAGE) != null) {
               display.showMovieDetailFragmentBySharedElements(intent.getStringExtra(Display.PARAM_ID), intent.getStringExtra(Display.PARAM_IMAGE));
+          } else {
+              display.showMovieDetailFragment(intent.getStringExtra(Display.PARAM_ID));
           }
-          }
+      }
     }
 }

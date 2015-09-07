@@ -34,7 +34,7 @@ import javax.inject.Singleton;
 
 
 @Singleton
-public class MovieGridPresenter extends BaseGridPresenter<MovieGridPresenter.MovieGridView> {
+public class MovieGridPresenter extends BaseListPresenter<MovieGridPresenter.MovieGridView> {
 
     private static final String LOG_TAG = MovieGridPresenter.class.getSimpleName();
 

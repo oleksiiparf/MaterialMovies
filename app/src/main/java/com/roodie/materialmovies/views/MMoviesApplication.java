@@ -31,7 +31,8 @@ public class MMoviesApplication extends Application implements Injector {
         return (MMoviesApplication) context.getApplicationContext();
     }
 
-    @Inject MovieGridPresenter mMovieGridPresenter;
+    @Inject
+    MovieGridPresenter mMovieGridPresenter;
 
     @Inject
     ShowGridPresenter mShowGridPresenter;

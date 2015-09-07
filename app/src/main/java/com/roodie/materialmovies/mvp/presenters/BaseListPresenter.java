@@ -15,7 +15,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * Created by Roodie on 14.08.2015.
  */
-abstract class BaseGridPresenter<R extends BaseMovieListView> extends BasePresenter {
+abstract class BaseListPresenter<R extends BaseMovieListView> extends BasePresenter {
 
     private final Set<R> mUis;
     private final Set<R> mUnmodifiableUis;
@@ -26,7 +26,7 @@ abstract class BaseGridPresenter<R extends BaseMovieListView> extends BasePresen
         return mUnmodifiableUis;
     }
 
-    public BaseGridPresenter() {
+    public BaseListPresenter() {
         mUis = new CopyOnWriteArraySet<>();
         mUnmodifiableUis = Collections.unmodifiableSet(mUis);
     }

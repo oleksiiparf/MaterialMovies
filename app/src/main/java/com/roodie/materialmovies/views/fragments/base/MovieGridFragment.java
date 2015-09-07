@@ -1,6 +1,7 @@
 package com.roodie.materialmovies.views.fragments.base;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -238,13 +239,13 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
         Display display = getDisplay();
         if (display != null) {
             if (movie.getTmdbId() != null) {
-               // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                //    System.out.println("Start by shared element");
-                 //   display.startMovieDetailActivityBySharedElements(String.valueOf(movie.getTmdbId()), view, (String) view.getTag());
-               // } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    System.out.println("Start by shared element");
+                    display.startMovieDetailActivityBySharedElements(String.valueOf(movie.getTmdbId()), view, (String) view.getTag());
+                } else {
                     System.out.println("Start by animation");
                     display.startMovieDetailActivityByAnimation(String.valueOf(movie.getTmdbId()), startingLocation);
-               // }
+                }
             }
         }
     }
