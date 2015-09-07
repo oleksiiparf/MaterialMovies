@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.MovieWrapper;
@@ -23,7 +22,7 @@ public class SearchMoviesSectionedListAdapter extends BaseSectionedListAdapter<M
 
     public SearchMoviesSectionedListAdapter(Activity activity) {
         super(activity, R.layout.item_list_3line, R.layout.item_list_movie_section_header);
-        MMoviesApplication.from(activity).inject(this);
+        //MMoviesApplication.from(activity).inject(this);
     }
 
     @Override

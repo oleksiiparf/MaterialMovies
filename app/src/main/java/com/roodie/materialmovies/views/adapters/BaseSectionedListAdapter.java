@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by Roodie on 06.09.2015.
  */
-abstract class BaseSectionedListAdapter <T> extends BaseAdapter
+public abstract class BaseSectionedListAdapter <T> extends BaseAdapter
         implements PinnedSectionListView.PinnedSectionListAdapter {
 
     protected final Activity mActivity;
