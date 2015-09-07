@@ -15,6 +15,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
@@ -431,6 +432,7 @@ public class PinnedSectionListView extends ListView {
     @Override
     public void onRestoreInstanceState(Parcelable state) {
         super.onRestoreInstanceState(state);
+        Log.d("Pinnedsection List view", "Restore instance state");
         post(new Runnable() {
             @Override
             public void run() { // restore pinned view after configuration change
