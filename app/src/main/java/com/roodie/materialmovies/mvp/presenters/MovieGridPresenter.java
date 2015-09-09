@@ -187,7 +187,6 @@ public class MovieGridPresenter extends BaseListPresenter<MovieGridPresenter.Mov
     }
 
     private void fetchPopularIfNeeded(final int callingId) {
-        Log.d(LOG_TAG, "Fetch popular if needed.");
         ApplicationState.MoviePaginatedResult popular = mState.getPopularMovies();
         if (popular == null || MoviesCollections.isEmpty(popular.items)) {
             fetchPopular(callingId, TMDB_FIRST_PAGE);
@@ -198,7 +197,6 @@ public class MovieGridPresenter extends BaseListPresenter<MovieGridPresenter.Mov
      * Fetch now playing movies task
      */
     private void fetchNowPlayingIfNeeded(final int callingId) {
-        Log.d(LOG_TAG, "Fetch now playing if needed.");
         ApplicationState.MoviePaginatedResult nowPlaying = mState.getNowPlaying();
         if (nowPlaying == null || MoviesCollections.isEmpty(nowPlaying.items)) {
             fetchNowPlaying(callingId, TMDB_FIRST_PAGE);

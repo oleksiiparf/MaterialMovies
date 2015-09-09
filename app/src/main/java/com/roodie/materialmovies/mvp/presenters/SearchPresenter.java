@@ -22,6 +22,7 @@ import com.roodie.model.tasks.FetchSearchPeopleResult;
 import com.roodie.model.tasks.FetchSearchShowRunnable;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.Injector;
+import com.roodie.model.util.MoviesCollections;
 import com.roodie.model.util.StringFetcher;
 import com.squareup.otto.Subscribe;
 
@@ -35,6 +36,7 @@ import javax.inject.Singleton;
 /**
  * Created by Roodie on 20.08.2015.
  */
+
 @Singleton
 public class SearchPresenter extends BasePresenter {
 
@@ -87,7 +89,6 @@ public class SearchPresenter extends BasePresenter {
 
     public void detachView(SearchView view) {
         Preconditions.checkArgument(view != null, "view cannot be null");
-       // Preconditions.checkState(mSearchView == view, "view is not attached");
         mSearchView = null;
         attached = false;
     }
@@ -155,15 +156,35 @@ public class SearchPresenter extends BasePresenter {
                 break;
             }
             case SEARCH_MOVIES: {
-                fetchMovieSearchResults(getId(mSearchView), query);
+                fetchMovieSearchResultsIfNeeded(getId(mSearchView), query);
                 break;
             }
             case SEARCH_PEOPLE: {
-                fetchPeopleSearchResults(getId(mSearchView), query);
+                fetchPeopleSearchResultsIfNeeded(getId(mSearchView), query);
                 break;
             }
             case SEARCH_SHOWS: {
-                fetchShowsSearchResults(getId(mSearchView), query);
+                fetchShowsSearchResultsIfNeeded(getId(mSearchView), query);
+                break;
+            }
+        }
+    }
+
+    public void refresh() {
+        Log.d(LOG_TAG, "Refresh");
+        String query = mState.getSearchResult().query;
+
+        switch (mSearchView.getQueryType()) {
+            case SEARCH_MOVIES: {
+                fetchMovieSearchResults(getId(mSearchView), query, TMDB_FIRST_PAGE);
+                break;
+            }
+            case SEARCH_PEOPLE: {
+                fetchPeopleSearchResults(getId(mSearchView), query, TMDB_FIRST_PAGE);
+                break;
+            }
+            case SEARCH_SHOWS: {
+                fetchShowsSearchResults(getId(mSearchView), query, TMDB_FIRST_PAGE);
                 break;
             }
         }
@@ -172,6 +193,7 @@ public class SearchPresenter extends BasePresenter {
     public void clearSearch() {
         mState.setSearchResult(null);
     }
+
     private void fetchSearchResults(final int callingId, String query) {
         mState.setSearchResult(new MoviesState.SearchResult(query));
         fetchMovieSearchResults(callingId, query, TMDB_FIRST_PAGE);
@@ -179,14 +201,53 @@ public class SearchPresenter extends BasePresenter {
         fetchShowsSearchResults(callingId, query, TMDB_FIRST_PAGE);
     }
 
+    private void fetchMovieSearchResultsIfNeeded(final int callingId, String query) {
+        Log.d(LOG_TAG, "Fetch movie search results if needed");
+
+        Preconditions.checkNotNull(callingId, "calling id cannot be null");
+        Preconditions.checkNotNull(query, "query cannot be null");
+
+        MoviesState.SearchResult result = mState.getSearchResult();
+        if (result.movies == null && MoviesCollections.isEmpty(result.movies.items)) {
+            fetchMovieSearchResults(callingId, query);
+        } else {
+            populateSearchMovieUi();
+        }
+    }
+
     private void fetchMovieSearchResults(final int callingId, String query) {
+        Log.d(LOG_TAG, "Fetch movie search results");
         mState.setSearchResult(new MoviesState.SearchResult(query));
         fetchMovieSearchResults(callingId, query, TMDB_FIRST_PAGE);
+    }
+
+    private void fetchPeopleSearchResultsIfNeeded(final int callingId, String query) {
+        Preconditions.checkNotNull(callingId, "calling id cannot be null");
+        Preconditions.checkNotNull(query, "query cannot be null");
+
+        MoviesState.SearchResult result = mState.getSearchResult();
+        if (result.people == null && MoviesCollections.isEmpty(result.people.items)) {
+            fetchPeopleSearchResults(callingId, query);
+        } else {
+           populateSearchPersonUi();
+        }
     }
 
     private void fetchPeopleSearchResults(final int callingId, String query) {
         mState.setSearchResult(new MoviesState.SearchResult(query));
         fetchPeopleSearchResults(callingId, query, TMDB_FIRST_PAGE);
+    }
+
+    private void fetchShowsSearchResultsIfNeeded(final int callingId, String query) {
+        Preconditions.checkNotNull(callingId, "calling id cannot be null");
+        Preconditions.checkNotNull(query, "query cannot be null");
+
+        MoviesState.SearchResult result = mState.getSearchResult();
+        if (result.shows == null && MoviesCollections.isEmpty(result.shows.items)) {
+            fetchShowsSearchResults(callingId, query);
+        } else {
+            populateSearchShowUi();
+        }
     }
 
     private void fetchShowsSearchResults(final int callingId, String query) {

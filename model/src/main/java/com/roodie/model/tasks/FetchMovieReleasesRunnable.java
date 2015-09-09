@@ -3,7 +3,6 @@ package com.roodie.model.tasks;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.state.MoviesState;
 import com.roodie.model.util.CountryProvider;
-import com.uwetrottmann.tmdb.entities.Movie;
 import com.uwetrottmann.tmdb.entities.Releases;
 
 import javax.inject.Inject;

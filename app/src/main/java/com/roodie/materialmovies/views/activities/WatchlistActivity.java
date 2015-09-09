@@ -40,9 +40,7 @@ public class WatchlistActivity extends BaseNavigationActivity {
         //if (Intent.ACTION_MAIN.equals(intent.getAction())) {
             if (!display.hasMainFragment()) {
              display.showMovies();
-               } else {
-                System.out.println("Hasnt main fragment");
-            }
+               }
        // }
     }
 
