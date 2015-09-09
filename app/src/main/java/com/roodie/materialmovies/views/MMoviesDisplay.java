@@ -137,6 +137,16 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
+    public void showMovieDetailFragmentBySharedElements(String movieId, String imageUrl) {
+        showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId, imageUrl));
+    }
+
+    @Override
+    public void showMovieDetailFragment(String movieId) {
+        showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId));
+    }
+
+    @Override
     public void startMovieDetailActivityBySharedElements(String movieId, View view, String imageUrl) {
         ActivityOptionsCompat options =
                 ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -148,21 +158,12 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
-    public void showMovieDetailFragmentBySharedElements(String movieId, String imageUrl) {
-        showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId, imageUrl));
-    }
-
-    @Override
     public void startMovieDetailActivity(String movieId, Bundle bundle) {
         Intent intent = new Intent(mActivity, MovieActivity.class);
         intent.putExtra(PARAM_ID, movieId);
         startActivity(intent, bundle);
     }
 
-    @Override
-    public void showMovieDetailFragment(String movieId) {
-        showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId));
-    }
 
     @Override
     public void startPersonDetailActivity(String id, Bundle bundle) {

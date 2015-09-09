@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.SearchPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
+import com.roodie.model.Display;
 import com.roodie.model.entities.BasicWrapper;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
@@ -41,8 +45,25 @@ public abstract class BaseSearchListFragment<M extends BasicWrapper> extends Bas
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search_list, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case  R.id.menu_refresh:
+                getPresenter().refresh();
+                return true;
+        }
+        return false;
+    }
 
     @Override
     public ListView createListView(Context context, LayoutInflater inflater) {
@@ -135,6 +156,11 @@ public abstract class BaseSearchListFragment<M extends BasicWrapper> extends Bas
 
     @Override
     public void onUiAttached() {
+        Display display = getDisplay();
+        if (display != null) {
+            display.setActionBarTitle(getTitle());
+            display.setActionBarSubtitle(getSubtitle());
+        }
 
     }
 

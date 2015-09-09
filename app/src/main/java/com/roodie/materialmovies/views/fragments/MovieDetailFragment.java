@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -101,6 +102,17 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     private static final String QUERY_MOVIE_ID = "movie_id";
 
 
+    public static MovieDetailFragment newInstance(String movieId) {
+        Preconditions.checkArgument(movieId != null, "movieId can not be null");
+
+        Bundle bundle = new Bundle();
+        bundle.putString(QUERY_MOVIE_ID, movieId);
+        MovieDetailFragment fragment = new MovieDetailFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
     public static MovieDetailFragment newInstance(String movieId, String imageUrl) {
         Preconditions.checkArgument(movieId != null, "movieId can not be null");
         Preconditions.checkArgument(imageUrl != null, "ImageUrl can not be null");
@@ -171,7 +183,9 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_movie_detail_list, container, false);
+        FrameLayout wrapper = new FrameLayout(getActivity());
+        inflater.inflate(R.layout.fragment_movie_detail_list, wrapper, true);
+        return wrapper;
     }
 
     @Override

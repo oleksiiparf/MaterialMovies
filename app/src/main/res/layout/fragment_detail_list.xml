@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"/>
 
-        <include layout="@layout/include_receicler_view"/>
+        <include layout="@layout/include_recycler_view"/>
 
     </FrameLayout>
 

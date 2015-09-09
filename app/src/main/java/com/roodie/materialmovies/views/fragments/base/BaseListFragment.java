@@ -3,6 +3,7 @@ package com.roodie.materialmovies.views.fragments.base;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,8 @@ import com.roodie.materialmovies.R;
  */
 public abstract class BaseListFragment<E extends AbsListView> extends BaseFragment implements AbsListView.OnScrollListener {
 
+    public static final String LOG_TAG = BaseListFragment.class.getSimpleName();
+
     static final String INTERNAL_EMPTY_TAG = "INTERNAL_EMPTY";
     static final String INTERNAL_PROGRESS_TAG = "INTERNAL_PROGRESS";
     static final String INTERNAL_LIST_CONTAINER_TAG = "INTERNAL_LIST_CONTAINER";
@@ -39,6 +42,9 @@ public abstract class BaseListFragment<E extends AbsListView> extends BaseFragme
     CharSequence mEmptyText;
     boolean mListShown;
 
+
+    boolean mTwoPane = false;
+
     private int mFirstVisiblePosition;
     private int mFirstVisiblePositionTop;
 
@@ -46,6 +52,19 @@ public abstract class BaseListFragment<E extends AbsListView> extends BaseFragme
 
     private boolean mLoadMoreIsAtBottom;
     private int mLoadMoreRequestedItemCount;
+
+
+    public void setTwoPaneLayout(boolean mTwoPane) {
+        this.mTwoPane = mTwoPane;
+    }
+
+    /**
+     * @return true if activity orientation is LANDSCAPE(has two frames)
+     * @return true if activity orientation is PORTRAIT(has one frames)
+     */
+    public boolean isTwoPaneLayout() {
+        return mTwoPane;
+    }
 
     final private Runnable mRequestFocus = new Runnable() {
         public void run() {
@@ -70,6 +89,7 @@ public abstract class BaseListFragment<E extends AbsListView> extends BaseFragme
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "OnCreateView()");
         final Context context = getActivity();
 
         FrameLayout contentRoot = new FrameLayout(context);
@@ -96,13 +116,16 @@ public abstract class BaseListFragment<E extends AbsListView> extends BaseFragme
         lframe.addView(tv, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
 
+
         E lv = createListView(context, inflater);
         lv.setId(android.R.id.list);
         lframe.addView(lv, new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+                ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         contentRoot.addView(lframe, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                 ViewGroup.LayoutParams.FILL_PARENT));
+
+        // ------------------------------------------------------------------
 
         ProgressBar secondaryProgress = new ProgressBar(context, null,
                 android.R.attr.progressBarStyleHorizontal);
@@ -115,7 +138,8 @@ public abstract class BaseListFragment<E extends AbsListView> extends BaseFragme
 
         View root;
 
-        if (getParentFragment() == null) {
+        // if PORTRAIT orientation add toolbar to contentRoot
+        if (!isTwoPaneLayout()) {
             final LinearLayout toolbarRoot = new LinearLayout(context);
             toolbarRoot.setOrientation(LinearLayout.VERTICAL);
             inflater.inflate(R.layout.include_toolbar, toolbarRoot, true);
@@ -133,11 +157,37 @@ public abstract class BaseListFragment<E extends AbsListView> extends BaseFragme
         return root;  }
 
 
+    @Override
+    public void onStop() {
+        Log.d(LOG_TAG, "OnStop()");
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(LOG_TAG, "OnDestroy()");
+        super.onDestroy();
+    }
+
+
+    /*
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        Log.d(LOG_TAG, "OnConfigChanged()");
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setTwoPaneLayout(true);
+        } else
+            setTwoPaneLayout(false);
+    }
+    */
+
     /**
      * Attach to listView once when it was created.
      */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "OnViewCreated()");
         super.onViewCreated(view, savedInstanceState);
         ensureList();
         getListView().setOnScrollListener(this);
@@ -145,12 +195,14 @@ public abstract class BaseListFragment<E extends AbsListView> extends BaseFragme
 
     @Override
     public void onPause() {
+        Log.d(LOG_TAG, "OnPause()");
         saveListViewPosition();
         super.onPause();
     }
 
     @Override
     public void onResume() {
+        Log.d(LOG_TAG, "OnResume()");
         super.onResume();
     }
 
@@ -229,7 +281,6 @@ public abstract class BaseListFragment<E extends AbsListView> extends BaseFragme
         return mListView;
     }
 
-
     /**
      * This method will be called when an item in the list is selected.
      * Subclasses should override it.
@@ -280,6 +331,7 @@ public abstract class BaseListFragment<E extends AbsListView> extends BaseFragme
         setListShown(shown, true);
     }
 
+
     /**
      * Control whether the list is being displayed.  You can make it not
      * displayed if you are waiting for the initial data to show in it.  During
@@ -304,6 +356,7 @@ public abstract class BaseListFragment<E extends AbsListView> extends BaseFragme
                 mProgressView.clearAnimation();
                 mListContainer.clearAnimation();
             }
+
             mProgressView.setVisibility(View.GONE);
             mListContainer.setVisibility(View.VISIBLE);
         } else {

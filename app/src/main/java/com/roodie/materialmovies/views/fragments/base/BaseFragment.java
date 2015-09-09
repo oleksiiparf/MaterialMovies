@@ -20,11 +20,9 @@ public class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
       mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
         }
-
        /** if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
          *((BaseActivity) getActivity()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
          *   ((BaseActivity) getActivity()).getWindow().setStatusBarColor(getResources().getColor(R.color.color_primary_dark_default));

@@ -2,18 +2,21 @@ package com.roodie.materialmovies.views.activities;
 
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.views.fragments.MovieDetailFragment;
+import com.roodie.materialmovies.views.fragments.MovieDetailFragmentVertical;
 import com.roodie.materialmovies.views.fragments.PersonDetailFragment;
 import com.roodie.materialmovies.views.fragments.SearchMoviesListFragment;
 import com.roodie.materialmovies.views.fragments.SearchPeopleListFragment;
 import com.roodie.materialmovies.views.fragments.SearchShowsListFragment;
+import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
 import com.roodie.materialmovies.views.fragments.base.BaseSearchListFragment;
 import com.roodie.model.Display;
 
@@ -25,13 +28,20 @@ public class SearchDetailActivity extends BaseNavigationActivity implements Sear
     private boolean mTwoPane;
     View mContentPane;
 
+    public static final String LOG_TAG = SearchDetailActivity.class.getSimpleName();
+
     Display.SearchMediaType queryType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Log.d(LOG_TAG, "OnCreate()");
+
         super.onCreate(savedInstanceState);
+
         mContentPane = findViewById(R.id.detail_frame);
 
+        //check if has second frame
         if (mContentPane != null) {
             mTwoPane = true;
         }
@@ -52,7 +62,6 @@ public class SearchDetailActivity extends BaseNavigationActivity implements Sear
                         showPersonDetail(String.valueOf(tmdbId), null);
                         break;
                 }
-
                 // if this is not a dual pane layout, remove ourselves from back stack
                 if (!mTwoPane) {
                     finish();
@@ -73,6 +82,9 @@ public class SearchDetailActivity extends BaseNavigationActivity implements Sear
                     fragment = new SearchPeopleListFragment();
                     break;
             }
+            //transmit activities orientation to listFragment
+            fragment.setTwoPaneLayout(mTwoPane);
+
             fragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()
@@ -82,6 +94,18 @@ public class SearchDetailActivity extends BaseNavigationActivity implements Sear
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //restart the activity when orientation changes
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
+
+    @Override
+    protected void handleIntent(Intent intent, Display display) {
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -91,11 +115,6 @@ public class SearchDetailActivity extends BaseNavigationActivity implements Sear
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void handleIntent(Intent intent, Display display) {
-
     }
 
     @Override
@@ -109,7 +128,7 @@ public class SearchDetailActivity extends BaseNavigationActivity implements Sear
 
         if (!TextUtils.isEmpty(movieId)) {
             if (mTwoPane) {
-                MovieDetailFragment fragment = MovieDetailFragment.newInstance(movieId);
+                BaseDetailFragment fragment = MovieDetailFragmentVertical.newInstance(movieId);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.detail_frame, fragment)
                         .commit();
