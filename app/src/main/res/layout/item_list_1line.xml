@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/movie_list_small_item_height"
+    android:orientation="horizontal">
+
+    <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+        android:id="@+id/imageview_poster"
+        android:layout_width="@dimen/movie_list_small_image_width"
+        android:layout_height="@dimen/movie_list_small_image_width"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/spacing_minor"
+        android:layout_marginBottom="@dimen/spacing_minor"
+        android:layout_marginLeft="@dimen/spacing_major" />
+
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+        android:id="@+id/textview_title"
+        android:layout_marginLeft="@dimen/spacing_major"
+        android:layout_marginRight="@dimen/spacing_major"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MMovies.TextAppearance.PrimaryText"
+        android:layout_gravity="center_vertical" />
+
+
+</LinearLayout>

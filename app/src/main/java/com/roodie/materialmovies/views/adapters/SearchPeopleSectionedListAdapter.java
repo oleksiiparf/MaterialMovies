@@ -17,7 +17,7 @@ public class SearchPeopleSectionedListAdapter extends BaseSectionedListAdapter<P
     private static final String LOG_TAG = SearchPeopleSectionedListAdapter.class.getSimpleName();
 
     public SearchPeopleSectionedListAdapter(Activity activity) {
-        super(activity, R.layout.item_list_2line, R.layout.item_list_movie_section_header);
+        super(activity, R.layout.item_list_1line, R.layout.item_list_movie_section_header);
     }
 
     @Override

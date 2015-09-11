@@ -53,7 +53,7 @@ public class SearchDetailActivity extends BaseNavigationActivity implements Sear
             if (tmdbId != -1) {
                 switch (queryType) {
                     case MOVIES:
-                        showMovieDetail(String.valueOf(tmdbId), null);
+                        showMovieDetail  (String.valueOf(tmdbId), null);
                         break;
                     case SHOWS:
                         showTvShowDetail(String.valueOf(tmdbId), null);

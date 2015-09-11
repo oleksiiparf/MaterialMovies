@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
-             android:layout_height="@dimen/movie_list_small_item_height">
+             android:layout_height="@dimen/movie_list_small_item_height"
+    android:orientation="horizontal">
 
     <com.roodie.materialmovies.views.custom_views.MMoviesImageView
           android:id="@+id/poster"
@@ -17,7 +18,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical"
-          android:layout_marginLeft="72dp"
+          android:layout_marginLeft="@dimen/spacing_major"
           android:layout_marginRight="@dimen/spacing_major"
           android:layout_gravity="center_vertical">
 
@@ -35,4 +36,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

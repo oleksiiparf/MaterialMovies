@@ -99,14 +99,13 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
     private static final Date DATE = new Date();
 
-    private static final String QUERY_MOVIE_ID = "movie_id";
+    protected static final String QUERY_MOVIE_ID = "movie_id";
 
-
-    public static MovieDetailFragment newInstance(String movieId) {
-        Preconditions.checkArgument(movieId != null, "movieId can not be null");
+    public static  MovieDetailFragment newInstance(String id) {
+        Preconditions.checkArgument(id != null, "movieId can not be null");
 
         Bundle bundle = new Bundle();
-        bundle.putString(QUERY_MOVIE_ID, movieId);
+        bundle.putString(QUERY_MOVIE_ID, id);
         MovieDetailFragment fragment = new MovieDetailFragment();
         fragment.setArguments(bundle);
 
