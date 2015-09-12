@@ -176,7 +176,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         if (savedInstanceState != null) {
             setMovie((MovieWrapper) savedInstanceState.getSerializable(KEY_MOVIE_SAVE_STATE));
         }
-
     }
 
     @Nullable

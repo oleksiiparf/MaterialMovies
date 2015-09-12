@@ -93,39 +93,42 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
 
     @Override
     public void onClick(View v) {
+
         startAnimationX = UiUtils.centerX(mFloatingButton);
         startAnimationY = UiUtils.centerY(mFloatingButton);
 
-        endAnimationX = mAnimationContainer.getRight() / 2;
-        endAnimationY = (int) (mAnimationContainer.getBottom() * 0.8f);
+            endAnimationX = mAnimationContainer.getRight() / 2;
+            endAnimationY = (int) (mAnimationContainer.getBottom() * 0.8f);
 
-        System.out.println("Positions: " + startAnimationX +  ", " + startAnimationY + ", " + endAnimationX + ", " + endAnimationY);
+            System.out.println("Positions: " + startAnimationX + ", " + startAnimationY + ", " + endAnimationX + ", " + endAnimationY);
 
-        if (endAnimationX == 0 && endAnimationY == 0) {
-            endAnimationX = (int) UiUtils.centerX(mFloatingButton);
-            endAnimationY = (int) UiUtils.centerY(mFloatingButton);
-            startCircleAnimation();
-        } else {
-            ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(mFloatingButton, endAnimationX,
-                    endAnimationY, 90, Side.RIGHT)
-                    .setDuration(500);
+            //disable recycler nested scrolling in order to FAB return to the starting position
+            getRecyclerView().setNestedScrollingEnabled(false);
 
-            arcAnimator.addListener(new SimpleListener() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    startCircleAnimation();
-                }
-            });
-            arcAnimator.start();
-        }
+            if (endAnimationX == 0 && endAnimationY == 0) {
+                endAnimationX = (int) UiUtils.centerX(mFloatingButton);
+                endAnimationY = (int) UiUtils.centerY(mFloatingButton);
+                startCircleAnimation();
+            } else {
+                ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(mFloatingButton, endAnimationX,
+                        endAnimationY, 90, Side.RIGHT)
+                        .setDuration(500);
 
+                arcAnimator.addListener(new SimpleListener() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        startCircleAnimation();
+                    }
+                });
+                arcAnimator.start();
+            }
     }
 
     private void initiaizeStartAnimation() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            configureEnterTransition ();
+            configureEnterTransition();
         } else {
-            configureEnterAnimation ();
+            configureEnterAnimation();
         }
     }
 
@@ -209,7 +212,17 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
             ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(mFloatingButton, startAnimationX,
                     startAnimationY, 90, Side.RIGHT)
                     .setDuration(500);
+
+            arcAnimator.addListener(new SimpleListener() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //enable scrolling when FAB returned to starting position
+                    getRecyclerView().setNestedScrollingEnabled(true);
+                }
+            });
             arcAnimator.start();
+        } else {
+            getRecyclerView().setNestedScrollingEnabled(true);
         }
     }
 
