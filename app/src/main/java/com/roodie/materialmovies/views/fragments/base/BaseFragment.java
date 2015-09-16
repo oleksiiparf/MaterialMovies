@@ -21,6 +21,7 @@ public class BaseFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
       mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         if (mToolbar != null) {
+            System.out.println("Toolbar != null");
             setSupportActionBar(mToolbar);
         }
        /** if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

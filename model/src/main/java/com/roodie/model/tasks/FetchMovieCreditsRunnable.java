@@ -1,6 +1,6 @@
 package com.roodie.model.tasks;
 
-import com.roodie.model.entities.MovieCreditWrapper;
+import com.roodie.model.entities.CreditWrapper;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.state.BaseState;
 import com.roodie.model.state.MoviesState;
@@ -36,14 +36,14 @@ public class FetchMovieCreditsRunnable extends BaseMovieRunnable<Credits> {
         if (movie != null) {
             if (!MoviesCollections.isEmpty(result.cast)) {
                 //Cast list should be mapped due to entity mapper
-                List<MovieCreditWrapper> cast = getEntityMapper().mapCastCredits(result.cast);
+                List<CreditWrapper> cast = getEntityMapper().mapCastCredits(result.cast);
                 Collections.sort(cast);
                 movie.setCast(cast);
             }
 
             if (!MoviesCollections.isEmpty(result.crew)) {
                 //Crew list should be mapped due to entity mapper
-                List<MovieCreditWrapper> crew = getEntityMapper().mapCrewCredits(result.crew);
+                List<CreditWrapper> crew = getEntityMapper().mapCrewCredits(result.crew);
                 Collections.sort(crew);
                 movie.setCrew(crew);
             }

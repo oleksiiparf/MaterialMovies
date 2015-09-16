@@ -31,6 +31,10 @@ public interface UiView {
         SEARCH_MOVIES,
         SEARCH_SHOWS,
         SEARCH_PEOPLE,
+        SHOW_DETAIL,
+        SHOW_CAST,
+        SHOW_CREW,
+        SHOW_SEASONS,
         NONE;
 
         public boolean showUpNavigation() {
@@ -47,6 +51,10 @@ public interface UiView {
                 case SEARCH_MOVIES:
                 case SEARCH_SHOWS:
                 case SEARCH_PEOPLE:
+                case SHOW_CAST:
+                case SHOW_CREW:
+                case SHOW_DETAIL:
+                case SHOW_SEASONS:
                     return true;
                 default:
                     return false;

@@ -53,7 +53,7 @@ public class SearchDetailActivity extends BaseNavigationActivity implements Sear
             if (tmdbId != -1) {
                 switch (queryType) {
                     case MOVIES:
-                        showMovieDetail  (String.valueOf(tmdbId), null);
+                        showMovieDetail(String.valueOf(tmdbId), null);
                         break;
                     case SHOWS:
                         showTvShowDetail(String.valueOf(tmdbId), null);
@@ -70,22 +70,24 @@ public class SearchDetailActivity extends BaseNavigationActivity implements Sear
             }
 
             BaseSearchListFragment fragment = null;
+                switch (queryType) {
+                    case MOVIES:
+                        fragment = new SearchMoviesListFragment();
+                        break;
+                    case SHOWS:
+                        fragment = new SearchShowsListFragment();
+                        break;
+                    case PEOPLE:
+                        fragment = new SearchPeopleListFragment();
+                        break;
+                }
 
-            switch (queryType) {
-                case MOVIES:
-                    fragment = new SearchMoviesListFragment();
-                    break;
-                case SHOWS:
-                    fragment = new SearchShowsListFragment();
-                    break;
-                case PEOPLE:
-                    fragment = new SearchPeopleListFragment();
-                    break;
-            }
             //transmit activities orientation to listFragment
             fragment.setTwoPaneLayout(mTwoPane);
 
             fragment.setArguments(getIntent().getExtras());
+
+            getDisplay().popEntireFragmentBackStack();
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.content_frame, fragment, "list")

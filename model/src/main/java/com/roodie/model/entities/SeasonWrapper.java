@@ -30,8 +30,8 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
 
     String posterUrl;
 
-    transient List<MovieCreditWrapper> cast;
-    transient List<MovieCreditWrapper> crew;
+    transient List<CreditWrapper> cast;
+    transient List<CreditWrapper> crew;
     transient List<EpisodeWrapper> episodes;
 
     public SeasonWrapper() {
@@ -114,11 +114,11 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
         return !TextUtils.isEmpty(posterUrl);
     }
 
-    public List<MovieCreditWrapper> getCast() {
+    public List<CreditWrapper> getCast() {
         return cast;
     }
 
-    public List<MovieCreditWrapper> getCrew() {
+    public List<CreditWrapper> getCrew() {
         return crew;
     }
 
@@ -126,11 +126,11 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
         return episodes;
     }
 
-    public void setCast(List<MovieCreditWrapper> cast) {
+    public void setCast(List<CreditWrapper> cast) {
         this.cast = cast;
     }
 
-    public void setCrew(List<MovieCreditWrapper> crew) {
+    public void setCrew(List<CreditWrapper> crew) {
         this.crew = crew;
     }
 

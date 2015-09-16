@@ -36,8 +36,8 @@ public class EpisodeWrapper extends BasicWrapper<EpisodeWrapper> {
     int ratingPercent;
     int ratingVotes;
 
-    transient List<MovieCreditWrapper> cast;
-    transient List<MovieCreditWrapper> crew;
+    transient List<CreditWrapper> cast;
+    transient List<CreditWrapper> crew;
 
     transient long lastFullFetchStarted;
     transient long lastFullFetchCompleted;
@@ -182,19 +182,19 @@ public class EpisodeWrapper extends BasicWrapper<EpisodeWrapper> {
         this.ratingVotes = ratingVotes;
     }
 
-    public List<MovieCreditWrapper> getCast() {
+    public List<CreditWrapper> getCast() {
         return cast;
     }
 
-    public void setCast(List<MovieCreditWrapper> cast) {
+    public void setCast(List<CreditWrapper> cast) {
         this.cast = cast;
     }
 
-    public List<MovieCreditWrapper> getCrew() {
+    public List<CreditWrapper> getCrew() {
         return crew;
     }
 
-    public void setCrew(List<MovieCreditWrapper> crew) {
+    public void setCrew(List<CreditWrapper> crew) {
         this.crew = crew;
     }
 

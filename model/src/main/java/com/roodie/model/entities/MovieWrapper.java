@@ -81,8 +81,8 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
     boolean loadedFromTmdb;
 
     transient List<MovieWrapper> related;
-    transient List<MovieCreditWrapper> cast;
-    transient List<MovieCreditWrapper> crew;
+    transient List<CreditWrapper> cast;
+    transient List<CreditWrapper> crew;
     transient List<TrailerWrapper> trailers;
     transient List<BackdropImage> backdropImages;
 
@@ -287,11 +287,11 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         this.trailers = trailers;
     }
 
-    public void setCrew(List<MovieCreditWrapper> crew) {
+    public void setCrew(List<CreditWrapper> crew) {
         this.crew = crew;
     }
 
-    public void setCast(List<MovieCreditWrapper> cast) {
+    public void setCast(List<CreditWrapper> cast) {
         this.cast = cast;
     }
 
@@ -311,11 +311,11 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         return trailers;
     }
 
-    public List<MovieCreditWrapper> getCrew() {
+    public List<CreditWrapper> getCrew() {
         return crew;
     }
 
-    public List<MovieCreditWrapper> getCast() {
+    public List<CreditWrapper> getCast() {
         return cast;
     }
 

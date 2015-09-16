@@ -34,9 +34,9 @@ import com.roodie.materialmovies.views.fragments.MovieImagesFragment;
 import com.roodie.materialmovies.views.fragments.MoviesTabFragment;
 import com.roodie.materialmovies.views.fragments.PersonDetailFragment;
 import com.roodie.materialmovies.views.fragments.SearchFragment;
-import com.roodie.materialmovies.views.fragments.SearchMoviesGridFragment;
-import com.roodie.materialmovies.views.fragments.SearchPeopleGridFragment;
-import com.roodie.materialmovies.views.fragments.SearchTvShowsGridFragment;
+import com.roodie.materialmovies.views.fragments.SearchMoviesListFragment;
+import com.roodie.materialmovies.views.fragments.SearchPeopleListFragment;
+import com.roodie.materialmovies.views.fragments.SearchShowsListFragment;
 import com.roodie.materialmovies.views.fragments.ShowsTabFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
@@ -71,6 +71,14 @@ public class MMoviesDisplay implements Display {
     private void showFragment(Fragment fragment) {
         mActivity.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_main, fragment)
+                .addToBackStack(null)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit();
+    }
+
+    private void showContentFragment(Fragment fragment) {
+        mActivity.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragment)
                 .addToBackStack(null)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
@@ -379,17 +387,17 @@ public class MMoviesDisplay implements Display {
 
     @Override
     public void showSearchMoviesFragment() {
-        showFragment(new SearchMoviesGridFragment());
+        showFragment(new SearchMoviesListFragment());
     }
 
     @Override
     public void showSearchPeopleFragment() {
-        showFragment(new SearchPeopleGridFragment());
+        showFragment(new SearchPeopleListFragment());
     }
 
     @Override
     public void showSearchTvShowsFragment() {
-        showFragment(new SearchTvShowsGridFragment());
+        showFragment(new SearchShowsListFragment());
     }
 
     @Override

@@ -28,6 +28,8 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     String overview;
 
+    int runtime;
+
     List<String> originCountries;
 
     long firstAirDate;
@@ -53,8 +55,8 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
     transient long lastFullFetchFromTmdbStarted;
     transient long lastFullFetchFromTmdbCompleted;
 
-    transient List<MovieCreditWrapper> cast;
-    transient List<MovieCreditWrapper> crew;
+    transient List<CreditWrapper> cast;
+    transient List<CreditWrapper> crew;
     transient List<SeasonWrapper> seasons;
 
 
@@ -114,6 +116,10 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
             amountOfEpisodes = show.number_of_episodes;
         }
 
+        if (show.episode_run_time != null) {
+             runtime = getAverageRuntime(show.episode_run_time);
+        }
+
         if (show.genres != null) {
             genres = getGenresString(show.genres);
         }
@@ -152,6 +158,21 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
             return sb.toString();
         }
         return null;
+    }
+
+    private static int getAverageRuntime(List<Integer> runTime) {
+        double average = 0;
+        if (runTime.size() > 0) {
+            double sum = 0;
+            for (int j = 0; j < runTime.size(); j++) {
+                sum += runTime.get(j);
+            }
+            average = sum / runTime.size();
+
+            return (int) (sum/ average);
+        }
+        return 0;
+
     }
 
     public static float roundPopularity(double d, int decimalPlace) {
@@ -233,11 +254,11 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         return amountOfSeasons;
     }
 
-    public List<MovieCreditWrapper> getCast() {
+    public List<CreditWrapper> getCast() {
         return cast;
     }
 
-    public List<MovieCreditWrapper> getCrew() {
+    public List<CreditWrapper> getCrew() {
         return crew;
     }
 
@@ -245,11 +266,11 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         return seasons;
     }
 
-    public void setCast(List<MovieCreditWrapper> cast) {
+    public void setCast(List<CreditWrapper> cast) {
         this.cast = cast;
     }
 
-    public void setCrew(List<MovieCreditWrapper> crew) {
+    public void setCrew(List<CreditWrapper> crew) {
         this.crew = crew;
     }
 
@@ -274,7 +295,7 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         }
     }
 
-    private boolean needFullFetch() {
+    public boolean needFullFetch() {
         return  MoviesCollections.isEmpty(cast)
                 || MoviesCollections.isEmpty(crew)
                 || MoviesCollections.isEmpty(seasons);

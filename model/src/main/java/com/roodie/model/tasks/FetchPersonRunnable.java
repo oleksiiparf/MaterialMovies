@@ -6,13 +6,12 @@ import com.roodie.model.state.MoviesState;
 import com.roodie.model.util.MoviesCollections;
 import com.uwetrottmann.tmdb.entities.AppendToResponse;
 import com.uwetrottmann.tmdb.entities.Person;
-
 import com.uwetrottmann.tmdb.entities.PersonCastCredit;
 import com.uwetrottmann.tmdb.entities.PersonCrewCredit;
 import com.uwetrottmann.tmdb.enumerations.AppendToResponseItem;
 
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit.RetrofitError;
@@ -46,6 +45,7 @@ public class FetchPersonRunnable extends BaseMovieRunnable<Person> {
                 for (PersonCastCredit credit : result.movie_credits.cast) {
                     credits.add(new PersonCreditWrapper(credit));
                 }
+                Collections.sort(credits, PersonCreditWrapper.COMPARATOR_SORT_DATE);
                 person.setCastCredits(credits);
             }
 
@@ -54,6 +54,7 @@ public class FetchPersonRunnable extends BaseMovieRunnable<Person> {
                 for (PersonCrewCredit credit : result.movie_credits.crew) {
                     credits.add(new PersonCreditWrapper(credit));
                 }
+                Collections.sort(credits, PersonCreditWrapper.COMPARATOR_SORT_DATE);
                 person.setCrewCredits(credits);
             }
 
