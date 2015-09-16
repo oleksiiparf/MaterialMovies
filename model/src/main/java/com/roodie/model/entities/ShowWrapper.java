@@ -12,8 +12,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-//import com.uwetrottmann.tmdb.entities.TvShowComplete;
 
 /**
  * Created by Roodie on 13.08.2015.
@@ -42,6 +42,8 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     int ratingPercent;
     int ratingVotes;
+    Double ratingVotesAverage;
+
     float popularity;
 
     String status;
@@ -101,6 +103,10 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
         if (!TextUtils.isEmpty(show.backdrop_path)) {
             backdropUrl = show.backdrop_path;
+        }
+
+        if ( show.vote_average != null) {
+              ratingVotesAverage =  show.vote_average;
         }
 
         ratingPercent = unbox(ratingPercent, show.vote_average);
@@ -240,6 +246,11 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     public int getRatingVotes() {
         return ratingVotes;
+    }
+
+    public String getRatingVoteAverage() {
+        return ratingVotesAverage == null || ratingVotesAverage == 0 ? "--"
+                : String.format(Locale.getDefault(), "%.1f", ratingVotesAverage);
     }
 
     public float getPopularity() {

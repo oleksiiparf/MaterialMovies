@@ -83,6 +83,18 @@ public class ImageHelper {
         return RESIZE_ALL ? getResizedUrl(url, width, height) : url;
     }
 
+    public static String getFanartUrl(final ShowWrapper show, final int width, final int height) {
+        String url = null;
+
+        if (!TextUtils.isEmpty(show.getBackdropUrl())) {
+            url = buildTmdbBackdropUrl(show.getBackdropUrl(), width, RESIZE_ALL);
+        }
+
+        Verify.verifyNotNull(url);
+
+        return RESIZE_ALL ? getResizedUrl(url, width, height) : url;
+    }
+
     public static String getFanartUrl(final MovieWrapper.BackdropImage image,
                                final int width, final int height) {
 

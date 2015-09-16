@@ -41,6 +41,7 @@ import com.roodie.materialmovies.views.fragments.ShowsTabFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
+import com.roodie.model.entities.ShowWrapper;
 
 /**
  * Created by Roodie on 27.06.2015.
@@ -344,6 +345,11 @@ public class MMoviesDisplay implements Display {
     @Override
     public void openTmdbPerson(PersonWrapper person) {
         openTmdbUrl(TmdbUtils.buildPersonUrl(person.getTmdbId()));
+    }
+
+    @Override
+    public void openTmdbTvShow(ShowWrapper show) {
+        openTmdbUrl(TmdbUtils.buildTvShowUrl(show.getTmdbId()));
     }
 
     @Override

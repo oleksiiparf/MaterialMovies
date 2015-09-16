@@ -179,6 +179,18 @@ public class MMoviesImageView extends ImageView {
         }
     }
 
+    public void loadBackdrop(ShowWrapper show) {
+        loadBackdrop(show, null);
+    }
+
+    public void loadBackdrop(ShowWrapper show, OnLoadedListener listener) {
+        if (show.hasBackdrodUrl()) {
+            setImageHandler(new ShowBackdropHandler(show, listener));
+        } else {
+            reset();
+        }
+    }
+
     public void loadBackdrop(MovieWrapper.BackdropImage image) {
         loadBackdrop(image, null);
     }
@@ -324,6 +336,23 @@ public class MMoviesImageView extends ImageView {
         @Override
         protected String buildUrl(MovieWrapper movie, ImageView imageView) {
             return ImageHelper.getFanartUrl(movie, imageView.getWidth(), imageView.getHeight());
+        }
+
+        @Override
+        int getPlaceholderDrawable() {
+            return R.color.mm_green;
+        }
+    }
+
+    private class ShowBackdropHandler extends ImageHandler<ShowWrapper> {
+
+        ShowBackdropHandler(ShowWrapper show, OnLoadedListener callback) {
+            super(show, callback);
+        }
+
+        @Override
+        protected String buildUrl(ShowWrapper show, ImageView imageView) {
+            return ImageHelper.getFanartUrl(show, imageView.getWidth(), imageView.getHeight());
         }
 
         @Override

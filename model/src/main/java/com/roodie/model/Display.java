@@ -24,6 +24,7 @@ import android.view.View;
 
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
+import com.roodie.model.entities.ShowWrapper;
 
 public interface Display {
 
@@ -106,6 +107,8 @@ public interface Display {
     public void openTmdbMovie(MovieWrapper movie);
 
     public void openTmdbPerson(PersonWrapper person);
+
+    public void openTmdbTvShow(ShowWrapper show);
 
     public void openTmdbUrl(String url);
 

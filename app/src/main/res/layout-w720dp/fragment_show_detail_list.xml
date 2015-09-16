@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/include_toolbar"></include>
+
+
+<LinearLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/left_container"
+        android:orientation="vertical"
+        android:layout_width="0px"
+        android:layout_weight="2"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/animation_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <io.codetail.widget.RevealFrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="?mmRevealBackgroundColor">
+
+                <include layout="@layout/include_detail_minor"/>
+
+            </io.codetail.widget.RevealFrameLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/data_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/item_show_detail_common"/>
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/right_container"
+          android:layout_height="match_parent"
+          android:layout_width="0px"
+          android:layout_weight="2">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/spacing_minor"/>
+
+    </FrameLayout>
+
+</LinearLayout>
+
+</FrameLayout>
