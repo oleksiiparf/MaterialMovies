@@ -20,6 +20,7 @@ import android.support.v4.util.ArrayMap;
 
 import com.google.common.base.Preconditions;
 import com.roodie.model.entities.MovieWrapper;
+import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.network.BackgroundCallRunnable;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.MoviesCollections;
@@ -42,11 +43,11 @@ public class AsyncDatabaseHelperImpl implements AsyncDatabaseHelper {
 
 
     @Override
-    public void put(final Collection<MovieWrapper> movies) {
+    public void putMovies(final Collection<MovieWrapper> movies) {
         mExecutor.execute(new DatabaseBackgroundRunnable<Void>() {
             @Override
             public Void doDatabaseCall(DatabaseHelper dbHelper) {
-                dbHelper.delete(movies);
+                dbHelper.deleteMovies(movies);
                 return null;
             }
         });
@@ -64,11 +65,44 @@ public class AsyncDatabaseHelperImpl implements AsyncDatabaseHelper {
     }
 
     @Override
-    public void delete(final Collection<MovieWrapper> movies) {
+    public void putShows(final Collection<ShowWrapper> shows) {
         mExecutor.execute(new DatabaseBackgroundRunnable<Void>() {
             @Override
             public Void doDatabaseCall(DatabaseHelper dbHelper) {
-                dbHelper.delete(movies);
+                dbHelper.deleteShows(shows);
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void put(final ShowWrapper show) {
+        mExecutor.execute(new DatabaseBackgroundRunnable<Void>() {
+            @Override
+            public Void doDatabaseCall(DatabaseHelper dbHelper) {
+                dbHelper.put(show);
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void deleteMovies(final Collection<MovieWrapper> movies) {
+        mExecutor.execute(new DatabaseBackgroundRunnable<Void>() {
+            @Override
+            public Void doDatabaseCall(DatabaseHelper dbHelper) {
+                dbHelper.deleteMovies(movies);
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void deleteShows(final Collection<ShowWrapper> shows) {
+        mExecutor.execute(new DatabaseBackgroundRunnable<Void>() {
+            @Override
+            public Void doDatabaseCall(DatabaseHelper dbHelper) {
+                dbHelper.deleteShows(shows);
                 return null;
             }
         });
@@ -90,7 +124,16 @@ public class AsyncDatabaseHelperImpl implements AsyncDatabaseHelper {
         });
     }
 
-
+    @Override
+    public void deleteAllShows() {
+        mExecutor.execute(new DatabaseBackgroundRunnable<Void>() {
+            @Override
+            public Void doDatabaseCall(DatabaseHelper dbHelper) {
+                dbHelper.deleteAllShows();
+                return null;
+            }
+        });
+    }
 
     private abstract class DatabaseBackgroundRunnable<R> extends BackgroundCallRunnable<R> {
 
@@ -110,27 +153,48 @@ public class AsyncDatabaseHelperImpl implements AsyncDatabaseHelper {
     }
 
     private static void merge(DatabaseHelper dbHelper,
-                              List<MovieWrapper> databaseItems,
-                              List<MovieWrapper> newItems) {
-        if (!MoviesCollections.isEmpty(databaseItems)) {
+                              List<MovieWrapper> movieDbItems,
+                              List<MovieWrapper> movieNewItems,
+                              List<ShowWrapper>  showDbItems,
+                              List<ShowWrapper>  showNewItems) {
+        if (!MoviesCollections.isEmpty(movieDbItems)) {
             Map<Long, MovieWrapper> dbItemsMap = new ArrayMap<>();
-            for (MovieWrapper movie : databaseItems) {
+            for (MovieWrapper movie : movieDbItems) {
                 dbItemsMap.put(movie.getDBId(), movie);
             }
 
             // Now lets remove the items from the mapAll, leaving only those
             // not in the watchlist
-            for (MovieWrapper movie : newItems) {
+            for (MovieWrapper movie : movieNewItems) {
                 dbItemsMap.remove(movie.getDBId());
             }
 
             // Anything left in the dbItemsMap needs removing from the db
             if (!dbItemsMap.isEmpty()) {
-                dbHelper.delete(dbItemsMap.values());
+                dbHelper.deleteMovies(dbItemsMap.values());
+            }
+        }
+
+        if (!MoviesCollections.isEmpty(showDbItems)) {
+            Map<Long, ShowWrapper> dbItemsMap = new ArrayMap<>();
+            for (ShowWrapper show : showDbItems) {
+                dbItemsMap.put(show.getDbId(), show);
+            }
+
+            // Now lets remove the items from the mapAll, leaving only those
+            // not in the watchlist
+            for (ShowWrapper show : showNewItems) {
+                dbItemsMap.remove(show.getDbId());
+            }
+
+            // Anything left in the dbItemsMap needs removing from the db
+            if (!dbItemsMap.isEmpty()) {
+                dbHelper.deleteShows(dbItemsMap.values());
             }
         }
 
         // Now persist the correct list
-        dbHelper.put(newItems);
+        dbHelper.putMovies(movieNewItems);
+        dbHelper.putShows(showNewItems);
     }
 }
