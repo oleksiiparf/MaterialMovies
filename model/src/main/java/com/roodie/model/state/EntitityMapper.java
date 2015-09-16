@@ -3,7 +3,7 @@ package com.roodie.model.state;
 import android.text.TextUtils;
 
 import com.google.common.base.Preconditions;
-import com.roodie.model.entities.MovieCreditWrapper;
+import com.roodie.model.entities.CreditWrapper;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.ShowWrapper;
@@ -91,10 +91,10 @@ public class EntitityMapper {
         return item;
     }
 
-    public List<MovieCreditWrapper> mapCrewCredits(List<CrewMember> entities) {
-        final ArrayList<MovieCreditWrapper> credits = new ArrayList<>(entities.size());
+    public List<CreditWrapper> mapCrewCredits(List<CrewMember> entities) {
+        final ArrayList<CreditWrapper> credits = new ArrayList<>(entities.size());
         for (CrewMember entity : entities) {
-            credits.add(new MovieCreditWrapper(map(entity), entity.job, entity.department));
+            credits.add(new CreditWrapper(map(entity), entity.job, entity.department));
         }
         Collections.sort(credits);
         return credits;
@@ -119,10 +119,10 @@ public class EntitityMapper {
         return item;
     }
 
-    public List<MovieCreditWrapper> mapCastCredits(List<CastMember> entities) {
-        final ArrayList<MovieCreditWrapper> credits = new ArrayList<>(entities.size());
+    public List<CreditWrapper> mapCastCredits(List<CastMember> entities) {
+        final ArrayList<CreditWrapper> credits = new ArrayList<>(entities.size());
         for (CastMember entity : entities) {
-            credits.add(new MovieCreditWrapper(map(entity), entity.character, entity.order));
+            credits.add(new CreditWrapper(map(entity), entity.character, entity.order));
         }
         Collections.sort(credits);
         return credits;

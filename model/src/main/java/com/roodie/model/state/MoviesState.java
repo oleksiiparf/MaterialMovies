@@ -3,6 +3,7 @@ package com.roodie.model.state;
 import com.google.common.base.Preconditions;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
+import com.roodie.model.entities.SeasonWrapper;
 import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.entities.TmdbConfiguration;
 
@@ -20,9 +21,13 @@ public interface MoviesState extends BaseState {
 
     public Map<String, ShowWrapper> getTmdbShows();
 
-    public ShowWrapper getShow(String id);
+    public ShowWrapper getTvShow(String id);
 
-    public ShowWrapper getShow(int id);
+    public ShowWrapper getTvShow(int id);
+
+    public SeasonWrapper getTvSeason(String id);
+
+    public SeasonWrapper getTvSeason(int id);
 
     public MovieWrapper getMovie(String id);
 
@@ -114,18 +119,30 @@ public interface MoviesState extends BaseState {
         }
     }
 
-    public static class ShowCastItemsUpdatedEvent extends BaseArgumentEvent<ShowWrapper> {
-        public ShowCastItemsUpdatedEvent(int callingId, ShowWrapper item) {
-            super(callingId, item);
-        }
-    }
-
-
     public static class PersonChangedEvent extends BaseArgumentEvent<PersonWrapper> {
         public PersonChangedEvent(int callingId, PersonWrapper item) {
             super(callingId, item);
         }
     }
+
+    public static class TvShowInformationUpdatedEvent extends BaseArgumentEvent<ShowWrapper> {
+        public TvShowInformationUpdatedEvent(int callingId, ShowWrapper item) {
+            super(callingId, item);
+        }
+    }
+
+    public static class TvShowImagesUpdatedEvent extends BaseArgumentEvent<ShowWrapper> {
+        public TvShowImagesUpdatedEvent(int callingId, ShowWrapper item) {
+            super(callingId, item);
+        }
+    }
+
+    public static class TvShowCastItemsUpdatedEvent extends BaseArgumentEvent<ShowWrapper> {
+        public TvShowCastItemsUpdatedEvent(int callingId, ShowWrapper item) {
+            super(callingId, item);
+        }
+    }
+
 
 
     public class MoviePaginatedResult extends PaginatedResult<MovieWrapper> {

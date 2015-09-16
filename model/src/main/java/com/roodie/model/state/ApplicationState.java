@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import com.roodie.model.controllers.DrawerMenuItem;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
+import com.roodie.model.entities.SeasonWrapper;
 import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.entities.TmdbConfiguration;
 import com.squareup.otto.Bus;
@@ -172,13 +173,23 @@ public  class ApplicationState implements BaseState, MoviesState {
     }
 
     @Override
-    public ShowWrapper getShow(String id) {
+    public ShowWrapper getTvShow(String id) {
         return mShows.get(id);
     }
 
     @Override
-    public ShowWrapper getShow(int id) {
-        return getShow(String.valueOf(id));
+    public ShowWrapper getTvShow(int id) {
+        return getTvShow(String.valueOf(id));
+    }
+
+    @Override
+    public SeasonWrapper getTvSeason(String id) {
+        return null;
+    }
+
+    @Override
+    public SeasonWrapper getTvSeason(int id) {
+        return getTvSeason(String.valueOf(id));
     }
 
     @Override
