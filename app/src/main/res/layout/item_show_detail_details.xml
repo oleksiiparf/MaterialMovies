@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:internal="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/movie_detail_card_details"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    internal:title="@string/details">
+
+    <LinearLayout
+        android:id="@+id/card_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_major"
+        android:paddingTop="@dimen/spacing_minor">
+
+        <com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout
+            android:id="@+id/layout_info_runtime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_micro"
+            android:visibility="gone"
+            internal:title="@string/movie_details_runtime" />
+
+        <com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout
+            android:id="@+id/layout_info_certification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_micro"
+            android:visibility="gone"
+            internal:title="@string/movie_details_certification" />
+
+        <com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout
+            android:id="@+id/layout_info_genres"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_micro"
+            android:visibility="gone"
+            internal:title="@string/movie_details_genres" />
+
+        <com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout
+            android:id="@+id/layout_info_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            internal:title="@string/movie_details_language" />
+
+        <com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout
+            android:id="@+id/layout_info_last_air"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_micro"
+            android:visibility="gone"
+            internal:title="@string/movie_details_released" />
+
+    </LinearLayout>
+
+</com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout>

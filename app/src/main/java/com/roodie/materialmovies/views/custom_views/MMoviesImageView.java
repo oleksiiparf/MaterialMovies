@@ -18,6 +18,7 @@ import com.roodie.materialmovies.util.AnimationUtils;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
+import com.roodie.model.entities.SeasonWrapper;
 import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.util.ImageHelper;
 import com.squareup.picasso.Picasso;
@@ -117,7 +118,7 @@ public class MMoviesImageView extends ImageView {
     }
 
     /**
-     * Set show poster handler
+     * Set Tv-show poster handler
      */
     public void loadPoster(ShowWrapper show) {
         loadPoster(show, null);
@@ -126,6 +127,22 @@ public class MMoviesImageView extends ImageView {
     public void loadPoster(ShowWrapper show, OnLoadedListener listener) {
         if (show.hasPosterUrl()) {
             setImageHandler(new ShowPosterHandler(show, listener));
+        } else {
+            reset();
+            setImageResourceImpl(R.color.movie_placeholder);
+        }
+    }
+
+    /**
+     * Set TvShows season poster handler
+     */
+    public void loadPoster(SeasonWrapper season) {
+        loadPoster(season, null);
+    }
+
+    public void loadPoster(SeasonWrapper season, OnLoadedListener listener) {
+        if (season.hasPosterUrl()) {
+            setImageHandler(new SeasonPosterHandler(season, listener));
         } else {
             reset();
             setImageResourceImpl(R.color.movie_placeholder);
@@ -292,6 +309,20 @@ public class MMoviesImageView extends ImageView {
 
         @Override
         protected String buildUrl(ShowWrapper object, ImageView imageView) {
+            return ImageHelper.getPosterUrl(object, imageView.getWidth(), imageView.getHeight());
+        }
+
+    }
+
+    //SeasonPosterHandler
+    private class SeasonPosterHandler extends ImageHandler<SeasonWrapper> {
+
+        public SeasonPosterHandler(SeasonWrapper mObject, OnLoadedListener mListener) {
+            super(mObject, mListener);
+        }
+
+        @Override
+        protected String buildUrl(SeasonWrapper object, ImageView imageView) {
             return ImageHelper.getPosterUrl(object, imageView.getWidth(), imageView.getHeight());
         }
 

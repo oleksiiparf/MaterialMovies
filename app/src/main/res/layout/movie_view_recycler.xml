@@ -4,57 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/loading_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="?colorPrimary">
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/spacing_major"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/progress_view"
-            android:layout_width="100dip"
-            android:layout_height="100dip"
-            android:layout_centerHorizontal="true">
-
-            <ImageView
-                android:layout_width="100.0dip"
-                android:layout_height="100.0dip"
-                android:layout_centerHorizontal="true"
-                android:scaleType="center"
-                android:src="@drawable/ic_action_mm_logo"
-                />
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="100.0dip"
-                android:layout_height="100.0dip"
-                android:layout_centerHorizontal="true"
-                android:indeterminate="true"
-                android:indeterminateDrawable="@drawable/indeterminate_progress_bar"
-                />
-    </FrameLayout>
-
-        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-            android:id="@+id/empty_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/spacing_major"
-            android:textAppearance="@style/Widget.MMovies.TextAppearance.PrimaryText"
-            android:layout_below="@id/progress_view"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="48.0dip"
-            android:textColor="@color/mm_white_1" />
-
-    </RelativeLayout>
-
-    </FrameLayout>
+    <include layout="@layout/include_loading_view"/>
 
     <ProgressBar
         android:id="@+id/secondary_progress_bar"

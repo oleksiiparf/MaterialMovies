@@ -29,7 +29,7 @@
                 android:layout_height="fill_parent"
                 android:background="?mmRevealBackgroundColor">
 
-                <include layout="@layout/include_movie_detail_minor"/>
+                <include layout="@layout/include_detail_minor"/>
 
             </io.codetail.widget.RevealFrameLayout>
 

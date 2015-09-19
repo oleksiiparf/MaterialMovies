@@ -32,8 +32,11 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     List<String> originCountries;
 
+    String originalLanguage;
+
     long firstAirDate;
     long lastAirDate;
+    long lastAirTime;
 
     String backdropUrl;
     String posterUrl;
@@ -51,6 +54,8 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     int amountOfEpisodes;
     int amountOfSeasons;
+
+    String contentRating;
 
     boolean isLiked = false;
 
@@ -95,6 +100,7 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
         if (show.last_air_date != null) {
             lastAirDate = unbox(lastAirDate, show.last_air_date);
+            lastAirTime = unbox(lastAirTime, show.last_air_date);
         }
 
         if (!TextUtils.isEmpty(show.poster_path)) {
@@ -137,6 +143,10 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         if (!TextUtils.isEmpty(show.type)) {
             type = show.type;
         }
+
+      if (!TextUtils.isEmpty(show.original_language)) {
+          originalLanguage = show.original_language;
+      }
 
     }
 
@@ -219,6 +229,10 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         return lastAirDate;
     }
 
+    public long getLastAirTime() {
+        return lastAirTime;
+    }
+
     public String getBackdropUrl() {
         return backdropUrl;
     }
@@ -265,6 +279,10 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         return amountOfSeasons;
     }
 
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
     public List<CreditWrapper> getCast() {
         return cast;
     }
@@ -285,6 +303,10 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         this.crew = crew;
     }
 
+    public String getContentRating() {
+        return contentRating;
+    }
+
     public void setSeasons(List<SeasonWrapper> seasons) {
         this.seasons = seasons;
     }
@@ -295,6 +317,10 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     public void setLiked(boolean isLiked) {
         this.isLiked = isLiked;
+    }
+
+    public int getRuntime() {
+        return runtime;
     }
 
     public int getAverageRatingPercent() {

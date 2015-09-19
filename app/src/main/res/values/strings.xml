@@ -45,6 +45,7 @@
     <string name="images_movies">Images</string>
     <string name="trailer_movie">Trailer</string>
     <string name="trailers_movies">Trailers</string>
+    <string name="show_seasons">Seasons</string>
     <string name="biography">Biography</string>
     <string name="placeholder_rating">--</string>
     <string name="tvdb_range">/10</string>

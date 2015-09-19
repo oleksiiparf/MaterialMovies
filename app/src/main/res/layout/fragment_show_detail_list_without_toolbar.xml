@@ -50,23 +50,6 @@
                     app:expandedTitleMarginStart="48dp"
                     app:expandedTitleMarginEnd="64dp">
 
-                    <com.roodie.materialmovies.views.custom_views.MMoviesImageView
-                        android:id="@+id/imageview_fanart"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:fitsSystemWindows="true"
-                        app:layout_collapseMode="parallax"
-                        />
-
-                    <android.support.v7.widget.Toolbar
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:fitsSystemWindows="true"
-                        style="@style/Widget.MMovies.Toolbar.Transparent"
-                        app:layout_collapseMode="pin" />
-
                 </android.support.design.widget.CollapsingToolbarLayout>
 
             </android.support.design.widget.AppBarLayout>
@@ -91,6 +74,15 @@
                 style="@style/Widget.MMovies.Movie.FAB" />
 
         </android.support.design.widget.CoordinatorLayout>
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+            android:id="@+id/imageview_fanart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:fitsSystemWindows="true"
+            app:layout_collapseMode="parallax"
+            android:layout_gravity="left|bottom" />
 
     </FrameLayout>
 

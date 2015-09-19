@@ -27,8 +27,6 @@ public abstract class BaseDetailFragment extends BaseFragment {
     protected RecyclerView mRecyclerView;
     private LinearLayout mLeftContainer;
 
-
-
     private Context mContext;
 
     @Override
@@ -127,6 +125,9 @@ public abstract class BaseDetailFragment extends BaseFragment {
         public final void notifyBinderItemRangeRemoved(int positionStart, int itemCount) {
             mDataBindAdapter.notifyBinderItemRangeRemoved(this, positionStart, itemCount);
         }
+
+
+
     }
 
     /**
@@ -188,7 +189,7 @@ public abstract class BaseDetailFragment extends BaseFragment {
      */
     public class ListDetailAdapter extends BaseDetailAdapter {
 
-        private List<BaseViewHolder> mBinderList = new ArrayList<>();
+        protected List<BaseViewHolder> mBinderList = new ArrayList<>();
 
         @Override
         public int getItemCount() {
@@ -263,6 +264,10 @@ public abstract class BaseDetailFragment extends BaseFragment {
             return mBinderList;
         }
 
+        public void addHeaderBinder(BaseViewHolder binder) {
+            mBinderList.add(binder);
+        }
+
         public void addBinder(BaseViewHolder binder) {
             mBinderList.add(binder);
         }
@@ -303,6 +308,5 @@ public abstract class BaseDetailFragment extends BaseFragment {
             return getDataBinder(e.ordinal());
         }
     }
-
 
 }

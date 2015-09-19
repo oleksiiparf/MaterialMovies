@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/spacing_minor"
+        android:paddingBottom="@dimen/title_summary_item_padding_bottom">
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+            android:id="@+id/imageview_poster"
+            android:layout_gravity="center_vertical"
+            android:layout_width="@dimen/movie_detail_poster_width"
+            android:layout_height="@dimen/movie_detail_poster_height"
+            android:layout_marginLeft="4.0dip"
+
+            android:cropToPadding="true"
+            android:scaleType="fitXY" />
+
+        <LinearLayout
+            android:id="@+id/summary_root"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_gravity="top"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/spacing_minor"
+            android:paddingRight="@dimen/spacing_minor"
+            android:paddingTop="@dimen/spacing_minor"
+            android:layout_marginRight="4.0dip"
+            android:layout_weight="1.0">
+
+            <TextView
+                android:id="@+id/textview_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:textAppearance="@style/Widget.MMovies.TextAppearance.PrimaryText.Large"
+                android:text="Status"/>
+
+            <TextView
+                android:id="@+id/textview_airs_on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginBottom="@dimen/spacing_minor"
+                android:textAppearance="@style/Widget.MMovies.TextAppearance.SecondaryText"
+                android:text="Airs on"/>
+
+            <include layout="@layout/item_detail_rating" />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

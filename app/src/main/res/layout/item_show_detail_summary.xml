@@ -14,15 +14,6 @@
         android:padding="@dimen/spacing_major"
         android:paddingTop="@dimen/spacing_minor">
 
-        <com.roodie.materialmovies.views.custom_views.AutofitTextView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/textview_tagline"
-            style="@style/Widget.MMovies.TextAppearance.PrimaryText"
-            android:layout_marginBottom="@dimen/spacing_major"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-
         <com.roodie.materialmovies.views.custom_views.ExpandableTextView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/textview_summary"

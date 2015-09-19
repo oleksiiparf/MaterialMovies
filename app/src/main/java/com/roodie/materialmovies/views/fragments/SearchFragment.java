@@ -148,14 +148,7 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
     }
 
     @Override
-    public void onDetach() {
-        //mPresenter.detachView(this);
-        super.onDetach();
-    }
-
-    @Override
     public void onUiAttached() {
-
     }
 
     private void configureToolbar(@NonNull Toolbar toolbar) {

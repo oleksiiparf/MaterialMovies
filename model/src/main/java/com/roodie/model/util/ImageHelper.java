@@ -23,6 +23,7 @@ import com.google.common.base.Verify;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
+import com.roodie.model.entities.SeasonWrapper;
 import com.roodie.model.entities.ShowWrapper;
 
 import java.net.URLEncoder;
@@ -58,11 +59,24 @@ public class ImageHelper {
         return RESIZE_ALL ? getResizedUrl(url, width, height) : url;
     }
 
-    public static String getPosterUrl(final ShowWrapper movie, final int width, final int height) {
+    public static String getPosterUrl(final ShowWrapper show, final int width, final int height) {
         String url = null;
 
-        if (!TextUtils.isEmpty(movie.getPosterUrl())) {
-            url = buildTmdbPosterUrl(movie.getPosterUrl(),
+        if (!TextUtils.isEmpty(show.getPosterUrl())) {
+            url = buildTmdbPosterUrl(show.getPosterUrl(),
+                    width, RESIZE_ALL);
+        }
+
+        Verify.verifyNotNull(url);
+
+        return RESIZE_ALL ? getResizedUrl(url, width, height) : url;
+    }
+
+    public static String getPosterUrl(final SeasonWrapper season, final int width, final int height) {
+        String url = null;
+
+        if (!TextUtils.isEmpty(season.getPosterUrl())) {
+            url = buildTmdbPosterUrl(season.getPosterUrl(),
                     width, RESIZE_ALL);
         }
 

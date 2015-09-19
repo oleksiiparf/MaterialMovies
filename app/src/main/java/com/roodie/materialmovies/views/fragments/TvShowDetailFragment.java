@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,8 +15,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.common.base.Preconditions;
@@ -23,13 +25,19 @@ import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.ShowDetailPresenter;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
+import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
+import com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout;
 import com.roodie.materialmovies.views.custom_views.RatingBarLayout;
+import com.roodie.materialmovies.views.custom_views.ViewRecycler;
 import com.roodie.materialmovies.views.fragments.base.BaseAnimationFragment;
 import com.roodie.model.Display;
+import com.roodie.model.entities.CreditWrapper;
+import com.roodie.model.entities.SeasonWrapper;
 import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.network.NetworkError;
 import com.roodie.model.util.MoviesCollections;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,19 +56,25 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
     private ShowWrapper mShow;
     private final ArrayList<DetailItemType> mItems = new ArrayList<>();
 
-    private RelativeLayout mSummaryContainer;
+    private LinearLayout mHeaderContainer;
 
     private CollapsingToolbarLayout mCollapsingToolbar;
     private MMoviesImageView mFanartImageView;
+    private MMoviesImageView mPosterImageView;
     private TextView mTitleTextView;
     private TextView mSummary;
-    private MMoviesImageView mPosterImageView;
+    private TextView mStatus;
+    private TextView mAirsOn;
     private RatingBarLayout mRatingBarLayout;
     private Context mContext;
 
     private MenuItem mShareItem;
     private MenuItem mWebSearchItem;
     boolean isEnableShare = false;
+
+    private ShowCastAdapter mShowCastAdapter;
+    private ShowCrewAdapter mShowCrewAdapter;
+    private ShowSeasonsAdapter mShowSeasonsAdapter;
 
     private static final Date DATE = new Date();
 
@@ -124,34 +138,27 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
 
         mCollapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.backdrop_toolbar);
 
-        mSummaryContainer = (RelativeLayout) view.findViewById(R.id.container_layout);
+        mHeaderContainer = (LinearLayout) view.findViewById(R.id.container_layout);
+        mStatus = (TextView) view.findViewById(R.id.textview_status);
+        mAirsOn = (TextView) view.findViewById(R.id.textview_airs_on);
+        mPosterImageView = (MMoviesImageView) view.findViewById(R.id.imageview_poster);
+
         mFanartImageView = (MMoviesImageView) view.findViewById(R.id.imageview_fanart);
         mTitleTextView = (TextView) view.findViewById(R.id.textview_title);
         mSummary = (TextView) view.findViewById(R.id.textview_summary);
-        mPosterImageView = (MMoviesImageView) view.findViewById(R.id.imageview_poster);
-        if (mPosterImageView != null) {
 
-            // check if jelly bean or higher
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                mFanartImageView.setImageAlpha(150);
-            } else {
-                mFanartImageView.setAlpha(150);
-            }
-            mPosterImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showTvShowImages(mShow);
-                }
-            });
+        // check if jelly bean or higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mFanartImageView.setImageAlpha(150);
         } else {
-
-            mFanartImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showTvShowImages(mShow);
-                }
-            });
+            mFanartImageView.setAlpha(150);
         }
+        mPosterImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTvShowImages(mShow);
+            }
+        });
 
         mRatingBarLayout = (RatingBarLayout) view.findViewById(R.id.rating_bar);
 
@@ -162,8 +169,8 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
 
     @Override
     protected void setUpVisibility() {
-        if (mSummaryContainer != null) {
-            mSummaryContainer.setVisibility(View.GONE);
+        if (mHeaderContainer != null) {
+            mHeaderContainer.setVisibility(View.GONE);
         }
         mFanartImageView.setVisibility(View.GONE);
     }
@@ -247,6 +254,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
         return mPresenter;
     }
 
+
     /**
      * MovieView
      */
@@ -304,8 +312,8 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
         getRecyclerView().setVisibility(View.VISIBLE);
         mFanartImageView.setVisibility(View.VISIBLE);
 
-        if (mSummaryContainer != null) {
-            mSummaryContainer.setVisibility(View.VISIBLE);
+        if (mHeaderContainer != null) {
+            mHeaderContainer.setVisibility(View.VISIBLE);
         }
 
 
@@ -358,8 +366,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
 
         } else {
 
-            mItems.add(DetailItemType.TITLE);
-
             if (!TextUtils.isEmpty(mShow.getOverview())) {
                 mItems.add(DetailItemType.SUMMARY);
             }
@@ -386,7 +392,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
     }
 
     enum DetailItemType {
-        TITLE,
         SUMMARY,
         DETAILS,
         TRAILERS,
@@ -406,9 +411,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
             mItems = new ArrayList<>(items.size());
             for (DetailItemType item : items) {
                 switch (item) {
-                    case TITLE:
-                        mItems.add(new ShowTitleBinder(this));
-                        break;
                     case SUMMARY:
                         mItems.add(new ShowSummaryBinder(this));
                         break;
@@ -433,42 +435,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
 
     }
 
-
-    /**
-     * ShowTitleBinder
-     */
-    public class ShowTitleBinder extends BaseViewHolder<ShowTitleBinder.ViewHolder> {
-
-        public ShowTitleBinder(BaseDetailAdapter dataBindAdapter) {
-            super(dataBindAdapter);
-        }
-
-        @Override
-        public int getItemCount() {
-            return 1;
-        }
-
-        @Override
-        public void bindViewHolder(ViewHolder holder, int position) {
-        //TODO
-        }
-
-        @Override
-        public ViewHolder newViewHolder(ViewGroup parent) {
-            //TODO
-            return null;
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-
-            public ViewHolder(View view) {
-                super(view);
-                //TODO
-
-            }
-        }
-    }
-
     /**
      * ShowSummaryBinder
      */
@@ -485,19 +451,26 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
 
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
-
+            holder.summary.setText(mShow.getOverview());
         }
 
         @Override
         public ViewHolder newViewHolder(ViewGroup parent) {
-            return null;
+            View view = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_show_detail_summary, parent, false);
+            return new ViewHolder(view);
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
+            View container;
+            TextView summary;
+
             public ViewHolder(View view) {
                 super(view);
 
+                container = view.findViewById(R.id.movie_detail_card_details);
+                summary = (TextView) view.findViewById(R.id.textview_summary);
             }
         }
     }
@@ -518,19 +491,73 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
 
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
+            if (mShow.getRuntime() > 0) {
+                holder.runtimeLayout.setContentText(
+                        getString(R.string.movie_details_runtime_content, mShow.getRuntime()));
+                holder.runtimeLayout.setVisibility(View.VISIBLE);
+            } else {
+                holder.runtimeLayout.setVisibility(View.GONE);
+            }
+
+            if (!TextUtils.isEmpty(mShow.getContentRating())) {
+                holder.contentRatingLayout.setContentText(mShow.getContentRating());
+                holder.contentRatingLayout.setVisibility(View.VISIBLE);
+            } else {
+                holder.contentRatingLayout.setVisibility(View.GONE);
+            }
+
+            if (!TextUtils.isEmpty(mShow.getGenres())) {
+                holder.genreLayout.setContentText(mShow.getGenres());
+                holder.genreLayout.setVisibility(View.VISIBLE);
+            } else {
+                holder.genreLayout.setVisibility(View.GONE);
+            }
+
+            if (mShow.getLastAirTime() > 0) {
+                DATE.setTime(mShow.getLastAirTime());
+                DateFormat dateFormat = DateFormat.getDateInstance();
+                holder.lastAirInfoLayout.setContentText( dateFormat.format(DATE));
+                holder.lastAirInfoLayout.setVisibility(View.VISIBLE);
+
+            } else {
+                holder.lastAirInfoLayout.setVisibility(View.GONE);
+            }
+
+
+            if (!TextUtils.isEmpty(mShow.getOriginalLanguage())) {
+                holder.languageLayout.setContentText(mShow.getOriginalLanguage());
+                holder.languageLayout.setVisibility(View.VISIBLE);
+            } else {
+                holder.languageLayout.setVisibility(View.GONE);
+            }
 
         }
 
         @Override
         public ViewHolder newViewHolder(ViewGroup parent) {
-            return null;
+            View view = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_show_detail_details, parent, false);
+            return new ViewHolder(view);
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
+            MovieDetailCardLayout container;
+            MovieDetailInfoLayout runtimeLayout;
+            MovieDetailInfoLayout contentRatingLayout;
+            MovieDetailInfoLayout genreLayout;
+            MovieDetailInfoLayout lastAirInfoLayout;
+            MovieDetailInfoLayout languageLayout;
+
             public ViewHolder(View view) {
                 super(view);
 
+                container = (MovieDetailCardLayout) view.findViewById(R.id.movie_detail_card_details);
+                runtimeLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_runtime);
+                contentRatingLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_certification);
+                genreLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_genres);
+                lastAirInfoLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_last_air);
+                languageLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_language);
             }
         }
     }
@@ -573,6 +600,8 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
      */
     public class ShowCastBinder extends BaseViewHolder<ShowCastBinder.ViewHolder> {
 
+        MovieDetailCardLayout cardLayout;
+
         public ShowCastBinder(BaseDetailAdapter dataBindAdapter) {
             super(dataBindAdapter);
         }
@@ -585,18 +614,50 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
 
+            cardLayout.setTitle(R.string.cast_movies);
+
+            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showTvShowCreditsDialog(MovieQueryType.SHOW_CAST);
+                }
+            };
+
+            final ViewRecycler viewRecycler = new ViewRecycler(holder.layout);
+            viewRecycler.recycleViews();
+
+            if (!getShowCastAdapter().isEmpty()) {
+                final int numItems = getResources().getInteger(R.integer.detail_card_max_items);
+                final int adapterCount = getShowCastAdapter().getCount();
+
+                for (int i = 0; i < Math.min(numItems, adapterCount); i++) {
+                    View view = getShowCastAdapter().getView(i, viewRecycler.getRecycledView(), holder.layout);
+                    holder.layout.addView(view);
+                }
+                final boolean showSeeMore = numItems < getShowCastAdapter().getCount();
+                cardLayout.setSeeMoreVisibility(showSeeMore);
+                cardLayout.setSeeMoreOnClickListener(showSeeMore ? seeMoreClickListener : null);
+
+            }
+            viewRecycler.clearRecycledViews();
         }
 
         @Override
         public ViewHolder newViewHolder(ViewGroup parent) {
-            return null;
+            View view = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_movie_detail_generic_card, parent, false);
+            cardLayout = (MovieDetailCardLayout) view;
+
+            return new ViewHolder(view);
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
+            ViewGroup layout;
+
             public ViewHolder(View view) {
                 super(view);
-
+                layout = (ViewGroup) view.findViewById(R.id.card_content);
             }
         }
     }
@@ -605,6 +666,8 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
      * ShowCrewBinder
      */
     public class ShowCrewBinder extends BaseViewHolder<ShowCrewBinder.ViewHolder> {
+
+        MovieDetailCardLayout cardLayout;
 
         public ShowCrewBinder(BaseDetailAdapter dataBindAdapter) {
             super(dataBindAdapter);
@@ -618,18 +681,50 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
 
+            cardLayout.setTitle(R.string.crew_movies);
+
+            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showTvShowCreditsDialog(MovieQueryType.SHOW_CREW);
+                }
+            };
+
+            final ViewRecycler viewRecycler = new ViewRecycler(holder.layout);
+            viewRecycler.recycleViews();
+
+            if (!getShowCrewAdapter().isEmpty()) {
+                final int numItems = getResources().getInteger(R.integer.detail_card_max_items);
+                final int adapterCount = getShowCrewAdapter().getCount();
+
+                for (int i = 0; i < Math.min(numItems, adapterCount); i++) {
+                    View view = getShowCrewAdapter().getView(i, viewRecycler.getRecycledView(), holder.layout);
+                    holder.layout.addView(view);
+                }
+                final boolean showSeeMore = numItems < getShowCrewAdapter().getCount();
+                cardLayout.setSeeMoreVisibility(showSeeMore);
+                cardLayout.setSeeMoreOnClickListener(showSeeMore ? seeMoreClickListener : null);
+
+            }
+            viewRecycler.clearRecycledViews();
         }
 
         @Override
         public ViewHolder newViewHolder(ViewGroup parent) {
-            return null;
+            View view = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_movie_detail_generic_card, parent, false);
+            cardLayout = (MovieDetailCardLayout) view;
+
+            return new ViewHolder(view);
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
+            ViewGroup layout;
+
             public ViewHolder(View view) {
                 super(view);
-
+                layout = (ViewGroup) view.findViewById(R.id.card_content);
             }
         }
     }
@@ -638,6 +733,8 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
      * ShowSeasonsBinder
      */
     public class ShowSeasonsBinder extends BaseViewHolder<ShowSeasonsBinder.ViewHolder> {
+
+        MovieDetailCardLayout cardLayout;
 
         public ShowSeasonsBinder(BaseDetailAdapter dataBindAdapter) {
             super(dataBindAdapter);
@@ -650,21 +747,237 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
 
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
-
+            //TODO
         }
 
         @Override
         public ViewHolder newViewHolder(ViewGroup parent) {
-            return null;
+            View view = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.item_show_detail_seasons, parent, false);
+            cardLayout = (MovieDetailCardLayout) view;
+
+            return new ViewHolder(view);
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
+            ViewGroup layout;
+
             public ViewHolder(View view) {
                 super(view);
-
+                layout = (ViewGroup) view.findViewById(R.id.card_content);
             }
         }
+    }
+
+    /**
+     * BaseMovieCastAdapter
+     */
+    private abstract class BaseMovieCastAdapter extends BaseAdapter {
+        private final LayoutInflater mInflater;
+        private final View.OnClickListener mItemOnClickListener;
+
+        public BaseMovieCastAdapter(LayoutInflater mInflater, View.OnClickListener mItemOnClickListener) {
+            this.mInflater = mInflater;
+            this.mItemOnClickListener = mItemOnClickListener;
+        }
+
+
+        @Override
+        public abstract CreditWrapper getItem(int position) ;
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            if (convertView == null) {
+                convertView = mInflater.inflate(getLayoutId(), parent, false);
+            }
+
+            CreditWrapper credit = getItem(position);
+
+            final TextView title = (TextView) convertView.findViewById(R.id.title);
+            title.setText(credit.getPerson().getName());
+
+            final MMoviesImageView image = (MMoviesImageView) convertView.findViewById(R.id.poster);
+            image.setAvatarMode(true);
+            //Load with Picasso
+            image.loadProfile(credit.getPerson());
+
+
+            final TextView subTitle = (TextView) convertView.findViewById(R.id.subtitle_1);
+            if (subTitle != null) {
+                if (!TextUtils.isEmpty(credit.getJob())) {
+                    subTitle.setText(credit.getJob());
+                    subTitle.setVisibility(View.VISIBLE);
+                } else {
+                    subTitle.setVisibility(View.GONE);
+                }
+            }
+
+            convertView.setOnClickListener(mItemOnClickListener);
+            convertView.setTag(credit);
+
+            return convertView;
+        }
+
+        protected int getLayoutId() {
+            return R.layout.item_movie_detail_list_2line;
+        }
+    }
+
+    /**
+     * ShowCastAdapter
+     */
+    private class ShowCastAdapter extends BaseMovieCastAdapter {
+
+        public ShowCastAdapter(LayoutInflater mInflater) {
+            super(mInflater, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CreditWrapper cast = (CreditWrapper) v.getTag();
+                    if (cast != null) {
+                       // showPersonDetail(cast.getPerson(), v);
+                        //TODO
+                    }
+                }
+            });
+        }
+
+        @Override
+        public int getCount() {
+            return mShow != null ? MoviesCollections.size(mShow.getCast()) : 0;
+        }
+
+        @Override
+        public CreditWrapper getItem(int position) {
+            return mShow.getCast().get(position);
+        }
+    }
+
+    /**
+     * ShowCrewAdapter
+     */
+    private class ShowCrewAdapter extends BaseMovieCastAdapter {
+
+        public ShowCrewAdapter(LayoutInflater mInflater) {
+            super(mInflater, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CreditWrapper cast = (CreditWrapper) v.getTag();
+                    if (cast != null) {
+                       // showPersonDetail(cast.getPerson(), v);
+                        //TODO
+                    }
+                }
+            });
+        }
+
+        @Override
+        public int getCount() {
+            return mShow != null ? MoviesCollections.size(mShow.getCrew()) : 0;
+        }
+
+        @Override
+        public CreditWrapper getItem(int position) {
+            return mShow.getCrew().get(position);
+        }
+    }
+
+    /**
+     * ShowSeasonsAdapter
+     */
+    private class ShowSeasonsAdapter extends BaseAdapter {
+
+        private final LayoutInflater mInflater;
+        private final View.OnClickListener mOnClickListener;
+
+        ShowSeasonsAdapter(LayoutInflater inflater) {
+            mInflater = inflater;
+
+            mOnClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                }
+            };
+        }
+
+        @Override
+        public int getCount() {
+            if (mShow != null && MoviesCollections.isEmpty(mShow.getSeasons())) {
+                return  mShow.getSeasons().size();
+            } else {
+                return 0;
+            }
+        }
+
+        @Override
+        public SeasonWrapper getItem(int position) {
+            return mShow.getSeasons().get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.item_show_season, parent, false);
+            }
+
+            final SeasonWrapper season = getItem(position);
+
+            final MMoviesImageView imageView = (MMoviesImageView)
+                    convertView.findViewById(R.id.poster);
+            imageView.loadPoster(season);
+
+            final TextView title = (TextView) convertView.findViewById(R.id.title);
+            title.setText(season.getTitle());
+            //TODO
+
+            final TextView subTitle = (TextView) convertView.findViewById(R.id.title);
+            subTitle.setText(season.getEpisodeCount());
+
+            convertView.setOnClickListener(mOnClickListener);
+            convertView.setTag(season);
+
+            return convertView;
+        }
+    }
+
+
+
+    private ShowCastAdapter getShowCastAdapter() {
+        if (mShowCastAdapter == null) {
+            mShowCastAdapter = new ShowCastAdapter(LayoutInflater.from(getActivity()));
+        }
+        return mShowCastAdapter;
+    }
+
+    private ShowCrewAdapter getShowCrewAdapter() {
+        if (mShowCrewAdapter == null) {
+            mShowCrewAdapter = new ShowCrewAdapter(LayoutInflater.from(getActivity()));
+        }
+        return mShowCrewAdapter;
+    }
+
+    private ShowSeasonsAdapter getShowSeasonssAdapter() {
+        if (mShowSeasonsAdapter == null) {
+            mShowSeasonsAdapter = new ShowSeasonsAdapter(LayoutInflater.from(getActivity()));
+        }
+        return mShowSeasonsAdapter;
+    }
+
+
+    @Override
+    protected void setSupportActionBar(Toolbar toolbar) {
+        setSupportActionBar(toolbar, false);
     }
 
 }

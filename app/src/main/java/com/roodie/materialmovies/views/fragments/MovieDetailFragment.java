@@ -41,7 +41,7 @@ import com.roodie.materialmovies.views.custom_views.RatingBarLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
 import com.roodie.materialmovies.views.fragments.base.BaseAnimationFragment;
 import com.roodie.model.Display;
-import com.roodie.model.entities.MovieCreditWrapper;
+import com.roodie.model.entities.CreditWrapper;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.TrailerWrapper;
@@ -605,7 +605,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             mItems.add(DetailItemType.TITLE);
 
             if (!TextUtils.isEmpty(mMovie.getOverview())) {
-                mItems.add(DetailItemType.DESCRIPTION);
+                mItems.add(DetailItemType.SUMMARY);
             }
         }
 
@@ -636,8 +636,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
      enum DetailItemType  {
         TITLE,          //(R.layout.item_movie_detail_title), includes poster, tagline and rating
-        TAGLINE,        //(R.layout.iutem_movie_detail_tagline)
-        DESCRIPTION,    // R.lay.item_movie_detail_description
         DETAILS,        //(R.layout.item_movie_detail_details), include details
         SUMMARY,        //(R.layout.item_movie_detail_summary), includes description text, maybe
         TRAILERS,       //(R.layout.item_movie_detail_trailers), includes trailers
@@ -664,7 +662,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                     case TITLE:
                         mItems.add(new MovieTitleBinder(this));
                         break;
-                    case DESCRIPTION:
+                    case SUMMARY:
                         mItems.add(new MovieDescriptionBinder(this));
                         break;
                     case DETAILS:
@@ -702,7 +700,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         @Override
         public ViewHolder newViewHolder(ViewGroup parent) {
             View view = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.item_movie_detail_description, parent, false);
+                    R.layout.item_movie_detail_summary, parent, false);
             return new ViewHolder(view);
         }
 
@@ -1244,7 +1242,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
 
         @Override
-        public abstract MovieCreditWrapper getItem(int position) ;
+        public abstract CreditWrapper getItem(int position) ;
 
         @Override
         public long getItemId(int position) {
@@ -1258,7 +1256,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                 convertView = mInflater.inflate(getLayoutId(), parent, false);
             }
 
-            MovieCreditWrapper credit = getItem(position);
+            CreditWrapper credit = getItem(position);
 
             final TextView title = (TextView) convertView.findViewById(R.id.title);
             title.setText(credit.getPerson().getName());
@@ -1291,7 +1289,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     }
 
     /**
-     * MovieCastAdapter
+     * ShowCastAdapter
      */
     private class MovieCastAdapter extends BaseMovieCastAdapter {
 
@@ -1299,7 +1297,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             super(mInflater, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MovieCreditWrapper cast = (MovieCreditWrapper) v.getTag();
+                    CreditWrapper cast = (CreditWrapper) v.getTag();
                     if (cast != null) {
                        showPersonDetail(cast.getPerson(), v);
                     }
@@ -1313,13 +1311,13 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         }
 
         @Override
-        public MovieCreditWrapper getItem(int position) {
+        public CreditWrapper getItem(int position) {
             return mMovie.getCast().get(position);
         }
     }
 
     /**
-     * MovieCrewAdapter
+     * ShowCrewAdapter
      */
     private class MovieCrewAdapter extends BaseMovieCastAdapter {
 
@@ -1327,7 +1325,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             super(mInflater, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MovieCreditWrapper cast = (MovieCreditWrapper) v.getTag();
+                    CreditWrapper cast = (CreditWrapper) v.getTag();
                     if (cast != null) {
                         showPersonDetail(cast.getPerson(), v);
                     }
@@ -1341,7 +1339,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         }
 
         @Override
-        public MovieCreditWrapper getItem(int position) {
+        public CreditWrapper getItem(int position) {
             return mMovie.getCrew().get(position);
         }
     }

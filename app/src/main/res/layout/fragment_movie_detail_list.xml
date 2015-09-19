@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge>
-    <include layout="@layout/fragment_movie_detail_list_vertical"/>
+<include layout="@layout/fragment_movie_detail_list_vertical"/>
 </merge>

@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <include layout="@layout/include_movie_detail_minor"/>
+                    <include layout="@layout/include_detail_minor"/>
 
                 </io.codetail.widget.RevealFrameLayout>
 
