@@ -27,7 +27,8 @@ public class FetchDetailTvShowRunnable  extends  BaseMovieRunnable<TvShowComplet
                 getCountryProvider().getTwoLetterLanguageCode(),
                 new AppendToResponse(
                         AppendToResponseItem.CREDITS,
-                        AppendToResponseItem.VIDEOS
+                        AppendToResponseItem.VIDEOS,
+                        AppendToResponseItem.CONTENT_RATINGS
                 )
         );
     }
@@ -44,6 +45,11 @@ public class FetchDetailTvShowRunnable  extends  BaseMovieRunnable<TvShowComplet
 
         if (result.credits != null && !MoviesCollections.isEmpty(result.credits.crew)){
             show.setCrew(getEntityMapper().mapCrewCredits(result.credits.crew));
+        }
+
+        if (result.content_ratings != null) {
+            show.updateContentRating(result.content_ratings,
+                    getCountryProvider().getTwoLetterCountryCode());
         }
 
         getDbHelper().put(show);

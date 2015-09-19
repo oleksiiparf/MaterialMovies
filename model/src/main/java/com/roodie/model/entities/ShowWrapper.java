@@ -5,7 +5,10 @@ import android.text.TextUtils;
 import com.google.common.base.Preconditions;
 import com.roodie.model.util.IntUtils;
 import com.roodie.model.util.MoviesCollections;
+import com.uwetrottmann.tmdb.entities.ContentRating;
 import com.uwetrottmann.tmdb.entities.Genre;
+import com.uwetrottmann.tmdb.entities.Network;
+import com.uwetrottmann.tmdb.entities.TvContentRatings;
 import com.uwetrottmann.tmdb.entities.TvShowComplete;
 
 import java.io.Serializable;
@@ -42,6 +45,7 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
     String posterUrl;
 
     String genres;
+    String networks;
 
     int ratingPercent;
     int ratingVotes;
@@ -136,6 +140,10 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
             genres = getGenresString(show.genres);
         }
 
+      if (show.networks != null) {
+          networks = getNetworksString(show.networks);
+      }
+
         if (!TextUtils.isEmpty(show.status)) {
             status = show.status;
         }
@@ -176,6 +184,20 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         return null;
     }
 
+    private static String getNetworksString(List<Network> list) {
+        if (!MoviesCollections.isEmpty(list)) {
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0, z = list.size(); i < z; i++) {
+                sb.append(list.get(i).name);
+                if (i < z - 1) {
+                    sb.append(" | ");
+                }
+            }
+            return sb.toString();
+        }
+        return null;
+    }
+
     private static int getAverageRuntime(List<Integer> runTime) {
         double average = 0;
         if (runTime.size() > 0) {
@@ -195,6 +217,27 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         BigDecimal bd = new BigDecimal(Double.toString(d));
         bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
         return bd.floatValue();
+    }
+
+    public void updateContentRating(final TvContentRatings ratings, final String countryCode) {
+        Preconditions.checkNotNull(ratings, "ratings cannot be null");
+
+        if (!MoviesCollections.isEmpty(ratings.results)) {
+            ContentRating cRating = null;
+
+            for (ContentRating rating : ratings.results) {
+                if (countryCode != null && countryCode.equalsIgnoreCase(rating.iso_3166_1)) {
+                    cRating = rating;
+                    break;
+                }
+            }
+
+            if (cRating != null) {
+                if (!TextUtils.isEmpty(cRating.rating)) {
+                    contentRating = cRating.rating;
+                }
+            }
+        }
     }
 
     public Long getDbId() {
@@ -305,6 +348,18 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     public String getContentRating() {
         return contentRating;
+    }
+
+    public void setContentRating(String contentRating) {
+        this.contentRating = contentRating;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getNetworks() {
+        return networks;
     }
 
     public void setSeasons(List<SeasonWrapper> seasons) {

@@ -78,13 +78,13 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
 
     private static final Date DATE = new Date();
 
-    protected static final String QUERY_SHOW_ID = "show_id";
+    protected static final String KEY_QUERY_SHOW_ID = "show_id";
 
     public static TvShowDetailFragment newInstance(String id) {
         Preconditions.checkArgument(id != null, "showId can not be null");
 
         Bundle bundle = new Bundle();
-        bundle.putString(QUERY_SHOW_ID, id);
+        bundle.putString(KEY_QUERY_SHOW_ID, id);
         TvShowDetailFragment fragment = new TvShowDetailFragment();
         fragment.setArguments(bundle);
 
@@ -275,7 +275,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
 
     @Override
     public String getRequestParameter() {
-        return null;
+        return getArguments().getString(KEY_QUERY_SHOW_ID);
     }
 
     @Override
@@ -316,7 +316,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
             mHeaderContainer.setVisibility(View.VISIBLE);
         }
 
-
     }
 
     @Override
@@ -351,19 +350,19 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
             mCollapsingToolbar.setTitle(mShow.getTitle());
         }
 
+        mStatus.setText(mShow.getStatus());
+        mAirsOn.setText(mShow.getNetworks());
+        mPosterImageView.loadPoster(mShow);
+
+        mRatingBarLayout.setRatingVotes(mShow.getRatingVotes());
+        mRatingBarLayout.setRatingValue(mShow.getRatingVoteAverage());
+        mRatingBarLayout.setRatingRange(10);
+
         if (hasLeftContainer()) {
 
             mTitleTextView.setText(mShow.getTitle());
 
             mSummary.setText(mShow.getOverview());
-
-            mPosterImageView.loadPoster(mShow);
-
-            mRatingBarLayout.setRatingVotes(mShow.getRatingVotes());
-            mRatingBarLayout.setRatingValue(mShow.getRatingVoteAverage());
-            mRatingBarLayout.setRatingRange(10);
-
-
         } else {
 
             if (!TextUtils.isEmpty(mShow.getOverview())) {
@@ -747,7 +746,32 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
 
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
-            //TODO
+            cardLayout.setTitle(R.string.show_seasons);
+
+            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO
+                }
+            };
+
+            final ViewRecycler viewRecycler = new ViewRecycler(holder.layout);
+            viewRecycler.recycleViews();
+
+            if (!getShowSeasonsAdapter().isEmpty()) {
+                final int numItems = getResources().getInteger(R.integer.detail_card_max_items);
+                final int adapterCount = getShowSeasonsAdapter().getCount();
+
+                for (int i = 0; i < Math.min(numItems, adapterCount); i++) {
+                    View view = getShowSeasonsAdapter().getView(i, viewRecycler.getRecycledView(), holder.layout);
+                    holder.layout.addView(view);
+                }
+                final boolean showSeeMore = numItems < getShowSeasonsAdapter().getCount();
+                cardLayout.setSeeMoreVisibility(showSeeMore);
+                cardLayout.setSeeMoreOnClickListener(showSeeMore ? seeMoreClickListener : null);
+
+            }
+            viewRecycler.clearRecycledViews();
         }
 
         @Override
@@ -967,7 +991,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
         return mShowCrewAdapter;
     }
 
-    private ShowSeasonsAdapter getShowSeasonssAdapter() {
+    private ShowSeasonsAdapter getShowSeasonsAdapter() {
         if (mShowSeasonsAdapter == null) {
             mShowSeasonsAdapter = new ShowSeasonsAdapter(LayoutInflater.from(getActivity()));
         }
