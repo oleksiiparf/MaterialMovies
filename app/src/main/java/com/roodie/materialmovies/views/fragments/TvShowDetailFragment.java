@@ -17,12 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.ShowDetailPresenter;
+import com.roodie.materialmovies.util.StringUtils;
 import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
@@ -56,7 +56,8 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
     private ShowWrapper mShow;
     private final ArrayList<DetailItemType> mItems = new ArrayList<>();
 
-    private LinearLayout mHeaderContainer;
+    private View mHeaderContainer;
+    private View mHeader;
 
     private CollapsingToolbarLayout mCollapsingToolbar;
     private MMoviesImageView mFanartImageView;
@@ -95,6 +96,18 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.onPause();
     }
 
     @Override
@@ -138,7 +151,8 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
 
         mCollapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.backdrop_toolbar);
 
-        mHeaderContainer = (LinearLayout) view.findViewById(R.id.container_layout);
+        mHeaderContainer = view.findViewById(R.id.container_layout);
+        mHeader = view.findViewById(R.id.header);
         mStatus = (TextView) view.findViewById(R.id.textview_status);
         mAirsOn = (TextView) view.findViewById(R.id.textview_airs_on);
         mPosterImageView = (MMoviesImageView) view.findViewById(R.id.imageview_poster);
@@ -146,21 +160,28 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
         mFanartImageView = (MMoviesImageView) view.findViewById(R.id.imageview_fanart);
         mTitleTextView = (TextView) view.findViewById(R.id.textview_title);
         mSummary = (TextView) view.findViewById(R.id.textview_summary);
+        mRatingBarLayout = (RatingBarLayout) view.findViewById(R.id.rating_bar);
 
-        // check if jelly bean or higher
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            mFanartImageView.setImageAlpha(150);
+        if (mHeader != null) {
+
+            mFanartImageView.setBlurred(true);
+            mRatingBarLayout.setWhiteTheme();
         } else {
-            mFanartImageView.setAlpha(150);
+
+            // check if jelly bean or higher
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                mFanartImageView.setImageAlpha(150);
+            } else {
+                mFanartImageView.setAlpha(150);
+            }
         }
+
         mPosterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showTvShowImages(mShow);
             }
         });
-
-        mRatingBarLayout = (RatingBarLayout) view.findViewById(R.id.rating_bar);
 
         mPresenter.attachView(this);
         super.onViewCreated(view, savedInstanceState);
@@ -178,6 +199,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
     @Override
     protected void configureEnterTransition() {
         //TODO
+        initializePresenter();
     }
 
     @Override
@@ -195,11 +217,11 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.show_detail, menu);
 
-        mShareItem = menu.findItem(R.id.menu_movie_share);
+        mShareItem = menu.findItem(R.id.menu_show_share);
         mShareItem.setEnabled(isEnableShare);
         mShareItem.setVisible(isEnableShare);
 
-        mWebSearchItem = menu.findItem(R.id.menu_action_movie_websearch);
+        mWebSearchItem = menu.findItem(R.id.menu_action_show_websearch);
         mWebSearchItem.setEnabled(isEnableShare);
         mWebSearchItem.setVisible(isEnableShare);
     }
@@ -350,7 +372,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
             mCollapsingToolbar.setTitle(mShow.getTitle());
         }
 
-        mStatus.setText(mShow.getStatus());
+        mStatus.setText(getString(StringUtils.getShowStatusStringId(mShow.getStatus())));
         mAirsOn.setText(mShow.getNetworks());
         mPosterImageView.loadPoster(mShow);
 

@@ -49,6 +49,7 @@ public class MovieDetailPresenter extends BasePresenter {
 
     @Subscribe
     public void onMovieDetailChanged(MoviesState.MovieInformationUpdatedEvent event) {
+        Log.d(LOG_TAG, "movie detail changed");
         populateUi();
         checkDetailMovieResult(event.callingId, event.item);
     }
@@ -73,9 +74,10 @@ public class MovieDetailPresenter extends BasePresenter {
 
     @Override
     public void initialize() {
+        Log.d(LOG_TAG, "initialize");
         checkViewAlreadySetted();
 
-        fetchDetailMovieIfNeeded(2, mMoviesView.getRequestParameter());
+        fetchDetailMovieIfNeeded(mMoviesView.hashCode(), mMoviesView.getRequestParameter());
     }
 
     public void attachView(MovieDetailView view) {
@@ -111,7 +113,7 @@ public class MovieDetailPresenter extends BasePresenter {
     }
 
     public void refresh() {
-        fetchDetailMovie(2, mMoviesView.getRequestParameter());
+        fetchDetailMovie(mMoviesView.hashCode(), mMoviesView.getRequestParameter());
     }
 
     /**

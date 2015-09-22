@@ -1,9 +1,11 @@
 package com.roodie.materialmovies.util;
 
+import com.roodie.model.util.Tmdb;
+
 /**
  * Created by Roodie on 06.08.2015.
  */
-public class TmdbUtils {
+public class TmdbUtils extends Tmdb{
 
     private static final String BASE_URL = "https://www.themoviedb.org/";
     private static final String PATH_MOVIES = "movie/";

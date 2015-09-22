@@ -259,6 +259,11 @@
         <item name="font">din_light</item>
     </style>
 
+    <style name="Widget.MMovies.TextAppearance.PrimaryText.Large.Light"
+        parent="Widget.MMovies.TextAppearance.PrimaryText.Large">
+        <item name="android:textColor">?mmTextColorSecondary</item>
+    </style>
+
     <style name="Widget.MMovies.TextAppearance.SecondaryText"
         parent="Widget.MMovies.TextAppearance">
         <item name="android:textSize">14.0sp</item>

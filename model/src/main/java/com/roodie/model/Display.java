@@ -64,6 +64,10 @@ public interface Display {
 
     public void showMovieDetailFragmentBySharedElements(String movieId, String imageUrl);
 
+    public void startTvDetailActivity(String showId, Bundle bundle);
+
+    public void showTvDetailFragment(String movieId);
+
     public void startPersonDetailActivity(String id, Bundle bundle);
 
     public void startPersonDetailActivity(String id, int[] startingLocation);

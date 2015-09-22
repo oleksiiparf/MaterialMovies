@@ -62,6 +62,15 @@ public class RatingBarLayout extends RelativeLayout {
         }
     }
 
+    public void setWhiteTheme() {
+        int colorW = getResources().getColor(R.color.mm_white_1);
+
+        mRatingValueTextView.setTextColor(colorW);
+        mRatingRangeTextView.setTextColor(colorW);
+        mRatingVotesTextView.setTextColor(colorW);
+        mRatingLabelTextView.setTextColor(colorW);
+    }
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);

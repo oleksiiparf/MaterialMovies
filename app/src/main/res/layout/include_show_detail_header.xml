@@ -14,14 +14,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/spacing_minor"
-        android:paddingBottom="@dimen/title_summary_item_padding_bottom">
+        android:layout_marginTop="?attr/actionBarSize">
 
         <com.roodie.materialmovies.views.custom_views.MMoviesImageView
             android:id="@+id/imageview_poster"
             android:layout_gravity="center_vertical"
-            android:layout_width="@dimen/movie_detail_poster_width"
-            android:layout_height="@dimen/movie_detail_poster_height"
-            android:layout_marginLeft="4.0dip"
+            android:layout_width="@dimen/show_poster_width"
+            android:layout_height="@dimen/show_poster_height"
+            android:layout_marginLeft="8.0dip"
 
             android:cropToPadding="true"
             android:scaleType="fitXY" />
@@ -29,7 +29,7 @@
         <LinearLayout
             android:id="@+id/summary_root"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_gravity="top"
             android:orientation="vertical"
@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|right"
-                android:textAppearance="@style/Widget.MMovies.TextAppearance.PrimaryText.Large"
+                android:textAppearance="@style/Widget.MMovies.TextAppearance.PrimaryText.Large.Light"
                 android:text="Status"/>
 
             <TextView
@@ -54,6 +54,7 @@
                 android:layout_gravity="center_vertical|right"
                 android:layout_marginBottom="@dimen/spacing_minor"
                 android:textAppearance="@style/Widget.MMovies.TextAppearance.SecondaryText"
+                android:textColor="@color/mm_white_1"
                 android:text="Airs on"/>
 
             <include layout="@layout/item_detail_rating" />

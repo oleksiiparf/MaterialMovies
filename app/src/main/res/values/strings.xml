@@ -50,6 +50,9 @@
     <string name="placeholder_rating">--</string>
     <string name="tvdb_range">/10</string>
     <string name="no_rating">n/a</string>
+    <string name="show_isalive">Continuing</string>
+    <string name="show_isnotalive">Ended</string>
+    <string name="show_unknown">Scripted</string>
 
     <!-- Tmdb ratings -->
     <plurals name="votes">

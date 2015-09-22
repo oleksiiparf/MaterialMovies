@@ -48,6 +48,16 @@
         </activity>
 
         <activity
+            android:name=".views.activities.TvActivity"
+            android:parentActivityName=".views.activities.WatchlistActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.activities.WatchlistActivity" />
+
+        </activity>
+
+        <activity
             android:name=".views.activities.PersonActivity"
             android:parentActivityName=".views.activities.WatchlistActivity">
 

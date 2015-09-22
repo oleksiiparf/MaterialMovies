@@ -33,6 +33,9 @@ public class MMoviesImageView extends ImageView {
     private ImageHandler mImageHandler;
     private boolean mAvatarMode = false;
     private boolean mAutoFade = false;
+    private boolean mBlurred = false;
+
+
 
     public interface OnLoadedListener {
 
@@ -51,6 +54,10 @@ public class MMoviesImageView extends ImageView {
 
     public void setAutoFade(boolean autoFade) {
         mAutoFade = autoFade;
+    }
+
+    public void setBlurred(boolean blurred) {
+        mBlurred = blurred;
     }
 
     private void reset() {
@@ -448,6 +455,7 @@ public class MMoviesImageView extends ImageView {
 
     void setImageBitmapFromNetwork(final Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
         final boolean fade = mAutoFade && loadedFrom != Picasso.LoadedFrom.MEMORY;
+        final boolean blur = mBlurred && loadedFrom != Picasso.LoadedFrom.MEMORY;
         final Drawable currentDrawable = getDrawable();
 
         if (fade) {
@@ -457,12 +465,16 @@ public class MMoviesImageView extends ImageView {
                 setImageBitmapImpl(bitmap);
                 AnimationUtils.Fade.show(this);
             } else {
-                AnimationUtils.startCrossFade(this, currentDrawable,
-                        new BitmapDrawable(getResources(), bitmap));
+                    AnimationUtils.startCrossFade(this, currentDrawable,
+                            new BitmapDrawable(getResources(), bitmap));
             }
+        } else if (blur) {
+            AnimationUtils.makeBlur(this, bitmap);
+
         } else {
             setImageBitmapImpl(bitmap);
         }
+
     }
 
     void setImageBitmapImpl(final Bitmap bitmap) {

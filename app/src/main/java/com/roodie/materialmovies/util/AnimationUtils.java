@@ -4,11 +4,16 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
+import android.support.v8.renderscript.Allocation;
+import android.support.v8.renderscript.Element;
+import android.support.v8.renderscript.RenderScript;
+import android.support.v8.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -35,10 +40,13 @@ public class AnimationUtils {
          * Duration for animations in msec, which can be used with {@link ViewPropertyAnimator#setDuration(long)}
          * for example.
          */
-        public static final int ANIMATION_DURATION = 200;
+        public static final int ANIMATION_DURATION = 500;
 
         private AnimationUtils() {
         }
+
+        private static final float BITMAP_BLUR_SCALE = 0.4f;
+        private static final float BITMAP_BLUR_RADIUS = 7.5f;
 
         public static final int SCALE_FACTOR = 30;
 
@@ -344,4 +352,50 @@ public class AnimationUtils {
 
         animator.start();
     }
+
+    /**
+     * Make image blur effect using ScriptIntrinsicBlur from the RenderScript library.
+     */
+    public static void makeBlur(final ImageView imageView, final Bitmap image) {
+        int width = Math.round(image.getWidth() * BITMAP_BLUR_SCALE);
+        int height = Math.round(image.getHeight() * BITMAP_BLUR_SCALE);
+
+        Bitmap inputBitmap = Bitmap.createScaledBitmap(image, width, height, false);
+        Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap);
+
+        RenderScript rs = RenderScript.create(imageView.getContext());
+        ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+        Allocation tmpIn = Allocation.createFromBitmap(rs, inputBitmap);
+        Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap);
+        theIntrinsic.setRadius(BITMAP_BLUR_RADIUS);
+        theIntrinsic.setInput(tmpIn);
+        theIntrinsic.forEach(tmpOut);
+        tmpOut.copyTo(outputBitmap);
+
+        imageView.setImageDrawable(new BitmapDrawable(imageView.getResources(), outputBitmap));
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+
     }

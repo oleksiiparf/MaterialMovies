@@ -53,6 +53,7 @@ public class FetchDetailTvShowRunnable  extends  BaseMovieRunnable<TvShowComplet
         }
 
         getDbHelper().put(show);
+        System.out.println(show.toString());
         getEventBus().post(new MoviesState.TvShowInformationUpdatedEvent(getCallingId(), show));
     }
 
@@ -62,8 +63,7 @@ public class FetchDetailTvShowRunnable  extends  BaseMovieRunnable<TvShowComplet
             ShowWrapper show = mState.getTvShow(mId);
             if (show != null) {
                 getDbHelper().put(show);
-                getEventBus()
-                        .post(new MoviesState.TvShowInformationUpdatedEvent(getCallingId(), show));
+                getEventBus().post(new MoviesState.TvShowInformationUpdatedEvent(getCallingId(), show));
             }
         }
         super.onError(re);

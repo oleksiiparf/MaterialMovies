@@ -1,10 +1,13 @@
 package com.roodie.model.entities;
 
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.google.common.base.Preconditions;
+import com.roodie.model.Constants;
 import com.roodie.model.util.IntUtils;
 import com.roodie.model.util.MoviesCollections;
+import com.roodie.model.util.Tmdb;
 import com.uwetrottmann.tmdb.entities.ContentRating;
 import com.uwetrottmann.tmdb.entities.Genre;
 import com.uwetrottmann.tmdb.entities.Network;
@@ -16,6 +19,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static com.roodie.model.util.TimeUtils.isPastStartingPoint;
 
 
 /**
@@ -53,7 +58,7 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     float popularity;
 
-    String status;
+    int status;
     String type;
 
     int amountOfEpisodes;
@@ -70,6 +75,12 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
     transient List<CreditWrapper> crew;
     transient List<SeasonWrapper> seasons;
 
+
+    public static class Status {
+        public static final int CONTINUING = 1;
+        public static final int ENDED = 0;
+        public static final int UNKNOWN = -1;
+    }
 
 
     public ShowWrapper() {
@@ -145,7 +156,7 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
       }
 
         if (!TextUtils.isEmpty(show.status)) {
-            status = show.status;
+            status = encodeShowStatus(show.status);
         }
 
         if (!TextUtils.isEmpty(show.type)) {
@@ -199,15 +210,12 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
     }
 
     private static int getAverageRuntime(List<Integer> runTime) {
-        double average = 0;
         if (runTime.size() > 0) {
             double sum = 0;
             for (int j = 0; j < runTime.size(); j++) {
                 sum += runTime.get(j);
             }
-            average = sum / runTime.size();
-
-            return (int) (sum/ average);
+            return (int) (sum/ runTime.size());
         }
         return 0;
 
@@ -354,8 +362,8 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         this.contentRating = contentRating;
     }
 
-    public String getStatus() {
-        return status;
+    public int getStatus() {
+       return status;
     }
 
     public String getNetworks() {
@@ -393,6 +401,13 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
                 || MoviesCollections.isEmpty(seasons);
     }
 
+    public boolean needFullFetchFromTmdb() {
+        return (needFullFetch() || isPastStartingPoint(lastFullFetchFromTmdbCompleted,
+                Constants.STALE_MOVIE_DETAIL_THRESHOLD)) &&
+                isPastStartingPoint(lastFullFetchFromTmdbStarted,
+                        Constants.FULL_MOVIE_DETAIL_ATTEMPT_THRESHOLD);
+    }
+
     public void markFullFetchStarted() {
         lastFullFetchFromTmdbStarted = System.currentTimeMillis();
     }
@@ -401,6 +416,52 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         lastFullFetchFromTmdbCompleted = System.currentTimeMillis();
     }
 
+    public static int encodeShowStatus(@Nullable String status) {
+        if (status == null) {
+            return Status.UNKNOWN;
+        }
+        switch (status) {
+            case Tmdb.ShowStatusExport.CONTINUING:
+                return Status.CONTINUING;
+            case Tmdb.ShowStatusExport.ENDED:
+                return Status.ENDED;
+            default:
+                return Status.UNKNOWN;
+        }
+    }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("ShowWrapper{");
+        sb.append("_id=").append(_id);
+        sb.append(", tmdbId=").append(tmdbId);
+        sb.append(", originalTitle='").append(originalTitle).append('\'');
+        sb.append(", title='").append(title).append('\'');
+        sb.append(", overview='").append(overview).append('\'');
+        sb.append(", runtime=").append(runtime);
+        sb.append(", originCountries=").append(originCountries);
+        sb.append(", originalLanguage='").append(originalLanguage).append('\'');
+        sb.append(", firstAirDate=").append(firstAirDate);
+        sb.append(", lastAirDate=").append(lastAirDate);
+        sb.append(", lastAirTime=").append(lastAirTime);
+        sb.append(", backdropUrl='").append(backdropUrl).append('\'');
+        sb.append(", posterUrl='").append(posterUrl).append('\'');
+        sb.append(", genres='").append(genres).append('\'');
+        sb.append(", networks='").append(networks).append('\'');
+        sb.append(", ratingPercent=").append(ratingPercent);
+        sb.append(", ratingVotes=").append(ratingVotes);
+        sb.append(", ratingVotesAverage=").append(ratingVotesAverage);
+        sb.append(", popularity=").append(popularity);
+        sb.append(", status='").append(status).append('\'');
+        sb.append(", type='").append(type).append('\'');
+        sb.append(", amountOfEpisodes=").append(amountOfEpisodes);
+        sb.append(", amountOfSeasons=").append(amountOfSeasons);
+        sb.append(", contentRating='").append(contentRating).append('\'');
+        sb.append(", isLiked=").append(isLiked);
+        sb.append(", lastFullFetchFromTmdbStarted=").append(lastFullFetchFromTmdbStarted);
+        sb.append(", lastFullFetchFromTmdbCompleted=").append(lastFullFetchFromTmdbCompleted);
+        sb.append('}');
+        return sb.toString();
+    }
 }
 

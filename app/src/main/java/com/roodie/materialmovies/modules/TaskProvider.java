@@ -6,6 +6,7 @@ import com.roodie.materialmovies.modules.library.StateProvider;
 import com.roodie.materialmovies.modules.library.UtilProvider;
 import com.roodie.model.tasks.FetchConfigurationRunnable;
 import com.roodie.model.tasks.FetchDetailMovieRunnable;
+import com.roodie.model.tasks.FetchDetailTvShowRunnable;
 import com.roodie.model.tasks.FetchInTheatresRunnable;
 import com.roodie.model.tasks.FetchMovieCreditsRunnable;
 import com.roodie.model.tasks.FetchMovieImagesRunnable;
@@ -20,6 +21,8 @@ import com.roodie.model.tasks.FetchRelatedMoviesRunnable;
 import com.roodie.model.tasks.FetchSearchMovieRunnable;
 import com.roodie.model.tasks.FetchSearchPeopleResult;
 import com.roodie.model.tasks.FetchSearchShowRunnable;
+import com.roodie.model.tasks.FetchShowCreditsRunnable;
+import com.roodie.model.tasks.FetchShowSeasonsRunnable;
 import com.roodie.model.tasks.FetchUpcomingMoviesRunnable;
 
 import dagger.Module;
@@ -46,7 +49,11 @@ import dagger.Module;
                 FetchOnTheAirShowsRunnable.class,
                 FetchSearchMovieRunnable.class,
                 FetchSearchPeopleResult.class,
-                FetchSearchShowRunnable.class
+                FetchSearchShowRunnable.class,
+                FetchDetailTvShowRunnable.class,
+                FetchShowSeasonsRunnable.class,
+                FetchShowCreditsRunnable.class
+
         },
         includes = {
                 PersistanceProvider.class,

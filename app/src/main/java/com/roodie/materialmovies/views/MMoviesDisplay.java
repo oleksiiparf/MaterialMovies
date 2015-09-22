@@ -28,6 +28,7 @@ import com.roodie.materialmovies.views.activities.MovieImagesActivity;
 import com.roodie.materialmovies.views.activities.PersonActivity;
 import com.roodie.materialmovies.views.activities.SearchDetailActivity;
 import com.roodie.materialmovies.views.activities.SettingsActivity;
+import com.roodie.materialmovies.views.activities.TvActivity;
 import com.roodie.materialmovies.views.activities.WatchlistActivity;
 import com.roodie.materialmovies.views.fragments.MovieDetailFragment;
 import com.roodie.materialmovies.views.fragments.MovieImagesFragment;
@@ -38,6 +39,7 @@ import com.roodie.materialmovies.views.fragments.SearchMoviesListFragment;
 import com.roodie.materialmovies.views.fragments.SearchPeopleListFragment;
 import com.roodie.materialmovies.views.fragments.SearchShowsListFragment;
 import com.roodie.materialmovies.views.fragments.ShowsTabFragment;
+import com.roodie.materialmovies.views.fragments.TvShowDetailFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
@@ -173,6 +175,17 @@ public class MMoviesDisplay implements Display {
         startActivity(intent, bundle);
     }
 
+    @Override
+    public void startTvDetailActivity(String showId, Bundle bundle) {
+        Intent intent = new Intent(mActivity, TvActivity.class);
+        intent.putExtra(PARAM_ID, showId);
+        startActivity(intent, bundle);
+    }
+
+    @Override
+    public void showTvDetailFragment(String movieId) {
+        showFragmentFromDrawer(TvShowDetailFragment.newInstance(movieId));
+    }
 
     @Override
     public void startPersonDetailActivity(String id, Bundle bundle) {

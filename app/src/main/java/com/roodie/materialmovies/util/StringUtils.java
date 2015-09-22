@@ -2,6 +2,7 @@ package com.roodie.materialmovies.util;
 
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.UiView;
+import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.network.NetworkError;
 
 /**
@@ -41,6 +42,22 @@ public class StringUtils {
                 return R.string.on_the_air_title;
         }
         return 0;
+    }
+
+    /**
+     * Decodes the show status and returns integet representation. May be {@code null} if
+     * status is unknown.
+     *
+     */
+    public static int getShowStatusStringId(int encodedStatus) {
+        if (encodedStatus == ShowWrapper.Status.CONTINUING) {
+            return R.string.show_isalive;
+        } else if (encodedStatus == ShowWrapper.Status.ENDED) {
+            return R.string.show_isnotalive;
+        } else {
+            // status unknown, display nothing
+            return R.string.show_unknown;
+        }
     }
 
 }

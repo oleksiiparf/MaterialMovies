@@ -46,12 +46,14 @@ public class ShowDetailPresenter extends BasePresenter {
 
     @Subscribe
     public void onShowDetailChanged(MoviesState.TvShowInformationUpdatedEvent event) {
+        Log.d(LOG_TAG, "show detail changed");
         populateUi();
         checkDetailTvShowResult(event.callingId, event.item);
     }
 
     @Subscribe
     public void onNetworkError(BaseState.OnErrorEvent event) {
+        Log.d(LOG_TAG, "network error");
         if (attached && null != event.error) {
             mView.showError(event.error);
         }
@@ -59,6 +61,7 @@ public class ShowDetailPresenter extends BasePresenter {
 
     @Subscribe
     public void onLoadingProgressVisibilityChanged(BaseState.ShowLoadingProgressEvent event) {
+        Log.d(LOG_TAG, "loading progress chenged");
         if (attached) {
             if (event.secondary) {
                 mView.showSecondaryLoadingProgress(event.show);
@@ -70,12 +73,14 @@ public class ShowDetailPresenter extends BasePresenter {
 
     @Override
     public void initialize() {
+        Log.d(LOG_TAG, "initialize");
         checkViewAlreadySetted();
 
-        fetchDetailTvShowIfNeeded(2, mView.getRequestParameter());
+        fetchDetailTvShowIfNeeded(mView.hashCode(), mView.getRequestParameter());
     }
 
     public void attachView(ShowDetailView view) {
+        Log.d(LOG_TAG, "attach view");
         Preconditions.checkNotNull(view, "View cannot be null");
         this.mView = view;
         attached = true;
@@ -121,7 +126,7 @@ public class ShowDetailPresenter extends BasePresenter {
 
     private void fetchDetailTvShowFromTmdb(final int callingId, int id) {
         Preconditions.checkNotNull(id, "id cannot be null");
-
+        Log.d(LOG_TAG, "fetch show from tmdb");
         ShowWrapper show = mState.getTvShow(id);
         if (show != null) {
             show.markFullFetchStarted();
@@ -131,12 +136,15 @@ public class ShowDetailPresenter extends BasePresenter {
     }
 
     private void fetchDetailTvShowIfNeeded(final int callingId, String id) {
+        Log.d(LOG_TAG, "fetch show if needed");
         Preconditions.checkNotNull(id, "id cannot be null");
 
         ShowWrapper cached = mState.getTvShow(id);
         if (cached == null) {
+            Log.d(LOG_TAG, "cached == null");
             fetchDetailTvShow(callingId, id);
         } else {
+            Log.d(LOG_TAG, "cached != null");
             fetchDetailTvShowIfNeeded(callingId, cached, false);
         }
     }
@@ -144,19 +152,23 @@ public class ShowDetailPresenter extends BasePresenter {
     private void fetchDetailTvShowIfNeeded(int callingId, ShowWrapper show, boolean force) {
         Preconditions.checkNotNull(show, "show cannot be null");
 
-        if (force || show.needFullFetch()) {
-            if (show.getTmdbId() != null)
+        if (force || show.needFullFetchFromTmdb()) {
+            if (show.getTmdbId() != null) {
+                Log.d(LOG_TAG, "show.getTmdbId() != null");
                 fetchDetailTvShowFromTmdb(callingId, show.getTmdbId());
+            }
         } else {
             populateUi();
         }
     }
 
     public void refresh() {
-        fetchDetailTvShow(2, mView.getRequestParameter());
+        Log.d(LOG_TAG, "Refresh");
+        fetchDetailTvShow(mView.hashCode(), mView.getRequestParameter());
     }
 
     private void checkDetailTvShowResult(int callingId, ShowWrapper show) {
+        Log.d(LOG_TAG, "check detail tv show result");
         Preconditions.checkNotNull(show, "show cannot be null");
         fetchDetailTvShowIfNeeded(callingId, show, false);
     }

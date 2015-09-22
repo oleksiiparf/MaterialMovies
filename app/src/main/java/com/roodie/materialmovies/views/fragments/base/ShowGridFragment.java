@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.ShowGridPresenter;
 import com.roodie.materialmovies.util.AnimationUtils;
@@ -173,6 +174,29 @@ public abstract class ShowGridFragment extends BaseGridFragment implements ShowG
         return null;
     }
 
+    @Override
+    public void showTvDetail(ShowWrapper tvShow) {
+        Preconditions.checkNotNull(tvShow, "tv cannot be null");
+        //int[] startingLocation = new int[2];
+       // view.getLocationOnScreen(startingLocation);
+        //startingLocation[0] += view.getWidth() / 2;
+        //startingLocation[1] += view.getHeight() / 2;
+
+        Display display = getDisplay();
+        if (display != null) {
+            if (tvShow.getTmdbId() != null) {
+                display.startTvDetailActivity(String.valueOf(tvShow.getTmdbId()), null);
+                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //    System.out.println("Start by shared element");
+                //    display.startMovieDetailActivityBySharedElements(String.valueOf(movie.getTmdbId()), view, (String) view.getTag());
+                //} else {
+                //    System.out.println("Start by animation");
+                //    display.startMovieDetailActivityByAnimation(String.valueOf(movie.getTmdbId()), startingLocation);
+                //}
+            }
+        }
+
+    }
 
     @Override
     public void showTvShowDialog(final ShowWrapper tvShow) {
@@ -250,10 +274,14 @@ public abstract class ShowGridFragment extends BaseGridFragment implements ShowG
 
     @Override
     public void onClick(View view, int position) {
-        ShowWrapper item = mShowsAdapter.getItem(position).getListItem();
+        if (hasPresenter()) {
 
-        if (item != null) {
-            showTvShowDialog(item);
+            ListItem<ShowWrapper> item = mShowsAdapter.getItem(position);
+            // Log.d(LOG_TAG, "List item clicked  " + item.getListItem().getTitle());
+            Log.d(LOG_TAG, getQueryType() + " clicked");
+            if (item.getListType() == ListItem.TYPE_ITEM) {
+                showTvDetail(item.getListItem());
+            }
         }
     }
 
