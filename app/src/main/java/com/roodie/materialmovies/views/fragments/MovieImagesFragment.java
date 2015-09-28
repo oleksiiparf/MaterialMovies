@@ -84,6 +84,12 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.detachView(true);
+    }
+
+    @Override
     public void onPause() {
         mVisibleItem = mViewPager.getCurrentItem();
         mPresenter.onPause();

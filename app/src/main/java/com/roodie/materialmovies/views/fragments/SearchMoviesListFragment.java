@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * Created by Roodie on 06.09.2015.
  */
+
 public class SearchMoviesListFragment extends BaseSearchListFragment<MovieWrapper> {
 
     private SearchMoviesSectionedListAdapter mListAdapter;

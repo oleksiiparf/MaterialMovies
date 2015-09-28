@@ -56,6 +56,7 @@ import java.util.List;
 /**
  * Created by Roodie on 20.08.2015.
  */
+
 public class SearchFragment extends BaseDetailFragment implements SearchPresenter.SearchView {
 
     private static final String LOG_TAG = SearchFragment.class.getSimpleName();
@@ -125,6 +126,12 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.detachView(true);
+    }
+
+    @Override
     public void onResume() {
         Log.d(LOG_TAG, "On resume");
 
@@ -142,8 +149,8 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
         getToolbar().setVisibility(View.GONE);
         ((ViewGroup)mSearchView.getParent()).removeView(mSearchView);
-        mPresenter.onPause();
 
+        mPresenter.onPause();
         super.onPause();
     }
 

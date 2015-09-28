@@ -45,6 +45,7 @@ import java.util.List;
 /**
  * Created by Roodie on 16.09.2015.
  */
+
 public class TvShowDetailFragment extends BaseAnimationFragment implements ShowDetailPresenter.ShowDetailView {
 
     private static final String LOG_TAG = TvShowDetailFragment.class.getSimpleName();
@@ -96,18 +97,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.onPause();
     }
 
     @Override
@@ -186,6 +175,24 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
         mPresenter.attachView(this);
         super.onViewCreated(view, savedInstanceState);
         //mPresenter.initialize();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.detachView(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.onPause();
     }
 
     @Override

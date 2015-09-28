@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * Created by Roodie on 07.09.2015.
  */
+
 public class SearchShowsListFragment extends BaseSearchListFragment<ShowWrapper> {
 
     private SearchShowsSectionedListAdapter mListAdapter;

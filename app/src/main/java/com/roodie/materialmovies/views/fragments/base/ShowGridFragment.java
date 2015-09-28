@@ -65,7 +65,7 @@ public abstract class ShowGridFragment extends BaseGridFragment implements ShowG
     @Override
     public void onDetach() {
         super.onDetach();
-        mPresenter.detachUi(this);
+       // mPresenter.detachUi(this);
     }
 
     @Override
@@ -101,6 +101,12 @@ public abstract class ShowGridFragment extends BaseGridFragment implements ShowG
             display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
         }
         mPresenter.attachUi(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.detachUi(this);
     }
 
     @Override

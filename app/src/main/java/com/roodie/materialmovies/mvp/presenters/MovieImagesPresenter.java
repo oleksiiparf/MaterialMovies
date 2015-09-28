@@ -25,25 +25,20 @@ import javax.inject.Inject;
 /**
  * Created by Roodie on 06.07.2015.
  */
-public class MovieImagesPresenter extends BasePresenter {
+public class MovieImagesPresenter extends BasePresenter<MovieImagesPresenter.MovieImagesView> {
 
     private static final String LOG_TAG = MovieImagesPresenter.class.getSimpleName();
 
-    private MovieImagesView mView;
-
-    private final ApplicationState mState;
     private final BackgroundExecutor mExecutor;
     private final Injector mInjector;
     private final StringFetcher mFetcher;
-
-    private boolean attached = false;
 
     @Inject
     public MovieImagesPresenter(ApplicationState applicationState,
                                 @GeneralPurpose BackgroundExecutor executor,
                                 Injector injector,
                                 StringFetcher fetcher) {
-        mState = Preconditions.checkNotNull(applicationState, "mState can not be null");
+        super(applicationState);
         mExecutor = Preconditions.checkNotNull(executor, "executor cannot be null");
         mInjector = Preconditions.checkNotNull(injector, "injector cannot be null");
         mFetcher = Preconditions.checkNotNull(fetcher, "fetcher cannot be null");
@@ -56,32 +51,20 @@ public class MovieImagesPresenter extends BasePresenter {
     }
 
     @Override
-    public void onResume() {
-        mState.registerForEvents(this);
-    }
-
-    @Override
     public void initialize() {
 
-        checkViewAlreadySetted();
-
-        fetchMovieImagesIfNeeded(5,mView.getRequestParameter());
+        fetchMovieImagesIfNeeded(5, getView().getRequestParameter());
     }
 
     @Override
-    public void onPause() {
-        mState.unregisterForEvents(this);
+    public void attachView(MovieImagesView view) {
+        super.attachView(view);
+        getView().updateDisplayTitle(mFetcher.getString(R.string.images_movies));
     }
 
-    public void attachView (MovieImagesView view) {
-        Preconditions.checkNotNull(view, "View cannot be null");
-        this.mView = view;
-        attached = true;
-        mView.updateDisplayTitle(mFetcher.getString(R.string.images_movies));
-    }
-
-    private void checkViewAlreadySetted() {
-        Preconditions.checkState(attached = true, "View not attached");
+    @Override
+    public void detachView(boolean retainInstance) {
+        super.detachView(retainInstance);
     }
 
     private void fetchMovieImagesIfNeeded(final int callingId, String id) {
@@ -105,10 +88,10 @@ public class MovieImagesPresenter extends BasePresenter {
     private void populateUi(MoviesState.MovieImagesUpdatedEvent event) {
 
         Preconditions.checkNotNull(event, "Event cannot be null");
-        final MovieWrapper movie = mState.getMovie(mView.getRequestParameter());
+        final MovieWrapper movie = mState.getMovie(getView().getRequestParameter());
 
         if (movie != null && !MoviesCollections.isEmpty(movie.getBackdropImages())) {
-            mView.setItems(Collections.unmodifiableList(movie.getBackdropImages()));
+            getView().setItems(Collections.unmodifiableList(movie.getBackdropImages()));
         }
     }
 

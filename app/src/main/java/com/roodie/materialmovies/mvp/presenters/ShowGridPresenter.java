@@ -2,7 +2,6 @@ package com.roodie.materialmovies.mvp.presenters;
 
 import android.util.Log;
 
-import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.BaseMovieListView;
 import com.roodie.materialmovies.mvp.views.UiView;
@@ -34,38 +33,13 @@ public class ShowGridPresenter extends BaseListPresenter<ShowGridPresenter.ShowG
 
     private static final String LOG_TAG = ShowGridPresenter.class.getSimpleName();
 
-    private final BackgroundExecutor mExecutor;
-    private final ApplicationState mState;
-    private final Injector mInjector;
-    private final StringFetcher mStringFetcher;
-
     @Inject
-    public ShowGridPresenter(ApplicationState moviesState,
-                             @GeneralPurpose BackgroundExecutor executor,
-                             Injector injector,
-                             StringFetcher stringFetcher) {
-        super();
-        mState = Preconditions.checkNotNull(moviesState, "mState can not be null");
-        mExecutor = Preconditions.checkNotNull(executor, "executor cannot be null");
-        mInjector = Preconditions.checkNotNull(injector, "injector cannot be null");
-        mStringFetcher = Preconditions.checkNotNull(stringFetcher, "stringFetcher cannot be null");
-
-
+    public ShowGridPresenter(ApplicationState moviesState, @GeneralPurpose BackgroundExecutor executor, Injector injector, StringFetcher stringFetcher) {
+        super(moviesState, executor, injector, stringFetcher);
     }
 
     @Override
     public void initialize() {
-
-    }
-
-    @Override
-    public void onResume() {
-        mState.registerForEvents(this);
-    }
-
-    @Override
-    public void onPause() {
-        mState.unregisterForEvents(this);
 
     }
 

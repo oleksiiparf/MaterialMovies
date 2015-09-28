@@ -12,55 +12,34 @@ import javax.inject.Inject;
 /**
  * Created by Roodie on 14.08.2015.
  */
-public class ShowTabPresenter extends BasePresenter {
+public class ShowTabPresenter extends BasePresenter<ShowTabPresenter.ShowsTabView> {
 
-    ShowsTabView mView;
-
-    private final ApplicationState mState;
     private final StringFetcher mStringFetcher;
-
-    private boolean attached = false;
 
     @Inject
     public ShowTabPresenter(ApplicationState state,
                              StringFetcher stringFetcher) {
-        mState = Preconditions.checkNotNull(state, "state can not be null");
+        super(state);
         mStringFetcher = Preconditions.checkNotNull(stringFetcher, "stringFetcher cannot be null");
     }
 
+    @Override
     public void attachView(ShowsTabView view) {
-        Preconditions.checkNotNull(view, "View cannot be null");
-        this.mView = view;
-        attached = true;
+        super.attachView(view);
 
         if (!view.isModal()) {
-            mView.updateDisplayTitle(mStringFetcher.getString(R.string.shows_title));
+            getView().updateDisplayTitle(mStringFetcher.getString(R.string.shows_title));
         }
     }
 
     @Override
     public void initialize() {
-        checkViewAlreadySetted();
 
         populateMovieTabsUi();
     }
 
-    @Override
-    public void onResume() {
-        mState.registerForEvents(this);
-    }
-
-    @Override
-    public void onPause() {
-        mState.unregisterForEvents(this);
-    }
-
-    private void checkViewAlreadySetted() {
-        Preconditions.checkState(attached = true, "View not attached");
-    }
-
     private void populateMovieTabsUi() {
-        mView.setupTabs(UiView.ShowTabs.POPULAR, UiView.ShowTabs.ON_THE_AIR);
+        getView().setupTabs(UiView.ShowTabs.POPULAR, UiView.ShowTabs.ON_THE_AIR);
 
     }
 

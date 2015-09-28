@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * Created by Roodie on 07.09.2015.
  */
+
 public class SearchPeopleListFragment extends BaseSearchListFragment <PersonWrapper>{
 
     private SearchPeopleSectionedListAdapter mListAdapter;

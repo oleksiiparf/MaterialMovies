@@ -58,6 +58,12 @@ public abstract class BaseSearchListFragment<M extends BasicWrapper> extends Bas
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.detachView(true);
+    }
+
+    @Override
     public void onResume() {
         mPresenter.onResume();
         super.onResume();

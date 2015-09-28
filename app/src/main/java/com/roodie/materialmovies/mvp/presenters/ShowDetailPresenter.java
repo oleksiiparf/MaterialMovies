@@ -20,27 +20,20 @@ import javax.inject.Inject;
 /**
  * Created by Roodie on 16.09.2015.
  */
-public class ShowDetailPresenter extends BasePresenter {
-
-    private ShowDetailView mView;
+public class ShowDetailPresenter extends BasePresenter<ShowDetailPresenter.ShowDetailView> {
 
     private static final String LOG_TAG = ShowDetailPresenter.class.getSimpleName();
 
     private final BackgroundExecutor mExecutor;
 
-    private final ApplicationState mState;
     private final Injector mInjector;
-
-
-    private boolean attached = false;
 
     @Inject
     public ShowDetailPresenter(
             @GeneralPurpose BackgroundExecutor executor,
             ApplicationState state, Injector injector) {
-        super();
+        super(state);
         mExecutor = Preconditions.checkNotNull(executor, "executor can not be null");
-        mState = Preconditions.checkNotNull(state, "application state cannot be null");
         mInjector = Preconditions.checkNotNull(injector, "injector cannot be null");
     }
 
@@ -54,19 +47,19 @@ public class ShowDetailPresenter extends BasePresenter {
     @Subscribe
     public void onNetworkError(BaseState.OnErrorEvent event) {
         Log.d(LOG_TAG, "network error");
-        if (attached && null != event.error) {
-            mView.showError(event.error);
+        if (isViewAttached() && null != event.error) {
+            getView().showError(event.error);
         }
     }
 
     @Subscribe
     public void onLoadingProgressVisibilityChanged(BaseState.ShowLoadingProgressEvent event) {
         Log.d(LOG_TAG, "loading progress chenged");
-        if (attached) {
+        if (isViewAttached()) {
             if (event.secondary) {
-                mView.showSecondaryLoadingProgress(event.show);
+                getView().showSecondaryLoadingProgress(event.show);
             } else {
-                mView.showLoadingProgress(event.show);
+                getView().showLoadingProgress(event.show);
             }
         }
     }
@@ -74,38 +67,20 @@ public class ShowDetailPresenter extends BasePresenter {
     @Override
     public void initialize() {
         Log.d(LOG_TAG, "initialize");
-        checkViewAlreadySetted();
 
-        fetchDetailTvShowIfNeeded(mView.hashCode(), mView.getRequestParameter());
-    }
-
-    public void attachView(ShowDetailView view) {
-        Log.d(LOG_TAG, "attach view");
-        Preconditions.checkNotNull(view, "View cannot be null");
-        this.mView = view;
-        attached = true;
-    }
-
-    @Override
-    public void onResume() {
-        mState.registerForEvents(this);
-    }
-
-    @Override
-    public void onPause() {
-        mState.unregisterForEvents(this);
+        fetchDetailTvShowIfNeeded(getView().hashCode(), getView().getRequestParameter());
     }
 
     public void populateUi() {
-        Log.d(LOG_TAG, "populateUi: " + mView.getClass().getSimpleName());
+        Log.d(LOG_TAG, "populateUi: " + getView().getClass().getSimpleName());
 
-        final ShowWrapper show = mState.getTvShow(mView.getRequestParameter());
+        final ShowWrapper show = mState.getTvShow(getView().getRequestParameter());
 
-        switch (mView.getQueryType()) {
+        switch (getView().getQueryType()) {
             case SHOW_DETAIL:
                 if (show != null) {
-                    mView.updateDisplayTitle(show.getTitle());
-                    mView.setTvShow(show);
+                    getView().updateDisplayTitle(show.getTitle());
+                    getView().setTvShow(show);
                 }
                 break;
         }
@@ -164,17 +139,13 @@ public class ShowDetailPresenter extends BasePresenter {
 
     public void refresh() {
         Log.d(LOG_TAG, "Refresh");
-        fetchDetailTvShow(mView.hashCode(), mView.getRequestParameter());
+        fetchDetailTvShow(getView().hashCode(), getView().getRequestParameter());
     }
 
     private void checkDetailTvShowResult(int callingId, ShowWrapper show) {
         Log.d(LOG_TAG, "check detail tv show result");
         Preconditions.checkNotNull(show, "show cannot be null");
         fetchDetailTvShowIfNeeded(callingId, show, false);
-    }
-
-    private void checkViewAlreadySetted() {
-        Preconditions.checkState(attached = true, "View not attached");
     }
 
     private <R> void executeTask(BaseMovieRunnable<R> task) {

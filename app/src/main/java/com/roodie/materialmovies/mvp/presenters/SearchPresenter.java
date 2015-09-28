@@ -38,29 +38,24 @@ import javax.inject.Singleton;
  */
 
 @Singleton
-public class SearchPresenter extends BasePresenter {
-
-    private SearchView mSearchView;
-
+public class SearchPresenter extends BasePresenter<SearchPresenter.SearchView> {
 
     protected static final int TMDB_FIRST_PAGE = 1;
 
     private static final String LOG_TAG = SearchPresenter.class.getSimpleName();
 
     private final BackgroundExecutor mExecutor;
-    private final ApplicationState mState;
     private final Injector mInjector;
     private final StringFetcher mStringFetcher;
 
-    private boolean attached = false;
 
     @Inject
     public SearchPresenter(@GeneralPurpose BackgroundExecutor mExecutor,
                            ApplicationState mState,
                            Injector mInjector,
                            StringFetcher stringFetcher) {
+        super(mState);
         this.mExecutor = Preconditions.checkNotNull(mExecutor, "mExecutor cannot be null");
-        this.mState = Preconditions.checkNotNull(mState, "mState cannot be null");
         this.mInjector = Preconditions.checkNotNull(mInjector, "mInjector cannot be null");
         mStringFetcher = Preconditions.checkNotNull(stringFetcher, "stringFetcher cannot be null");
     }
@@ -80,31 +75,14 @@ public class SearchPresenter extends BasePresenter {
         }
     }
 
+    @Override
     public void attachView(SearchView view) {
-        Preconditions.checkNotNull(view, "View cannot be null");
-        this.mSearchView = view;
-        attached = true;
-        mSearchView.onUiAttached();
+        super.attachView(view);
+        getView().onUiAttached();
     }
 
-    public void detachView(SearchView view) {
-        Preconditions.checkArgument(view != null, "view cannot be null");
-        mSearchView = null;
-        attached = false;
-    }
-
-    @Override
-    public void onResume() {
-        mState.registerForEvents(this);
-    }
-
-    @Override
-    public void onPause() {
-        mState.unregisterForEvents(this);
-    }
-
-    protected int getId(SearchView view) {
-        return view.hashCode();
+    protected int getId() {
+        return getView().hashCode();
     }
 
     public void onScrolledToBottom() {
@@ -112,12 +90,12 @@ public class SearchPresenter extends BasePresenter {
         ApplicationState.SearchResult searchResult;
 
         Log.d(LOG_TAG, "On scrolled to bottom");
-        switch (mSearchView.getQueryType()) {
+        switch (getView().getQueryType()) {
             case SEARCH_PEOPLE:
                 searchResult = mState.getSearchResult();
                 if (searchResult != null && canFetchNextPage(searchResult.people)) {
                     fetchPeopleSearchResults(
-                            getId(mSearchView),
+                            getId(),
                             searchResult.query,
                             searchResult.people.page + 1);
                 }
@@ -126,7 +104,7 @@ public class SearchPresenter extends BasePresenter {
                 searchResult = mState.getSearchResult();
                 if (searchResult != null && canFetchNextPage(searchResult.movies)) {
                     fetchMovieSearchResults(
-                            getId(mSearchView),
+                            getId(),
                             searchResult.query,
                             searchResult.movies.page + 1);
                 }
@@ -135,7 +113,7 @@ public class SearchPresenter extends BasePresenter {
                 searchResult = mState.getSearchResult();
                 if (searchResult != null && canFetchNextPage(searchResult.shows)) {
                     fetchShowsSearchResults(
-                            getId(mSearchView),
+                            getId(),
                             searchResult.query,
                             searchResult.shows.page + 1);
                 }
@@ -149,22 +127,22 @@ public class SearchPresenter extends BasePresenter {
 
     public void search(String query) {
         Log.d(LOG_TAG, "Performing search :" + query);
-        switch (mSearchView.getQueryType()) {
+        switch (getView().getQueryType()) {
             case SEARCH: {
                 Log.d(LOG_TAG, "Fetch common search results");
-                fetchSearchResults(getId(mSearchView), query);
+                fetchSearchResults(getId(), query);
                 break;
             }
             case SEARCH_MOVIES: {
-                fetchMovieSearchResultsIfNeeded(getId(mSearchView), query);
+                fetchMovieSearchResultsIfNeeded(getId(), query);
                 break;
             }
             case SEARCH_PEOPLE: {
-                fetchPeopleSearchResultsIfNeeded(getId(mSearchView), query);
+                fetchPeopleSearchResultsIfNeeded(getId(), query);
                 break;
             }
             case SEARCH_SHOWS: {
-                fetchShowsSearchResultsIfNeeded(getId(mSearchView), query);
+                fetchShowsSearchResultsIfNeeded(getId(), query);
                 break;
             }
         }
@@ -174,17 +152,17 @@ public class SearchPresenter extends BasePresenter {
         Log.d(LOG_TAG, "Refresh");
         String query = mState.getSearchResult().query;
 
-        switch (mSearchView.getQueryType()) {
+        switch (getView().getQueryType()) {
             case SEARCH_MOVIES: {
-                fetchMovieSearchResults(getId(mSearchView), query, TMDB_FIRST_PAGE);
+                fetchMovieSearchResults(getId(), query, TMDB_FIRST_PAGE);
                 break;
             }
             case SEARCH_PEOPLE: {
-                fetchPeopleSearchResults(getId(mSearchView), query, TMDB_FIRST_PAGE);
+                fetchPeopleSearchResults(getId(), query, TMDB_FIRST_PAGE);
                 break;
             }
             case SEARCH_SHOWS: {
-                fetchShowsSearchResults(getId(mSearchView), query, TMDB_FIRST_PAGE);
+                fetchShowsSearchResults(getId(), query, TMDB_FIRST_PAGE);
                 break;
             }
         }
@@ -272,7 +250,7 @@ public class SearchPresenter extends BasePresenter {
         final List<UiView.MovieQueryType> list = Arrays.asList(queryTypes);
 
         for (UiView.MovieQueryType type : list) {
-            if (mSearchView.getQueryType().equals(type)) {
+            if (getView().getQueryType().equals(type)) {
                 populateUiFromQueryType(type);
                 break;
             }
@@ -281,7 +259,7 @@ public class SearchPresenter extends BasePresenter {
 
     public void populateUiFromQueryType(UiView.MovieQueryType queryType) {
 
-        if (mSearchView.getQueryType() == queryType) {
+        if (getView().getQueryType() == queryType) {
             switch (queryType) {
                 case SEARCH: {
                     Log.d(LOG_TAG, "Populate search Ui");
@@ -304,34 +282,34 @@ public class SearchPresenter extends BasePresenter {
     }
 
     private void populateSearchUi() {
-        mSearchView.setSearchResult(mState.getSearchResult());
+        getView().setSearchResult(mState.getSearchResult());
     }
 
     private void populateSearchMovieUi() {
         MoviesState.SearchResult result = mState.getSearchResult();
-        mSearchView.updateDisplayTitle(result != null ? result.query : null);
+        getView().updateDisplayTitle(result != null ? result.query : null);
 
         if (result != null && result.movies != null) {
-            mSearchView.setItems(createListItemList(result.movies.items));
+            getView().setItems(createListItemList(result.movies.items));
         }
     }
 
     private void populateSearchPersonUi() {
         ApplicationState.SearchResult searchResult = mState.getSearchResult();
-        mSearchView.updateDisplayTitle(searchResult != null ? searchResult.query : null);
+        getView().updateDisplayTitle(searchResult != null ? searchResult.query : null);
 
         // Now carry on with list ui population
         if (searchResult != null && searchResult.people != null) {
-            mSearchView.setItems(createListItemList(searchResult.people.items));
+            getView().setItems(createListItemList(searchResult.people.items));
         }
     }
 
     private void populateSearchShowUi() {
         ApplicationState.SearchResult result = mState.getSearchResult();
-        mSearchView.updateDisplayTitle(result != null ? result.query : null);
+        getView().updateDisplayTitle(result != null ? result.query : null);
 
         if (result != null && result.shows != null) {
-            mSearchView.setItems(createListItemList(result.shows.items));
+            getView().setItems(createListItemList(result.shows.items));
         }
 
     }
@@ -341,7 +319,7 @@ public class SearchPresenter extends BasePresenter {
     }
 
     public String getUiSubTitle() {
-        switch (mSearchView.getQueryType()) {
+        switch (getView().getQueryType()) {
             case SEARCH_MOVIES:
                 return mStringFetcher.getString(R.string.movies_title);
             case SEARCH_SHOWS:
@@ -360,12 +338,6 @@ public class SearchPresenter extends BasePresenter {
         }
         return listItems;
     }
-
-
-    private void checkViewAlreadySetted() {
-        Preconditions.checkState(attached = true, "View not attached");
-    }
-
 
     private <R> void executeTask(BaseMovieRunnable<R> task) {
         mInjector.inject(task);

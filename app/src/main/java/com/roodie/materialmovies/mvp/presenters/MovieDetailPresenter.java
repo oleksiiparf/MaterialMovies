@@ -23,27 +23,20 @@ import javax.inject.Inject;
 /**
  * Created by Roodie on 25.06.2015.
  */
-public class MovieDetailPresenter extends BasePresenter {
-
-    private MovieDetailView mMoviesView;
+public class MovieDetailPresenter extends BasePresenter<MovieDetailPresenter.MovieDetailView> {
 
     private static final String LOG_TAG = MovieDetailPresenter.class.getSimpleName();
 
     private final BackgroundExecutor mExecutor;
 
-
-    private final ApplicationState mState;
     private final Injector mInjector;
-
-    private boolean attached = false;
 
     @Inject
     public MovieDetailPresenter(
             @GeneralPurpose BackgroundExecutor executor,
             ApplicationState state, Injector injector) {
-        super();
+        super(state);
         mExecutor = Preconditions.checkNotNull(executor, "executor can not be null");
-        mState = Preconditions.checkNotNull(state, "application state cannot be null");
         mInjector = Preconditions.checkNotNull(injector, "injector cannot be null");
     }
 
@@ -56,64 +49,60 @@ public class MovieDetailPresenter extends BasePresenter {
 
     @Subscribe
     public void onNetworkError(BaseState.OnErrorEvent event) {
-        if (attached && null != event.error) {
-            mMoviesView.showError(event.error);
+        if (isViewAttached() && null != event.error) {
+            getView().showError(event.error);
         }
     }
 
     @Subscribe
     public void onLoadingProgressVisibilityChanged(BaseState.ShowLoadingProgressEvent event) {
-        if (attached) {
+        if (isViewAttached()) {
             if (event.secondary) {
-                mMoviesView.showSecondaryLoadingProgress(event.show);
+                getView().showSecondaryLoadingProgress(event.show);
             } else {
-                mMoviesView.showLoadingProgress(event.show);
+                getView().showLoadingProgress(event.show);
             }
         }
     }
 
     @Override
     public void initialize() {
-        Log.d(LOG_TAG, "initialize");
-        checkViewAlreadySetted();
+        Log.d(LOG_TAG, "initialize()");
 
-        fetchDetailMovieIfNeeded(mMoviesView.hashCode(), mMoviesView.getRequestParameter());
+        fetchDetailMovieIfNeeded(getView().hashCode(), getView().getRequestParameter());
     }
 
+    @Override
     public void attachView(MovieDetailView view) {
-        Preconditions.checkNotNull(view, "View cannot be null");
-        this.mMoviesView = view;
-        attached = true;
+        Log.d(LOG_TAG, "attachView()");
+        super.attachView(view);
+
     }
 
     @Override
-    public void onResume() {
-        mState.registerForEvents(this);
-    }
-
-    @Override
-    public void onPause() {
-        mState.unregisterForEvents(this);
+    public void detachView(boolean retainInstance) {
+        Log.d(LOG_TAG, "detachView()");
+        super.detachView(retainInstance);
     }
 
 
     public void populateUi() {
-        Log.d(LOG_TAG, "populateUi: " + mMoviesView.getClass().getSimpleName());
+        Log.d(LOG_TAG, "populateUi: " + getView().getClass().getSimpleName());
 
-        final MovieWrapper movie = mState.getMovie(mMoviesView.getRequestParameter());
+        final MovieWrapper movie = mState.getMovie(getView().getRequestParameter());
 
-        switch (mMoviesView.getQueryType()) {
+        switch (getView().getQueryType()) {
             case MOVIE_DETAIL:
                 if (movie != null) {
-                    mMoviesView.updateDisplayTitle(movie.getTitle());
-                    mMoviesView.setMovie(movie);
+                    getView().updateDisplayTitle(movie.getTitle());
+                    getView().setMovie(movie);
                 }
                 break;
         }
     }
 
     public void refresh() {
-        fetchDetailMovie(mMoviesView.hashCode(), mMoviesView.getRequestParameter());
+        fetchDetailMovie(getView().hashCode(), getView().getRequestParameter());
     }
 
     /**
@@ -170,10 +159,6 @@ public class MovieDetailPresenter extends BasePresenter {
         fetchDetailMovieIfNeeded(callingId, movie, false);
     }
 
-
-    private void checkViewAlreadySetted() {
-        Preconditions.checkState(attached = true, "View not attached");
-    }
 
     private <R> void executeTask(BaseMovieRunnable<R> task) {
         mInjector.inject(task);

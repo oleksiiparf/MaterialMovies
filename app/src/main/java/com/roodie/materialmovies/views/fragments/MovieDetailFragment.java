@@ -247,6 +247,25 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     }
 
     @Override
+    public void onDestroyView() {
+        mPresenter.detachView(true);
+        super.onDestroyView();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.onPause();
+    }
+
+    @Override
     protected void setUpVisibility() {
         if (mSummaryContainer != null) {
             mSummaryContainer.setVisibility(View.GONE);
@@ -329,21 +348,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         mFanartImageView.setTranslationY(-mFanartImageView.getHeight());
         mFanartImageView.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(getInterpolator());
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.onPause();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.onResume();
-    }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -12,56 +12,37 @@ import javax.inject.Inject;
 /**
  * Created by Roodie on 02.08.2015.
  */
-public class MovieTabPresenter extends BasePresenter {
+public class MovieTabPresenter extends BasePresenter<MovieTabPresenter.MoviesTabView> {
 
-    MoviesTabView mView;
-
-    private final ApplicationState mState;
     private final StringFetcher mStringFetcher;
-
-    private boolean attached = false;
 
     @Inject
     public MovieTabPresenter(ApplicationState state,
                              StringFetcher stringFetcher) {
-        mState = Preconditions.checkNotNull(state, "state can not be null");
+        super(state);
         mStringFetcher = Preconditions.checkNotNull(stringFetcher, "stringFetcher cannot be null");
     }
 
-    public void attachView(MoviesTabView view) {
-        Preconditions.checkNotNull(view, "View cannot be null");
-        this.mView = view;
-        attached = true;
 
-        if (!view.isModal()) {
-            mView.updateDisplayTitle(mStringFetcher.getString(R.string.movies_title));
+    @Override
+    public void attachView(MoviesTabView view) {
+        super.attachView(view);
+
+        if (!getView().isModal()) {
+            getView().updateDisplayTitle(mStringFetcher.getString(R.string.movies_title));
         }
     }
 
     @Override
     public void initialize() {
-        checkViewAlreadySetted();
 
         populateMovieTabsUi();
     }
 
-    @Override
-    public void onResume() {
-        mState.registerForEvents(this);
-    }
-
-    @Override
-    public void onPause() {
-        mState.unregisterForEvents(this);
-    }
-
-    private void checkViewAlreadySetted() {
-        Preconditions.checkState(attached = true, "View not attached");
-    }
 
     private void populateMovieTabsUi() {
            // mView.setupTabs(UiView.MovieTabs.UPCOMING_MOVIES);
-            mView.setupTabs(UiView.MovieTabs.POPULAR, UiView.MovieTabs.IN_THEATRES, UiView.MovieTabs.UPCOMING);
+            getView().setupTabs(UiView.MovieTabs.POPULAR, UiView.MovieTabs.IN_THEATRES, UiView.MovieTabs.UPCOMING);
 
     }
 

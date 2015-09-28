@@ -19,6 +19,7 @@ import java.util.ArrayList;
 /**
  * Created by Roodie on 02.08.2015.
  */
+
 public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresenter.MoviesTabView {
 
     private MovieTabPresenter mPresenter;
@@ -40,6 +41,12 @@ public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresen
         super.onViewCreated(view, savedInstanceState);
         mPresenter.attachView(this);
         mPresenter.initialize();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.detachView(true);
     }
 
     @Override

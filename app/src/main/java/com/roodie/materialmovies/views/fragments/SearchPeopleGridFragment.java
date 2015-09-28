@@ -12,6 +12,7 @@ import com.roodie.materialmovies.views.fragments.base.BaseFragment;
 /**
  * Created by Roodie on 22.08.2015.
  */
+
 public class SearchPeopleGridFragment extends BaseFragment {
 
     @Nullable

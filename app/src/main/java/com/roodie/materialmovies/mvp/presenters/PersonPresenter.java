@@ -22,15 +22,11 @@ import javax.inject.Inject;
 /**
  * Created by Roodie on 25.06.2015.
  */
-public class PersonPresenter extends BasePresenter {
+public class PersonPresenter extends BasePresenter<PersonPresenter.PersonView> {
 
     public static final String LOG_TAG = PersonPresenter.class.getSimpleName();
 
-    private PersonView mPersonView;
-
-
     private final BackgroundExecutor mExecutor;
-    private final ApplicationState mState;
     private final Injector mInjector;
 
     private boolean attached = false;
@@ -40,8 +36,7 @@ public class PersonPresenter extends BasePresenter {
     public PersonPresenter(
             ApplicationState state,
             @GeneralPurpose BackgroundExecutor executor, Injector injector) {
-        super();
-        mState = Preconditions.checkNotNull(state, "moviesState cannot be null");
+        super(state);
         mExecutor = Preconditions.checkNotNull(executor, "executor can not be null");
         mInjector = Preconditions.checkNotNull(injector, "injector cannot be null");
     }
@@ -56,7 +51,7 @@ public class PersonPresenter extends BasePresenter {
     @Subscribe
     public void onNetworkError(BaseState.OnErrorEvent event) {
         if (attached && null != event.error) {
-            mPersonView.showError(event.error);
+            getView().showError(event.error);
         }
     }
 
@@ -64,9 +59,9 @@ public class PersonPresenter extends BasePresenter {
     public void onLoadingProgressVisibilityChanged(BaseState.ShowLoadingProgressEvent event) {
         if (attached) {
             if (event.secondary) {
-                mPersonView.showSecondaryLoadingProgress(event.show);
+                getView().showSecondaryLoadingProgress(event.show);
             } else {
-                mPersonView.showLoadingProgress(event.show);
+                getView().showLoadingProgress(event.show);
             }
         }
     }
@@ -74,23 +69,7 @@ public class PersonPresenter extends BasePresenter {
     @Override
     public void initialize() {
 
-        fetchPersonIfNeeded(3, mPersonView.getRequestParameter());
-    }
-
-    public void attachView(PersonView view) {
-        Preconditions.checkNotNull(view, "View cannot be null");
-        this.mPersonView = view;
-        attached = true;
-    }
-
-    @Override
-    public void onResume() {
-        mState.registerForEvents(this);
-    }
-
-    @Override
-    public void onPause() {
-        mState.unregisterForEvents(this);
+        fetchPersonIfNeeded(3, getView().getRequestParameter());
     }
 
     /**
@@ -118,13 +97,13 @@ public class PersonPresenter extends BasePresenter {
 
     public void populateUi() {
 
-        final PersonWrapper person = mState.getPerson(mPersonView.getRequestParameter());
-        Log.d(LOG_TAG, "Populate ui: " + mPersonView.getQueryType().toString());
-        switch (mPersonView.getQueryType()) {
+        final PersonWrapper person = mState.getPerson(getView().getRequestParameter());
+        Log.d(LOG_TAG, "Populate ui: " + getView().getQueryType().toString());
+        switch (getView().getQueryType()) {
             case PERSON_DETAIL:
                 if (person != null) {
-                    mPersonView.updateDisplayTitle(person.getName());
-                    mPersonView.setPerson(person);
+                    getView().updateDisplayTitle(person.getName());
+                    getView().setPerson(person);
                 }
                 break;
         }
@@ -132,7 +111,6 @@ public class PersonPresenter extends BasePresenter {
     }
 
     public interface PersonView extends MovieView {
-
 
         void setPerson(PersonWrapper person);
 

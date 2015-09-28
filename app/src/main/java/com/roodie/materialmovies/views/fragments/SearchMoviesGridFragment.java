@@ -22,6 +22,7 @@ import java.util.List;
 /**
  * Created by Roodie on 22.08.2015.
  */
+
 public class SearchMoviesGridFragment extends SearchGridFragment<MovieWrapper, SearchMovieGridAdapter> {
 
 

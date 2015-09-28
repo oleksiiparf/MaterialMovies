@@ -19,6 +19,7 @@ import java.util.ArrayList;
 /**
  * Created by Roodie on 01.08.2015.
  */
+
 public class ShowsTabFragment extends BaseTabFragment implements ShowTabPresenter.ShowsTabView {
 
     private ShowTabPresenter mPresenter;
@@ -40,6 +41,12 @@ public class ShowsTabFragment extends BaseTabFragment implements ShowTabPresente
 
         mPresenter.attachView(this);
         mPresenter.initialize();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.detachView(true);
     }
 
     @Override

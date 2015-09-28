@@ -43,6 +43,7 @@ import java.util.List;
 /**
  * Created by Roodie on 28.06.2015.
  */
+
 public class PersonDetailFragment extends BaseAnimationFragment implements PersonPresenter.PersonView {
 
     private static final String LOG_TAG = PersonDetailFragment.class.getSimpleName();
@@ -142,6 +143,24 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.detachView(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.onPause();
+    }
+
+    @Override
     protected void setUpVisibility() {
         if (personImagePoster != null && personName != null) {
             personImagePoster.setVisibility(View.GONE);
@@ -175,19 +194,6 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
     @Override
     protected void initializePresenter() {
         mPresenter.initialize();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.onPause();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.onResume();
     }
 
     @Override

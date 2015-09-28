@@ -62,7 +62,7 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
     @Override
     public void onPause() {
         super.onPause();
-        mMovieGridPresenter.detachUi(this);
+        //mMovieGridPresenter.detachUi(this);
     }
 
     @Override
@@ -125,6 +125,11 @@ public abstract class MovieGridFragment extends BaseGridFragment implements Movi
         mMovieGridPresenter.attachUi(this);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mMovieGridPresenter.detachUi(this);
+    }
 
     @Override
     public void initializeRecycler() {

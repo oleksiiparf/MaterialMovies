@@ -45,18 +45,6 @@ public abstract class SearchGridFragment<D extends BasicWrapper, E extends Recyc
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.onResume();
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
         //mPresenter.detachView(this);
@@ -84,6 +72,12 @@ public abstract class SearchGridFragment<D extends BasicWrapper, E extends Recyc
         }
         mPresenter.attachView(this);
         mPresenter.initialize();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.detachView(true);
     }
 
     @Override

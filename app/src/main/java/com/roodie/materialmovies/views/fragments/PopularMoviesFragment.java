@@ -7,6 +7,7 @@ import com.roodie.materialmovies.views.fragments.base.MovieGridFragment;
 /**
  * Created by Roodie on 09.07.2015.
  */
+
 public class PopularMoviesFragment extends MovieGridFragment  {
 
     @Override
