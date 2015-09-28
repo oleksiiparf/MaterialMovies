@@ -143,6 +143,12 @@ public interface MoviesState extends BaseState {
         }
     }
 
+    public static class TvShowSeasonUpdatedEvent extends DoubleArgumentEvent<ShowWrapper, SeasonWrapper> {
+        public TvShowSeasonUpdatedEvent(int callingId,ShowWrapper show, SeasonWrapper item) {
+            super(callingId, show, item);
+        }
+    }
+
 
 
     public class MoviePaginatedResult extends PaginatedResult<MovieWrapper> {

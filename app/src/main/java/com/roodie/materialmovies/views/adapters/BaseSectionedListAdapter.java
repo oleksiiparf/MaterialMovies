@@ -20,10 +20,10 @@ public abstract class BaseSectionedListAdapter <T> extends BaseAdapter
         implements PinnedSectionListView.PinnedSectionListAdapter {
 
     protected final Activity mActivity;
-    private final LayoutInflater mLayoutInflater;
+    protected final LayoutInflater mLayoutInflater;
 
-    private final int mViewLayoutId;
-    private final int mPinnedViewLayoutId;
+    protected final int mViewLayoutId;
+    protected final int mPinnedViewLayoutId;
 
     private List<ListItem<T>> mItems;
 
@@ -58,7 +58,7 @@ public abstract class BaseSectionedListAdapter <T> extends BaseAdapter
     }
 
     @Override
-    public final View getView(int position, View convertView, ViewGroup viewGroup) {
+    public  View getView(int position, View convertView, ViewGroup viewGroup) {
         final ListItem<T> item = getItem(position);
         View view = convertView;
 

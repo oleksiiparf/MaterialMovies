@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollview_season"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Set focus to work around textIsSelectable auto-scroll -->
+    <LinearLayout
+        android:id="@+id/container_season"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="beforeDescendants"
+        android:orientation="vertical">
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/textview_season_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            tools:text="Season Title"
+            style="@style/Widget.MMovies.TextAppearance.PrimaryText.Large"
+            android:textIsSelectable="true" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/textview_season_release_time"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_major"
+            tools:text="OCT 15, 2013 (TUE)"
+            style="@style/Widget.MMovies.TextAppearance.PrimaryText"
+            android:textIsSelectable="true" />
+
+        <FrameLayout
+            android:id="@+id/container_season_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/spacing_minor"
+            android:layout_marginRight="@dimen/spacing_major"
+            android:layout_marginBottom="@dimen/spacing_micro"
+            android:focusable="true"
+            android:background="?attr/mmColorBackgroundDim"
+            android:foreground="?attr/selectableItemBackground"
+            tools:ignore="Overdraw">
+
+            <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+                android:id="@+id/imageview_season"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/imagecontainer_height"
+                android:scaleType="centerCrop" />
+
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/spacing_major"
+            android:layout_marginRight="@dimen/spacing_major"
+            android:layout_marginBottom="@dimen/spacing_major"
+            android:background="?attr/mmColorDivider" />
+
+        <com.roodie.materialmovies.views.custom_views.ExpandableTextView
+            android:id="@+id/textview_season_description"
+            android:lineSpacingMultiplier="1.25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_major"
+            tools:text="This is a sample description of what happens in this season. A lot."
+            style="@style/Widget.MMovies.Movie.Detail.Summary.Scroll"
+            android:textIsSelectable="true" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/spacing_major"
+            android:layout_marginRight="@dimen/spacing_major"
+            android:background="?attr/mmColorDivider" />
+
+        <com.roodie.materialmovies.views.custom_views.RatingBarLayout
+            android:id="@+id/rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+        </com.roodie.materialmovies.views.custom_views.RatingBarLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/spacing_major"
+            android:layout_marginRight="@dimen/spacing_major"
+            android:background="?attr/mmColorDivider" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/label_season_regulars"
+            android:layout_marginTop="@dimen/spacing_massive"
+            android:layout_marginBottom="@dimen/spacing_micro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/season_regulars"
+            style="@style/Widget.MMovies.TextAppearance.PrimaryText" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/textview_season_regulars"
+            android:lineSpacingMultiplier="1.25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Daniel Craig, Jaimie Alexander, Kiefer Sutherland, Stephanie Leonidas"
+            style="@style/Widget.MMovies.TextAppearance.SecondaryText"
+            android:textIsSelectable="true" />
+
+
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/label_season_release_day"
+            android:layout_marginTop="@dimen/spacing_massive"
+            android:layout_marginBottom="@dimen/spacing_micro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/season_firstaired"
+            style="@style/Widget.MMovies.TextAppearance.PrimaryText" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/textview_season_release_day"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="2014/07/25 CEST (Fri)"
+            style="@style/Widget.MMovies.TextAppearance.SecondaryText"
+            android:textIsSelectable="true" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/label_number_of_episodes"
+            android:layout_marginTop="@dimen/spacing_massive"
+            android:layout_marginBottom="@dimen/spacing_micro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/season_number_of_episodes"
+            style="@style/Widget.MMovies.TextAppearance.PrimaryText" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/textview_number_of_episodes"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="July 17, 21:48"
+            style="@style/Widget.MMovies.TextAppearance.SecondaryText"
+            android:textIsSelectable="true" />
+
+
+    </LinearLayout>
+</ScrollView>

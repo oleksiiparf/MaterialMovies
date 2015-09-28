@@ -31,6 +31,15 @@ public interface BaseState {
         }
     }
 
+    static class DoubleArgumentEvent<M, V> extends BaseArgumentEvent<M> {
+        public final V secondaryItem;
+
+        public DoubleArgumentEvent(int callingId, M item, V secondary) {
+            super(callingId, item);
+            this.secondaryItem = secondary;
+        }
+    }
+
     public abstract static class PaginatedResult<T> implements Serializable {
         public List<T> items;
         public int page;
@@ -95,6 +104,12 @@ public interface BaseState {
 
     public static class ShowVideosLoadingProgressEvent extends ShowLoadingProgressEvent {
         public ShowVideosLoadingProgressEvent(int callingId, boolean show) {
+            super(callingId, show);
+        }
+    }
+
+    public static class ShowTvSeasonLoadingProgressEvent extends ShowLoadingProgressEvent {
+        public ShowTvSeasonLoadingProgressEvent(int callingId, boolean show) {
             super(callingId, show);
         }
     }

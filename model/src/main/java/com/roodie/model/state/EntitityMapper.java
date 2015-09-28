@@ -68,7 +68,6 @@ public class EntitityMapper {
         return getShowEntity(String.valueOf(id));
     }
 
-
     void putShowEntity(ShowWrapper entity) {
         mMoviesState.getTmdbShows().put(String.valueOf(entity.getTmdbId()), entity);
     }

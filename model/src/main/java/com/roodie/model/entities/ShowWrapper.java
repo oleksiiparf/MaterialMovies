@@ -2,6 +2,7 @@ package com.roodie.model.entities;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.ArrayMap;
 
 import com.google.common.base.Preconditions;
 import com.roodie.model.Constants;
@@ -16,9 +17,11 @@ import com.uwetrottmann.tmdb.entities.TvShowComplete;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.roodie.model.util.TimeUtils.isPastStartingPoint;
 
@@ -73,7 +76,7 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     transient List<CreditWrapper> cast;
     transient List<CreditWrapper> crew;
-    transient List<SeasonWrapper> seasons;
+    Map<String, SeasonWrapper> seasons;
 
 
     public static class Status {
@@ -138,6 +141,8 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         if (show.number_of_seasons != null) {
             amountOfSeasons = show.number_of_seasons;
         }
+
+        seasons = new ArrayMap<>(amountOfSeasons);
 
         if (show.number_of_episodes != null) {
             amountOfEpisodes = show.number_of_episodes;
@@ -342,10 +347,6 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         return crew;
     }
 
-    public List<SeasonWrapper> getSeasons() {
-        return seasons;
-    }
-
     public void setCast(List<CreditWrapper> cast) {
         this.cast = cast;
     }
@@ -371,7 +372,28 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
     }
 
     public void setSeasons(List<SeasonWrapper> seasons) {
-        this.seasons = seasons;
+        for (SeasonWrapper season : seasons) {
+            if (season.getId() != null && season.getSeasonNumber() != null)
+            this.seasons.put(String.valueOf(season.getSeasonNumber()), season);
+        }
+
+    }
+
+    public void updateSeason(SeasonWrapper season) {
+      if (season.getId() != null && season.getSeasonNumber() != null) {
+          this.seasons.put(String.valueOf(season.getSeasonNumber()), season);
+      }
+    }
+
+    public List<SeasonWrapper> getSeasons() {
+        return new ArrayList<SeasonWrapper>(seasons.values());
+    }
+
+    public SeasonWrapper getSeason(String seasonNumber) {
+        if (this.seasons.containsKey(seasonNumber)) {
+            return this.seasons.get(seasonNumber);
+        }
+        return null;
     }
 
     public boolean isLiked() {
@@ -398,7 +420,7 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
     public boolean needFullFetch() {
         return  MoviesCollections.isEmpty(cast)
                 || MoviesCollections.isEmpty(crew)
-                || MoviesCollections.isEmpty(seasons);
+                || MoviesCollections.isEmpty(seasons.values());
     }
 
     public boolean needFullFetchFromTmdb() {

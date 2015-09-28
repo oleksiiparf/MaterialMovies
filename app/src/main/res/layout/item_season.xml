@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/activatedBackgroundIndicator">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesStarView
+            android:id="@+id/star_season"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="10dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/textview_season_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/textview_season_airdate"
+            android:layout_toRightOf="@id/star_season"
+            android:paddingTop="16dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            style="@style/Widget.MMovies.TextAppearance.PrimaryText"
+            tools:text="Season Title" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/textview_season_airdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/default_padding"
+            android:paddingTop="16dp"
+            android:paddingRight="@dimen/spacing_major"
+            tools:text="10 dec"
+            style="@style/Widget.MMovies.TextAppearance.PrimaryText" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/textview_episodes_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textview_season_title"
+            android:layout_toRightOf="@id/star_season"
+            android:paddingTop="@dimen/spacing_micro"
+            android:ellipsize="end"
+            android:singleLine="true"
+            style="@style/Widget.MMovies.TextAppearance.SecondaryText"
+            tools:text="13 episodes" />
+
+        <ImageView
+            android:id="@+id/imageView_context_menu"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingRight="@dimen/default_padding"
+            android:paddingBottom="13dp"
+            android:scaleType="fitXY"
+            android:src="?attr/drawableDropdown" />
+    </RelativeLayout>
+
+</FrameLayout>

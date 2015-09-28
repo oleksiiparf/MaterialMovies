@@ -3,11 +3,15 @@ package com.roodie.model.entities;
 import android.text.TextUtils;
 
 import com.google.common.base.Preconditions;
+import com.roodie.model.Constants;
 import com.roodie.model.util.MoviesCollections;
+import com.uwetrottmann.tmdb.entities.TvEpisode;
 import com.uwetrottmann.tmdb.entities.TvSeason;
 
 import java.util.Date;
 import java.util.List;
+
+import static com.roodie.model.util.TimeUtils.isPastStartingPoint;
 
 /**
  * Created by Roodie on 13.08.2015.
@@ -26,13 +30,16 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
 
     String overview;
 
-    int seasonNumber;
+    Integer seasonNumber;
 
     String posterUrl;
 
+    transient long lastFullFetchFromTmdbStarted;
+    transient long lastFullFetchFromTmdbCompleted;
+
     transient List<CreditWrapper> cast;
     transient List<CreditWrapper> crew;
-    transient List<EpisodeWrapper> episodes;
+    transient List<TvEpisode> episodes;
 
     public SeasonWrapper() {
     }
@@ -68,12 +75,6 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
         }
     }
 
-    private boolean needFullFetch() {
-        return MoviesCollections.isEmpty(cast)
-                || MoviesCollections.isEmpty(crew)
-                || MoviesCollections.isEmpty(episodes);
-    }
-
     private static long unbox(long currentValue, Date newValue) {
         return newValue != null ? newValue.getTime() : currentValue;
     }
@@ -82,7 +83,7 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
         return _id;
     }
 
-    public Integer getTmdbId() {
+    public Integer getId() {
         return tmdbId;
     }
 
@@ -102,7 +103,7 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
         return overview;
     }
 
-    public int getSeasonNumber() {
+    public Integer getSeasonNumber() {
         return seasonNumber;
     }
 
@@ -122,7 +123,7 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
         return crew;
     }
 
-    public List<EpisodeWrapper> getEpisodes() {
+    public List<TvEpisode> getEpisodes() {
         return episodes;
     }
 
@@ -134,9 +135,37 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
         this.crew = crew;
     }
 
-    public void setEpisodes(List<EpisodeWrapper> episodes) {
+    public void setEpisodes(List<TvEpisode> episodes) {
         this.episodes = episodes;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public boolean needFullFetch() {
+        return  (!TextUtils.isEmpty(title))
+                || (!TextUtils.isEmpty(overview))
+                || MoviesCollections.isEmpty(episodes);
+    }
+
+    public boolean needFullFetchFromTmdb() {
+        return (needFullFetch() || isPastStartingPoint(lastFullFetchFromTmdbCompleted,
+                Constants.STALE_MOVIE_DETAIL_THRESHOLD)) &&
+                isPastStartingPoint(lastFullFetchFromTmdbStarted,
+                        Constants.FULL_MOVIE_DETAIL_ATTEMPT_THRESHOLD);
+    }
+
+    public void markFullFetchStarted() {
+        lastFullFetchFromTmdbStarted = System.currentTimeMillis();
+    }
+
+    public void markFullFetchCompleted() {
+        lastFullFetchFromTmdbCompleted = System.currentTimeMillis();
+    }
 
 }

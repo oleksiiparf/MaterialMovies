@@ -14,6 +14,8 @@ import com.roodie.materialmovies.mvp.presenters.MovieImagesPresenter;
 import com.roodie.materialmovies.mvp.presenters.MovieTabPresenter;
 import com.roodie.materialmovies.mvp.presenters.PersonPresenter;
 import com.roodie.materialmovies.mvp.presenters.SearchPresenter;
+import com.roodie.materialmovies.mvp.presenters.SeasonDetailPresenter;
+import com.roodie.materialmovies.mvp.presenters.SeasonsPresenter;
 import com.roodie.materialmovies.mvp.presenters.ShowDetailPresenter;
 import com.roodie.materialmovies.mvp.presenters.ShowGridPresenter;
 import com.roodie.materialmovies.mvp.presenters.ShowTabPresenter;
@@ -58,6 +60,13 @@ public class MMoviesApplication extends Application implements Injector {
 
     @Inject
     SearchPresenter mSearchPresenter;
+
+    @Inject
+    SeasonsPresenter mTvSeasonsListPresenter;
+
+    @Inject
+    SeasonDetailPresenter mTvSeasonDetailPresenter;
+
 
     private ObjectGraph mObjectGraph;
 
@@ -114,6 +123,14 @@ public class MMoviesApplication extends Application implements Injector {
 
     public ShowGridPresenter getShowGridPresenter() {
         return mShowGridPresenter;
+    }
+
+    public SeasonsPresenter getTvSeasonsListPresenter() {
+        return mTvSeasonsListPresenter;
+    }
+
+    public SeasonDetailPresenter getTvSeasonDetailPresenter() {
+        return mTvSeasonDetailPresenter;
     }
 
     public SearchPresenter getSearchPresenter() {
