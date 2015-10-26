@@ -2,7 +2,6 @@ package com.roodie.model.entities;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.ArrayMap;
 
 import com.google.common.base.Preconditions;
 import com.roodie.model.Constants;
@@ -19,6 +18,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -142,7 +142,7 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
             amountOfSeasons = show.number_of_seasons;
         }
 
-        seasons = new ArrayMap<>(amountOfSeasons);
+        seasons = new HashMap<String, SeasonWrapper>(amountOfSeasons);
 
         if (show.number_of_episodes != null) {
             amountOfEpisodes = show.number_of_episodes;
@@ -373,6 +373,7 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     public void setSeasons(List<SeasonWrapper> seasons) {
         for (SeasonWrapper season : seasons) {
+            System.out.println(season);
             if (season.getId() != null && season.getSeasonNumber() != null)
             this.seasons.put(String.valueOf(season.getSeasonNumber()), season);
         }
@@ -389,13 +390,16 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         return new ArrayList<SeasonWrapper>(seasons.values());
     }
 
+    public SeasonWrapper getSeason(Integer position) {
+        return (new ArrayList<SeasonWrapper>(seasons.values())).get(position);
+    }
+
     public SeasonWrapper getSeason(String seasonNumber) {
         if (this.seasons.containsKey(seasonNumber)) {
             return this.seasons.get(seasonNumber);
         }
         return null;
     }
-
     public boolean isLiked() {
         return isLiked;
     }
@@ -454,34 +458,17 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("ShowWrapper{");
-        sb.append("_id=").append(_id);
+        final StringBuffer sb = new StringBuffer("Show {");
         sb.append(", tmdbId=").append(tmdbId);
         sb.append(", originalTitle='").append(originalTitle).append('\'');
-        sb.append(", title='").append(title).append('\'');
-        sb.append(", overview='").append(overview).append('\'');
-        sb.append(", runtime=").append(runtime);
-        sb.append(", originCountries=").append(originCountries);
-        sb.append(", originalLanguage='").append(originalLanguage).append('\'');
-        sb.append(", firstAirDate=").append(firstAirDate);
-        sb.append(", lastAirDate=").append(lastAirDate);
-        sb.append(", lastAirTime=").append(lastAirTime);
-        sb.append(", backdropUrl='").append(backdropUrl).append('\'');
-        sb.append(", posterUrl='").append(posterUrl).append('\'');
-        sb.append(", genres='").append(genres).append('\'');
-        sb.append(", networks='").append(networks).append('\'');
-        sb.append(", ratingPercent=").append(ratingPercent);
-        sb.append(", ratingVotes=").append(ratingVotes);
-        sb.append(", ratingVotesAverage=").append(ratingVotesAverage);
-        sb.append(", popularity=").append(popularity);
-        sb.append(", status='").append(status).append('\'');
+        sb.append(", status=").append(status);
         sb.append(", type='").append(type).append('\'');
         sb.append(", amountOfEpisodes=").append(amountOfEpisodes);
         sb.append(", amountOfSeasons=").append(amountOfSeasons);
-        sb.append(", contentRating='").append(contentRating).append('\'');
-        sb.append(", isLiked=").append(isLiked);
-        sb.append(", lastFullFetchFromTmdbStarted=").append(lastFullFetchFromTmdbStarted);
-        sb.append(", lastFullFetchFromTmdbCompleted=").append(lastFullFetchFromTmdbCompleted);
+        sb.append(", seasons=");
+        for(SeasonWrapper seasonWrapper : new ArrayList<SeasonWrapper>(seasons.values())) {
+            sb.append(seasonWrapper.toString());
+        }
         sb.append('}');
         return sb.toString();
     }

@@ -6,11 +6,13 @@ import com.google.common.base.Preconditions;
 import com.roodie.model.entities.CreditWrapper;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
+import com.roodie.model.entities.SeasonWrapper;
 import com.roodie.model.entities.ShowWrapper;
 import com.uwetrottmann.tmdb.entities.CastMember;
 import com.uwetrottmann.tmdb.entities.CrewMember;
 import com.uwetrottmann.tmdb.entities.Movie;
 import com.uwetrottmann.tmdb.entities.Person;
+import com.uwetrottmann.tmdb.entities.TvSeason;
 import com.uwetrottmann.tmdb.entities.TvShowComplete;
 
 import java.util.ArrayList;
@@ -58,6 +60,14 @@ public class EntitityMapper {
 
     void putPersonEntity(PersonWrapper entity) {
         mMoviesState.getPeople().put(String.valueOf(entity.getTmdbId()), entity);
+    }
+
+    SeasonWrapper getSeasonEntity(String id) {
+        return mMoviesState.getTmdbSeasons().get(id);
+    }
+
+    void putSeasonEntity(SeasonWrapper entity) {
+        mMoviesState.getTmdbSeasons().put(String.valueOf(entity.getId()), entity);
     }
 
     ShowWrapper getShowEntity(String id) {
@@ -186,6 +196,36 @@ public class EntitityMapper {
         putShowEntity(show);
 
         return show;
+    }
+
+    /*
+    Wrap TvSeason to SeasonWrapper
+    */
+    public SeasonWrapper map(TvSeason entity) {
+        SeasonWrapper item = getSeasonEntity(String.valueOf(entity.id));
+
+        if (item == null) {
+            // No item, so create one
+            item = new SeasonWrapper();
+        }
+
+        // We already have a season entity, so just update it wrapped value
+        item.setFromSeason(entity);
+        putSeasonEntity(item);
+
+        return item;
+    }
+
+    public List<SeasonWrapper> mapTvSeasons(Integer tvId, List<TvSeason> entities) {
+        final ShowWrapper show = getShowEntity(String.valueOf(tvId));
+        if (show != null) {
+            final ArrayList<SeasonWrapper> seasons = new ArrayList<>(entities.size());
+            for (TvSeason season : entities) {
+                seasons.add(map(season));
+            }
+            return seasons;
+        }
+        return null;
     }
 
 

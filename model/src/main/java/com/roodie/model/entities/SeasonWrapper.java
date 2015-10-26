@@ -44,6 +44,11 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
     public SeasonWrapper() {
     }
 
+    public SeasonWrapper(TvSeason season) {
+        Preconditions.checkNotNull(season, "TvSeason cannot be null");
+        setFromSeason(season);
+    }
+
     public void setFromSeason(TvSeason season) {
 
         Preconditions.checkNotNull(season, "Season cannot be null");
@@ -168,4 +173,15 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
         lastFullFetchFromTmdbCompleted = System.currentTimeMillis();
     }
 
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Season ");
+        sb.append(seasonNumber).append(" {");
+        sb.append("tmdbId=").append(tmdbId);
+        sb.append(", title='").append(title).append('\'');
+        sb.append(", overview='").append(overview).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

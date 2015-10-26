@@ -52,6 +52,11 @@ public class FetchDetailTvShowRunnable  extends  BaseMovieRunnable<TvShowComplet
                     getCountryProvider().getTwoLetterCountryCode());
         }
 
+        if (!MoviesCollections.isEmpty(result.seasons)){
+            show.setSeasons(getEntityMapper().mapTvSeasons(result.id, result.seasons));
+        }
+
+
         getDbHelper().put(show);
         System.out.println(show.toString());
         getEventBus().post(new MoviesState.TvShowInformationUpdatedEvent(getCallingId(), show));

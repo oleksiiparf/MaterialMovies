@@ -28,6 +28,7 @@ public  class ApplicationState implements BaseState, MoviesState {
     private Map<String, MovieWrapper> mImdbIdMovies;
     private Map<String, PersonWrapper> mPeople;
     private Map<String, ShowWrapper> mShows;
+    private Map<String, SeasonWrapper> mSeasons;
 
     private String popularString = "Popular";
 
@@ -49,7 +50,8 @@ public  class ApplicationState implements BaseState, MoviesState {
         mTmdbIdMovies = new ArrayMap<>(INITIAL_MOVIE_MAP_CAPACITY);
         mImdbIdMovies = new ArrayMap<>(INITIAL_MOVIE_MAP_CAPACITY);
         mShows = new ArrayMap<>(INITIAL_MOVIE_MAP_CAPACITY);
-        mPeople = new ArrayMap<>();
+        mPeople = new ArrayMap<>(INITIAL_MOVIE_MAP_CAPACITY);
+        mSeasons = new ArrayMap<>(INITIAL_MOVIE_MAP_CAPACITY);
     }
 
     @Override
@@ -175,6 +177,14 @@ public  class ApplicationState implements BaseState, MoviesState {
     @Override
     public ShowWrapper getTvShow(String id) {
         return mShows.get(id);
+    }
+
+    public Map<String, SeasonWrapper> getTmdbSeasons() {
+        return mSeasons;
+    }
+
+    public void setTmdbSeasons(Map<String, SeasonWrapper> mSeasons) {
+        this.mSeasons = mSeasons;
     }
 
     @Override

@@ -13,8 +13,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/movie_list_small_item_height"
-        android:layout_gravity="top"
+        android:layout_height="@dimen/show_list_small_item_height"
+        android:layout_gravity="bottom"
         android:background="#AA000000"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
@@ -28,7 +28,7 @@
             style="@style/Widget.MMovies.TextAppearance.PrimaryText" />
 
         <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-            android:id="@+id/subtitle_1"
+            android:id="@+id/subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
