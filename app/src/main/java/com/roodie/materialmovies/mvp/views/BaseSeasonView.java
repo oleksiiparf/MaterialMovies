@@ -5,8 +5,8 @@ package com.roodie.materialmovies.mvp.views;
  */
 public interface BaseSeasonView extends MovieView {
 
-    public void markSeasonAsStared(String showId, String seasonId);
+    public void markSeasonAsStared(String showId, String seasonNumber);
 
-    public void markSeasonAsUnstared(String showId, String seasonId);
+    public void markSeasonAsUnstared(String showId, String seasonNumber);
 
 }

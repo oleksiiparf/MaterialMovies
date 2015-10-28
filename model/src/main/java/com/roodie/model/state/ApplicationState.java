@@ -194,7 +194,7 @@ public  class ApplicationState implements BaseState, MoviesState {
 
     @Override
     public SeasonWrapper getTvSeason(String id) {
-        return null;
+        return mSeasons.get(id);
     }
 
     @Override

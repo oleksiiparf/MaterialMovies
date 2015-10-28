@@ -57,6 +57,8 @@ public interface UiView {
                 case TV_SHOW_CREW:
                 case TV_SHOW_DETAIL:
                 case TV_SHOW_SEASONS:
+                case TV_SEASON_DETAIL:
+                case TV_SEASONS:
                     return true;
                 default:
                     return false;

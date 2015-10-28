@@ -143,9 +143,9 @@ public interface MoviesState extends BaseState {
         }
     }
 
-    public static class TvShowSeasonUpdatedEvent extends DoubleArgumentEvent<ShowWrapper, SeasonWrapper> {
-        public TvShowSeasonUpdatedEvent(int callingId,ShowWrapper show, SeasonWrapper item) {
-            super(callingId, show, item);
+    public static class TvShowSeasonUpdatedEvent extends DoubleArgumentEvent<String, SeasonWrapper> {
+        public TvShowSeasonUpdatedEvent(int callingId,String showId, SeasonWrapper item) {
+            super(callingId, showId, item);
         }
     }
 

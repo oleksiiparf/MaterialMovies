@@ -14,12 +14,12 @@ import retrofit.RetrofitError;
 /**
  * Created by Roodie on 16.09.2015.
  */
-public class FetchShowSeasonRunnable extends BaseMovieRunnable<TvSeason> {
+public class FetchDetailTvSeasonRunnable extends BaseMovieRunnable<TvSeason> {
 
     private final int showId;
     private final int seasonNumber;
 
-    public FetchShowSeasonRunnable(int callingId, int showId, int seasonNumber) {
+    public FetchDetailTvSeasonRunnable(int callingId, int showId, int seasonNumber) {
         super(callingId);
         this.showId = showId;
         this.seasonNumber = seasonNumber;
@@ -48,7 +48,7 @@ public class FetchShowSeasonRunnable extends BaseMovieRunnable<TvSeason> {
                 season.setEpisodes(result.episodes);
             }
 
-            getEventBus().post(new MoviesState.TvShowSeasonUpdatedEvent(getCallingId(), show, season));
+            getEventBus().post(new MoviesState.TvShowSeasonUpdatedEvent(getCallingId(), String.valueOf(showId), season));
         }
 
     }
@@ -60,7 +60,7 @@ public class FetchShowSeasonRunnable extends BaseMovieRunnable<TvSeason> {
         ShowWrapper show = mState.getTvShow(showId);
         SeasonWrapper season = show.getSeason(String.valueOf(seasonNumber));
         if (season != null) {
-            getEventBus().post(new MoviesState.TvShowSeasonUpdatedEvent(getCallingId(), show, season));
+            getEventBus().post(new MoviesState.TvShowSeasonUpdatedEvent(getCallingId(), String.valueOf(showId), season));
         }
     }
 
