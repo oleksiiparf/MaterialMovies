@@ -34,7 +34,7 @@ public interface UiView {
         TV_SHOW_DETAIL,
         TV_SHOW_CAST,
         TV_SHOW_CREW,
-        TV_SHOW_SEASONS,
+        TV_SEASONS_LIST,
         TV_SEASONS,
         TV_SEASON_DETAIL,
         NONE;
@@ -56,7 +56,7 @@ public interface UiView {
                 case TV_SHOW_CAST:
                 case TV_SHOW_CREW:
                 case TV_SHOW_DETAIL:
-                case TV_SHOW_SEASONS:
+                case TV_SEASONS_LIST:
                 case TV_SEASON_DETAIL:
                 case TV_SEASONS:
                     return true;

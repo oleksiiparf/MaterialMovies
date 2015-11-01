@@ -11,7 +11,6 @@ import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.state.ApplicationState;
 import com.roodie.model.state.BaseState;
 import com.roodie.model.state.MoviesState;
-import com.roodie.model.tasks.BaseMovieRunnable;
 import com.roodie.model.tasks.FetchInTheatresRunnable;
 import com.roodie.model.tasks.FetchPopularMoviesRunnable;
 import com.roodie.model.tasks.FetchUpcomingMoviesRunnable;
@@ -252,11 +251,6 @@ public class MovieGridPresenter extends BaseListPresenter<MovieGridPresenter.Mov
                 return mStringFetcher.getString(R.string.upcoming_title);
         }
         return null;
-    }
-
-    private <R> void executeTask(BaseMovieRunnable<R> task) {
-        mInjector.inject(task);
-        mExecutor.execute(task);
     }
 
     @Override

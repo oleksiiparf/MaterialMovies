@@ -6,6 +6,7 @@ import com.roodie.materialmovies.mvp.views.UiView;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
 import com.roodie.model.entities.ListItem;
 import com.roodie.model.state.ApplicationState;
+import com.roodie.model.tasks.BaseMovieRunnable;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.Injector;
 import com.roodie.model.util.StringFetcher;
@@ -128,5 +129,11 @@ class BaseListPresenter<R extends BaseMovieListView> extends BasePresenter<R> {
             populateUi(ui);
         }
     }
+
+    protected  <M> void executeTask(BaseMovieRunnable<M> task) {
+        mInjector.inject(task);
+        mExecutor.execute(task);
+    }
+
 
 }

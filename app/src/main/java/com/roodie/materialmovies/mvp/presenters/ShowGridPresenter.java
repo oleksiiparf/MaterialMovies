@@ -10,7 +10,6 @@ import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.state.ApplicationState;
 import com.roodie.model.state.BaseState;
 import com.roodie.model.state.MoviesState;
-import com.roodie.model.tasks.BaseMovieRunnable;
 import com.roodie.model.tasks.FetchOnTheAirShowsRunnable;
 import com.roodie.model.tasks.FetchPopularShowsRunnable;
 import com.roodie.model.util.BackgroundExecutor;
@@ -207,10 +206,6 @@ public class ShowGridPresenter extends BaseListPresenter<ShowGridPresenter.ShowG
         return null;
     }
 
-    private <R> void executeTask(BaseMovieRunnable<R> task) {
-        mInjector.inject(task);
-        mExecutor.execute(task);
-    }
 
     @Override
     public String toString() {
