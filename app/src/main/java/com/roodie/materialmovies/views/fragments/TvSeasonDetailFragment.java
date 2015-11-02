@@ -1,41 +1,51 @@
 package com.roodie.materialmovies.views.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.mvp.views.SeasonDetailView;
+import com.roodie.materialmovies.mvp.presenters.TvSeasonPresenter;
+import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.RatingBarLayout;
+import com.roodie.materialmovies.views.fragments.base.BaseFragment;
 import com.roodie.model.entities.SeasonWrapper;
 import com.roodie.model.network.NetworkError;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
 /**
  * Created by Roodie on 25.09.2015.
  */
-public class TvSeasonDetailFragment extends Fragment implements SeasonDetailView {
+public class TvSeasonDetailFragment extends BaseFragment implements TvSeasonPresenter.TvSeasonView {
 
     private static final String LOG_TAG = TvSeasonDetailFragment.class.getSimpleName();
 
-    private View mSeasonContainer;
-    private View mImageContainer;
-    private MMoviesImageView mSeasonImage;
+    private static final String KEY_SEASON_SAVE_STATE = "tv_season_on_save_state";
 
-    private TextView mTitle;
-    private TextView mDescription;
-    private TextView mReleseTime;
-    private RatingBarLayout mRatingBar;
-    private TextView mRegulars;
-    private TextView mReleaseDay;
-    private TextView mEpisodesCount;
+
+    private TvSeasonPresenter mPresenter;
+
+    private SeasonWrapper mSeason;
+
+    @Bind(R.id.container_season) View mSeasonContainer;
+    @Bind(R.id.container_season_image) View mImageContainer;
+    @Bind(R.id.imageview_season) MMoviesImageView mSeasonImage;
+
+    @Bind(R.id.textview_season_title) TextView mTitle;
+    @Bind(R.id.textview_season_description) TextView mDescription;
+    @Bind(R.id.textview_season_release_time) TextView mReleseTime;
+    @Bind(R.id.rating_bar) RatingBarLayout mRatingBar;
+    @Bind(R.id.textview_season_regulars) TextView mRegulars;
+    @Bind(R.id.textview_season_release_day) TextView mReleaseDay;
+    @Bind(R.id.textview_number_of_episodes) TextView mEpisodesCount;
 
 
     public interface InitBundle {
@@ -49,6 +59,11 @@ public class TvSeasonDetailFragment extends Fragment implements SeasonDetailView
          * Integer extra.
          */
         String QUERY_SEASON_ID = "_season_id";
+
+        /**
+         * Integer extra.
+         */
+        String QUERY_SEASON_NUMBER = "_season_number";
 
         /**
          * Boolean extra.
@@ -68,15 +83,23 @@ public class TvSeasonDetailFragment extends Fragment implements SeasonDetailView
         return f;
     }
 
-    public static TvSeasonDetailFragment newInstance(String showId, String seasonId) {
+    public static TvSeasonDetailFragment newInstance(String showId, String seasonId, boolean isMultiPaneLayout) {
         TvSeasonDetailFragment f = new TvSeasonDetailFragment();
 
         // Supply index input as an argument.
         Bundle args = new Bundle();
         args.putString(InitBundle.QUERY_SEASON_ID, seasonId);
         args.putString(InitBundle.QUERY_SHOW_ID, showId);
+        args.putBoolean(InitBundle.QUERY_IS_IN_MULTIPANE_LAYOUT, isMultiPaneLayout);
+
         f.setArguments(args);
         return f;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getTvSeasonDetailPresenter();
     }
 
     @Nullable
@@ -90,42 +113,59 @@ public class TvSeasonDetailFragment extends Fragment implements SeasonDetailView
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
 
-        mSeasonContainer = view.findViewById(R.id.container_season);
-        mImageContainer = view.findViewById(R.id.container_season_image);
-        mSeasonImage = (MMoviesImageView) view.findViewById(R.id.imageview_season);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            setSeason((SeasonWrapper) savedInstanceState.getSerializable(KEY_SEASON_SAVE_STATE));
+        }
+    }
 
-        mTitle = (TextView) view.findViewById(R.id.textview_season_title);
-        mDescription = (TextView) view.findViewById(R.id.textview_season_description);
-        mReleseTime = (TextView) view.findViewById(R.id.textview_season_release_time);
-        RatingBarLayout mRatingBar = (RatingBarLayout) view.findViewById(R.id.rating_bar);
-        TextView mRegulars = (TextView) view.findViewById(R.id.textview_season_regulars);
-        TextView mReleaseDay = (TextView) view.findViewById(R.id.textview_season_release_day);
-        TextView mEpisodesCount = (TextView) view.findViewById(R.id.textview_number_of_episodes);
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KEY_SEASON_SAVE_STATE, mSeason);
+    }
+
+    public TvSeasonPresenter getPresenter() {
+        return mPresenter;
     }
 
     /**
-     * SeasonDetailView
+     * TvSeasonView
      */
-    @Override
-    public void setTvSeason(SeasonWrapper season) {
-
-    }
 
     @Override
     public void markSeasonAsStared(String showId, String seasonId) {
-
+        //TODO
     }
 
     @Override
     public void markSeasonAsUnstared(String showId, String seasonId) {
-
+        //TODO
     }
 
     @Override
-    public String getRequestTvShow() {
-        return null;
+    public String getShowId() {
+        return getArguments().getString(InitBundle.QUERY_SHOW_ID);
+    }
+
+    @Override
+    public void setSeason(SeasonWrapper season) {
+
+        mSeason = season;
+
+        mTitle.setText(mSeason.getTitle());
+        mDescription.setText(mSeason.getOverview());
+        mSeasonImage.loadPoster(mSeason);
+        //TODO
     }
 
     /**
@@ -133,32 +173,32 @@ public class TvSeasonDetailFragment extends Fragment implements SeasonDetailView
      */
     @Override
     public void showError(NetworkError error) {
-
+        //NTD
     }
 
     @Override
     public void showLoadingProgress(boolean visible) {
-
+        getActivity().setProgressBarIndeterminateVisibility(visible);
     }
 
     @Override
     public void showSecondaryLoadingProgress(boolean visible) {
-
+        //NTD
     }
 
     @Override
     public String getRequestParameter() {
-        return null;
+        return getArguments().getString(InitBundle.QUERY_SEASON_ID);
     }
 
     @Override
     public void updateDisplayTitle(String title) {
-
+        //TODO
     }
 
     @Override
     public MovieQueryType getQueryType() {
-        return null;
+        return MovieQueryType.TV_SEASON_DETAIL;
     }
 
     @Override

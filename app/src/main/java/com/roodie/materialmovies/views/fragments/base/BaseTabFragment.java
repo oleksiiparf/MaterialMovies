@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by Roodie on 02.08.2015.
  */
-public abstract class BaseTabFragment extends BaseFragment {
+public abstract class BaseTabFragment<E extends BaseTabFragment.TabPagerAdapter> extends BaseFragment {
 
     private static final String SAVE_SELECTED_TAB = "selected_tab";
 
@@ -28,7 +28,7 @@ public abstract class BaseTabFragment extends BaseFragment {
 
     private ViewPager mViewPager;
     private TabLayout mSlidingTabStrip;
-    private TabPagerAdapter mAdapter;
+    private E mAdapter;
 
     private int mCurrentItem;
 
@@ -37,7 +37,7 @@ public abstract class BaseTabFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_viewpager, container, false);
 
-        mAdapter = new TabPagerAdapter(getChildFragmentManager());
+        mAdapter = setupAdapter();
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mViewPager.setAdapter(mAdapter);
@@ -80,7 +80,9 @@ public abstract class BaseTabFragment extends BaseFragment {
         return mViewPager;
     }
 
-    protected TabPagerAdapter getAdapter() {
+    protected abstract E setupAdapter();
+
+    public E getAdapter() {
         return mAdapter;
     }
 
@@ -122,7 +124,7 @@ public abstract class BaseTabFragment extends BaseFragment {
         }
 
         @Override
-        public final int getCount() {
+        public int getCount() {
             return mFragments.size();
         }
     }

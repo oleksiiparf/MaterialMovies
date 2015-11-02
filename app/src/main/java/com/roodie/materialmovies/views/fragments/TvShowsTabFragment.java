@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * Created by Roodie on 01.08.2015.
  */
 
-public class ShowsTabFragment extends BaseTabFragment implements ShowTabPresenter.ShowsTabView {
+public class TvShowsTabFragment extends BaseTabFragment<BaseTabFragment.TabPagerAdapter> implements ShowTabPresenter.ShowsTabView {
 
     private ShowTabPresenter mPresenter;
 
@@ -100,6 +100,11 @@ public class ShowsTabFragment extends BaseTabFragment implements ShowTabPresente
     @Override
     public boolean isModal() {
         return false;
+    }
+
+    @Override
+    protected TabPagerAdapter setupAdapter() {
+        return new TabPagerAdapter(getChildFragmentManager());
     }
 
     @Override

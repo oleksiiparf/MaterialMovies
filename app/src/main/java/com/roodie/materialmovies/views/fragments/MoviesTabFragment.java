@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * Created by Roodie on 02.08.2015.
  */
 
-public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresenter.MoviesTabView {
+public class MoviesTabFragment extends BaseTabFragment<BaseTabFragment.TabPagerAdapter> implements MovieTabPresenter.MoviesTabView {
 
     private MovieTabPresenter mPresenter;
 
@@ -99,6 +99,11 @@ public class MoviesTabFragment extends BaseTabFragment implements MovieTabPresen
     @Override
     public void showError(NetworkError error) {
 
+    }
+
+    @Override
+    protected TabPagerAdapter setupAdapter() {
+        return new TabPagerAdapter(getChildFragmentManager());
     }
 
     @Override

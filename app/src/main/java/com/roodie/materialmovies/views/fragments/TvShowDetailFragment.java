@@ -9,6 +9,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +33,7 @@ import com.roodie.materialmovies.views.custom_views.ViewRecycler;
 import com.roodie.materialmovies.views.fragments.base.BaseAnimationFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.CreditWrapper;
+import com.roodie.model.entities.ListItem;
 import com.roodie.model.entities.SeasonWrapper;
 import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.network.NetworkError;
@@ -315,12 +317,20 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
         }
     }
 
+    @Override
+    public void updateDisplaySubtitle(CharSequence subtitle) {
+        Display display = getDisplay();
+        if (display != null) {
+            display.setActionBarSubtitle(subtitle);
+        }
+    }
+
     /**
      * UiView
      */
     @Override
     public MovieQueryType getQueryType() {
-        return MovieQueryType.SHOW_DETAIL;
+        return MovieQueryType.TV_SHOW_DETAIL;
     }
 
     @Override
@@ -334,6 +344,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
     @Override
     public void setTvShow(ShowWrapper show) {
         mShow = show;
+        Log.d(LOG_TAG, mShow.toString());
         mAdapter = populateUi();
         getRecyclerView().setAdapter(mAdapter);
         getActivity().invalidateOptionsMenu();
@@ -354,6 +365,16 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
 
     @Override
     public void showTvShowCreditsDialog(MovieQueryType queryType) {
+        //TODO
+    }
+
+    @Override
+    public void setTvSeasons(List<ListItem<SeasonWrapper>> items) {
+        //NOIMPL (Alessio) Not implemented in this fragment
+    }
+
+    @Override
+    public void showSeasonDetail(Integer seasonId, View view, int position) {
         //TODO
     }
 
@@ -647,7 +668,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showTvShowCreditsDialog(MovieQueryType.SHOW_CAST);
+                    showTvShowCreditsDialog(MovieQueryType.TV_SHOW_CAST);
                 }
             };
 
@@ -714,7 +735,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showTvShowCreditsDialog(MovieQueryType.SHOW_CREW);
+                    showTvShowCreditsDialog(MovieQueryType.TV_SHOW_CREW);
                 }
             };
 
@@ -955,22 +976,24 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
             mOnClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    System.out.println("Clicked");
                 }
             };
         }
 
         @Override
         public int getCount() {
-            if (mShow != null && MoviesCollections.isEmpty(mShow.getSeasons())) {
-                return  mShow.getSeasons().size();
-            } else {
-                return 0;
-            }
+            return mShow != null ? MoviesCollections.size(mShow.getSeasons()) : 0;
         }
 
         @Override
         public SeasonWrapper getItem(int position) {
-            return mShow.getSeasons().get(position);
+            Log.d(LOG_TAG, mShow.getSeasons().get(position).toString());
+            return mShow.getSeason(position);
+        }
+
+        protected int getLayoutId() {
+            return R.layout.item_show_season;
         }
 
         @Override
@@ -981,7 +1004,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.item_show_season, parent, false);
+                convertView = mInflater.inflate(getLayoutId(), parent, false);
             }
 
             final SeasonWrapper season = getItem(position);
@@ -991,17 +1014,18 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
             imageView.loadPoster(season);
 
             final TextView title = (TextView) convertView.findViewById(R.id.title);
-            title.setText(season.getTitle());
+            title.setText(getString(R.string.show_season) + season.getSeasonNumber());
             //TODO
-
-            final TextView subTitle = (TextView) convertView.findViewById(R.id.title);
-            subTitle.setText(season.getEpisodeCount());
 
             convertView.setOnClickListener(mOnClickListener);
             convertView.setTag(season);
 
             return convertView;
         }
+
+
+
+
     }
 
 
