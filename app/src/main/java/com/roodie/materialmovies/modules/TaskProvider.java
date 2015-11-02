@@ -6,6 +6,7 @@ import com.roodie.materialmovies.modules.library.StateProvider;
 import com.roodie.materialmovies.modules.library.UtilProvider;
 import com.roodie.model.tasks.FetchConfigurationRunnable;
 import com.roodie.model.tasks.FetchDetailMovieRunnable;
+import com.roodie.model.tasks.FetchDetailTvSeasonRunnable;
 import com.roodie.model.tasks.FetchDetailTvShowRunnable;
 import com.roodie.model.tasks.FetchInTheatresRunnable;
 import com.roodie.model.tasks.FetchMovieCreditsRunnable;
@@ -22,7 +23,6 @@ import com.roodie.model.tasks.FetchSearchMovieRunnable;
 import com.roodie.model.tasks.FetchSearchPeopleResult;
 import com.roodie.model.tasks.FetchSearchShowRunnable;
 import com.roodie.model.tasks.FetchShowCreditsRunnable;
-import com.roodie.model.tasks.FetchShowSeasonRunnable;
 import com.roodie.model.tasks.FetchUpcomingMoviesRunnable;
 
 import dagger.Module;
@@ -51,7 +51,7 @@ import dagger.Module;
                 FetchSearchPeopleResult.class,
                 FetchSearchShowRunnable.class,
                 FetchDetailTvShowRunnable.class,
-                FetchShowSeasonRunnable.class,
+                FetchDetailTvSeasonRunnable.class,
                 FetchShowCreditsRunnable.class
 
         },

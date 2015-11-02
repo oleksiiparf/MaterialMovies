@@ -8,6 +8,7 @@ import com.roodie.model.util.MoviesCollections;
 import com.uwetrottmann.tmdb.entities.TvEpisode;
 import com.uwetrottmann.tmdb.entities.TvSeason;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -16,15 +17,15 @@ import static com.roodie.model.util.TimeUtils.isPastStartingPoint;
 /**
  * Created by Roodie on 13.08.2015.
  */
-public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
+public class SeasonWrapper extends BasicWrapper<SeasonWrapper> implements Serializable {
 
     Long _id;
 
     Integer tmdbId;
 
-    long airDate;
+    Date airDate;
 
-    int episodeCount;
+    Integer episodeCount;
 
     String title;
 
@@ -33,6 +34,8 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
     Integer seasonNumber;
 
     String posterUrl;
+
+    boolean isStarred;
 
     transient long lastFullFetchFromTmdbStarted;
     transient long lastFullFetchFromTmdbCompleted;
@@ -66,7 +69,7 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
         }
 
         if (season.air_date != null) {
-            airDate = unbox(airDate, season.air_date);
+            airDate = season.air_date;
         }
 
         if (!TextUtils.isEmpty(season.overview)) {
@@ -78,6 +81,8 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
         if (!TextUtils.isEmpty(season.poster_path)) {
             posterUrl = season.poster_path;
         }
+
+        isStarred = false;
     }
 
     private static long unbox(long currentValue, Date newValue) {
@@ -92,11 +97,11 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
         return tmdbId;
     }
 
-    public long getAirDate() {
+    public Date getAirDate() {
         return airDate;
     }
 
-    public int getEpisodeCount() {
+    public Integer getEpisodeCount() {
         return episodeCount;
     }
 
@@ -150,6 +155,14 @@ public class SeasonWrapper extends BasicWrapper<SeasonWrapper> {
 
     public void setOverview(String overview) {
         this.overview = overview;
+    }
+
+    public boolean isStarred() {
+        return isStarred;
+    }
+
+    public void setStarred(boolean isStarred) {
+        this.isStarred = isStarred;
     }
 
     public boolean needFullFetch() {

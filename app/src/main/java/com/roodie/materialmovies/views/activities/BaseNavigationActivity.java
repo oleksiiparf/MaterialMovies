@@ -17,9 +17,6 @@ import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
  */
 public abstract class BaseNavigationActivity extends BaseActivity {
 
-    //@Bind({R.id.card_container})
-    private View mCardContainer;
-
    // @Bind({R.id.drawer_layout})
     private DrawerLayout mDrawerLayout;
 
@@ -50,7 +47,6 @@ public abstract class BaseNavigationActivity extends BaseActivity {
 
         super.onCreate(savedInstanceState);
 
-        mCardContainer = findViewById(R.id.card_container);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         getDisplay().setDrawerLayout(this.mDrawerLayout);

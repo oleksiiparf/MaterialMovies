@@ -83,6 +83,8 @@ public interface MoviesState extends BaseState {
 
     public static class TmdbConfigurationChangedEvent {}
 
+    public static class TvSeasonsChangeEvent {}
+
     public static class MovieInformationUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
         public MovieInformationUpdatedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
@@ -148,6 +150,8 @@ public interface MoviesState extends BaseState {
             super(callingId, showId, item);
         }
     }
+
+
 
 
 

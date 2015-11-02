@@ -108,6 +108,12 @@ public class MMoviesImageView extends ImageView {
         }
     }
 
+
+    // Cancel the loading request event.
+    public void cancelLoading() {
+        //TODO
+    }
+
     /**
      * Set movie poster handler
      */
