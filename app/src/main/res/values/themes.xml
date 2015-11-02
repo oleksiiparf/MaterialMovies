@@ -49,6 +49,9 @@
         <item name="mmDialogBackgroundColor">@color/material_dialog_light</item>
         <item name="mmCardBackground">@drawable/abc_dialog_material_background_light</item>
         <item name="drawableDropdown">@drawable/ic_action_contextmenu_light</item>
+        <item name="mmColorSeparator">@color/separator</item>
+        <item name="mmColorDivider">@color/divider</item>
+        <item name="mmColorBackgroundDim">@color/background_dim_inverse</item>
     </style>
 
     <style name="Theme.MMovies.Dark" parent="Base.Theme.MMovies">
@@ -86,6 +89,10 @@
         <item name="mmDialogBackgroundColor">@color/material_dialog_dark</item>
         <item name="mmCardBackground">@drawable/abc_dialog_material_background_dark </item>
         <item name="drawableDropdown">@drawable/ic_action_contextmenu</item>
+        <item name="mmColorSeparator">@color/separator_inverse</item>
+        <item name="mmColorDivider">@color/divider_inverse</item>
+        <item name="mmColorBackgroundDim">@color/background_dim_inverse</item>
+
     </style>
 
     <style name="Theme.MMovies.Green" parent="Theme.MMovies.Dark">

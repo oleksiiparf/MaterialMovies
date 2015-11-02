@@ -130,4 +130,10 @@ public interface Display {
 
     public void startSearchDetailActivity(String id, SearchMediaType queryType);
 
+    public void startTvSeasonDetailActivity(String showId, String seasonId, Bundle bundle);
+
+    public void showTvSeasonDetailFragment(String showId, String seasonId);
+
+    public void startTvSeasonsActivity(String showId, String seasonId, Bundle bundle);
+
 }

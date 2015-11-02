@@ -124,6 +124,8 @@
     <dimen name="movie_list_small_image_width">48dp</dimen>
     <dimen name="movie_list_small_item_height">72dp</dimen>
 
+    <dimen name="show_list_small_item_height">72dp</dimen>
+
     <dimen name="movie_discover_tab_height">48dp</dimen>
 
     <dimen name="movie_backdrop_title_left_initial">16dp</dimen>
@@ -134,6 +136,8 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="toolbar_elevation">4.0dip</dimen>
+
+    <dimen name="imagecontainer_height">180dp</dimen>
 
     <!-- Button-->
     <dimen name="button_elevation">2.0dip</dimen>

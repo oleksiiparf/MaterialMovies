@@ -118,6 +118,10 @@
         <attr name="drawableDropdown" format="reference" />
         <attr name="mmCardBackground" format="reference" />
 
+        <attr name="mmColorSeparator" format="reference|color" />
+        <attr name="mmColorDivider" format="reference|color" />
+        <attr name="mmColorBackgroundDim" format="reference|color" />
+
 
 
     </declare-styleable>

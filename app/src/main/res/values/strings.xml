@@ -16,6 +16,7 @@
     <string name="watchlist_title">Watchlist</string>
     <string name="movies_title">Movies</string>
     <string name="shows_title">Shows</string>
+    <string name="seasons_title">Seasons</string>
     <string name="people_title">People</string>
     <string name="popular_title">Popular</string>
     <string name="trending_title">Trending</string>
@@ -34,6 +35,7 @@
     <string name="movie_details_released">Released</string>
     <string name="movie_details_runtime">Runtime</string>
     <string name="movie_details_runtime_content">%1$d mins</string>
+
     <string name="movie_details_certification">Certification</string>
     <string name="movie_details_genres">Genres</string>
     <string name="movie_details_budget">Budget</string>
@@ -45,6 +47,7 @@
     <string name="images_movies">Images</string>
     <string name="trailer_movie">Trailer</string>
     <string name="trailers_movies">Trailers</string>
+    <string name="show_season">Season </string>
     <string name="show_seasons">Seasons</string>
     <string name="biography">Biography</string>
     <string name="placeholder_rating">--</string>
@@ -53,6 +56,7 @@
     <string name="show_isalive">Continuing</string>
     <string name="show_isnotalive">Ended</string>
     <string name="show_unknown">Scripted</string>
+    <string name="tv_season_number">Season %1$d</string>
 
     <!-- Tmdb ratings -->
     <plurals name="votes">
@@ -100,6 +104,8 @@
     <string name="movie_rating_votes">%1$d%% - %2$d votes</string>
     <string name="movie_release_date">Release date: %1$s</string>
 
+    <string name="season_episodes_amount">%d episodes</string>
+
     <string name="action_mark_liked">Mark as liked</string>
     <string name="action_mark_unliked">Mark as unliked</string>
 
@@ -129,6 +135,11 @@
 
     <string name="activity_continue">Continue</string>
     <string name="activity_continue_with_caret">Continue   ❯</string>
+
+    <string name="season_regulars">Season regulars</string>
+    <string name="season_firstaired">Release date</string>
+    <string name="season_number_of_episodes">Number of episodes</string>
+
 
     <!-- Appearance settings -->
     <string name="pref_appearance">Appearance</string>

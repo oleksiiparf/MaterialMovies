@@ -406,4 +406,13 @@
 
     </style>
 
+    <!-- Panes -->
+    <style name="EpisodesPane" parent="android:Widget">
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="DetailsPane" parent="android:Widget">
+        <item name="android:layout_weight">1</item>
+    </style>
+
 </resources>

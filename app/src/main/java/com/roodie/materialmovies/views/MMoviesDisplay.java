@@ -29,6 +29,7 @@ import com.roodie.materialmovies.views.activities.PersonActivity;
 import com.roodie.materialmovies.views.activities.SearchDetailActivity;
 import com.roodie.materialmovies.views.activities.SettingsActivity;
 import com.roodie.materialmovies.views.activities.TvActivity;
+import com.roodie.materialmovies.views.activities.TvSeasonsActivity;
 import com.roodie.materialmovies.views.activities.WatchlistActivity;
 import com.roodie.materialmovies.views.fragments.MovieDetailFragment;
 import com.roodie.materialmovies.views.fragments.MovieImagesFragment;
@@ -38,8 +39,8 @@ import com.roodie.materialmovies.views.fragments.SearchFragment;
 import com.roodie.materialmovies.views.fragments.SearchMoviesListFragment;
 import com.roodie.materialmovies.views.fragments.SearchPeopleListFragment;
 import com.roodie.materialmovies.views.fragments.SearchShowsListFragment;
-import com.roodie.materialmovies.views.fragments.ShowsTabFragment;
 import com.roodie.materialmovies.views.fragments.TvShowDetailFragment;
+import com.roodie.materialmovies.views.fragments.TvShowsTabFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
@@ -106,7 +107,7 @@ public class MMoviesDisplay implements Display {
 
     @Override
     public void showTvShows() {
-        showFragmentFromDrawer(new ShowsTabFragment());
+        showFragmentFromDrawer(new TvShowsTabFragment());
     }
 
     @Override
@@ -425,5 +426,27 @@ public class MMoviesDisplay implements Display {
         intent.putExtra(PARAM_ID, Integer.valueOf(id));
         intent.putExtra(PARAM_SEARCH_TYPE, queryType);
         startActivity(intent, null);
+    }
+
+    @Override
+    public void startTvSeasonDetailActivity(String showId, String seasonId, Bundle bundle) {
+        //TODO
+    }
+
+    @Override
+    public void showTvSeasonDetailFragment(String showId, String seasonId) {
+        //TODO
+        //showFragment(TvSeasonDetailFragment.newInstance(showId, seasonId));
+
+    }
+
+    @Override
+    public void startTvSeasonsActivity(String showId, String seasonId, Bundle bundle) {
+        Intent intent = new Intent();
+        intent.setClass(mActivity, TvSeasonsActivity.class);
+        intent.putExtra(TvSeasonsActivity.InitBundle.SHOW_ID, showId);
+        intent.putExtra(TvSeasonsActivity.InitBundle.SEASON_ID, seasonId);
+        startActivity(intent, bundle);
+
     }
 }

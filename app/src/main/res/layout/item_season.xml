@@ -7,7 +7,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/container">
 
         <com.roodie.materialmovies.views.custom_views.MMoviesStarView
             android:id="@+id/star_season"
@@ -43,7 +44,7 @@
             style="@style/Widget.MMovies.TextAppearance.PrimaryText" />
 
         <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-            android:id="@+id/textview_episodes_number"
+            android:id="@+id/textview_episodes_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/textview_season_title"

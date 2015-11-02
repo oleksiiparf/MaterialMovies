@@ -168,6 +168,13 @@
     <color name="unselected">#88ffffff</color>
     <color name="white_hint_color">#88ffffff</color>
 
+    <color name="separator">#ff1c1c1c</color>
+    <color name="separator_inverse">#ffe9e9e9</color>
+    <color name="divider">#26ffffff</color>
+    <color name="divider_inverse">#1A000000</color>
+    <color name="background_dim">#80111111</color>
+    <color name="background_dim_inverse">#80ffffff</color>
+
     <!-- Page indicator -->
     <color name="vpi__background_holo_dark">#ff000000</color>
     <color name="vpi__background_holo_light">#fff3f3f3</color>
@@ -187,6 +194,9 @@
     <color name="default_title_indicator_selected_color">#FFFFFFFF</color>
     <color name="default_title_indicator_text_color">#BBFFFFFF</color>
     <color name="default_underline_indicator_selected_color">#FF33B5E5</color>
+
+    <color name="accent">#FFC107</color>
+    <color name="star_deactivated">#D6D6D6</color>
 
 
 </resources>
