@@ -97,7 +97,7 @@ public abstract class BaseTabFragment<E extends BaseTabFragment.TabPagerAdapter>
 
     protected  abstract String getTabTitle(int position);
 
-    protected class TabPagerAdapter extends FragmentStatePagerAdapter {
+    public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
         private final ArrayList<Fragment> mFragments;
 

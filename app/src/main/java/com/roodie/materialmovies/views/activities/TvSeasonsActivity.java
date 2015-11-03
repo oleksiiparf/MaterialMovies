@@ -4,13 +4,15 @@ import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.views.fragments.TvSeasonsListFragment;
+import com.roodie.materialmovies.views.fragments.TvSeasonsFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.SeasonWrapper;
 
@@ -26,16 +28,15 @@ public class TvSeasonsActivity extends BaseNavigationActivity {
     public static final String FRAGMENT_TAG_DETAILS = "detailsFragmentTag";
     public static final String FRAGMENT_TAG_SEASONS = "seasonsFragmentTag";
 
-    private TvSeasonsListFragment mListFragment;
+    private TvSeasonsFragment mListFragment;
     private Fragment mDetailsragment;
 
     @Bind(R.id.fragment_main)  ViewGroup leftPane;
     @Bind(R.id.fragment_detail) ViewGroup rightPane;
     @Nullable @Bind(R.id.paneContainer) ViewGroup paneContainer;
 
-   // private ViewPager mPager;
-
-   // private TabLayout mTabs;
+    private ViewPager mPager;
+    private TabLayout mTabs;
 
     private boolean mDualPane;
 
@@ -65,11 +66,11 @@ public class TvSeasonsActivity extends BaseNavigationActivity {
         mDetailsragment = findDetailsFragment();
 
         if (savedInstanceState == null) {
-            mListFragment = TvSeasonsListFragment.newInstance(0,0,0,0);
+            mListFragment = TvSeasonsFragment.newInstance(0, 0, 0, 0);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.add(R.id.fragment_main, mListFragment, FRAGMENT_TAG_SEASONS).commit();
         } else {
-            mListFragment = (TvSeasonsListFragment) getSupportFragmentManager().findFragmentByTag(
+            mListFragment = (TvSeasonsFragment) getSupportFragmentManager().findFragmentByTag(
                     FRAGMENT_TAG_SEASONS);
         }
 

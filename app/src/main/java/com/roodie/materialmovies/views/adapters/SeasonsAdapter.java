@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.google.common.base.Objects;
 import com.roodie.materialmovies.R;
+import com.roodie.materialmovies.util.StringUtils;
 import com.roodie.materialmovies.views.custom_views.MMoviesStarView;
 import com.roodie.materialmovies.views.custom_views.MMoviesTextView;
 import com.roodie.model.entities.ListItem;
@@ -81,7 +82,8 @@ public class SeasonsAdapter extends BaseAdapter {
 
         final SeasonWrapper season = getItem(position).getListItem();
 
-        holder.seasonTitle.setText(context.getResources().getString(R.string.tv_season_number, season.getSeasonNumber()));
+        holder.seasonTitle.setText(StringUtils.getSeasonString(context, season.getSeasonNumber()));
+
 
         if (season.getAirDate() != null) {
             holder.seasonAirDate.setText(seasonAirDate.format(season.getAirDate()));

@@ -173,7 +173,7 @@ public class TvSeasonDetailFragment extends BaseFragment implements TvSeasonPres
      */
     @Override
     public void showError(NetworkError error) {
-        //NTD
+        //TODO
     }
 
     @Override
@@ -183,7 +183,7 @@ public class TvSeasonDetailFragment extends BaseFragment implements TvSeasonPres
 
     @Override
     public void showSecondaryLoadingProgress(boolean visible) {
-        //NTD
+        //TODO
     }
 
     @Override

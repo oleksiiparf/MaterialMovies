@@ -49,6 +49,23 @@ public class TvSeasonsTabPresenter extends BasePresenter<TvSeasonsTabPresenter.T
     }
 
     public interface TvSeasonsTabView extends MovieView {
+        /**
+         * Switch to the given page, update the highlighted season.
+         *
+         * <p> Only call this if the episode list and episode view pager are available.
+         */
+        void setCurrentPage(int position);
+
+        /**
+         * Updates the seasons list. If a valid initial season id is given
+         * it will return its position in the created list.
+         */
+        int updateSeasonsList(int initialSeasonId);
+
         void setupTabs(ArrayList<SeasonWrapper> list);
+
+        int getPositionForSeason(int seassonId);
+
+        boolean isDualPane();
     }
 }

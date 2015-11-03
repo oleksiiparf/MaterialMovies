@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -375,7 +376,12 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
 
     @Override
     public void showSeasonDetail(Integer seasonId, View view, int position) {
-        //TODO
+        Display display = getDisplay();
+        if (display != null) {
+            display.startTvSeasonsActivity(getRequestParameter(), String.valueOf(seasonId), ActivityOptionsCompat
+                    .makeScaleUpAnimation(view, 0, 0, view.getWidth(), view.getHeight())
+                    .toBundle());
+        }
     }
 
     protected DetailAdapter createRecyclerAdapter(List<DetailItemType> items) {
@@ -801,7 +807,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO
+                    showSeasonDetail(null, v, 0);
                 }
             };
 
@@ -968,17 +974,10 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
     private class ShowSeasonsAdapter extends BaseAdapter {
 
         private final LayoutInflater mInflater;
-        private final View.OnClickListener mOnClickListener;
+
 
         ShowSeasonsAdapter(LayoutInflater inflater) {
             mInflater = inflater;
-
-            mOnClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    System.out.println("Clicked");
-                }
-            };
         }
 
         @Override
@@ -1014,10 +1013,14 @@ public class TvShowDetailFragment extends BaseAnimationFragment implements ShowD
             imageView.loadPoster(season);
 
             final TextView title = (TextView) convertView.findViewById(R.id.title);
-            title.setText(getString(R.string.show_season) + season.getSeasonNumber());
-            //TODO
+            title.setText(StringUtils.getSeasonString(mContext, season.getSeasonNumber()));
 
-            convertView.setOnClickListener(mOnClickListener);
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showSeasonDetail(season.getId(), v, 0);
+                }
+            });
             convertView.setTag(season);
 
             return convertView;

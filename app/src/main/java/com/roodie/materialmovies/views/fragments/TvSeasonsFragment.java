@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by Roodie on 23.09.2015.
  */
-public class TvSeasonsListFragment extends BaseListFragment<ListView> implements ShowDetailPresenter.ShowDetailView,
+public class TvSeasonsFragment extends BaseListFragment<ListView> implements ShowDetailPresenter.ShowDetailView,
         SeasonStarListener, PopupMenuClickListener {
 
     private ShowDetailPresenter mPresenter;
@@ -48,9 +48,9 @@ public class TvSeasonsListFragment extends BaseListFragment<ListView> implements
         String QUERY_STARTING_POSITION = "starting_position";
     }
 
-    public static TvSeasonsListFragment newInstance(int showId, int seasonId, int seasonNumber,
+    public static TvSeasonsFragment newInstance(int showId, int seasonId, int seasonNumber,
                                                int startingPosition) {
-        TvSeasonsListFragment f = new TvSeasonsListFragment();
+        TvSeasonsFragment f = new TvSeasonsFragment();
 
         Bundle args = new Bundle();
         args.putInt(InitBundle.QUERY_SHOW_ID, showId);

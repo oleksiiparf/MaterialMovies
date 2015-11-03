@@ -57,6 +57,13 @@ public class ShowDetailPresenter extends BasePresenter<ShowDetailPresenter.ShowD
     }
 
     @Subscribe
+    public void onTvSeasonDetailsChanged(MoviesState.TvShowSeasonUpdatedEvent event) {
+        Log.d(LOG_TAG, "season details changed");
+        populateUi();
+        //checkDetailSeasonResult(event.callingId, event.item, event.secondaryItem);
+    }
+
+    @Subscribe
     public void onNetworkError(BaseState.OnErrorEvent event) {
         Log.d(LOG_TAG, "network error");
         if (isViewAttached() && null != event.error) {

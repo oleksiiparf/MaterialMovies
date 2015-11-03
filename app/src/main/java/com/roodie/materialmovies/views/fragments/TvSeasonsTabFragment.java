@@ -4,8 +4,10 @@ package com.roodie.materialmovies.views.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.google.common.base.Preconditions;
@@ -26,13 +28,23 @@ public class TvSeasonsTabFragment extends BaseTabFragment<TvSeasonsTabFragment.T
 
     private TvSeasonsTabPresenter mPresenter;
 
-    private int mTvShowId;
+    private ArrayList<SeasonWrapper> mSeasons;
+
+    private ViewPager mPager;
+    private TabLayout mTabs;
+
+    private boolean mDualPane;
+
+    private int mShowId;
 
     private Context mContext;
 
     public interface  InitBundle {
 
-        String QUERY_SEASON_NUMBER = "_season_number";
+        String QUERY_SHOW_ID = "_show_id";
+
+        String QUERY_DUAL_PANE = "_dual_pane";
+
     }
 
     @Override
@@ -89,7 +101,7 @@ public class TvSeasonsTabFragment extends BaseTabFragment<TvSeasonsTabFragment.T
 
     @Override
     public String getRequestParameter() {
-        return null;
+        return getArguments().getString(InitBundle.QUERY_SHOW_ID);
     }
 
     @Override
@@ -114,13 +126,45 @@ public class TvSeasonsTabFragment extends BaseTabFragment<TvSeasonsTabFragment.T
         //TvSeasonsPagerAdapter adapter = new TvSeasonsPagerAdapter(getChildFragmentManager(), list, mContext, false);
     }
 
+    @Override
+    public void setCurrentPage(int position) {
+        mPager.setCurrentItem(position, true);
+    }
 
+    @Override
+    public int updateSeasonsList(int initialSeasonId) {
+        return 0;
+    }
+
+    public void updateSeasonsList() {
+       updateSeasonsList(0);
+    }
+
+    @Override
+    public int getPositionForSeason(int seasonId) {
+        // find page index for this episode
+        for (int position = 0; position < mSeasons.size(); position++) {
+            if (mSeasons.get(position).getId() == seasonId) {
+                return position;
+            }
+        }
+
+        return 0;
+    }
+
+    @Override
+    public boolean isDualPane() {
+        return getArguments().getBoolean(InitBundle.QUERY_DUAL_PANE);
+    }
 
     @Override
     protected String getTabTitle(int position) {
         return null;
     }
 
+    /**
+     * TvSeasonsPagerAdapter
+     */
     protected class TvSeasonsPagerAdapter extends BaseTabFragment.TabPagerAdapter {
 
         private ArrayList<SeasonWrapper> mSeasons;
@@ -163,5 +207,9 @@ public class TvSeasonsTabFragment extends BaseTabFragment<TvSeasonsTabFragment.T
                 mSeasons = list;
             notifyDataSetChanged();
         }
+
+
+
+
     }
 }

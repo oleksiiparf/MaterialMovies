@@ -1,5 +1,7 @@
 package com.roodie.materialmovies.util;
 
+import android.content.Context;
+
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.UiView;
 import com.roodie.model.entities.ShowWrapper;
@@ -59,5 +61,17 @@ public class StringUtils {
             return R.string.show_unknown;
         }
     }
+
+    /**
+     * Builds a localized string like "Season 5" or if the number is 0 "Special Episodes".
+     */
+    public static String getSeasonString(Context context, int seasonNumber) {
+        if (seasonNumber == 0) {
+            return context.getString(R.string.tv_season_specials);
+        } else {
+            return context.getString(R.string.tv_season_number, seasonNumber);
+        }
+    }
+
 
 }

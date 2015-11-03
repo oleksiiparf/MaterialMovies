@@ -56,6 +56,7 @@
     <string name="show_isalive">Continuing</string>
     <string name="show_isnotalive">Ended</string>
     <string name="show_unknown">Scripted</string>
+    <string name="tv_season_specials">Season Specials</string>
     <string name="tv_season_number">Season %1$d</string>
 
     <!-- Tmdb ratings -->
