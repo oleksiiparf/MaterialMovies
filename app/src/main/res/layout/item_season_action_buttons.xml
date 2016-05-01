@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/spacing_major"
+    android:paddingRight="@dimen/spacing_major"
+    android:paddingTop="@dimen/spacing_minor"
+    style="?android:buttonBarStyle">
+
+    <ImageButton
+        android:id="@+id/btn_checkin"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:contentDescription="@string/season_checkin"
+        android:visibility="gone"
+        style="?android:attr/borderlessButtonStyle" />
+
+    <ImageButton
+        android:id="@+id/btn_cancel_checkin"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:contentDescription="@string/season_checkin_cancel"
+        android:visibility="gone"
+        style="?android:attr/borderlessButtonStyle" />
+
+    <com.roodie.materialmovies.views.custom_views.CheckableImageButton
+        android:id="@+id/btn_star"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        style="?android:attr/borderlessButtonStyle" />
+
+    <com.roodie.materialmovies.views.custom_views.CheckableImageButton
+        android:id="@+id/btn_share"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        style="?android:attr/borderlessButtonStyle" />
+
+    <com.roodie.materialmovies.views.custom_views.CheckableImageButton
+        android:id="@+id/btn_collection"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        style="?android:attr/borderlessButtonStyle" />
+
+</LinearLayout>

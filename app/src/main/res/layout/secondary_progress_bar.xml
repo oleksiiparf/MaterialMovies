@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="end|center"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/md_content_padding_top"
+    android:paddingLeft="@dimen/md_dialog_frame_margin"
+    android:paddingRight="@dimen/md_dialog_frame_margin"
+    android:paddingTop="@dimen/md_content_padding_top">
+
+    <ProgressBar
+        android:id="@+id/secondary_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true" />
+
+    <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+        android:id="@+id/progress_text_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        style="@style/Widget.MMovies.TextAppearance.PrimaryText"
+        android:text="Loading more"
+        android:paddingLeft="16.0dip" />
+</LinearLayout>

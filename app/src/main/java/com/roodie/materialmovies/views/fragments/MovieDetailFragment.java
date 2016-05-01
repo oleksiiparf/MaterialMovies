@@ -1,11 +1,10 @@
+
 package com.roodie.materialmovies.views.fragments;
 
-import android.app.Activity;
-import android.content.Context;
+import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,35 +16,38 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.common.base.Preconditions;
+import com.nineoldandroids.animation.Animator;
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.mvp.presenters.MovieDetailPresenter;
-import com.roodie.materialmovies.settings.TmdbSettings;
-import com.roodie.materialmovies.views.MMoviesApplication;
+import com.roodie.materialmovies.mvp.presenters.DetailMoviePresenter;
+import com.roodie.materialmovies.mvp.views.MovieDetailView;
+import com.roodie.materialmovies.util.UiUtils;
 import com.roodie.materialmovies.views.activities.SettingsActivity;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
+import com.roodie.materialmovies.views.custom_views.MMoviesTextView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout;
+import com.roodie.materialmovies.views.custom_views.MovieTitleCardLayout;
+import com.roodie.materialmovies.views.custom_views.MovieWatchedToggler;
 import com.roodie.materialmovies.views.custom_views.RatingBarLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
+import com.roodie.materialmovies.views.custom_views.recyclerview.DetailRecyclerLayout;
 import com.roodie.materialmovies.views.fragments.base.BaseAnimationFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.CreditWrapper;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.TrailerWrapper;
-import com.roodie.model.network.NetworkError;
+import com.roodie.model.util.FileLog;
 import com.roodie.model.util.MoviesCollections;
 import com.squareup.picasso.Picasso;
 
@@ -54,10 +56,24 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.InjectView;
+import butterknife.Optional;
+import io.codetail.animation.arcanimator.ArcAnimator;
+import io.codetail.animation.arcanimator.Side;
+
+
 /**
  * Created by Roodie on 27.06.2015.
  */
-public class MovieDetailFragment extends BaseAnimationFragment implements MovieDetailPresenter.MovieDetailView {
+
+public class MovieDetailFragment extends BaseAnimationFragment<MovieWrapper, DetailRecyclerLayout> implements MovieDetailView {
+
+    @Override
+    public void onRefreshData(boolean visible) {
+    }
+
+    @InjectPresenter
+    DetailMoviePresenter mPresenter;
 
     private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
@@ -67,39 +83,95 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     private static final int ANIMATION_DELAY = 150;
     long animationDelay = ANIMATION_DELAY + 2 * 30;
 
-    private MovieDetailPresenter mPresenter;
     private DetailAdapter mAdapter;
     private MovieWrapper mMovie;
     private final ArrayList<DetailItemType> mItems = new ArrayList<>();
 
 
-
     private MenuItem mYoutubeItem;
     private MenuItem mShareItem;
     private MenuItem mWebSearchItem;
+    private MenuItem mWatchedItem;
+
     boolean isEnableYoutube = false;
     boolean isEnableShare = false;
 
     private RelativeLayout mSummaryContainer;
 
-    private CollapsingToolbarLayout mCollapsingToolbar;
     private MMoviesImageView mFanartImageView;
     private TextView mTitleTextView;
     private TextView mSummary;
-    private TextView mTagline;
-    private MMoviesImageView mPosterImageView;
-    private Button mTrailerButton;
     private RatingBarLayout mRatingBarLayout;
-    private Context mContext;
 
     private RelatedMoviesAdapter mRelatedMoviesAdapter;
     private MovieCastAdapter mMovieCastAdapter;
     private MovieCrewAdapter mMovieCrewAdapter;
     private MovieTrailersAdapter mMovieTrailersAdapter;
 
+    @Optional @InjectView(R.id.toggler_watched)
+    MovieWatchedToggler mWatchedToggler;
+    @Optional @InjectView(R.id.button_trailer)
+    TextView mTrailerButton;
+
+
     private static final Date DATE = new Date();
 
     protected static final String QUERY_MOVIE_ID = "movie_id";
+
+    @Override
+    protected void configureEnterTransition() {
+        if (mPosterImageView != null) {
+            FileLog.d("animation", "MovieDetailFragment : has poster view");
+            ViewCompat.setTransitionName(mPosterImageView, getActivity().getString(R.string.transition_poster));
+            Picasso.with(getActivity().getApplicationContext()).load(getImageUrl()).into(mPosterImageView);
+        }
+    }
+
+    private void onWatchedClicked() {
+        if (!mMovie.isWatched()) {
+            toast(String.format(getResources().getString(R.string.action_item_added_to_watched), mMovie.getTitle()));
+        }
+        mPresenter.toggleMovieWatched(this, mMovie);
+
+    }
+
+    private void updateMovieWatched(boolean isWatched) {
+        if (mWatchedToggler != null)
+        mWatchedToggler.setStatus(isWatched);
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFabClicked() {
+        startAnimationX = UiUtils.getInstance().centerX(mFloatingButton);
+        startAnimationY = UiUtils.getInstance().centerY(mFloatingButton);
+
+        endAnimationX = mAnimationContainer.getRight() / 2;
+        endAnimationY = (int) (mAnimationContainer.getBottom() * 0.8f);
+
+        System.out.println("Positions: " + startAnimationX + ", " + startAnimationY + ", " + endAnimationX + ", " + endAnimationY);
+
+        //disable recycler nested scrolling in order to FAB return to the starting position
+        getRecyclerView().mRecyclerView.setNestedScrollingEnabled(false);
+
+        if (endAnimationX == 0 && endAnimationY == 0) {
+            endAnimationX = (int) UiUtils.getInstance().centerX(mFloatingButton);
+            endAnimationY = (int) UiUtils.getInstance().centerY(mFloatingButton);
+            startCircleAnimation();
+        } else {
+            ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(mFloatingButton, endAnimationX,
+                    endAnimationY, 90, Side.RIGHT)
+                    .setDuration(500);
+
+            arcAnimator.addListener(new SimpleAnimationListener() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    startCircleAnimation();
+                }
+            });
+            arcAnimator.start();
+        }
+    }
 
     public static  MovieDetailFragment newInstance(String id) {
         Preconditions.checkArgument(id != null, "movieId can not be null");
@@ -125,32 +197,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         return fragment;
     }
 
-
-    public static MovieDetailFragment newInstance(String movieId, int[] startingLocation) {
-        Preconditions.checkArgument(movieId != null, "MovieId can not be null");
-
-        Bundle bundle = new Bundle();
-        bundle.putString(QUERY_MOVIE_ID, movieId);
-        bundle.putIntArray(KEY_REVEAL_START_LOCATION, startingLocation);
-        MovieDetailFragment fragment = new MovieDetailFragment();
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
-
-    public static MovieDetailFragment newInstance(String movieId, int[] startingLocation, String imageUrl) {
-        Preconditions.checkArgument(movieId != null, "MovieId can not be null");
-
-        Bundle bundle = new Bundle();
-        bundle.putString(QUERY_MOVIE_ID, movieId);
-        bundle.putIntArray(KEY_REVEAL_START_LOCATION, startingLocation);
-        bundle.putString(KEY_IMAGE_URL, imageUrl);
-        MovieDetailFragment fragment = new MovieDetailFragment();
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,10 +204,13 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mContext = activity.getApplicationContext();
-        mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getDetailMoviePresenter();
+    protected void attachUiToPresenter() {
+        mPresenter.attachUiByParameter(this, getRequestParameter());
+        Display display = getDisplay();
+        if ( display != null) {
+            display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
+            display.setActionBarTitle(mPresenter.getUiTitle(getRequestParameter()));
+        }
     }
 
     @Override
@@ -174,35 +223,42 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            setMovie((MovieWrapper) savedInstanceState.getSerializable(KEY_MOVIE_SAVE_STATE));
+            setData((MovieWrapper) savedInstanceState.getSerializable(KEY_MOVIE_SAVE_STATE));
         }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FrameLayout wrapper = new FrameLayout(getActivity());
-        inflater.inflate(R.layout.fragment_movie_detail_list, wrapper, true);
-        return wrapper;
+    public void onResume() {
+        super.onResume();
+        if (mAppBar != null) {
+            mPrimaryRecyclerView.addOnScrollListener(expandableScrollListener);
+        }
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    protected int getLayoutRes() {
+        return R.layout.fragment_movie_detail_list;
+    }
 
-        //set actionbar up navigation
-        final Display display = getDisplay();
-        if (!isModal()) {
-            display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
+    @Override
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                @TargetApi(21)
+                public boolean onPreDraw() {
+                    view.getViewTreeObserver().removeOnPreDrawListener(this);
+                    getActivity().startPostponedEnterTransition();
+                    return true;
+                }
+            });
         }
-
-        mCollapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.backdrop_toolbar);
 
         mSummaryContainer = (RelativeLayout) view.findViewById(R.id.container_layout);
-        mFanartImageView = (MMoviesImageView) view.findViewById(R.id.imageview_fanart);
-        mTitleTextView = (TextView) view.findViewById(R.id.textview_title);
-        mSummary = (TextView) view.findViewById(R.id.textview_summary);
-        mTagline = (TextView) view.findViewById(R.id.textview_tagline);
-        mPosterImageView = (MMoviesImageView) view.findViewById(R.id.imageview_poster);
+        mFanartImageView = (MMoviesImageView) view.findViewById(R.id.fanart_image);
+        mTitleTextView = (TextView) view.findViewById(R.id.title);
+        mSummary = (TextView) view.findViewById(R.id.summary);
         if (mPosterImageView != null) {
 
             // check if jelly bean or higher
@@ -229,9 +285,16 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
         mRatingBarLayout = (RatingBarLayout)view.findViewById(R.id.rating_bar);
 
-        mTrailerButton = (Button) view.findViewById(R.id.trailer_button);
-        if (mTrailerButton != null) {
-            onPrepareTrailerButton(mTrailerButton);
+
+        if (hasLeftContainer()) {
+            mWatchedToggler.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onWatchedClicked();
+                }
+            });
+
+            //onPrepareTrailerButton(mTrailerButton);
             mTrailerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -241,66 +304,14 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                 }
             });
         }
-        mPresenter.attachView(this);
         super.onViewCreated(view, savedInstanceState);
-        //mPresenter.initialize();
-    }
-
-    @Override
-    public void onDestroyView() {
-        mPresenter.detachView(true);
-        super.onDestroyView();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.onPause();
-    }
-
-    @Override
-    protected void setUpVisibility() {
-        if (mSummaryContainer != null) {
-            mSummaryContainer.setVisibility(View.GONE);
-        }
-        mFanartImageView.setVisibility(View.GONE);
-    }
-
-    @Override
-    protected void configureEnterTransition() {
-        System.out.println("Configure enter transition");
-        if (mPosterImageView != null) {
-            ViewCompat.setTransitionName(mPosterImageView, KEY_IMAGE_URL);
-            Picasso.with(getActivity().getApplicationContext()).load(getImageUrl()).into(mPosterImageView);
-        }
-        initializePresenter();
-    }
-
-    @Override
-    protected void configureEnterAnimation() {
-        System.out.println("Configure enter animation");
-        final int[] startingLocation = getStartingLocation();
-
-        setEndAnimationX(startingLocation[0]);
-        setEndAnimationY(startingLocation[1]);
-        super.configureEnterAnimation();
-    }
-
-    @Override
-    protected void initializePresenter() {
-        mPresenter.initialize();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.movie_detail, menu);
+        mWatchedItem = menu.findItem(R.id.menu_item_watched);
+
         mYoutubeItem = menu.findItem(R.id.menu_open_youtube);
         mYoutubeItem.setEnabled(isEnableYoutube);
         mYoutubeItem.setVisible(isEnableYoutube);
@@ -327,26 +338,24 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
         mWebSearchItem.setEnabled(isEnableShare);
         mWebSearchItem.setVisible(isEnableShare);
+
+        if (mWatchedItem != null) {
+            if (mMovie != null) {
+                if (mMovie.isWatched()) {
+                    mWatchedItem.setIcon(R.drawable.ic_added_to_watchlist_white_24dp);
+                    mWatchedItem.setTitle(R.string.menu_item_movie_is_watched);
+                } else {
+                    mWatchedItem.setIcon(R.drawable.ic_add_to_watched_white_24dp);
+                    mWatchedItem.setTitle(R.string.menu_item_watchable_add_to_watched);
+                }
+            }
+        }
         super.onPrepareOptionsMenu(menu);
     }
 
-    public void onPrepareTrailerButton(Button button) {
+    public void onPrepareTrailerButton(TextView view) {
         isEnableYoutube = (mMovie != null && !MoviesCollections.isEmpty(mMovie.getTrailers()));
-        //button.setEnabled(isEnableYoutube);
-    }
-
-    /**
-     * Animations
-     */
-
-    private void animateSummary() {
-     mSummaryContainer.setTranslationY(-mSummaryContainer.getHeight());
-     mSummaryContainer.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(getInterpolator());
-  }
-
-    private void animateFanart() {
-        mFanartImageView.setTranslationY(-mFanartImageView.getHeight());
-        mFanartImageView.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(getInterpolator());
+        //view.setEnabled(isEnableYoutube);
     }
 
     @Override
@@ -354,8 +363,12 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         Display display = getDisplay();
         if (display != null) {
             switch (item.getItemId()) {
+                case R.id.menu_item_watched: {
+                    onWatchedClicked();
+                    return true;
+                }
                 case R.id.menu_refresh: {
-                    mPresenter.refresh();
+                    mPresenter.refresh(this, getRequestParameter());
                     return true;
                 }
                 case R.id.menu_movie_share: {
@@ -387,14 +400,10 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         return super.onOptionsItemSelected(item);
     }
 
-
-    public MovieDetailPresenter getPresenter() {
-        return mPresenter;
-    }
-
     /**
-     * MovieView
+     * MvpView
      */
+
     @Override
     public void updateDisplayTitle(String title) {
         Display display = getDisplay();
@@ -404,21 +413,16 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     }
 
     @Override
-    public void showError(NetworkError error) {
-
+    public void updateDisplaySubtitle(String subtitle) {
+        //TODO
     }
 
-    @Override
-    public void showLoadingProgress(boolean visible) {
-        getActivity().setProgressBarIndeterminateVisibility(visible);
+    //@Override
+    public String getTitle() {
+        return null;
     }
 
-    @Override
-    public void showSecondaryLoadingProgress(boolean visible) {
-
-    }
-
-    @Override
+    //@Override
     public String getRequestParameter() {
         return getArguments().getString(QUERY_MOVIE_ID);
     }
@@ -433,31 +437,28 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
 
     @Override
-    public MovieQueryType getQueryType() {
-        return MovieQueryType.MOVIE_DETAIL;
+    public MMoviesQueryType getQueryType() {
+        return MMoviesQueryType.MOVIE_DETAIL;
     }
 
-    /**
-     * MovieDetailView
-     */
-
     @Override
-    public void setMovie(MovieWrapper movie) {
-        mMovie = movie;
+    public void setData(MovieWrapper data) {
+        mMovie = data;
         mAdapter = populateUi();
+        mToolbarTitle = data.getTitle();
         getRecyclerView().setAdapter(mAdapter);
-        getActivity().invalidateOptionsMenu();
-        onPrepareTrailerButton(mTrailerButton);
-
-        getRecyclerView().setVisibility(View.VISIBLE);
+        //onPrepareTrailerButton(mTrailerButton);
+        updateMovieWatched(mMovie.isWatched());
         mFanartImageView.setVisibility(View.VISIBLE);
-        //animateFanart();
 
         if (mSummaryContainer != null) {
             mSummaryContainer.setVisibility(View.VISIBLE);
-            //animateSummary();
-            }
+        }
     }
+
+/**
+     * MovieDetailView
+     */
 
     @Override
     public void showMovieDetail(MovieWrapper movie, View view) {
@@ -469,11 +470,10 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         Display display = getDisplay();
         if (display != null) {
             if (movie.getTmdbId() != null) {
-                display.startMovieDetailActivityByAnimation(String.valueOf(movie.getTmdbId()), startingLocation);
+                display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), null);
             }
         }
     }
-
 
     @Override
     public void showMovieImages(MovieWrapper movie) {
@@ -486,32 +486,18 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     }
 
     @Override
-    public void showPersonDetail(PersonWrapper person, Bundle bundle) {
-        Preconditions.checkNotNull(person, "person cannot be null");
-        Preconditions.checkNotNull(person.getTmdbId(), "person id cannot be null");
-
-        Display display = getDisplay();
-        if (display != null) {
-            display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), bundle);
-        }
-    }
-
-    @Override
     public void showPersonDetail(PersonWrapper person, View view) {
         Preconditions.checkNotNull(person, "person cannot be null");
-        Preconditions.checkNotNull(person.getTmdbId(), "person id cannot be null");
 
-        int[] startingLocation = new int[2];
+   /*     int[] startingLocation = new int[2];
         view.getLocationOnScreen(startingLocation);
-        startingLocation[0] += view.getWidth() / 2;
+        startingLocation[0] += view.getWidth() / 2;*/
 
         Display display = getDisplay();
         if (display != null) {
-            display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), startingLocation);
+            display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), null);
         }
-
     }
-
 
     @Override
     public void playTrailer() {
@@ -527,9 +513,8 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     }
 
     @Override
-    public void showMovieCreditsDialog(MovieQueryType queryType) {
+    public void showMovieCreditsDialog(MMoviesQueryType queryType) {
         Preconditions.checkNotNull(queryType, "Query type cannot be null");
-        Log.d(LOG_TAG, "Show detail dialog list");
         ListView list = new ListView(mContext);
         String mTitle = "";
         boolean wrapInScrollView = false;
@@ -543,7 +528,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                 list.setAdapter(getMovieCrewAdapter());
                 mTitle = getResources().getString(R.string.crew_movies);
                 break;
-            case MOVIE_RELATED:
+            case RELATED_MOVIES:
                 list.setAdapter(getRelatedMoviesAdapter());
                 mTitle = getResources().getString(R.string.related_movies);
         }
@@ -554,19 +539,8 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                 .show();
     }
 
-
-    @Override
-    public boolean isModal() {
-        return false;
-    }
-
-
     protected DetailAdapter createRecyclerAdapter(List<DetailItemType> items) {
         return new DetailAdapter(items);
-    }
-
-    protected DetailAdapter getRecyclerAdapter() {
-        return mAdapter;
     }
 
     private DetailAdapter populateUi() {
@@ -579,8 +553,8 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             mFanartImageView.loadBackdrop(mMovie);
         }
 
-        if (mCollapsingToolbar != null) {
-            mCollapsingToolbar.setTitle(mMovie.getTitle());
+        if (mCollapsingToolbarLayout != null) {
+            mCollapsingToolbarLayout.setTitle(mMovie.getTitle());
         }
 
         if (hasLeftContainer()) {
@@ -590,11 +564,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                 mTitleTextView.setText(mMovie.getTitle());
             }
 
-            if (!TextUtils.isEmpty(mMovie.getTagline())) {
-                mTagline.setText(mMovie.getTagline());
-            } else {
-                mTagline.setHeight(0);
-            }
             mSummary.setText(mMovie.getOverview());
 
             mPosterImageView.loadPoster(mMovie);
@@ -602,7 +571,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             mRatingBarLayout.setRatingVotes(mMovie.getRatingVotes());
             mRatingBarLayout.setRatingValue(mMovie.getRatingVoteAverage());
             mRatingBarLayout.setRatingRange(10);
-
 
         } else {
 
@@ -615,7 +583,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
         mItems.add(DetailItemType.DETAILS);
 
-        /**
+        /*
          *  if (!MoviesCollections.isEmpty(mMovie.getTrailers())){
          *  mItems.add(DetailItemType.TRAILERS);
          *  }
@@ -639,7 +607,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     }
 
      enum DetailItemType  {
-        TITLE,          //(R.layout.item_movie_detail_title), includes poster, tagline and rating
+        TITLE,          //(R.layout.item_movie_detail_title_old), includes poster, tagline and rating
         DETAILS,        //(R.layout.item_movie_detail_details), include details
         SUMMARY,        //(R.layout.item_movie_detail_summary), includes description text, maybe
         TRAILERS,       //(R.layout.item_movie_detail_trailers), includes trailers
@@ -649,9 +617,11 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
     }
 
-    /**
+
+/**
      * DetailAdapter
      */
+
     public class DetailAdapter extends  EnumListDetailAdapter<DetailItemType> {
         List<BaseViewHolder> mItems;
 
@@ -661,7 +631,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
         public DetailAdapter(List<DetailItemType> items) {
             mItems = new ArrayList<>(items.size());
-            for(DetailItemType item : items) {
+            for (DetailItemType item : items) {
                 switch (item) {
                     case TITLE:
                         mItems.add(new MovieTitleBinder(this));
@@ -687,10 +657,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             }
             addAllBinder(mItems);
         }
-
-
     }
-
 
     /**
      * MovieDescriptionBinder
@@ -710,21 +677,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
-
-            holder.tagline.setText(mMovie.getTagline());
             holder.summary.setText(mMovie.getOverview());
-
-
-            holder.container.setScaleY(0);
-            holder.container.setScaleX(0);
-
-            holder.container.animate()
-                    .scaleY(1)
-                    .scaleX(1)
-                    .setDuration(200)
-                    .setInterpolator(getInterpolator())
-                    .setStartDelay(animationDelay)
-                    .start();
 
         }
 
@@ -736,14 +689,12 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         class ViewHolder extends RecyclerView.ViewHolder {
 
             View container;
-            TextView tagline;
             TextView summary;
 
             public ViewHolder(View view) {
                 super(view);
 
                 container = view.findViewById(R.id.movie_detail_card_details);
-                tagline = (TextView) view.findViewById(R.id.textview_tagline);
                 summary = (TextView) view.findViewById(R.id.textview_summary);
             }
         }
@@ -767,22 +718,20 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
-            holder.title.setText(mMovie.getTitle() + " (" + mMovie.getYear() + ")");
-            holder.genres.setText(mMovie.getGenres());
-            String mImageBaseUrl = TmdbSettings.getImageBaseUrl(mContext)
-                    + TmdbSettings.POSTER_SIZE_SPEC_W154;
 
-            Picasso.with(mContext)
-                    .load(mImageBaseUrl + mMovie.getPosterUrl())
-                    .fit().
-                    centerCrop().
-                    into(holder.posterImageView);
+            holder.container.setTitle(mMovie.getTitle());
+            holder.tagline.setText(mMovie.getTagline());
+
+            holder.releaseYear.setText(String.valueOf(mMovie.getYear()));
+
+            holder.posterImageView.loadPoster(mMovie);
 
             holder.ratingBarLayout.setRatingVotes(mMovie.getRatingVotes());
             holder.ratingBarLayout.setRatingValue(mMovie.getRatingVoteAverage());
             holder.ratingBarLayout.setRatingRange(10);
 
-            onPrepareTrailerButton(holder.trailerButton);
+            holder.watchedButton.setStatus(mMovie.isWatched());
+
             holder.trailerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -792,16 +741,12 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                 }
             });
 
-            holder.container.setScaleY(0);
-            holder.container.setScaleX(0);
-
-            holder.container.animate()
-                    .scaleY(1)
-                    .scaleX(1)
-                    .setDuration(200)
-                    .setInterpolator(getInterpolator())
-                    .setStartDelay(animationDelay)
-                    .start();
+            holder.watchedButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onWatchedClicked();
+                }
+            });
         }
 
 
@@ -812,27 +757,29 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
-            LinearLayout container;
-            TextView title;
-            TextView genres;
-            ImageView posterImageView;
+            MovieTitleCardLayout container;
+            MMoviesTextView tagline;
+            MMoviesTextView releaseYear;
+            MMoviesImageView posterImageView;
             RatingBarLayout ratingBarLayout;
-            Button trailerButton;
-
+            TextView trailerButton;
+            MovieWatchedToggler watchedButton;
 
             public ViewHolder(View view) {
                 super(view);
 
-                container = (LinearLayout) view.findViewById(R.id.container_layout);
-                title = (TextView) view.findViewById(R.id.textview_title);
-                genres = (TextView) view.findViewById(R.id.textview_genres);
-                posterImageView = (ImageView)view.findViewById(R.id.imageview_poster);
+                container = (MovieTitleCardLayout) view.findViewById(R.id.movie_detail_card_title);
+                tagline = (MMoviesTextView) view.findViewById(R.id.textview_tagline);
+                releaseYear = (MMoviesTextView) view.findViewById(R.id.textview_release_year);
+                posterImageView = (MMoviesImageView) view.findViewById(R.id.poster_image);
                 ratingBarLayout = (RatingBarLayout)view.findViewById(R.id.rating_bar);
-                trailerButton = (Button) view.findViewById(R.id.trailer_button);
+                trailerButton = (TextView) view.findViewById(R.id.button_trailer);
+                watchedButton = (MovieWatchedToggler) view.findViewById(R.id.toggler_watched);
 
             }
         }
     }
+
 
     /**
      * MovieDetailsBinder
@@ -867,8 +814,8 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                 holder.certificationLayout.setVisibility(View.GONE);
             }
 
-            if (!TextUtils.isEmpty(mMovie.getGenres())) {
-                holder.genreLayout.setContentText(mMovie.getGenres());
+            if (!TextUtils.isEmpty(mMovie.getGenresString())) {
+                holder.genreLayout.setContentText(mMovie.getGenresString());
                 holder.genreLayout.setVisibility(View.VISIBLE);
             } else {
                 holder.genreLayout.setVisibility(View.GONE);
@@ -877,6 +824,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             if (mMovie.getReleasedTime() > 0) {
                 DATE.setTime(mMovie.getReleasedTime());
                 DateFormat dateFormat = DateFormat.getDateInstance();
+                holder.releasedInfoLayout.setContentText( dateFormat.format(DATE));
                 holder.releasedInfoLayout.setContentText( dateFormat.format(DATE));
                 holder.releasedInfoLayout.setVisibility(View.VISIBLE);
 
@@ -898,18 +846,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             } else {
                 holder.languageLayout.setVisibility(View.GONE);
             }
-
-            holder.container.setScaleY(0);
-            holder.container.setScaleX(0);
-
-            holder.container.animate()
-                    .scaleY(1)
-                    .scaleX(1)
-                    .setDuration(200)
-                    .setInterpolator(getInterpolator())
-                    .setStartDelay(animationDelay)
-                    .start();
-
         }
 
         @Override
@@ -970,7 +906,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showMovieCreditsDialog(MovieQueryType.MOVIE_CAST);
+                    showMovieCreditsDialog(MMoviesQueryType.MOVIE_CAST);
                 }
             };
 
@@ -991,18 +927,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
             }
             viewRecycler.clearRecycledViews();
-
-
-            cardLayout.setScaleY(0);
-            cardLayout.setScaleX(0);
-
-            cardLayout.animate()
-                    .scaleY(1)
-                    .scaleX(1)
-                    .setDuration(200)
-                    .setInterpolator(getInterpolator())
-                    .setStartDelay(animationDelay)
-                    .start();
         }
 
         @Override
@@ -1050,7 +974,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showMovieCreditsDialog(MovieQueryType.MOVIE_CREW);
+                    showMovieCreditsDialog(MMoviesQueryType.MOVIE_CREW);
                 }
             };
 
@@ -1072,7 +996,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             }
             viewRecycler.clearRecycledViews();
 
-            cardLayout.setScaleY(0);
+ /*           cardLayout.setScaleY(0);
             cardLayout.setScaleX(0);
 
             cardLayout.animate()
@@ -1081,7 +1005,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                     .setDuration(200)
                     .setInterpolator(getInterpolator())
                     .setStartDelay(animationDelay)
-                    .start();
+                    .start();*/
         }
 
         @Override
@@ -1101,6 +1025,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         }
     }
 
+
     /**
      * MovieRelated
      */
@@ -1110,7 +1035,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
         public MovieRelatedBinder(BaseDetailAdapter dataBindAdapter) {
             super(dataBindAdapter);
-            Log.d(LOG_TAG, "Bind related movies");
         }
 
         @Override
@@ -1129,7 +1053,9 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showMovieCreditsDialog(MovieQueryType.MOVIE_RELATED);
+                    if (getDisplay() != null) {
+                        getDisplay().showRelatedMovies(String.valueOf(mMovie.getTmdbId()));
+                    }
                 }
             };
 
@@ -1150,17 +1076,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
 
             }
             viewRecycler.clearRecycledViews();
-
-            cardLayout.setScaleY(0);
-            cardLayout.setScaleX(0);
-
-            cardLayout.animate()
-                    .scaleY(1)
-                    .scaleX(1)
-                    .setDuration(200)
-                    .setInterpolator(getInterpolator())
-                    .setStartDelay(animationDelay)
-                    .start();
         }
 
         @Override
@@ -1232,9 +1147,11 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     }
 
 
+
     /**
      * BaseMovieCastAdapter
      */
+
     private abstract class BaseMovieCastAdapter extends BaseAdapter {
         private final LayoutInflater mInflater;
         private final View.OnClickListener mItemOnClickListener;
@@ -1265,13 +1182,13 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             final TextView title = (TextView) convertView.findViewById(R.id.title);
             title.setText(credit.getPerson().getName());
 
-            final MMoviesImageView image = (MMoviesImageView) convertView.findViewById(R.id.poster);
+            final MMoviesImageView image = (MMoviesImageView) convertView.findViewById(R.id.imageview_poster);
             image.setAvatarMode(true);
             //Load with Picasso
             image.loadProfile(credit.getPerson());
 
 
-            final TextView subTitle = (TextView) convertView.findViewById(R.id.subtitle_1);
+            final TextView subTitle = (TextView) convertView.findViewById(R.id.textview_subtitle_1);
             if (subTitle != null) {
                 if (!TextUtils.isEmpty(credit.getJob())) {
                     subTitle.setText(credit.getJob());
@@ -1292,9 +1209,11 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         }
     }
 
+
     /**
      * ShowCastAdapter
      */
+
     private class MovieCastAdapter extends BaseMovieCastAdapter {
 
         public MovieCastAdapter(LayoutInflater mInflater) {
@@ -1348,8 +1267,9 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         }
     }
 
-    /**
-     * RelatedMoviesAdapter
+
+     /**
+      *  RelatedMoviesAdapter
      */
     private class RelatedMoviesAdapter extends BaseAdapter {
 
@@ -1403,7 +1323,7 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
             }
 
             final MMoviesImageView imageView =
-                    (MMoviesImageView) convertView.findViewById(R.id.poster);
+                    (MMoviesImageView) convertView.findViewById(R.id.imageview_poster);
             imageView.setAvatarMode(false);
             imageView.loadPoster(movie);
 
@@ -1418,8 +1338,8 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
         }
     }
 
-    /**
-     * MovieTrailersAdapter
+     /**
+      *  MovieTrailersAdapter
      */
     private class MovieTrailersAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
@@ -1464,10 +1384,6 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
                convertView = mInflater.inflate(R.layout.item_movie_trailer, parent, false);
            }
             final TrailerWrapper trailer = getItem(position);
-
-            ImageView imageView = (ImageView) convertView.findViewById(R.id.thumbnail);
-            // imageView set trailer
-
 
             TextView title = (TextView) convertView.findViewById(R.id.title);
             title.setText(trailer.getName());
@@ -1514,6 +1430,4 @@ public class MovieDetailFragment extends BaseAnimationFragment implements MovieD
     protected void setSupportActionBar(Toolbar toolbar) {
        setSupportActionBar(toolbar, false);
     }
-
-
 }

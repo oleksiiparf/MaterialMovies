@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/movie_list_small_item_height"
+    android:background="?attr/selectableItemBackground"
     android:orientation="horizontal">
 
     <com.roodie.materialmovies.views.custom_views.MMoviesImageView
@@ -14,7 +15,7 @@
         android:layout_marginLeft="@dimen/spacing_major" />
 
     <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-        android:id="@+id/textview_title"
+        android:id="@+id/title"
         android:layout_marginLeft="@dimen/spacing_major"
         android:layout_marginRight="@dimen/spacing_major"
         android:layout_width="match_parent"

@@ -20,9 +20,10 @@ public class FetchOnTheAirShowsRunnable extends BasePaginatedShowRunnable {
                 getCountryProvider().getTwoLetterLanguageCode());
     }
 
+
     @Override
     protected void updateState(ApplicationState.ShowPaginatedResult result) {
-      mState.setOnTheAirShows(result);
+      mState.setOnTheAirShows(getCallingId(), result);
     }
 
     @Override

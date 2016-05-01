@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.roodie.materialmovies.views.custom_views.MMoviesToolbar
+        android:id="@+id/toolbar"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
+        style="@style/Widget.MMovies.Toolbar" />
+
+    <com.roodie.materialmovies.views.custom_views.recyclerview.LoadMoreRecyclerLayout
+        android:id="@+id/primary_recycler_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:clipToPadding="false"
+        app:paddingLeft="@dimen/basic_container_padding"
+        app:paddingRight="@dimen/basic_container_padding"
+        app:paddingTop="@dimen/activity_vertical_margin_half"
+        app:recyclerViewType="autofitGrid"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    </com.roodie.materialmovies.views.custom_views.recyclerview.LoadMoreRecyclerLayout>
+
+
+    </merge>

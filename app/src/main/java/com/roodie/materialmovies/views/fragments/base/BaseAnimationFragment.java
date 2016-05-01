@@ -1,6 +1,5 @@
 package com.roodie.materialmovies.views.fragments.base;
 
-import android.annotation.TargetApi;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,9 +20,15 @@ import android.widget.TextView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.util.UiUtils;
+import com.roodie.materialmovies.util.MMoviesPreferences;
+import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
+import com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout;
 import com.roodie.materialmovies.views.listeners.RotateAnimationListener;
 
+import java.io.Serializable;
+
+import butterknife.InjectView;
+import butterknife.Optional;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.animation.arcanimator.ArcAnimator;
@@ -32,25 +37,33 @@ import io.codetail.animation.arcanimator.Side;
 /**
  * Created by Roodie on 12.08.2015.
  */
-public abstract class BaseAnimationFragment extends BaseDetailFragment implements View.OnClickListener {
+public abstract class BaseAnimationFragment<M extends Serializable, RV extends BaseRecyclerLayout> extends BaseDetailFragment<M, RV> {
 
     protected static final String KEY_REVEAL_START_LOCATION = "reveal_start_location";
     protected static final String KEY_VIEW = "image_view";
     protected static final String KEY_IMAGE_URL = "_image";
 
-    protected FrameLayout mAnimationLayout;
+    @Optional @InjectView(R.id.animation_layout)
+    FrameLayout mAnimationLayout;
     protected ImageView mAnimationStarImageView;
     protected TextView mAnimationTextView;
+
+    @Optional @InjectView(R.id.button_fab)
     protected FloatingActionButton mFloatingButton;
-    private FrameLayout mAnimationContainer;
-    private FrameLayout mDataContainer;
 
+    @Optional @InjectView(R.id.animation_container)
+    protected FrameLayout mAnimationContainer;
 
+    @Optional @InjectView(R.id.data_container)
+    FrameLayout mDataContainer;
 
-    private float startAnimationX, startAnimationY;
+    @Optional @InjectView(R.id.poster_image)
+    protected MMoviesImageView mPosterImageView;
 
-    private int endAnimationX, endAnimationY;
-    private  int startAnimationPairBottom;
+    protected float startAnimationX, startAnimationY;
+
+    protected int endAnimationX, endAnimationY;
+    protected   int startAnimationPairBottom;
 
     final static AccelerateInterpolator ACCELERATE = new AccelerateInterpolator();
     final static DecelerateInterpolator DECELERATE = new DecelerateInterpolator();
@@ -65,16 +78,16 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
         return mAnimationContainer != null;
     }
 
+    protected boolean hasFAB() {
+        return mFloatingButton != null;
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mAnimationLayout = (FrameLayout) view.findViewById(R.id.animation_layout);
+
         mAnimationStarImageView =  (ImageView) view.findViewById(R.id.image_view_star);
 
         mAnimationTextView =  (TextView) view.findViewById(R.id.confirmation_text_view);
-        mFloatingButton =  (FloatingActionButton) view.findViewById(R.id.like_fab);
-        mAnimationContainer = (FrameLayout) view.findViewById(R.id.animation_container);
-        mDataContainer = (FrameLayout) view.findViewById(R.id.data_container);
 
         if (hasAnimationContainer()) {
             mAnimationStarImageView.setVisibility(View.GONE);
@@ -85,62 +98,33 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
 
         initiaizeStartAnimation();
 
-        if (mFloatingButton != null && hasAnimationContainer()) {
-            mFloatingButton.setOnClickListener(this);
+        if (hasFAB() && hasAnimationContainer()) {
+            mFloatingButton.setVisibility(View.VISIBLE);
+            mFloatingButton.setOnClickListener(mOnClickListener);
         }
+
+        super.onViewCreated(view, savedInstanceState);
+
     }
 
+    final private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            onFabClicked();
+        }
+    };
 
-    @Override
-    public void onClick(View v) {
+    public abstract void onFabClicked();
 
-        startAnimationX = UiUtils.centerX(mFloatingButton);
-        startAnimationY = UiUtils.centerY(mFloatingButton);
-
-            endAnimationX = mAnimationContainer.getRight() / 2;
-            endAnimationY = (int) (mAnimationContainer.getBottom() * 0.8f);
-
-            System.out.println("Positions: " + startAnimationX + ", " + startAnimationY + ", " + endAnimationX + ", " + endAnimationY);
-
-            //disable recycler nested scrolling in order to FAB return to the starting position
-            getRecyclerView().setNestedScrollingEnabled(false);
-
-            if (endAnimationX == 0 && endAnimationY == 0) {
-                endAnimationX = (int) UiUtils.centerX(mFloatingButton);
-                endAnimationY = (int) UiUtils.centerY(mFloatingButton);
-                startCircleAnimation();
-            } else {
-                ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(mFloatingButton, endAnimationX,
-                        endAnimationY, 90, Side.RIGHT)
-                        .setDuration(500);
-
-                arcAnimator.addListener(new SimpleListener() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        startCircleAnimation();
-                    }
-                });
-                arcAnimator.start();
-            }
-    }
-
-    private void initiaizeStartAnimation() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+   private void initiaizeStartAnimation() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && MMoviesPreferences.areAnimationsEnabled(getContext())) {
             configureEnterTransition();
-        } else {
-            configureEnterAnimation();
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     protected abstract void configureEnterTransition();
 
-    protected void configureEnterAnimation() {
-        setUpVisibility();
-        initializePresenter();
-    }
-
-    private void startCircleAnimation() {
+    protected void startCircleAnimation() {
         mFloatingButton.setVisibility(View.INVISIBLE);
         mDataContainer.setVisibility(View.GONE);
         mAnimationContainer.setVisibility(View.VISIBLE);
@@ -155,7 +139,7 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
                         finalRadius);
                 animator.setDuration(500);
                 animator.setInterpolator(ACCELERATE);
-                animator.addListener(new SimpleListener() {
+                animator.addListener(new SimpleAnimationListener() {
                     @Override
                     public void onAnimationEnd() {
                         animateConfirmationView();
@@ -193,7 +177,7 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
         SupportAnimator animator = ViewAnimationUtils.createCircularReveal(mAnimationLayout, endAnimationX, endAnimationY,
                 finalRadius, 10);
         animator.setDuration(500);
-        animator.addListener(new SimpleListener() {
+        animator.addListener(new SimpleAnimationListener() {
             @Override
             public void onAnimationEnd() {
                 mAnimationLayout.setVisibility(View.GONE);
@@ -213,23 +197,23 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
                     startAnimationY, 90, Side.RIGHT)
                     .setDuration(500);
 
-            arcAnimator.addListener(new SimpleListener() {
+            arcAnimator.addListener(new SimpleAnimationListener() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     //enable scrolling when FAB returned to starting position
-                    getRecyclerView().setNestedScrollingEnabled(true);
+                    getRecyclerView().mRecyclerView.setNestedScrollingEnabled(true);
                 }
             });
             arcAnimator.start();
         } else {
-            getRecyclerView().setNestedScrollingEnabled(true);
+            getRecyclerView().mRecyclerView.setNestedScrollingEnabled(true);
         }
     }
 
     private void raiseUpAnimation(){
         startAnimationPairBottom = mAnimationLayout.getBottom();
         ObjectAnimator objectAnimator = ObjectAnimator.ofInt(mAnimationLayout, "bottom", mAnimationLayout.getBottom(), mAnimationLayout.getTop() + dpToPx(100));
-        objectAnimator.addListener(new SimpleListener() {
+        objectAnimator.addListener(new SimpleAnimationListener() {
             @Override
             public void onAnimationEnd(Animator animation) {
 
@@ -241,7 +225,7 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
 
     private void comeDownAnimation(){
         ObjectAnimator objectAnimator = ObjectAnimator.ofInt(mAnimationLayout, "bottom", mAnimationLayout.getBottom(), startAnimationPairBottom);
-        objectAnimator.addListener(new SimpleListener() {
+        objectAnimator.addListener(new SimpleAnimationListener() {
             @Override
             public void onAnimationEnd(Animator animator) {
             }
@@ -269,7 +253,7 @@ public abstract class BaseAnimationFragment extends BaseDetailFragment implement
 
 
 
-    private static class SimpleListener implements SupportAnimator.AnimatorListener, ObjectAnimator.AnimatorListener{
+    public static class SimpleAnimationListener implements SupportAnimator.AnimatorListener, ObjectAnimator.AnimatorListener{
 
         @Override
         public void onAnimationStart() {

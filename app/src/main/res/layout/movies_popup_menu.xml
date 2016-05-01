@@ -24,6 +24,6 @@
     <Button
         android:id="@+id/button_cancel"
         style="@style/ContextMenuButton"
-        android:text="@string/cancel" />
+        android:text="@string/label_cancel" />
 
 </merge>

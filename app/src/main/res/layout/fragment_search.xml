@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.codetail.widget.RevealFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+
+<LinearLayout
+    android:id="@+id/search_view_container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/faded_search_background"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:visibility="invisible">
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_minor"
+        android:layout_marginLeft="@dimen/spacing_minor"
+        android:layout_marginRight="@dimen/spacing_minor"
+        android:background="?mmBackgroundColorSecondary">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="?actionBarSize"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/up_button"
+                android:layout_width="56.0dip"
+                android:layout_height="56.0dip"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/label_back"
+                android:tint="?mmSearchTextColor"
+                android:src="@drawable/ic_back"/>
+
+            <com.roodie.materialmovies.views.custom_views.MMoviesEditText
+                android:id="@+id/search_edit"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                style="@style/Widget.MMovies.TextAppearance.PrimaryText.Search"
+                android:hint="@string/search_hint"
+                android:imeOptions="actionSearch"
+                android:inputType="textNoSuggestions" />
+
+            <ImageButton
+                android:id="@+id/cancel_button"
+                android:layout_width="56.0dip"
+                android:layout_height="56.0dip"
+                android:layout_marginLeft="@dimen/spacing_major"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/label_cancel"
+                android:tint="?mmSearchTextColor"
+                android:src="@drawable/ic_action_close" />
+        </LinearLayout>
+
+        <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+            android:id="@+id/smooth_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/MaterialProgressBar"/>
+    </FrameLayout>
+
+    <com.roodie.materialmovies.views.custom_views.recyclerview.SearchRecyclerLayout
+        android:id="@+id/primary_recycler_view"
+        android:layout_marginTop="@dimen/spacing_micro"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+</io.codetail.widget.RevealFrameLayout>

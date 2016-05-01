@@ -13,7 +13,7 @@ import com.roodie.materialmovies.util.MMoviesVisitManager;
 import com.roodie.materialmovies.views.custom_views.CirclePageIndicator;
 import com.roodie.model.Display;
 
-import butterknife.Bind;
+import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -26,19 +26,19 @@ public class WelcomeActivity extends BaseActivity {
 
     private static final int WELCOME_ACTIVITY_PAGER_SIZE = 3;
 
-    @Bind({R.id.viewpager})
+    @InjectView(R.id.viewpager)
     ViewPager mViewPager;
 
-    @Bind({R.id.welcome_view_1})
+    @InjectView(R.id.welcome_view_1)
     View mWelcomeViewPage1;
 
-    @Bind({R.id.welcome_view_2})
+    @InjectView(R.id.welcome_view_2)
     View mWelcomeViewPage2;
 
-    @Bind({R.id.welcome_view_3})
+    @InjectView(R.id.welcome_view_3)
     View mWelcomeViewPage3;
 
-    @Bind({R.id.welcome_pager_dot_indicator})
+    @InjectView(R.id.welcome_pager_dot_indicator)
     CirclePageIndicator mPageIndicator;
 
 

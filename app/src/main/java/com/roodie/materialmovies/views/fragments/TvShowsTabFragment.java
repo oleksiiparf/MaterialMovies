@@ -1,74 +1,64 @@
 package com.roodie.materialmovies.views.fragments;
 
-import android.app.Activity;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.View;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.common.base.Preconditions;
-import com.roodie.materialmovies.mvp.presenters.ShowGridPresenter;
-import com.roodie.materialmovies.mvp.presenters.ShowTabPresenter;
+import com.roodie.materialmovies.MMoviesApp;
+import com.roodie.materialmovies.mvp.presenters.TabShowsPresenter;
+import com.roodie.materialmovies.mvp.views.TvShowsTabView;
+import com.roodie.materialmovies.mvp.views.UiView;
 import com.roodie.materialmovies.util.StringUtils;
-import com.roodie.materialmovies.views.MMoviesApplication;
 import com.roodie.materialmovies.views.fragments.base.BaseTabFragment;
 import com.roodie.model.Display;
 import com.roodie.model.network.NetworkError;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Roodie on 01.08.2015.
  */
 
-public class TvShowsTabFragment extends BaseTabFragment<BaseTabFragment.TabPagerAdapter> implements ShowTabPresenter.ShowsTabView {
+public class TvShowsTabFragment extends BaseTabFragment<BaseTabFragment.TabPagerAdapter> implements TvShowsTabView {
 
-    private ShowTabPresenter mPresenter;
+    @InjectPresenter
+    TabShowsPresenter mPresenter;
 
-    private ShowGridPresenter mGridPresenter;
-
-    private ShowTabs[] mTabs;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getShowTabsPresenter();
-        mGridPresenter = MMoviesApplication.from(activity.getApplicationContext()).getShowGridPresenter();
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        mPresenter.attachView(this);
-        mPresenter.initialize();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mPresenter.detachView(true);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.onResume();
-        mGridPresenter.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mGridPresenter.onPause();
-        mPresenter.onPause();
-    }
-
+    private List<ShowTabs> mTabs;
 
     @Override
     public void updateDisplayTitle(String title) {
         Display display = getDisplay();
         if (display != null) {
             display.setActionBarTitle(title);
+        }
+    }
+
+    @Override
+    protected void attachUiToPresenter() {
+        mPresenter.attachUiToPresenter(this);
+    }
+
+    @Override
+    public void updateDisplaySubtitle(String subtitle) {
+        Display display = getDisplay();
+        if (display != null) {
+            display.setActionBarSubtitle(subtitle);
+        }
+    }
+
+    @Override
+    public void setData(List<ShowTabs> data) {
+         Preconditions.checkNotNull(data, "tabs cannot be null");
+         mTabs = data;
+
+        if (getAdapter().getCount() != mTabs.size()) {
+            ArrayList<Fragment> fragments = new ArrayList<>();
+            for (int i = 0; i < mTabs.size(); i++) {
+                fragments.add(createFragmentForTab(mTabs.get(i)));
+            }
+            setFragments(fragments);
         }
     }
 
@@ -83,24 +73,14 @@ public class TvShowsTabFragment extends BaseTabFragment<BaseTabFragment.TabPager
     }
 
     @Override
-    public void showSecondaryLoadingProgress(boolean visible) {
+    public void onRefreshData(boolean visible) {
 
     }
 
     @Override
-    public String getRequestParameter() {
-        return null;
-    }
-
-    @Override
-    public MovieQueryType getQueryType() {
-        return MovieQueryType.SHOWS_TAB;
-    }
-
-    @Override
-    public boolean isModal() {
-        return false;
-    }
+    public UiView.MMoviesQueryType getQueryType() {
+         return UiView.MMoviesQueryType.SHOWS_TAB;
+     }
 
     @Override
     protected TabPagerAdapter setupAdapter() {
@@ -108,33 +88,19 @@ public class TvShowsTabFragment extends BaseTabFragment<BaseTabFragment.TabPager
     }
 
     @Override
-    public void setupTabs(ShowTabs... tabs) {
-        Preconditions.checkNotNull(tabs, "tabs cannot be null");
-        mTabs = tabs;
-
-        if (getAdapter().getCount() != tabs.length) {
-            ArrayList<Fragment> fragments = new ArrayList<>();
-            for (int i = 0; i < tabs.length; i++) {
-                fragments.add(createFragmentForTab(tabs[i]));
-            }
-            setFragments(fragments);
-        }
-    }
-
-    @Override
     protected String getTabTitle(int position) {
         if (mTabs != null) {
-            return getString(StringUtils.getShowsStringResId(mTabs[position]));
+            return getResources().getString(StringUtils.getShowsStringResId(mTabs.get(position)));
         }
         return null;
     }
 
-    private Fragment createFragmentForTab(ShowTabs tab) {
+    private Fragment createFragmentForTab(UiView.ShowTabs tab) {
         switch (tab) {
             case POPULAR:
-                return new PopularShowsFragment();
+                return Fragment.instantiate(MMoviesApp.get().getAppContext(), PopularShowsFragment.class.getName());
             case ON_THE_AIR:
-                return new OnTheAirShowsFragment();
+                return Fragment.instantiate(MMoviesApp.get().getAppContext(), OnTheAirShowsFragment.class.getName());
         }
         return null;
     }

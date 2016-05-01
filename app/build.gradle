@@ -21,15 +21,15 @@ repositories {
 }
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion '22.0.1'
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
 
     defaultConfig {
         applicationId "com.roodie.materialmovies"
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
-        versionName "0.2"
+        versionName "0.9"
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
 
@@ -50,21 +50,33 @@ android {
 
 dependencies {
     compile project(':model')
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:support-annotations:23.2.0'
+    compile 'com.android.support:recyclerview-v7:23.2.0'
+    compile 'com.android.support:design:23.2.0'
+    compile 'com.android.support:cardview-v7:23.0.+'
+    compile 'com.android.support:palette-v7:23.0.+'
+    compile 'com.android.support:gridlayout-v7:23.2.0'
 
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.2.0'
-    compile 'com.android.support:design:22.2.1'
-    compile 'com.android.support:cardview-v7:22.0.+'
-    compile 'com.android.support:palette-v7:22.0.+'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.afollestad:material-dialogs:0.7.7.0'
-    compile 'com.github.chrisbanes.photoview:library:1.2.+'
     compile 'com.github.asyl.animation:arcanimator:1.0.0'
     compile 'com.github.ozodrukh:CircularReveal:1.0.4@aar'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.github.castorflex.smoothprogressbar:library:1.1.0'
+    compile 'com.github.castorflex.smoothprogressbar:library-circular:1.1.0'
+    compile 'com.github.chrisbanes.photoview:library:1.2.+'
 
+    compile 'com.arello-mobile:moxy:0.3.3'
+    compile 'com.arello-mobile:moxy-android:0.3.3'
 
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.7@aar') {
+        transitive = true
+    }
+    compile 'com.jakewharton:butterknife:6.1.0'
+    compile 'frankiesardo:icepick:3.1.0'
 
+    provided 'frankiesardo:icepick-processor:3.1.0'
+
+    apt 'com.arello-mobile:moxy-compiler:0.3.3'
     apt 'com.squareup.dagger:dagger-compiler:1.2.+'
 
     compile fileTree(include: ['*.jar'], dir: 'libs')

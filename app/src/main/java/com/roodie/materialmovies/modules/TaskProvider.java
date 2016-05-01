@@ -4,6 +4,7 @@ import com.roodie.materialmovies.modules.library.NetworkProvider;
 import com.roodie.materialmovies.modules.library.PersistanceProvider;
 import com.roodie.materialmovies.modules.library.StateProvider;
 import com.roodie.materialmovies.modules.library.UtilProvider;
+import com.roodie.model.tasks.ClearWatchedRunnable;
 import com.roodie.model.tasks.FetchConfigurationRunnable;
 import com.roodie.model.tasks.FetchDetailMovieRunnable;
 import com.roodie.model.tasks.FetchDetailTvSeasonRunnable;
@@ -20,10 +21,13 @@ import com.roodie.model.tasks.FetchPopularMoviesRunnable;
 import com.roodie.model.tasks.FetchPopularShowsRunnable;
 import com.roodie.model.tasks.FetchRelatedMoviesRunnable;
 import com.roodie.model.tasks.FetchSearchMovieRunnable;
-import com.roodie.model.tasks.FetchSearchPeopleResult;
+import com.roodie.model.tasks.FetchSearchPeopleRunnable;
 import com.roodie.model.tasks.FetchSearchShowRunnable;
 import com.roodie.model.tasks.FetchShowCreditsRunnable;
 import com.roodie.model.tasks.FetchUpcomingMoviesRunnable;
+import com.roodie.model.tasks.FetchWatchedRunnable;
+import com.roodie.model.tasks.MarkEntitySeenRunnable;
+import com.roodie.model.tasks.MarkEntityUnseenRunnable;
 
 import dagger.Module;
 
@@ -48,11 +52,15 @@ import dagger.Module;
                 FetchPopularShowsRunnable.class,
                 FetchOnTheAirShowsRunnable.class,
                 FetchSearchMovieRunnable.class,
-                FetchSearchPeopleResult.class,
+                FetchSearchPeopleRunnable.class,
                 FetchSearchShowRunnable.class,
                 FetchDetailTvShowRunnable.class,
                 FetchDetailTvSeasonRunnable.class,
-                FetchShowCreditsRunnable.class
+                FetchShowCreditsRunnable.class,
+                FetchWatchedRunnable.class,
+                MarkEntitySeenRunnable.class,
+                MarkEntityUnseenRunnable.class,
+                ClearWatchedRunnable.class
 
         },
         includes = {

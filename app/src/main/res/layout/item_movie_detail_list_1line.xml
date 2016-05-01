@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/spacing_major">
 
     <com.roodie.materialmovies.views.custom_views.MMoviesImageView
-        android:id="@+id/poster"
+        android:id="@+id/imageview_poster"
         android:layout_width="@dimen/movie_list_small_image_width"
         android:layout_height="@dimen/movie_list_small_image_width"
         android:layout_gravity="center_vertical" />

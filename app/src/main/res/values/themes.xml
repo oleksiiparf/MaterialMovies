@@ -31,7 +31,7 @@
         <item name="mmRoundedBackgroundMiddle">@drawable/rounded_background_middle_day</item>
         <item name="mmRoundedBackgroundBottom">@drawable/rounded_background_bottom_day</item>
         <item name="mmIconTintColorPrimary">@color/mm_gray_1</item>
-        <item name="mmButtonTextColorBorderlessWhite">@color/white</item>
+        <item name="mmButtonTextColorBorderlessWhite">@color/mm_white</item>
         <item name="mmButtonTextColorBorderlessGreen">@color/button_selector_borderless_day_green</item>
         <item name="mmButtonTextColorBorderlessRed">@color/button_selector_borderless_day_red</item>
         <item name="mmRadioButtonDrawable">@drawable/radio_button_background_day</item>
@@ -52,6 +52,11 @@
         <item name="mmColorSeparator">@color/separator</item>
         <item name="mmColorDivider">@color/divider</item>
         <item name="mmColorBackgroundDim">@color/background_dim_inverse</item>
+        <item name="mmImageViewTogglerOff">@drawable/done_24_8_light_grey</item>
+        <item name="mmImageViewTogglerOn">@drawable/done_24_8_white</item>
+        <item name="mmSearchTintColor">@color/grey_12_5</item>
+        <item name="mmSearchTextColor">@color/grey_12_5</item>
+
     </style>
 
     <style name="Theme.MMovies.Dark" parent="Base.Theme.MMovies">
@@ -70,7 +75,7 @@
         <item name="mmRoundedBackgroundMiddle">@drawable/rounded_background_middle_night</item>
         <item name="mmRoundedBackgroundBottom">@drawable/rounded_background_bottom_night</item>
         <item name="mmIconTintColorPrimary">@color/mm_gray_2</item>
-        <item name="mmButtonTextColorBorderlessWhite">@color/white</item>
+        <item name="mmButtonTextColorBorderlessWhite">@color/mm_white</item>
         <item name="mmButtonTextColorBorderlessGreen">@color/button_selector_borderless_night_green</item>
         <item name="mmButtonTextColorBorderlessRed">@color/button_selector_borderless_night_red</item>
         <item name="mmRadioButtonDrawable">@drawable/radio_button_background_night</item>
@@ -88,10 +93,14 @@
         <item name="colorAccent">@color/mm_green</item>
         <item name="mmDialogBackgroundColor">@color/material_dialog_dark</item>
         <item name="mmCardBackground">@drawable/abc_dialog_material_background_dark </item>
-        <item name="drawableDropdown">@drawable/ic_action_contextmenu</item>
+        <item name="drawableDropdown">@drawable/ic_menu_moreoverflow_mtrl_alpha</item>
         <item name="mmColorSeparator">@color/separator_inverse</item>
         <item name="mmColorDivider">@color/divider_inverse</item>
         <item name="mmColorBackgroundDim">@color/background_dim_inverse</item>
+        <item name="mmImageViewTogglerOff">@drawable/done_24_8_white</item>
+        <item name="mmImageViewTogglerOn">@drawable/done_24_8_white</item>
+        <item name="mmSearchTintColor">@color/mm_white_40</item>
+        <item name="mmSearchTextColor">@color/mm_white_40</item>
 
     </style>
 

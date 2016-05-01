@@ -4,12 +4,14 @@ import android.content.res.AssetManager;
 
 import com.roodie.materialmovies.modules.library.ContextProvider;
 import com.roodie.materialmovies.modules.library.UtilProvider;
-import com.roodie.materialmovies.util.TypefaceManager;
+import com.roodie.materialmovies.util.FontManager;
 import com.roodie.materialmovies.views.custom_views.AutofitTextView;
 import com.roodie.materialmovies.views.custom_views.ExpandableTextView;
 import com.roodie.materialmovies.views.custom_views.MMoviesButton;
 import com.roodie.materialmovies.views.custom_views.MMoviesEditText;
 import com.roodie.materialmovies.views.custom_views.MMoviesTextView;
+import com.roodie.materialmovies.views.custom_views.MMoviesToolbar;
+import com.roodie.materialmovies.views.custom_views.MMoviesToolbarLayout;
 
 import javax.inject.Singleton;
 
@@ -30,15 +32,17 @@ import dagger.Provides;
                 AutofitTextView.class,
                 ExpandableTextView.class,
                 MMoviesEditText.class,
-                MMoviesButton.class
+                MMoviesButton.class,
+                MMoviesToolbar.class,
+                MMoviesToolbarLayout.class
         }
 )
 
 public class ViewUtilProvider {
 
         @Provides @Singleton
-        public TypefaceManager provideTypefaceManager(AssetManager assetManager) {
-                return new TypefaceManager(assetManager);
+        public FontManager provideFontManager(AssetManager assetManager) {
+                return new FontManager(assetManager);
         }
 
 }

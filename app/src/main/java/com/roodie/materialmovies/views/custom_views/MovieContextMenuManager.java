@@ -69,7 +69,7 @@ import com.roodie.materialmovies.util.UiUtils;
         private void setupContextMenuInitialPosition(View openingView) {
             final int[] openingViewLocation = new int[2];
             openingView.getLocationOnScreen(openingViewLocation);
-            int additionalBottomMargin = UiUtils.dpToPx(16);
+            int additionalBottomMargin = UiUtils.getInstance().dpToPx(16);
             contextMenuView.setTranslationX(openingViewLocation[0] - contextMenuView.getWidth() / 3);
             contextMenuView.setTranslationY(openingViewLocation[1] - contextMenuView.getHeight() - additionalBottomMargin);
         }

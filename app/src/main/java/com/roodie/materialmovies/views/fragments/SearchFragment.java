@@ -1,86 +1,91 @@
+
 package com.roodie.materialmovies.views.fragments;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.ResultReceiver;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.Theme;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.SearchPresenter;
-import com.roodie.materialmovies.util.AnimationUtils;
+import com.roodie.materialmovies.mvp.views.SearchView;
+import com.roodie.materialmovies.mvp.views.UiView;
+import com.roodie.materialmovies.util.ImeUtils;
 import com.roodie.materialmovies.util.UiUtils;
-import com.roodie.materialmovies.views.MMoviesApplication;
-import com.roodie.materialmovies.views.activities.SettingsActivity;
+import com.roodie.materialmovies.views.custom_views.MMoviesEditText;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
-import com.roodie.materialmovies.views.custom_views.TvShowDialogView;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
+import com.roodie.materialmovies.views.custom_views.recyclerview.SearchRecyclerLayout;
+import com.roodie.materialmovies.views.fragments.base.BaseAnimationFragment;
 import com.roodie.materialmovies.views.fragments.base.BaseDetailFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.ShowWrapper;
-import com.roodie.model.network.NetworkError;
 import com.roodie.model.state.ApplicationState;
 import com.roodie.model.state.MoviesState;
+import com.roodie.model.util.FileLog;
 import com.roodie.model.util.MoviesCollections;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Roodie on 20.08.2015.
- */
+import butterknife.InjectView;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+import io.codetail.animation.SupportAnimator;
+import io.codetail.animation.ViewAnimationUtils;
 
-public class SearchFragment extends BaseDetailFragment implements SearchPresenter.SearchView {
+
+public class SearchFragment extends BaseDetailFragment<ApplicationState.SearchResult, SearchRecyclerLayout> implements SearchView {
+
+    @InjectPresenter
+    SearchPresenter mPresenter;
 
     private static final String LOG_TAG = SearchFragment.class.getSimpleName();
 
     private static final String KEY_SEARCH_RESULT_STATE = "search_result_state";
 
+    static final AccelerateInterpolator ACCELERATE = new AccelerateInterpolator();
+    static final DecelerateInterpolator DECELERATE = new DecelerateInterpolator();
+
     private static final AutoCompleteTextViewReflector HIDDEN_METHOD_INVOKER
             = new AutoCompleteTextViewReflector();
 
-    private SearchPresenter mPresenter;
-
-    private boolean hasPresenter() {
-        return mPresenter != null;
-    }
-
-
     private ApplicationState.SearchResult mSearchResult;
 
-    private EditText mEditText;
-    private ImageButton mUpButton;
-    private ImageButton mCancelButton;
+    @InjectView(R.id.cancel_button)
+    View mCancelButton;
 
-    private InputMethodManager mInputMethodManager;
-    private View mSearchView;
+    @InjectView(R.id.smooth_progress_bar)
+    SmoothProgressBar mProgressBar;
+
+    @InjectView(R.id.search_edit)
+    MMoviesEditText mSearchEdit;
+
+    @InjectView(R.id.search_view_container)
+    View mSearchViewContainer;
+
+    @InjectView(R.id.up_button)
+    View mUpButton;
+
     private String mSearchQuery;
 
     private SearchAdapter mAdapter;
@@ -88,12 +93,35 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
     private PeopleAdapter mPeopleAdapter;
     private TvShowAdapter mShowsAdapter;
 
-    private final Handler mHandler = new Handler();
+    private final View.OnClickListener onCancelClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            cancelSearch();
+        }
+    };
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getSearchPresenter();
+    private final View.OnClickListener onBackClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mSearchResult != null && !mSearchResult.query.isEmpty()) {
+                setQuery(null);
+                if (mPresenter != null) {
+                    mPresenter.clearSearch(SearchFragment.this);
+                }
+            } else {
+                cancelSearch();
+            }
+        }
+    };
+
+
+    public static SearchFragment newInstance() {
+
+        Bundle bundle = new Bundle();
+        SearchFragment fragment = new SearchFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
     }
 
     @Override
@@ -110,142 +138,184 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
         }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "On create view");
-        return inflater.inflate(R.layout.fragment_search_list, container, false);
+    protected int getLayoutRes() {
+        return R.layout.fragment_search;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "On view created");
-        super.onViewCreated(view, savedInstanceState);
-        mPresenter.attachView(this);
-        mPresenter.initialize();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mPresenter.detachView(true);
-    }
-
-    @Override
-    public void onResume() {
-        Log.d(LOG_TAG, "On resume");
-
-        Toolbar toolbar = getToolbar();
-        if (toolbar != null) {
-            configureToolbar(toolbar);
-        }
-        mPresenter.onResume();
-        super.onResume();
+    protected void attachUiToPresenter() {
+        mPresenter.onUiAttached(this, getQueryType(), null);
     }
 
     @Override
     public void onPause() {
-        Log.d(LOG_TAG, "On pause");
-
-        getToolbar().setVisibility(View.GONE);
-        ((ViewGroup)mSearchView.getParent()).removeView(mSearchView);
-
-        mPresenter.onPause();
         super.onPause();
+        if (mSearchEdit != null) {
+            mSearchEdit.clearFocus();
+        }
     }
 
     @Override
-    public void onUiAttached() {
-    }
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        Log.d("lifecycle", "Search: On view created");
 
-    private void configureToolbar(@NonNull Toolbar toolbar) {
+        super.onViewCreated(view, savedInstanceState);
 
-        toolbar.setVisibility(View.GONE);
-        ViewGroup localViewGroup = (ViewGroup) toolbar.getParent();
-        int index = localViewGroup.indexOfChild(toolbar);
-        if (mSearchView == null) {
-            mSearchView = LayoutInflater.from(getBaseActivity()).inflate(R.layout.include_searchview, localViewGroup, false);
-        }
-        localViewGroup.addView(mSearchView, index);
-
-        mEditText = (EditText) mSearchView.findViewById(R.id.search_edt);
-        mUpButton = (ImageButton) mSearchView.findViewById(R.id.up_button);
-        mCancelButton = (ImageButton) mSearchView.findViewById(R.id.cancel_btn);
-
-        UiUtils.attachToastPopup(getBaseActivity(), mUpButton);
-        UiUtils.attachToastPopup(getActivity(), mCancelButton);
+        this.mUpButton.setOnClickListener(this.onCancelClicked);
+        view.setOnClickListener(this.onCancelClicked);
+        this.mCancelButton.setOnClickListener(this.onBackClicked);
 
 
-        mEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity().getApplicationContext(), "edit text clicked", Toast.LENGTH_LONG).show();
-            }
-        });
+        this.mSearchViewContainer.setVisibility(View.INVISIBLE);
 
-        //mInputMethodManager = ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
-        mEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    Toast.makeText(getActivity().getApplicationContext(), "got the focus", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "lost the focus", Toast.LENGTH_LONG).show();
 
-                }
-            }
-        });
+        UiUtils.getInstance().attachToastPopup(getBaseActivity(), this.mUpButton);
+        UiUtils.getInstance().attachToastPopup(getActivity(), this.mCancelButton);
 
-        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+        getRecyclerView().setVisibility(View.INVISIBLE);
+
+        this.mSearchEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (hasPresenter()) {
-                        mPresenter.search(mEditText.getText().toString());
+                    if (mPresenter != null) {
+                        mPresenter.search(SearchFragment.this, getQueryType(), mSearchEdit.getText().toString());
                     }
+
+                    //Clear focus
+                    return true;
                 }
                 return false;
             }
         });
 
 
-        mUpButton.setOnClickListener(new View.OnClickListener() {
+        this.mSearchEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity().getApplicationContext(), "UpButton", Toast.LENGTH_LONG).show();
-                //finish();
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    //showKeyboard
+                    ImeUtils.showIme(mSearchEdit);
+                } else {
+                    //hideKeyboard
+                    ImeUtils.hideIme(mSearchEdit);
 
-            }
-        });
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "CancelButton", Toast.LENGTH_LONG).show();
-
-                 setQuery(null);
-                  if (hasPresenter()) {
-                    mPresenter.clearSearch();
-                }
-                if (mSearchQuery == null) {
-                  //  finish();
                 }
             }
         });
-        mHandler.post(mShowImeRunnable);
-    }
 
-    private void finish() {
-        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
-    }
+        this.mSearchViewContainer.post(new Runnable() {
+            @Override
+            public void run() {
+                float finalRadius = Math.max(mSearchViewContainer.getWidth(), mSearchViewContainer.getHeight()) * 1.5f;
 
+                SupportAnimator animator = ViewAnimationUtils.createCircularReveal(mSearchViewContainer, mSearchViewContainer.getRight(), mSearchViewContainer.getTop(), mCancelButton.getWidth() / 2f,
+                        finalRadius);
+                animator.setDuration(500);
+                animator.setInterpolator(ACCELERATE);
+                animator.addListener(new BaseAnimationFragment.SimpleAnimationListener() {
+                    @Override
+                    public void onAnimationEnd() {
+                        FileLog.d("search", "On animation ended");
+                        mSearchEdit.setFocusableInTouchMode(true);
+                        mSearchEdit.requestFocus();
+                        ImeUtils.showIme(mSearchEdit);
+                    }
+
+                    @Override
+                    public void onAnimationStart() {
+                        mSearchViewContainer.setVisibility(View.VISIBLE);
+                    }
+                });
+                animator.start();
+            }
+        });
+
+    }
 
     private void setQuery(String query) {
-        if (mSearchView != null) {
-            mEditText.setText(query);
+        if (mSearchEdit != null) {
+            this.mSearchEdit.setText(query);
             mSearchQuery = null;
         } else {
             mSearchQuery = query;
         }
+    }
+
+
+    public boolean cancelSearch() {
+        boolean close = false;
+        if (this.mSearchViewContainer.getVisibility() == View.VISIBLE) {
+            setQuery(null);
+            if (mPresenter != null) {
+                mPresenter.clearSearch(this);
+            }
+
+            this.mSearchViewContainer.post(new Runnable() {
+                @Override
+                public void run() {
+                    float startRadius = Math.max(mSearchViewContainer.getWidth(), mSearchViewContainer.getHeight()) * 1.5f;
+
+                    SupportAnimator animator = ViewAnimationUtils.createCircularReveal(mSearchViewContainer, mSearchViewContainer.getRight(), mSearchViewContainer.getTop(),
+                            startRadius, 10);
+                    animator.setDuration(500);
+                    animator.addListener(new BaseAnimationFragment.SimpleAnimationListener() {
+                        @Override
+                        public void onAnimationEnd() {
+                            mSearchViewContainer.setVisibility(View.INVISIBLE);
+                            finish();
+                        }
+
+                        @Override
+                        public void onAnimationStart() {
+                            mSearchViewContainer.setOnClickListener(null);
+                            ImeUtils.hideIme(mSearchEdit);
+                        }
+                    });
+                    animator.setInterpolator(DECELERATE);
+                    animator.start();
+                }
+            });
+            close = true;
+        }
+        return close;
+    }
+
+
+    @Override
+    public void showLoadingProgress(boolean visible) {
+        if (visible) {
+            this.mProgressBar.setVisibility(View.VISIBLE);
+        } else {
+            this.mProgressBar.setVisibility(View.GONE);
+        }
+
+    }
+
+    @Override
+    public void onScrolledToBottom() {
+        //NTD
+    }
+
+    @Override
+    public void onRefreshData(boolean visible) {
+        //NTD
+    }
+
+    @Override
+    public void updateDisplayTitle(String title) {
+      //NTD
+    }
+
+    @Override
+    public void updateDisplaySubtitle(String subtitle) {
+        //NTD
+    }
+
+    private void finish() {
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 
     private  SearchAdapter populateUi() {
@@ -270,7 +340,7 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
         }
 
         if (MoviesCollections.isEmpty(items)) {
-           // setEmptyText(R.string.search_empty_no_results);
+            // setEmptyText(R.string.search_empty_no_results);
         }
 
         Toast.makeText(getActivity().getApplicationContext(), "searchResult != null", Toast.LENGTH_LONG);
@@ -283,32 +353,20 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
     }
 
     @Override
-    protected void setUpVisibility() {
-
+    public UiView.MMoviesQueryType getQueryType() {
+        return UiView.MMoviesQueryType.SEARCH;
     }
 
-    @Override
-    protected void initializePresenter() {
-
-    }
 
     @Override
-    public MovieQueryType getQueryType() {
-        return MovieQueryType.SEARCH;
-    }
+    public void setData(MoviesState.SearchResult data) {
 
-    @Override
-    public boolean isModal() {
-        return false;
-    }
+        if (data != null && mSearchEdit != null) {
+            mSearchEdit.clearFocus();
+        }
+        this.mProgressBar.setVisibility(View.INVISIBLE);
 
-    /**
-     * SearchView
-     *
-     */
-    @Override
-    public void setSearchResult(MoviesState.SearchResult result) {
-        mSearchResult = result;
+        mSearchResult = data;
         setQuery(mSearchResult != null ? mSearchResult.query : null);
 
         mAdapter = populateUi();
@@ -316,59 +374,6 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
         getRecyclerView().setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void setItems(List list) {
-        //TODO
-    }
-
-    /**
-     * MovieView
-     *
-     */
-    @Override
-    public void showError(NetworkError error) {
-
-    }
-
-    @Override
-    public void showLoadingProgress(boolean visible) {
-
-    }
-
-    @Override
-    public void showSecondaryLoadingProgress(boolean visible) {
-
-    }
-
-    @Override
-    public String getRequestParameter() {
-        return null;
-    }
-
-    @Override
-    public void updateDisplayTitle(String title) {
-
-    }
-
-    public SearchPresenter getPresenter() {
-        return mPresenter;
-    }
-
-    @Override
-    public String getSubtitle() {
-        if (hasPresenter()) {
-            return getPresenter().getUiSubTitle();
-        }
-        return  null;
-    }
-
-    @Override
-    public String getTitle() {
-        if (hasPresenter()) {
-            return getPresenter().getUiTitle();
-        }
-        return  null;
-    }
 
     private static class AutoCompleteTextViewReflector {
         private Method showSoftInputUnchecked;
@@ -397,38 +402,14 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
         }
     }
 
-    private final Runnable mShowImeRunnable = new Runnable() {
-        public void run() {
-            InputMethodManager imm = (InputMethodManager)
-                    getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-
-            if (mSearchResult == null && imm != null) {
-                mEditText.requestFocus();
-                HIDDEN_METHOD_INVOKER.showSoftInputUnchecked(imm, mSearchView, 0);
-            }
-        }
-    };
-
-
     @Override
     public void showMovieDetail(MovieWrapper movie,View view){
         Preconditions.checkNotNull(movie, "movie cannot be null");
-        int[] startingLocation = new int[2];
-        view.getLocationOnScreen(startingLocation);
-        startingLocation[0] += view.getWidth() / 2;
-        startingLocation[1] += view.getHeight() / 2;
 
         Display display = getDisplay();
         if (display != null) {
             if (movie.getTmdbId() != null) {
-                display.startSearchDetailActivity(String.valueOf(movie.getTmdbId()), Display.SearchMediaType.MOVIES);
-               // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                //    System.out.println("Start by shared element");
-                //    display.startMovieDetailActivityBySharedElements(String.valueOf(movie.getTmdbId()), view, (String) view.getTag());
-               // } else {
-                //    System.out.println("Start by animation");
-                //    display.startMovieDetailActivityByAnimation(String.valueOf(movie.getTmdbId()), startingLocation);
-              //  }
+                    display.startMovieDetailActivity(String.valueOf(movie.getTmdbId()), null);
             }
         }
     }
@@ -444,83 +425,21 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
         Display display = getDisplay();
         if (display != null) {
-           // display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), startingLocation);
-            display.startSearchDetailActivity(String.valueOf(person.getTmdbId()), Display.SearchMediaType.PEOPLE);
-
+            //TODO
+            display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), null);
         }
-
     }
 
     @Override
-    public void showTvShowDetail(ShowWrapper show, View view) {
-        Preconditions.checkNotNull(show, "show cannot be null");
-        Preconditions.checkNotNull(show.getTmdbId(), "show id cannot be null");
-
-        int[] startingLocation = new int[2];
-        view.getLocationOnScreen(startingLocation);
-        startingLocation[0] += view.getWidth() / 2;
+    public void showTvShowDetail(ShowWrapper tvShow, View view) {
+        Preconditions.checkNotNull(tvShow, "tv cannot be null");
 
         Display display = getDisplay();
         if (display != null) {
-            // display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), startingLocation);
-            display.startSearchDetailActivity(String.valueOf(show.getTmdbId()), Display.SearchMediaType.SHOWS);
+            if (tvShow.getTmdbId() != null) {
+                display.startTvDetailActivity(String.valueOf(tvShow.getTmdbId()), null);
+            }
         }
-    }
-
-    @Override
-    public void showTvShowDialog(final ShowWrapper tvShow) {
-
-        // View localView = View.inflate(getActivity())
-        final TvShowDialogView dialogView = new TvShowDialogView(getActivity());
-
-
-        MaterialDialog localMaterialDialog = new MaterialDialog.Builder(getActivity())
-                .title(tvShow.getTitle())
-                .autoDismiss(false)
-                .customView(dialogView, true)
-                .theme(SettingsActivity.THEME == R.style.Theme_MMovies_Light ? Theme.LIGHT : Theme.DARK)
-                .negativeText(getActivity().getString(R.string.close_dialog_window)).callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            AnimationUtils.hideImageCircular(dialogView, dialog);
-                        }
-                    }
-                })
-                .build();
-
-        localMaterialDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            public void onShow(DialogInterface paramDialogInterface) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    AnimationUtils.revealImageCircular(dialogView);
-                    return;
-                }
-                dialogView.setVisibility(View.VISIBLE);
-            }
-        });
-        localMaterialDialog.show();
-
-        dialogView.setSummary(tvShow.getOverview());
-        dialogView.getCoverImageView().loadPoster(tvShow);
-        dialogView.setYear(String.valueOf(tvShow.getFirstAirDate()));
-        dialogView.setRating(tvShow.getAverageRatingPercent() + "%");
-        dialogView.getLikeButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        dialogView.getShareButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getDisplay() != null) {
-                    getDisplay().shareTvShow(tvShow.getTmdbId(), tvShow.getTitle());
-                }
-            }
-        });
-
-
     }
 
     private enum SearchCategoryItems {
@@ -581,7 +500,14 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
             cardLayout.setTitle(R.string.movies_title);
 
-            final View.OnClickListener seeMoreClickListener = new OnSearchItemClickListener(Display.SearchMediaType.MOVIES);
+            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getDisplay() != null) {
+                        getDisplay().showSearchMoviesFragment();
+                    }
+                }
+            };
 
             final ViewRecycler viewRecycler = new ViewRecycler(holder.layout);
             viewRecycler.recycleViews();
@@ -644,8 +570,14 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
             cardLayout.setTitle(R.string.people_title);
 
-            final View.OnClickListener seeMoreClickListener = new OnSearchItemClickListener(Display.SearchMediaType.PEOPLE);
-
+            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getDisplay() != null) {
+                        getDisplay().showSearchPeopleFragment();
+                    }
+                }
+            };
             final ViewRecycler viewRecycler = new ViewRecycler(holder.layout);
             viewRecycler.recycleViews();
 
@@ -709,8 +641,14 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
             cardLayout.setTitle(R.string.shows_title);
 
-            final View.OnClickListener seeMoreClickListener = new OnSearchItemClickListener(Display.SearchMediaType.SHOWS);
-
+            final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getDisplay() != null) {
+                        getDisplay().showSearchTvShowsFragment();
+                    }
+                }
+            };
             final ViewRecycler viewRecycler = new ViewRecycler(holder.layout);
             viewRecycler.recycleViews();
 
@@ -790,7 +728,7 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
             final TextView title = (TextView) view.findViewById(R.id.title);
             final MMoviesImageView imageView =
-                    (MMoviesImageView) view.findViewById(R.id.poster);
+                    (MMoviesImageView) view.findViewById(R.id.imageview_poster);
 
             if (item.getYear() > 0) {
                 title.setText(getString(R.string.movie_title_year,item.getTitle(), item.getYear()));
@@ -809,7 +747,12 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
             });
 
             view.setTag(mImageUrl);
-            view.setOnClickListener(new OnSearchItemClickListener(item.getTmdbId(), Display.SearchMediaType.MOVIES, imageView));
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showMovieDetail(item, imageView);
+                }
+            });
 
             return view;
         }
@@ -860,7 +803,7 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
             final TextView title = (TextView) view.findViewById(R.id.title);
             final MMoviesImageView imageView =
-                    (MMoviesImageView) view.findViewById(R.id.poster);
+                    (MMoviesImageView) view.findViewById(R.id.imageview_poster);
 
             if (!TextUtils.isEmpty(item.getName()) ) {
                 title.setText(item.getName());
@@ -879,9 +822,12 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
             });
 
             view.setTag(mImageUrl);
-            view.setOnClickListener(new OnSearchItemClickListener(item.getTmdbId(), Display.SearchMediaType.PEOPLE, imageView));
-
-
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPersonDetail(item, imageView);
+                }
+            });
 
             return view;
         }
@@ -932,16 +878,21 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
 
             final TextView title = (TextView) view.findViewById(R.id.title);
             final MMoviesImageView imageView =
-                    (MMoviesImageView) view.findViewById(R.id.poster);
+                    (MMoviesImageView) view.findViewById(R.id.imageview_poster);
 
             if (!TextUtils.isEmpty(item.getTitle()) ) {
-                title.setText(getString(R.string.movie_title_year, item.getTitle(), item.getFirstAirDate()));
+                title.setText(getString(R.string.movie_title_year, item.getTitle(), item.getLastAirTime()));
             }
 
             imageView.loadPoster(item);
 
             view.setTag(item);
-            view.setOnClickListener(new OnSearchItemClickListener(item.getTmdbId(), Display.SearchMediaType.PEOPLE, imageView));
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   showTvShowDetail(item, imageView);
+                }
+            });
 
             return view;
         }
@@ -970,36 +921,5 @@ public class SearchFragment extends BaseDetailFragment implements SearchPresente
             mShowsAdapter = new TvShowAdapter(LayoutInflater.from(getActivity()));
         }
         return mShowsAdapter;
-    }
-
-    public  class OnSearchItemClickListener implements View.OnClickListener {
-
-        private final int mItemTmdbId;
-        private final Display.SearchMediaType queryType;
-        private final View view;
-
-        public OnSearchItemClickListener(int tmdbId, Display.SearchMediaType queryType, View view) {
-            this.mItemTmdbId = tmdbId;
-            this.queryType = queryType;
-            this.view = view;
-        }
-
-        public OnSearchItemClickListener(Display.SearchMediaType queryType) {
-            this(-1, queryType, null);
-        }
-
-        @Override
-        public void onClick(View v) {
-           // int[] startingLocation = new int[2];
-           // view.getLocationOnScreen(startingLocation);
-           // startingLocation[0] += view.getWidth() / 2;
-           // startingLocation[1] += view.getHeight() / 2;
-
-            Display display = getDisplay();
-            if (display != null) {
-                    display.startSearchDetailActivity(String.valueOf(mItemTmdbId), queryType);
-
-            }
-        }
     }
 }

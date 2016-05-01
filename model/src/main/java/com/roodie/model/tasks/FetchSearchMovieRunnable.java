@@ -41,7 +41,7 @@ public class FetchSearchMovieRunnable extends BasePaginatedMovieRunnable {
         MoviesState.SearchResult searchResult = mState.getSearchResult();
         if (searchResult != null && Objects.equal(mQuery, searchResult.query)) {
             searchResult.movies = result;
-            mState.setSearchResult(searchResult);
+            mState.setSearchResult(getCallingId(), searchResult);
         }
     }
 

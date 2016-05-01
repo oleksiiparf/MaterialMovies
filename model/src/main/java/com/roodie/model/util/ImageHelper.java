@@ -88,8 +88,8 @@ public class ImageHelper {
     public static String getFanartUrl(final MovieWrapper movie, final int width, final int height) {
         String url = null;
 
-        if (!TextUtils.isEmpty(movie.getTmdbBackdropUrl())) {
-            url = buildTmdbBackdropUrl(movie.getTmdbBackdropUrl(), width, RESIZE_ALL);
+        if (!TextUtils.isEmpty(movie.getBackdropUrl())) {
+            url = buildTmdbBackdropUrl(movie.getBackdropUrl(), width, RESIZE_ALL);
         }
 
         Verify.verifyNotNull(url);
@@ -131,7 +131,7 @@ public class ImageHelper {
     }
 
     public static String getResizedUrl(String url, int width, int height) {
-        StringBuffer sb = new StringBuffer("https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy");
+        StringBuilder sb = new StringBuilder("https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy");
         sb.append("?container=focus");
         sb.append("&resize_w=").append(width);
         sb.append("&resize_h=").append(height);

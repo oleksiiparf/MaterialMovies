@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/not_available_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:background="?android:windowBackground"
+        android:gravity="center"
+        android:paddingLeft="@dimen/offline_placeholder_padding"
+        android:paddingRight="@dimen/offline_placeholder_padding"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:scaleType="center"
+            android:src="@drawable/cat_placeholder_offline" />
+
+        <TextView
+            android:id="@+id/title_not_available"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/icon"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:paddingTop="20.0dip"
+            android:textColor="@color/txt_offline_placeholder_title"
+            android:textSize="@dimen/offline_placeholder_text_size_title"
+            android:text="@string/error_no_connection"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/body_not_available"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_not_available"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:paddingTop="20.0dip"
+            android:textColor="@color/txt_offline_placeholder_body"
+            android:textSize="@dimen/offline_placeholder_text_size_body"
+            android:text="@string/error_no_connection_body"/>
+    </RelativeLayout>
+</merge>

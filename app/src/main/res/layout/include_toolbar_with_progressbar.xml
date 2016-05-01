@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar_wrapper"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="?colorPrimary">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.MMovies.Toolbar"
+        android:layout_width="fill_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:fitsSystemWindows="true" />
+
+    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+        android:id="@+id/toolbar_progress_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:spb_color="@color/mm_white_1"
+        app:spb_interpolator="spb_interpolator_accelerate"
+        app:spb_mirror_mode="true"
+        app:spb_progressiveStart_activated="true"
+        app:spb_progressiveStart_speed="2.0"
+        app:spb_sections_count="2"
+        app:spb_speed="1.7"
+        app:spb_stroke_separator_length="4.0dip"
+        app:spb_stroke_width="4.0dip" />
+</FrameLayout>

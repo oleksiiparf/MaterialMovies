@@ -16,9 +16,11 @@
             android:orientation="vertical">
 
             <com.roodie.materialmovies.views.custom_views.MMoviesImageView
-                android:id="@+id/poster"
+                android:id="@+id/imageview_poster"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/movie_grid_item_height" />
+                android:layout_height="@dimen/card_item_image_size"
+                android:scaleType="fitCenter"
+                />
 
             <include layout="@layout/item_grid_3line"/>
 

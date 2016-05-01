@@ -27,6 +27,6 @@ public class FetchUpcomingMoviesRunnable extends BasePaginatedMovieRunnable {
 
     @Override
     protected void updateState(ApplicationState.MoviePaginatedResult result) {
-        mState.setUpcoming(result);
+        mState.setUpcoming(getCallingId(), result);
     }
 }

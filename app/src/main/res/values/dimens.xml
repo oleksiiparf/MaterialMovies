@@ -1,5 +1,7 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="actionBarHeightMaterial">64dp</dimen>
+
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_horizontal_margin_half">8dp</dimen>
     <dimen name="activity_horizontal_margin_double">32dp</dimen>
@@ -55,9 +57,12 @@
     <dimen name="movie_detail_login_title_textsize">26dp</dimen>
 
     <dimen name="grid_spacing">4dip</dimen>
-    <dimen name="movie_grid_item_width">180dip</dimen>
-    <dimen name="movie_grid_item_height">200dip</dimen>
 
+    <dimen name="card_item_image_size">140dip</dimen>
+    <dimen name="card_item_height">188dip</dimen>
+
+    <!--  180 200    140 188
+-->
     <dimen name="movie_grid_item_padding">3.0dip</dimen>
 
 
@@ -79,12 +84,24 @@
     <dimen name="show_card_item_icon_padding">24dp</dimen>
     <dimen name="show_card_item_icon_padding_micro">8dp</dimen>
 
-    <dimen name="show_grid_item_title_size">16dp</dimen>
-    <dimen name="show_grid_item_subtitle_size">12dp</dimen>
+    <dimen name="show_grid_item_title_size">12dp</dimen>  <!--16-->
+    <dimen name="show_grid_item_subtitle_size">10dp</dimen> <!--12-->
 
     <dimen name="show_detail_season_item_height">160dp</dimen>
     <dimen name="show_detail_season_item_width">240dp</dimen>
 
+
+    <dimen name="season_background_image_height">228.0dip</dimen>
+    <dimen name="season_fab_top_margin">26.0dip</dimen>
+    <dimen name="season_header_margin_top">26.0dip</dimen>
+    <item type="dimen" name="season_poster_margin">@dimen/spacing_major</item>
+
+
+    <dimen name="season_info_margin_top">8.0dip</dimen>
+
+
+    <dimen name="season_poster_width">110.0dip</dimen>
+    <dimen name="season_poster_height">164.0dip</dimen>
 
 
     <dimen name="movie_grid_item_font_size">18dp</dimen>
@@ -92,12 +109,17 @@
     <dimen name="movie_detail_poster_width">136.0dp</dimen>
     <dimen name="movie_detail_poster_height">203.0dp</dimen>
 
+    <!--164  110-->
+
 
     <dimen name="movie_detail_ratingbar_height">144dp</dimen>
 
     <dimen name="movie_detail_fanart_height">224dp</dimen>
 
-    <dimen name="show_detail_fanart_height">300dp</dimen>
+    <dimen name="show_detail_fanart_height">380dp</dimen>
+
+    <dimen name="show_detail_poster_height">150dp</dimen>
+    <dimen name="show_detail_poster_width">100dp</dimen>
 
     <dimen name="movie_detail_pinned_elevation">6dp</dimen>
     <dimen name="movie_detail_title_textsize">26dp</dimen>
@@ -124,7 +146,9 @@
     <dimen name="movie_list_small_image_width">48dp</dimen>
     <dimen name="movie_list_small_item_height">72dp</dimen>
 
-    <dimen name="show_list_small_item_height">72dp</dimen>
+    <dimen name="show_list_small_item_height">64dp</dimen>
+
+    <dimen name="watched_list_item_container_height">64dp</dimen>
 
     <dimen name="movie_discover_tab_height">48dp</dimen>
 
@@ -151,5 +175,49 @@
     <!-- Page indicator -->
     <dimen name="default_circle_indicator_radius">3dp</dimen>
     <dimen name="default_circle_indicator_stroke_width">0dp</dimen>
+
+    <!-- List of seasons -->
+    <dimen name="season_item_padding_top_bottom">8dp</dimen>
+    <dimen name="season_item_padding_left_right">16dp</dimen>
+
+
+    <!-- Snackbar -->
+    <dimen name="offline_bar_height">25.0dip</dimen>
+    <dimen name="offline_placeholder_padding">20.0dip</dimen>
+    <dimen name="offline_placeholder_text_size_body">15.0dip</dimen>
+    <dimen name="offline_placeholder_text_size_title">20.0dip</dimen>
+
+    <!-- Header item -->
+    <dimen name="sectionHeaderPaddingLeftRight">16.0dip</dimen>
+    <dimen name="sectionHeaderPaddingBottom">4.0dip</dimen>
+    <dimen name="sectionHeaderPaddingTop">32.0dip</dimen>
+
+    <dimen name="header_info_page_image_size">80.0dip</dimen>
+    <dimen name="header_info_page_margin">16.0dip</dimen>
+
+    <dimen name="watchableOverviewWidth">80.0dip</dimen>
+    <dimen name="watchableOverviewHeight">120.0dip</dimen>
+
+    <dimen name="typo_subhead">16.0sp</dimen>
+
+    <dimen name="show_header_shadow_height">66.0dip</dimen>
+    <dimen name="cell_margin">15.0dip</dimen>
+
+    <!-- Button -->
+    <dimen name="mm_button_border_width">2.0dip</dimen>
+    <dimen name="mm_button_corner_radius">24.0sp</dimen>
+    <dimen name="mm_button_height">48.0sp</dimen>
+    <dimen name="mm_button_padding">34.0sp</dimen>
+    <dimen name="mm_button_small_border_width">1.0dip</dimen>
+    <dimen name="mm_button_small_corner_radius">12.0sp</dimen>
+    <dimen name="mm_button_small_height">24.0sp</dimen>
+    <dimen name="mm_button_small_padding">19.0sp</dimen>
+
+    <dimen name="fragment_show_tuner_width">220.0dip</dimen>
+
+    <dimen name="text_size_subtitle_material_toolbar">16.0dip</dimen>
+    <dimen name="text_size_title_material_toolbar">20.0dip</dimen>
+
+
 
 </resources>

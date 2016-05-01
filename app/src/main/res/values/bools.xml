@@ -8,4 +8,9 @@
 
     <bool name="default_underline_indicator_fades">true</bool>
 
+    <bool name="dual_pane">false</bool>
+
+    <bool name="tablet">false</bool>
+
+
 </resources>

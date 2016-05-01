@@ -1,23 +1,22 @@
 package com.roodie.materialmovies.views.fragments;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.common.base.Preconditions;
+import com.roodie.materialmovies.MMoviesApp;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.MovieImagesPresenter;
-import com.roodie.materialmovies.views.MMoviesApplication;
+import com.roodie.materialmovies.mvp.views.MovieImagesView;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
-import com.roodie.materialmovies.views.fragments.base.BaseFragment;
+import com.roodie.materialmovies.views.fragments.base.BaseMvpFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.network.NetworkError;
@@ -29,12 +28,14 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 /**
  * Created by Roodie on 27.06.2015.
  */
-public class MovieImagesFragment extends BaseFragment implements  MovieImagesPresenter.MovieImagesView {
+public class MovieImagesFragment extends BaseMvpFragment implements MovieImagesView {
 
     private static final String MOVIE_ID = "movie_id";
     private static final String CURRENT_ITEM = "viewpager_current";
 
-    private MovieImagesPresenter mPresenter;
+    @InjectPresenter
+    MovieImagesPresenter mPresenter;
+
     List<MovieWrapper.BackdropImage> mImages;
 
     private ViewPager mViewPager;
@@ -54,15 +55,8 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getMovieImagesPresenter();
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_movie_images, container, false);
+    protected int getLayoutRes() {
+        return R.layout.fragment_movie_images;
     }
 
     @Override
@@ -79,27 +73,28 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
         if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_ITEM)) {
             mVisibleItem = savedInstanceState.getInt(CURRENT_ITEM);
         }
-        mPresenter.attachView(this);
-        mPresenter.initialize();
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mPresenter.detachView(true);
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void attachUiToPresenter() {
+        mPresenter.attachUiByParameter(this, getRequestParameter());
+        Display display = getDisplay();
+        if ( display != null) {
+            display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
+            display.setActionBarTitle(mPresenter.getUiTitle(getRequestParameter()));
+            display.setActionBarSubtitle(MMoviesApp.get().getStringFetcher().getString(R.string.images_movies));
+        }
     }
 
     @Override
     public void onPause() {
         mVisibleItem = mViewPager.getCurrentItem();
-        mPresenter.onPause();
         super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        mPresenter.onResume();
-        super.onResume();
     }
 
     @Override
@@ -109,35 +104,34 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
     }
 
     /**
-     * MovieView
+     * MvpView
      */
     @Override
-    public MovieQueryType getQueryType() {
-        return MovieQueryType.MOVIE_IMAGES;
+    public MMoviesQueryType getQueryType() {
+        return MMoviesQueryType.MOVIE_IMAGES;
     }
 
     @Override
-    public boolean isModal() {
-        return false;
-    }
-
-    /**
-     * MovieImagesView
-     */
-    @Override
-    public void setItems(List<MovieWrapper.BackdropImage> images) {
-        mImages = images;
+    public void setData(List<MovieWrapper.BackdropImage> data) {
+        mImages = data;
         if (mAdapter != null) {
-            System.out.println("Adapter != null");
             mAdapter.notifyDataSetChanged();
             mViewPager.setCurrentItem(mVisibleItem);
         }
     }
 
-
-    @Override
     public String getRequestParameter() {
         return getArguments().getString(MOVIE_ID);
+    }
+
+    @Override
+    public void showError(NetworkError error) {
+
+    }
+
+    @Override
+    public void onRefreshData(boolean visible) {
+        //NTD
     }
 
     @Override
@@ -149,18 +143,13 @@ public class MovieImagesFragment extends BaseFragment implements  MovieImagesPre
     }
 
     @Override
-    public void showSecondaryLoadingProgress(boolean visible) {
+    public void updateDisplaySubtitle(String subtitle) {
 
     }
 
     @Override
     public void showLoadingProgress(boolean visible) {
-
-    }
-
-    @Override
-    public void showError(NetworkError error) {
-
+        //NTD
     }
 
     private class ImageAdapter extends PagerAdapter {

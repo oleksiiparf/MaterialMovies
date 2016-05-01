@@ -14,7 +14,7 @@ import retrofit.RetrofitError;
 /**
  * Created by Roodie on 24.06.2015.
  */
-public class FetchRelatedMoviesRunnable extends BaseMovieRunnable<MovieResultsPage> {
+public class FetchRelatedMoviesRunnable extends BaseRunnable<MovieResultsPage> {
 
     private final int mId;
 

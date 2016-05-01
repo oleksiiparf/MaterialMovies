@@ -1,16 +1,7 @@
 package com.roodie.materialmovies.modules.library;
 
-import android.content.Context;
-
-import com.roodie.materialmovies.qualifiers.AppContext;
-import com.roodie.materialmovies.qualifiers.Database;
 import com.roodie.materialmovies.qualifiers.FilesDirectory;
 import com.roodie.materialmovies.util.AndroidFileManager;
-import com.roodie.materialmovies.util.MMovieSQLiteOpenHelper;
-import com.roodie.model.state.AsyncDatabaseHelper;
-import com.roodie.model.state.AsyncDatabaseHelperImpl;
-import com.roodie.model.state.DatabaseHelper;
-import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.FileManager;
 
 import java.io.File;
@@ -35,18 +26,6 @@ import dagger.Provides;
 )
 
 public class PersistanceProvider {
-
-    @Provides @Singleton
-    public DatabaseHelper getDatabaseHelper(@AppContext Context context) {
-        return new MMovieSQLiteOpenHelper(context);
-    }
-
-    @Provides @Singleton
-    public AsyncDatabaseHelper getAsyncDatabaseHelper(
-            @Database BackgroundExecutor executor,
-            DatabaseHelper databaseHelper) {
-        return new AsyncDatabaseHelperImpl(executor, databaseHelper);
-    }
 
     @Provides @Singleton
     public FileManager provideFileManager(@FilesDirectory File file) {

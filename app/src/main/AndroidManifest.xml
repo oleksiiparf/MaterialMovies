@@ -2,14 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.roodie.materialmovies">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".views.MMoviesApplication"
+        android:name=".MMoviesApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:installLocation="auto"
         android:theme="@style/Theme.MMovies.Light">
+
 
         <activity
             android:name=".views.activities.WelcomeActivity"
@@ -35,8 +39,6 @@
 
         </activity>
 
-        <activity android:name=".views.activities.ShowsActivity"/>
-
         <activity
             android:name=".views.activities.MovieActivity"
             android:parentActivityName=".views.activities.WatchlistActivity">
@@ -48,14 +50,14 @@
         </activity>
 
         <activity
-            android:name=".views.activities.TvActivity"
-            android:parentActivityName=".views.activities.WatchlistActivity">
+        android:name=".views.activities.TvActivity"
+        android:parentActivityName=".views.activities.WatchlistActivity">
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".views.activities.WatchlistActivity" />
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".views.activities.WatchlistActivity" />
 
-        </activity>
+    </activity>
 
         <activity
             android:name=".views.activities.PersonActivity"
@@ -65,18 +67,6 @@
                 <action android:name="mmovies.intent.action.VIEW_PERSON"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".views.activities.WatchlistActivity" />
-
-        </activity>
-
-        <activity
-            android:name=".views.activities.SearchDetailActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/app_name"
-            android:parentActivityName=".views.activities.WatchlistActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -95,9 +85,6 @@
                 android:value=".views.activities.MovieActivity" />
 
         </activity>
-
-        <activity android:name=".views.activities.TvSeasonsActivity"/>
-        <activity android:name=".views.activities.TvSeasonDetailActivity"/>
 
         <!-- Settings -->
         <activity

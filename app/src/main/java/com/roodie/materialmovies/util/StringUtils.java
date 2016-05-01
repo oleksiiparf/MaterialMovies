@@ -12,7 +12,12 @@ import com.roodie.model.network.NetworkError;
  */
 public class StringUtils {
 
-    public static int getMoviesStringResId(NetworkError error) {
+    /**
+     * Decodes the {@link com.roodie.model.network.NetworkError} and returns integer representation. May be {@code null} if
+     * error status is unknown.
+     *
+     */
+    public static int getMessageByError(NetworkError error) {
         switch (error) {
             case NOT_FOUND_TMDB:
                 return R.string.error_movie_not_found_tmdb;
@@ -20,11 +25,14 @@ public class StringUtils {
                 return R.string.error_network;
             case UNKNOWN:
                 default:
-                    return R.string.empty_unknown_error;
+                    return R.string.error_unknown;
         }
     }
 
-    public static int getMoviesStringResId(UiView.MovieTabs tab) {
+    /**
+     * Decodes the movies tab title and returns integer representation.
+     */
+    public static int getTabTitle(UiView.MovieTabs tab) {
         switch (tab) {
             case POPULAR:
                 return R.string.popular_title;
@@ -36,6 +44,9 @@ public class StringUtils {
         return 0;
     }
 
+    /**
+     * Decodes the show tab title and returns integer representation.
+     */
     public static int getShowsStringResId(UiView.ShowTabs tab) {
         switch (tab) {
             case POPULAR:
@@ -47,7 +58,7 @@ public class StringUtils {
     }
 
     /**
-     * Decodes the show status and returns integet representation. May be {@code null} if
+     * Decodes the show status and returns integer representation. May be {@code null} if
      * status is unknown.
      *
      */
@@ -72,6 +83,7 @@ public class StringUtils {
             return context.getString(R.string.tv_season_number, seasonNumber);
         }
     }
+
 
 
 }

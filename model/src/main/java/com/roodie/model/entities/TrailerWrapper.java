@@ -6,17 +6,17 @@ import com.uwetrottmann.tmdb.entities.Videos;
 /**
  * Created by Roodie on 25.06.2015.
  */
-public class TrailerWrapper extends BasicWrapper<TrailerWrapper> {
+public class TrailerWrapper {
 
     private static final String SOURCE_YOUTUBE = "youtube";
 
     private static final String TYPE_TRAILER = "trailer";
 
-    public static enum Source {
+    public enum Source {
         QUICKTIME, YOUTUBE
     }
 
-    public static enum Type {
+    public enum Type {
         TRAILER
     }
 

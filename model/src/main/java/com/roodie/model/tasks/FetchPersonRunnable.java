@@ -19,7 +19,7 @@ import retrofit.RetrofitError;
 /**
  * Created by Roodie on 24.06.2015.
  */
-public class FetchPersonRunnable extends BaseMovieRunnable<Person> {
+public class FetchPersonRunnable extends BaseRunnable<Person> {
 
     private final int mId;
 

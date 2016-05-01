@@ -6,8 +6,8 @@ import android.support.v7.widget.AppCompatEditText;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 
-import com.roodie.materialmovies.util.TypefaceManager;
-import com.roodie.materialmovies.views.MMoviesApplication;
+import com.roodie.materialmovies.MMoviesApp;
+import com.roodie.materialmovies.util.FontManager;
 
 import javax.inject.Inject;
 
@@ -17,8 +17,7 @@ import javax.inject.Inject;
 public class MMoviesEditText extends AppCompatEditText {
 
     @Inject
-    TypefaceManager mTypefaceManager;
-
+    FontManager mTypefaceManager;
 
     public MMoviesEditText(Context context) {
         this(context, null);
@@ -30,7 +29,7 @@ public class MMoviesEditText extends AppCompatEditText {
 
     public MMoviesEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        MMoviesApplication.from(context).inject(this);
+        MMoviesApp.from(context).inject(this);
 
         if (isInEditMode())
             return;
@@ -44,4 +43,6 @@ public class MMoviesEditText extends AppCompatEditText {
             setTypeface(typeface);
         }
     }
+
+
 }

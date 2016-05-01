@@ -1,12 +1,15 @@
 package com.roodie.materialmovies.mvp.views;
 
-import com.roodie.model.controllers.DrawerMenuItem;
+import com.arellomobile.mvp.GenerateViewState;
+import com.arellomobile.mvp.MvpView;
 
 /**
- * Created by Roodie on 04.07.2015.
+ * Created by Roodie on 23.02.2016.
  */
-public interface MainView extends UiView  {
 
-        void setSideMenuItems(DrawerMenuItem[] items, DrawerMenuItem selected);
+@GenerateViewState
+public interface MainView extends MvpView {
+
+    void setData(int[] data);
 
 }

@@ -24,4 +24,15 @@
 
     <integer name="default_underline_indicator_fade_length">400</integer>
 
+    <array name="loading_colors">
+        <item>@color/pressed_green</item>
+        <item>@color/primary_dark_material_dark</item>
+    </array>
+
+    <integer name="anim_duration_very_long">1500</integer>
+    <integer name="anim_duration_long">500</integer>
+    <integer name="anim_duration_medium">300</integer>
+
+    <integer name="image_background_fade_millis">1000</integer>
+
 </resources>

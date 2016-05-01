@@ -11,6 +11,10 @@ import java.util.Locale;
 /**
  * Created by Roodie on 25.06.2015.
  */
+
+/**
+ * This is a set of helper methods to get language codes information.
+ */
 public class MMoviesCountryProvider implements CountryProvider {
 
     private final Context mContext;
@@ -32,9 +36,6 @@ public class MMoviesCountryProvider implements CountryProvider {
         return  mCountryCode;
         }
 
-
-
-
     private String getTwoLetterCountryCodeFromLocale() {
         final Locale locale = Locale.getDefault();
 
@@ -45,7 +46,6 @@ public class MMoviesCountryProvider implements CountryProvider {
 
         return null;
     }
-
 
     @Override
     public String getTwoLetterLanguageCode() {

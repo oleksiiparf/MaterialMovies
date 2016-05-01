@@ -1,24 +1,9 @@
-/*
- * Copyright 2014 Chris Banes
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.roodie.model;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 
@@ -28,112 +13,110 @@ import com.roodie.model.entities.ShowWrapper;
 
 public interface Display {
 
-    public static final String PARAM_ID = "_id";
+    String PARAM_ID = "_id";
 
-    public static final String PARAM_LOCATION = "_location";
+    String PARAM_LOCATION = "_location";
 
-    public static final String PARAM_IMAGE = "_image";
+    String PARAM_IMAGE = "_image";
+    String PARAM_IMAGE_BACKGROUND = "_image_background";
 
-    public static final String PARAM_SEARCH_TYPE = "_search_type";
 
-    public static enum SearchMediaType {
-        MOVIES, SHOWS, PEOPLE
-    }
+    String PARAM_SEARCH_TYPE = "_search_type";
 
-    public void setDrawerLayout(DrawerLayout drawerLayout);
+    void setDrawerLayout(DrawerLayout layout);
 
-    public void showMovies();
+    void showMovies();
 
-    public void showTvShows();
+    void showTvShows();
 
-    public void showSettings();
+    void showSettings();
 
-    public void showAbout();
+    void showWatched();
 
-    public void startWatchlistActivity();
+    void showAbout();
 
-    public void startMovieDetailActivityByAnimation(String movieId, int[] startingLocation);
+    void showRelatedMovies(String movieId);
 
-    public void startMovieDetailActivityBySharedElements(String movieId, View view, String imageUrl);
+    void startWatchlistActivity();
 
-    public void startMovieDetailActivity(String movieId, Bundle bundle);
+    void startMovieDetailActivityBySharedElements(String movieId, View view, String imageUrl);
 
-    public void showMovieDetailFragmentByAnimation(String movieId, int[] startingLocation);
+    void startMovieDetailActivity(String movieId, Bundle bundle);
 
-    public void showMovieDetailFragment(String movieId);
+    void showMovieDetailFragment(String movieId);
 
-    public void showMovieDetailFragmentBySharedElements(String movieId, String imageUrl);
+    Fragment showMovieDetailFragmentBySharedElements(String movieId, String imageUrl);
 
-    public void startTvDetailActivity(String showId, Bundle bundle);
+    void startTvDetailActivity(String showId, Bundle bundle);
 
-    public void showTvDetailFragment(String movieId);
+    void startTvDetailActivityBySharedElements(String tvId, View view, String imageUrl);
 
-    public void startPersonDetailActivity(String id, Bundle bundle);
+    void showTvDetailFragment(String tvId);
 
-    public void startPersonDetailActivity(String id, int[] startingLocation);
+    Fragment showTvDetailFragmentBySharedElement(String tvId, String imageUrl);
 
-    public void showPersonDetailFragment(String id, int[]startingLocation);
+    void startPersonDetailActivity(String id, Bundle bundle);
 
-    public void startMovieImagesActivity(String movieId);
+    void showPersonDetailFragment(String id);
 
-    public void showMovieImagesFragment(String movieId);
+    void startMovieImagesActivity(String movieId);
 
-    public void startSettingsActivity();
+    void showMovieImagesFragment(String movieId);
 
-    public void closeDrawerLayout();
+    void startSettingsActivity();
 
-    public boolean hasMainFragment();
+    void playYoutubeVideo(String id);
 
-    public void showUpNavigation(boolean show);
+    void shareMovie(int movieId, String movieTitle);
 
-    public void setActionBarTitle(CharSequence title);
+    void shareTvShow(int showId, String showTitle);
 
-    public void setActionBarSubtitle(CharSequence title);
+    void startShareIntentChooser(String message, @StringRes int titleResId);
 
-    public boolean popEntireFragmentBackStack();
+    void openTmdbMovie(MovieWrapper movie);
 
-    public void finishActivity();
+    void openTmdbPerson(PersonWrapper person);
 
-    public void playYoutubeVideo(String id);
+    void openTmdbTvShow(ShowWrapper show);
 
-    public boolean toggleDrawer();
+    void openTmdbUrl(String url);
 
-    public void setStatusBarColor(float scroll);
+    boolean tryStartActivity(Intent intent, boolean displayError);
 
-    public void setSupportActionBar(Object toolbar, boolean handleBackground);
+    void performWebSearch(String query);
 
-    public void shareMovie(int movieId, String movieTitle);
+    void showSearchFragment();
 
-    public void shareTvShow(int showId, String showTitle);
+    void showSearchMoviesFragment();
 
-    public void startShareIntentChooser(String message, @StringRes int titleResId);
+    void showSearchPeopleFragment();
 
-    public void openTmdbMovie(MovieWrapper movie);
+    void showSearchTvShowsFragment();
 
-    public void openTmdbPerson(PersonWrapper person);
+    void closeDrawerLayout();
 
-    public void openTmdbTvShow(ShowWrapper show);
+    boolean hasMainFragment();
 
-    public void openTmdbUrl(String url);
+    boolean hasDetailFragment();
 
-    public boolean tryStartActivity(Intent intent, boolean displayError);
+    void showUpNavigation(boolean show);
 
-    public void performWebSearch(String query);
+    void setActionBarTitle(CharSequence title);
 
-    public void showSearchFragment();
+    void setActionBarSubtitle(CharSequence title);
 
-    public void showSearchMoviesFragment();
+    boolean popEntireFragmentBackStack();
 
-    public void showSearchPeopleFragment();
+    void finishActivity();
 
-    public void showSearchTvShowsFragment();
+    boolean toggleDrawer();
 
-    public void startSearchDetailActivity(String id, SearchMediaType queryType);
+    void setStatusBarColor(float scroll);
 
-    public void startTvSeasonDetailActivity(String showId, String seasonId, Bundle bundle);
+    void setSupportActionBar(Object toolbar, boolean handleBackground);
 
-    public void showTvSeasonDetailFragment(String showId, String seasonId);
+    boolean isTablet();
 
-    public void startTvSeasonsActivity(String showId, String seasonId, Bundle bundle);
+    void sendEmail();
 
 }

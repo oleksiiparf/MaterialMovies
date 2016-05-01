@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="watchable_movie">Фильм</string>
+    <string name="watchable_show">Тв шоу</string>
+    <string name="watchable_season">Тв сезон</string>
+    <string name="watchable_episode">Тв эпизод</string>
+    <string name="watchable_none">Неизвестно</string>
+
+    <string name="genre_action">Action</string>
+    <string name="genre_adventure">Adventure</string>
+    <string name="genre_animation">Animation</string>
+    <string name="genre_children">Children</string>
+    <string name="genre_comedy">Комедия</string>
+    <string name="genre_crime">Криминал</string>
+    <string name="genre_disaster">Disaster</string>
+    <string name="genre_documentary">Documentary</string>
+    <string name="genre_drama">Драма</string>
+    <string name="genre_erotic">Erotic</string>
+    <string name="genre_eastern">Вестерн</string>
+    <string name="genre_family">Family</string>
+    <string name="genre_fantasy">Фентези</string>
+    <string name="genre_fanFilm">Fan Film</string>
+    <string name="genre_filmNoir">Film Noir</string>
+    <string name="genre_food">Food</string>
+    <string name="genre_foreign">Foreign</string>
+    <string name="genre_gameShow">Game Show</string>
+    <string name="genre_history">History</string>
+    <string name="genre_holiday">Holiday</string>
+    <string name="genre_homeAndGarden">Home and Garden</string>
+    <string name="genre_horror">Horror</string>
+    <string name="genre_indie">Indie</string>
+    <string name="genre_kids">Kids</string>
+    <string name="genre_miniSeries">Mini-Series</string>
+    <string name="genre_music">Music</string>
+    <string name="genre_musical">Musical</string>
+    <string name="genre_mystery">Mystery</string>
+    <string name="genre_neoNoir">Neo-noir</string>
+    <string name="genre_news">News</string>
+    <string name="genre_reality">Reality</string>
+    <string name="genre_roadMovie">Road Movie</string>
+    <string name="genre_romance">Romance</string>
+    <string name="genre_scienceFiction">Science Fiction</string>
+    <string name="genre_sciFiAndFantasy">Sci-Fi &amp; Fantasy</string>
+    <string name="genre_short">Short</string>
+    <string name="genre_soap">Soap</string>
+    <string name="genre_specialInterest">Special Interest</string>
+    <string name="genre_sport">Sport</string>
+    <string name="genre_sportingEvent">Sporting Event</string>
+    <string name="genre_sportsFilm">Sports Film</string>
+    <string name="genre_suspense">Suspense</string>
+    <string name="genre_talkShow">Talk Show</string>
+    <string name="genre_thriller">Thriller</string>
+    <string name="genre_travel">Travel</string>
+    <string name="genre_tvMovie">TV movie</string>
+    <string name="genre_war">War</string>
+    <string name="genre_western">Western</string>
+</resources>

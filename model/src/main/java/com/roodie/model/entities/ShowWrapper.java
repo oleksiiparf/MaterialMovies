@@ -5,22 +5,19 @@ import android.text.TextUtils;
 
 import com.google.common.base.Preconditions;
 import com.roodie.model.Constants;
-import com.roodie.model.util.IntUtils;
+import com.roodie.model.state.EntitityMapper;
 import com.roodie.model.util.MoviesCollections;
 import com.roodie.model.util.Tmdb;
 import com.uwetrottmann.tmdb.entities.ContentRating;
-import com.uwetrottmann.tmdb.entities.Genre;
-import com.uwetrottmann.tmdb.entities.Network;
 import com.uwetrottmann.tmdb.entities.TvContentRatings;
 import com.uwetrottmann.tmdb.entities.TvShowComplete;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static com.roodie.model.util.TimeUtils.isPastStartingPoint;
@@ -29,79 +26,62 @@ import static com.roodie.model.util.TimeUtils.isPastStartingPoint;
 /**
  * Created by Roodie on 13.08.2015.
  */
-public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializable {
 
-    Long _id;
-    Integer tmdbId;
+public class ShowWrapper extends Watchable {
 
-    String originalTitle;
-    String title;
+    private static final long serialVersionUID = 6765523899215923228L;
 
-    String overview;
+    private static final Calendar CALENDAR = Calendar.getInstance();
 
-    int runtime;
+    public String originalTitle;
 
     List<String> originCountries;
 
-    String originalLanguage;
+    public String originalLanguage;
 
-    long firstAirDate;
-    long lastAirDate;
-    long lastAirTime;
+    public Date tmdbLastAirDate;
 
-    String backdropUrl;
-    String posterUrl;
+    public long tmdbLastAirTime;
 
-    String genres;
-    String networks;
+    public String networks;
 
-    int ratingPercent;
-    int ratingVotes;
-    Double ratingVotesAverage;
+    public float popularity;
 
-    float popularity;
+    public int status;
 
-    int status;
-    String type;
+    public String type;
 
-    int amountOfEpisodes;
-    int amountOfSeasons;
+    public int amountOfEpisodes;
 
-    String contentRating;
+    public int amountOfSeasons;
 
-    boolean isLiked = false;
+    public String contentRating;
 
-    transient long lastFullFetchFromTmdbStarted;
-    transient long lastFullFetchFromTmdbCompleted;
-
-    transient List<CreditWrapper> cast;
-    transient List<CreditWrapper> crew;
     Map<String, SeasonWrapper> seasons;
 
 
     public static class Status {
         public static final int CONTINUING = 1;
-        public static final int ENDED = 0;
-        public static final int UNKNOWN = -1;
+        public static final int ENDED = -1;
+        public static final int UNKNOWN = 0;
     }
 
-
-    public ShowWrapper() {
+    public ShowWrapper(String parentId) {
+        super(parentId);
     }
 
-  public void setFromShow(TvShowComplete show) {
+    @Override
+    public WatchableType getWatchableType() {
+        return WatchableType.TV_SHOW;
+    }
+
+    public void setFromShow(TvShowComplete show) {
         Preconditions.checkNotNull(show, "Show cannot be null");
 
         tmdbId = show.id;
 
-        if (_id == null) {
-            if (tmdbId != null) {
-                _id = new Long(tmdbId);
-            }
-        }
-
         if (!TextUtils.isEmpty(show.name)) {
-            title = show.name;
+            tmdbTitle = show.name;
         }
 
         if (!TextUtils.isEmpty(show.original_name)) {
@@ -109,32 +89,38 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         }
 
         if (!TextUtils.isEmpty(show.overview)) {
-            overview = show.overview;
+            tmdbOverview = show.overview;
         }
 
         if (show.first_air_date != null) {
-            firstAirDate = unbox(firstAirDate, show.first_air_date);
+            tmdbFirstAirDate = show.first_air_date;
+            tmdbFirstReleasedTime = unbox(tmdbFirstReleasedTime, show.first_air_date);
+        }
+
+        if (tmdbYear == 0 && tmdbFirstReleasedTime != 0) {
+            CALENDAR.setTimeInMillis(tmdbFirstReleasedTime);
+            tmdbYear = CALENDAR.get(Calendar.YEAR);
         }
 
         if (show.last_air_date != null) {
-            lastAirDate = unbox(lastAirDate, show.last_air_date);
-            lastAirTime = unbox(lastAirTime, show.last_air_date);
+            tmdbLastAirDate = show.last_air_date;
+            tmdbLastAirTime = unbox(tmdbLastAirTime, show.last_air_date);
         }
 
         if (!TextUtils.isEmpty(show.poster_path)) {
-            posterUrl = show.poster_path;
+            tmdbPosterUrl = show.poster_path;
         }
 
         if (!TextUtils.isEmpty(show.backdrop_path)) {
-            backdropUrl = show.backdrop_path;
+            tmdbBackdropUrl = show.backdrop_path;
         }
 
         if ( show.vote_average != null) {
-              ratingVotesAverage =  show.vote_average;
+              tmdbRatingVotesAverage =  show.vote_average;
         }
 
-        ratingPercent = unbox(ratingPercent, show.vote_average);
-        ratingVotes = unbox(ratingVotes, show.vote_count);
+        tmdbRatingPercent = unbox(tmdbRatingPercent, show.vote_average);
+        tmdbRatingVotesAmount = unbox(tmdbRatingVotesAmount, show.vote_count);
 
         popularity = roundPopularity(show.popularity, 1);
 
@@ -142,18 +128,20 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
             amountOfSeasons = show.number_of_seasons;
         }
 
-        seasons = new HashMap<String, SeasonWrapper>(amountOfSeasons);
+        seasons = new LinkedHashMap<>(amountOfSeasons);
 
         if (show.number_of_episodes != null) {
             amountOfEpisodes = show.number_of_episodes;
         }
 
         if (show.episode_run_time != null) {
-             runtime = getAverageRuntime(show.episode_run_time);
+             tmdbRuntime = getAverageRuntime(show.episode_run_time);
         }
 
         if (show.genres != null) {
-            genres = getGenresString(show.genres);
+            tmdbGenres = getGenresString(show.genres);
+            mGenres = EntitityMapper.mapGenres(show.genres);
+
         }
 
       if (show.networks != null) {
@@ -174,46 +162,6 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     }
 
-    private static long unbox(long currentValue, Date newValue) {
-        return newValue != null ? newValue.getTime() : currentValue;
-    }
-
-    private static int unbox(int currentValue, Double newValue) {
-        return newValue != null ? ((int) (newValue * 10)) : currentValue;
-    }
-
-    private static int unbox(int currentValue, Integer newValue) {
-        return newValue != null ? newValue : currentValue;
-    }
-
-    private static String getGenresString(List<Genre> list) {
-        if (!MoviesCollections.isEmpty(list)) {
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0, z = list.size(); i < z; i++) {
-                sb.append(list.get(i).name);
-                if (i < z - 1) {
-                    sb.append(" | ");
-                }
-            }
-            return sb.toString();
-        }
-        return null;
-    }
-
-    private static String getNetworksString(List<Network> list) {
-        if (!MoviesCollections.isEmpty(list)) {
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0, z = list.size(); i < z; i++) {
-                sb.append(list.get(i).name);
-                if (i < z - 1) {
-                    sb.append(" | ");
-                }
-            }
-            return sb.toString();
-        }
-        return null;
-    }
-
     private static int getAverageRuntime(List<Integer> runTime) {
         if (runTime.size() > 0) {
             double sum = 0;
@@ -223,7 +171,6 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
             return (int) (sum/ runTime.size());
         }
         return 0;
-
     }
 
     public static float roundPopularity(double d, int decimalPlace) {
@@ -253,74 +200,22 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
         }
     }
 
-    public Long getDbId() {
-        return _id;
-    }
-
-    public Integer getTmdbId() {
-        return tmdbId;
-    }
-
     public String getOriginalTitle() {
         return originalTitle;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
 
     public List<String> getOriginCountries() {
         return originCountries;
     }
 
-    public long getFirstAirDate() {
-        return firstAirDate;
-    }
 
-    public long getLastAirDate() {
-        return lastAirDate;
+    public Date getLastAirDate() {
+        return tmdbLastAirDate;
     }
 
     public long getLastAirTime() {
-        return lastAirTime;
-    }
-
-    public String getBackdropUrl() {
-        return backdropUrl;
-    }
-
-    public boolean hasBackdrodUrl () {
-        return !TextUtils.isEmpty(backdropUrl);
-    }
-
-    public String getPosterUrl() {
-        return posterUrl;
-    }
-
-    public boolean hasPosterUrl() {
-        return !TextUtils.isEmpty(posterUrl);
-    }
-
-
-    public String getGenres() {
-        return genres;
-    }
-
-    public int getRatingPercent() {
-        return ratingPercent;
-    }
-
-    public int getRatingVotes() {
-        return ratingVotes;
-    }
-
-    public String getRatingVoteAverage() {
-        return ratingVotesAverage == null || ratingVotesAverage == 0 ? "--"
-                : String.format(Locale.getDefault(), "%.1f", ratingVotesAverage);
+        return tmdbLastAirTime;
     }
 
     public float getPopularity() {
@@ -337,22 +232,6 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     public String getOriginalLanguage() {
         return originalLanguage;
-    }
-
-    public List<CreditWrapper> getCast() {
-        return cast;
-    }
-
-    public List<CreditWrapper> getCrew() {
-        return crew;
-    }
-
-    public void setCast(List<CreditWrapper> cast) {
-        this.cast = cast;
-    }
-
-    public void setCrew(List<CreditWrapper> crew) {
-        this.crew = crew;
     }
 
     public String getContentRating() {
@@ -373,25 +252,25 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     public void setSeasons(List<SeasonWrapper> seasons) {
         for (SeasonWrapper season : seasons) {
-            System.out.println(season);
-            if (season.getId() != null && season.getSeasonNumber() != null)
+            if (season.getTmdbId() != null && season.getSeasonNumber() != null)
             this.seasons.put(String.valueOf(season.getSeasonNumber()), season);
         }
-
     }
 
     public void updateSeason(SeasonWrapper season) {
-      if (season.getId() != null && season.getSeasonNumber() != null) {
+      if (season.getTmdbId() != null && season.getSeasonNumber() != null) {
           this.seasons.put(String.valueOf(season.getSeasonNumber()), season);
       }
     }
 
     public List<SeasonWrapper> getSeasons() {
-        return new ArrayList<SeasonWrapper>(seasons.values());
+        if (seasons == null)
+            return null;
+        return new ArrayList<>(seasons.values());
     }
 
     public SeasonWrapper getSeason(Integer position) {
-        return (new ArrayList<SeasonWrapper>(seasons.values())).get(position);
+        return (new ArrayList<>(seasons.values())).get(position);
     }
 
     public SeasonWrapper getSeason(String seasonNumber) {
@@ -399,26 +278,6 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
             return this.seasons.get(seasonNumber);
         }
         return null;
-    }
-    public boolean isLiked() {
-        return isLiked;
-    }
-
-    public void setLiked(boolean isLiked) {
-        this.isLiked = isLiked;
-    }
-
-    public int getRuntime() {
-        return runtime;
-    }
-
-    public int getAverageRatingPercent() {
-        if ( ratingPercent > 0) {
-            return IntUtils.weightedAverage(
-                    ratingPercent, ratingVotes);
-        } else {
-            return ratingPercent;
-        }
     }
 
     public boolean needFullFetch() {
@@ -432,14 +291,6 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
                 Constants.STALE_MOVIE_DETAIL_THRESHOLD)) &&
                 isPastStartingPoint(lastFullFetchFromTmdbStarted,
                         Constants.FULL_MOVIE_DETAIL_ATTEMPT_THRESHOLD);
-    }
-
-    public void markFullFetchStarted() {
-        lastFullFetchFromTmdbStarted = System.currentTimeMillis();
-    }
-
-    public void markFullFetchCompleted() {
-        lastFullFetchFromTmdbCompleted = System.currentTimeMillis();
     }
 
     public static int encodeShowStatus(@Nullable String status) {
@@ -458,18 +309,10 @@ public class ShowWrapper extends BasicWrapper<ShowWrapper> implements Serializab
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("Show {");
-        sb.append(", tmdbId=").append(tmdbId);
-        sb.append(", originalTitle='").append(originalTitle).append('\'');
-        sb.append(", status=").append(status);
-        sb.append(", type='").append(type).append('\'');
-        sb.append(", amountOfEpisodes=").append(amountOfEpisodes);
-        sb.append(", amountOfSeasons=").append(amountOfSeasons);
-        sb.append(", seasons=");
-        for(SeasonWrapper seasonWrapper : new ArrayList<SeasonWrapper>(seasons.values())) {
-            sb.append(seasonWrapper.toString());
-        }
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("Show = ");
+        sb.append("tmdbId = ").append(tmdbId);
+        sb.append(", isWatched = ").append(isWatched());
+
         return sb.toString();
     }
 }

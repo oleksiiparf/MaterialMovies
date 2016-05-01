@@ -1,14 +1,15 @@
 package com.roodie.materialmovies.views.fragments;
 
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.ListView;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.common.base.Preconditions;
-import com.roodie.materialmovies.views.adapters.SearchPeopleSectionedListAdapter;
-import com.roodie.materialmovies.views.fragments.base.BaseSearchListFragment;
-import com.roodie.model.entities.ListItem;
+import com.roodie.materialmovies.mvp.presenters.ListPeoplePresenter;
+import com.roodie.materialmovies.mvp.views.ListPeopleView;
+import com.roodie.materialmovies.views.adapters.FooterViewListAdapter;
+import com.roodie.materialmovies.views.adapters.PeopleListAdapter;
+import com.roodie.materialmovies.views.fragments.base.BaseListFragment;
+import com.roodie.model.Display;
 import com.roodie.model.entities.PersonWrapper;
 
 import java.util.List;
@@ -17,73 +18,50 @@ import java.util.List;
  * Created by Roodie on 07.09.2015.
  */
 
-public class SearchPeopleListFragment extends BaseSearchListFragment <PersonWrapper>{
+public class SearchPeopleListFragment extends BaseListFragment<PeopleListAdapter.PeopleListViewHolder, List<PersonWrapper>, ListPeopleView> implements ListPeopleView {
 
-    private SearchPeopleSectionedListAdapter mListAdapter;
-
-    private OnShowPersonListener mListener = mModelListener;
-
-    public interface OnShowPersonListener {
-        public void showPersonDetail(String personId, View view);
-    }
-
-    private static OnShowPersonListener mModelListener = new OnShowPersonListener() {
-        @Override
-        public void showPersonDetail(String personId, View view) {
-
-        }
-    };
+    @InjectPresenter
+    ListPeoplePresenter mPresenter;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public MMoviesQueryType getQueryType() {
+        return MMoviesQueryType.SEARCH_PEOPLE;
+    }
 
-        try {
-            mListener = (OnShowPersonListener) activity;
-        } catch (ClassCastException ex) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnShowPersonListener");
+    @Override
+    protected FooterViewListAdapter createAdapter() {
+        return new PeopleListAdapter(getActivity(), this);
+    }
+
+    @Override
+    protected void attachUiToPresenter() {
+        mPresenter.onUiAttached(this, getQueryType(), null);
+        Display display = getDisplay();
+        if (display != null) {
+            display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
         }
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-
-        mListener = mModelListener;
+    public void onClick(View view, int position) {
+        PersonWrapper item = mAdapter.getItems().get(position);
+        showItemDetail(item, view);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void showItemDetail(PersonWrapper person, View view) {
+        Preconditions.checkNotNull(person, "person cannot be null");
+        Preconditions.checkNotNull(person.getTmdbId(), "person id cannot be null");
 
-        mListAdapter = new SearchPeopleSectionedListAdapter(getActivity());
-        setListAdapter(mListAdapter);
-    }
-
-    @Override
-    public MovieQueryType getQueryType() {
-        return MovieQueryType.SEARCH_PEOPLE;
-    }
-
-    @Override
-    public void showPersonDetail(PersonWrapper person, View view) {
-            Preconditions.checkNotNull(person, "person cannot be null");
-            Preconditions.checkNotNull(person.getTmdbId(), "person id cannot be null");
-
-            mListener.showPersonDetail(String.valueOf(person.getTmdbId()), view);
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        ListItem<PersonWrapper> item = (ListItem<PersonWrapper>) l.getItemAtPosition(position);
-        if (item.getListType() == ListItem.TYPE_ITEM) {
-            showPersonDetail(item.getListItem(), v);
+        Display display = getDisplay();
+        if (display != null) {
+            display.startPersonDetailActivity(String.valueOf(person.getTmdbId()), null);
         }
+
     }
 
     @Override
-    public void setItems(List<ListItem<PersonWrapper>> listItems) {
-        mListAdapter.setItems(listItems);
+    public void onPopupMenuClick(View view, int position) {
+
     }
 }

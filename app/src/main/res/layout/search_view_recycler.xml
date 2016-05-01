@@ -20,7 +20,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-            <com.roodie.materialmovies.views.custom_views.AutofitRecyclerView
+            <com.roodie.materialmovies.views.custom_views.recyclerview.LoadMoreRecyclerLayout
                 android:id="@+id/recycler_view"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -29,9 +29,9 @@
                 android:paddingRight="@dimen/basic_container_padding"
                 android:paddingTop="@dimen/activity_vertical_margin_half"
                 android:clipToPadding="false"
-                android:columnWidth="@dimen/movie_grid_item_width">
+                android:columnWidth="@dimen/card_item_image_size">
 
-            </com.roodie.materialmovies.views.custom_views.AutofitRecyclerView>
+            </com.roodie.materialmovies.views.custom_views.recyclerview.LoadMoreRecyclerLayout>
         </FrameLayout>
 
 

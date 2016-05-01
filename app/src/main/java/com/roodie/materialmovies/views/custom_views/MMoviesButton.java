@@ -6,8 +6,8 @@ import android.support.v7.widget.AppCompatButton;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 
-import com.roodie.materialmovies.util.TypefaceManager;
-import com.roodie.materialmovies.views.MMoviesApplication;
+import com.roodie.materialmovies.MMoviesApp;
+import com.roodie.materialmovies.util.FontManager;
 
 import javax.inject.Inject;
 
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 public class MMoviesButton extends AppCompatButton {
 
     @Inject
-    TypefaceManager mTypefaceManager;
+    FontManager mTypefaceManager;
 
     public MMoviesButton(Context context) {
         this(context, null);
@@ -30,7 +30,7 @@ public class MMoviesButton extends AppCompatButton {
     public MMoviesButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        MMoviesApplication.from(context).inject(this);
+        MMoviesApp.from(context).inject(this);
         if (isInEditMode())
             return;
         setFont();

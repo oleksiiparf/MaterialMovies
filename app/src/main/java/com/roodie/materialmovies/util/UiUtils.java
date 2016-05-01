@@ -14,9 +14,23 @@ import com.roodie.materialmovies.R;
  */
 public class UiUtils {
 
-    private static int offsetHeight;
+    private static  UiUtils instance;
 
-    public static void attachToastPopup(final Activity paramActivity, final View paramView) {
+    private int offsetHeight;
+
+    public static UiUtils getInstance() {
+        if (instance == null)
+            instance = new UiUtils();
+        return instance;
+    }
+
+    /**
+     *  Customize the location of your Toast under the custom view
+     *
+     * @param paramView view, needed for toast
+     *
+     */
+    public void attachToastPopup(final Activity paramActivity, final View paramView) {
         if (offsetHeight == 0) {
             View localView = paramActivity.getWindow().getDecorView();
             if (localView != null)
@@ -29,25 +43,30 @@ public class UiUtils {
         paramView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(paramActivity, paramView.getContentDescription(), Toast.LENGTH_SHORT);
-                return false;
+                Toast.makeText(paramActivity, paramView.getContentDescription(), Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
     }
 
 
-    public static float centerX(View view){
+    public float centerX(View view){
         return ViewHelper.getX(view) + view.getWidth()/2;
     }
 
-    public static float centerY(View view){
+    public float centerY(View view){
         return ViewHelper.getY(view) + view.getHeight()/2;
     }
 
-    public static int dpToPx(int dp) {
+    public int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 
-
+    public int dp(float value) {
+        if (value == 0) {
+            return 0;
+        }
+        return (int) Math.ceil(Resources.getSystem().getDisplayMetrics().density * value);
+    }
 
 }

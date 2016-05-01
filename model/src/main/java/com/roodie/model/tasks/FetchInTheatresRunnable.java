@@ -28,6 +28,6 @@ public class FetchInTheatresRunnable extends BasePaginatedMovieRunnable {
 
     @Override
     protected void updateState(ApplicationState.MoviePaginatedResult result) {
-        mState.setNowPlaying(result);
+        mState.setNowPlaying(getCallingId(), result);
     }
 }

@@ -11,14 +11,13 @@ import com.uwetrottmann.tmdb.entities.CountryRelease;
 import com.uwetrottmann.tmdb.entities.Genre;
 import com.uwetrottmann.tmdb.entities.Image;
 import com.uwetrottmann.tmdb.entities.Movie;
+import com.uwetrottmann.tmdb.entities.Network;
 import com.uwetrottmann.tmdb.entities.Releases;
 import com.uwetrottmann.tmdb.entities.SpokenLanguage;
 import com.uwetrottmann.tmdb.entities.Videos;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,66 +26,36 @@ import static com.roodie.model.util.TimeUtils.isPastStartingPoint;
 /**
  * Created by Roodie on 07.07.2015.
  */
-public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializable {
 
-    public static final int NOT_SET = 0;
-    public static final int TYPE_TMDB = 1;
-    public static final int TYPE_IMDB = 2;
+public class MovieWrapper extends Watchable {
+
+    private static final long serialVersionUID = 7371884463695497963L;
 
     private static final Calendar CALENDAR = Calendar.getInstance();
 
-    Long _id;
-    int idType;
-    String imdbId;
-    Integer tmdbId;
+    public String tmdbTagline;
 
-    String tmdbTitle;
+    public boolean tmdbIsAdult;
 
-    String tmdbSortTitle;
+    public int tmdbBudget;
 
-    String tmdbOverview;
+    public String tmdbReleasedCountryCode;
 
-    String tmdbTagline;
-
-    String tmdbPosterUrl;
-
-    String tmdbBackdropUrl;
-
-    Date releaseDate;
-
-    int tmdbYear;
-
-    boolean tmdbIsAdult;
-
-    int tmdbBudget;
-
-    long tmdbReleasedTime;
-    String tmdbReleasedCountryCode;
-
-    int tmdbRatingPercent;
-    int tmdbRatingVotesAmount;
-    Double tmdbRatingVoteAverage;
-
-    int tmdbRuntime;
-
-    String tmdbCertification;
-
-    String tmdbGenres;
-
-    String tmdbMainLanguage;
-
-    transient long lastFullFetchFromTmdbStarted;
-    transient long lastFullFetchFromTmdbCompleted;
+    public String tmdbCertification;
 
     boolean loadedFromTmdb;
 
     transient List<MovieWrapper> related;
-    transient List<CreditWrapper> cast;
-    transient List<CreditWrapper> crew;
     transient List<TrailerWrapper> trailers;
     transient List<BackdropImage> backdropImages;
 
-    public MovieWrapper() {
+    public MovieWrapper(String parentId) {
+        super(parentId);
+    }
+
+    @Override
+    public WatchableType getWatchableType() {
+        return WatchableType.MOVIE;
     }
 
     public void setFromMovie (Movie movie) {
@@ -95,22 +64,6 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         loadedFromTmdb = true;
 
         tmdbId = movie.id;
-
-        if (!TextUtils.isEmpty(movie.imdb_id)) {
-            imdbId = movie.imdb_id;
-        }
-
-        if (_id == null || idType == NOT_SET ) {
-            if (!TextUtils.isEmpty(imdbId)) {
-                _id = new Long(imdbId.hashCode());
-                idType = TYPE_IMDB;
-            } else if (tmdbId != null) {
-                _id = new Long(tmdbId);
-                idType = TYPE_TMDB;
-            } else {
-                idType = NOT_SET;
-            }
-        }
 
         if (!TextUtils.isEmpty(movie.title)) {
             tmdbTitle = movie.title;
@@ -125,12 +78,12 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         }
 
         if (movie.release_date != null && tmdbReleasedCountryCode == null) {
-            releaseDate = movie.release_date;
-            tmdbReleasedTime = unbox(tmdbReleasedTime, movie.release_date);
+            tmdbFirstAirDate = movie.release_date;
+            tmdbFirstReleasedTime = unbox(tmdbFirstReleasedTime, movie.release_date);
         }
 
-        if (tmdbYear == 0 && tmdbReleasedTime != 0) {
-            CALENDAR.setTimeInMillis(tmdbReleasedTime);
+        if (tmdbYear == 0 && tmdbFirstReleasedTime != 0) {
+            CALENDAR.setTimeInMillis(tmdbFirstReleasedTime);
             tmdbYear = CALENDAR.get(Calendar.YEAR);
         }
 
@@ -142,7 +95,7 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         tmdbRatingVotesAmount = unbox(tmdbRatingVotesAmount, movie.vote_count);
 
         if (movie.vote_average != null) {
-            tmdbRatingVoteAverage = movie.vote_average;
+            tmdbRatingVotesAverage = movie.vote_average;
         }
 
         if (!TextUtils.isEmpty(movie.backdrop_path)) {
@@ -168,10 +121,35 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         if (movie.videos != null) {
             updateVideos(movie.videos);
         }
-
-
     }
 
+    public static String getGenresString(List<Genre> list) {
+        if (!MoviesCollections.isEmpty(list)) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0, z = list.size(); i < z; i++) {
+                sb.append(list.get(i).name);
+                if (i < z - 1) {
+                    sb.append(" | ");
+                }
+            }
+            return sb.toString();
+        }
+        return null;
+    }
+
+    public static String getNetworksString(List<Network> list) {
+        if (!MoviesCollections.isEmpty(list)) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0, z = list.size(); i < z; i++) {
+                sb.append(list.get(i).name);
+                if (i < z - 1) {
+                    sb.append(" | ");
+                }
+            }
+            return sb.toString();
+        }
+        return null;
+    }
 
     public void updateVideos(final Videos videos) {
         Preconditions.checkNotNull(videos, "videos cannot be null");
@@ -217,11 +195,11 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
                     tmdbCertification = countryRelease.certification;
                 }
                 if (countryRelease.release_date != null) {
-                    tmdbReleasedTime = countryRelease.release_date.getTime();
+                    tmdbFirstReleasedTime = countryRelease.release_date.getTime();
                     tmdbReleasedCountryCode = countryRelease.iso_3166_1;
 
-                    if (tmdbYear == 0 && tmdbReleasedTime != 0) {
-                        CALENDAR.setTimeInMillis(tmdbReleasedTime);
+                    if (tmdbYear == 0 && tmdbFirstReleasedTime != 0) {
+                        CALENDAR.setTimeInMillis(tmdbFirstReleasedTime);
                         tmdbYear = CALENDAR.get(Calendar.YEAR);
                     }
                 }
@@ -229,54 +207,9 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         }
     }
 
-    private static String getGenresString(List<Genre> list) {
-        if (!MoviesCollections.isEmpty(list)) {
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0, z = list.size(); i < z; i++) {
-                sb.append(list.get(i).name);
-                if (i < z - 1) {
-                    sb.append(" | ");
-                }
-            }
-            return sb.toString();
-        }
-        return null;
-    }
-
-
-    private static boolean unbox(boolean currentValue, Boolean newValue) {
-        return newValue != null ? newValue : currentValue;
-    }
-
-    private static int unbox(int currentValue, Integer newValue) {
-        return newValue != null ? newValue : currentValue;
-    }
-
-    private static int unbox(int currentValue, Double newValue) {
-        return newValue != null ? ((int) (newValue * 10)) : currentValue;
-    }
-
-    private static long unbox(long currentValue, Date newValue) {
-        return newValue != null ? newValue.getTime() : currentValue;
-    }
-
-    public Long getDBId() {
-        return _id;
-    }
-    public boolean hasPosterUrl() {
-        return !TextUtils.isEmpty(tmdbPosterUrl);
-    }
-
-    public boolean hasBackdropUrl() {
-        return !TextUtils.isEmpty(tmdbBackdropUrl);
-    }
 
     public List<BackdropImage> getBackdropImages() {
         return backdropImages;
-    }
-
-    public boolean isLoadedFromTmdb() {
-        return loadedFromTmdb;
     }
 
     public void setBackdropImages(List<BackdropImage> backdropImages) {
@@ -285,18 +218,6 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
 
     public void setTrailers(List<TrailerWrapper> trailers) {
         this.trailers = trailers;
-    }
-
-    public void setCrew(List<CreditWrapper> crew) {
-        this.crew = crew;
-    }
-
-    public void setCast(List<CreditWrapper> cast) {
-        this.cast = cast;
-    }
-
-    public void setTmdbReleasedTime(long tmdbReleasedTime) {
-        this.tmdbReleasedTime = tmdbReleasedTime;
     }
 
     public void setRelated(List<MovieWrapper> related) {
@@ -311,52 +232,16 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         return trailers;
     }
 
-    public List<CreditWrapper> getCrew() {
-        return crew;
-    }
-
-    public List<CreditWrapper> getCast() {
-        return cast;
-    }
-
     public List<MovieWrapper> getRelated() {
         return related;
-    }
-
-    public long getLastFullFetchFromTmdbCompleted() {
-        return lastFullFetchFromTmdbCompleted;
-    }
-
-    public long getLastFullFetchFromTmdbStarted() {
-        return lastFullFetchFromTmdbStarted;
-    }
-
-    public String getMainLanguageTitle() {
-        return tmdbMainLanguage;
-    }
-
-    public String getGenres() {
-        return tmdbGenres;
     }
 
     public String getCertification() {
         return tmdbCertification;
     }
 
-    public int getRuntime() {
-        return tmdbRuntime;
-    }
-
-    public int getRatingPercent() {
-        return tmdbRatingPercent;
-    }
-
     public String getReleasedCountryCode() {
         return tmdbReleasedCountryCode;
-    }
-
-    public long getReleasedTime() {
-        return tmdbReleasedTime;
     }
 
     public int getBudget() {
@@ -371,50 +256,18 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
         return tmdbYear;
     }
 
-    public String getTmdbBackdropUrl() {
-        return tmdbBackdropUrl;
-    }
-
-    public Date getReleaseDate() {
-        return releaseDate;
-    }
-
-    public String getPosterUrl() {
-        return tmdbPosterUrl;
-    }
-
     public String getTagline() {
         return tmdbTagline;
     }
 
-    public String getOverview() {
-        return tmdbOverview;
-    }
-
-    public String getSortTitle() {
-        return tmdbSortTitle;
-    }
-
-    public String getTitle() {
-        return tmdbTitle;
-    }
-
-    public Integer getTmdbId() {
-        return tmdbId;
-    }
 
     public String getRatingVoteAverage() {
-        return tmdbRatingVoteAverage == null || tmdbRatingVoteAverage == 0 ? "--"
-                : String.format(Locale.getDefault(), "%.1f", tmdbRatingVoteAverage);
+        return tmdbRatingVotesAverage == null || tmdbRatingVotesAverage == 0 ? "--"
+                : String.format(Locale.getDefault(), "%.1f", tmdbRatingVotesAverage);
     }
 
     public int getRatingVotes() {
-
         return tmdbRatingVotesAmount;
-    }
-
-    public String getImdbId() {
-        return imdbId;
     }
 
     public int getAverageRatingPercent() {
@@ -440,31 +293,20 @@ public class MovieWrapper extends BasicWrapper<MovieWrapper> implements Serializ
                         Constants.FULL_MOVIE_DETAIL_ATTEMPT_THRESHOLD);
     }
 
-    public void markFullFetchStarted() {
-         lastFullFetchFromTmdbStarted = System.currentTimeMillis();
-    }
-
-    public void markFullFetchCompleted() {
-                lastFullFetchFromTmdbCompleted = System.currentTimeMillis();
-        }
-
     @Override
     public String toString() {
-        return new StringBuffer().append(tmdbId).append(" ").append(imdbId).append(" ").append(tmdbTitle+ "  ").toString();
+        return "Movie = " + tmdbId + ", isWatched = " + isWatched();
     }
 
     public static class BackdropImage {
         public final String url;
-        public final int sourceType;
 
-        public BackdropImage(String url, int sourceType) {
+        public BackdropImage(String url) {
             this.url = Preconditions.checkNotNull(url, "url cannot be null");
-            this.sourceType = sourceType;
         }
 
         public BackdropImage(Image image) {
             this.url = image.file_path;
-            this.sourceType = MovieWrapper.TYPE_TMDB;
         }
     }
 

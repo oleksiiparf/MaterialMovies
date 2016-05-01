@@ -1,27 +1,9 @@
 package com.roodie.materialmovies.views.fragments.base;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ListView;
-
-import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.mvp.presenters.SearchPresenter;
-import com.roodie.materialmovies.views.MMoviesApplication;
-import com.roodie.model.Display;
-import com.roodie.model.entities.BasicWrapper;
-import com.roodie.model.entities.MovieWrapper;
-import com.roodie.model.entities.PersonWrapper;
-import com.roodie.model.entities.ShowWrapper;
-import com.roodie.model.network.NetworkError;
-import com.roodie.model.state.MoviesState;
-
 /**
  * Created by Roodie on 07.09.2015.
  */
-public abstract class BaseSearchListFragment<M extends BasicWrapper> extends BaseListFragment<ListView> implements SearchPresenter.SearchView<M> {
+public abstract class BaseSearchListFragment { /*<M extends Watchable> extends OldListFragment<ListView> implements SearchPresenter.SearchView<M> {
 
     private SearchPresenter mPresenter;
 
@@ -34,9 +16,14 @@ public abstract class BaseSearchListFragment<M extends BasicWrapper> extends Bas
     }
 
     @Override
+    public boolean hasToolbar() {
+        return false;
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getSearchPresenter();
+        mPresenter = MMoviesApp.from(activity.getApplicationContext()).getSearchPresenter();
     }
 
     @Override
@@ -92,6 +79,11 @@ public abstract class BaseSearchListFragment<M extends BasicWrapper> extends Bas
     }
 
     @Override
+    public void updateDisplaySubtitle(String subtitle) {
+
+    }
+
+    @Override
     public String getRequestParameter() {
         return null;
     }
@@ -112,7 +104,7 @@ public abstract class BaseSearchListFragment<M extends BasicWrapper> extends Bas
 
     @Override
     public void showError(NetworkError error) {
-        setListShown(true);
+        setListShown(pulltorefresh);
 
         switch (error) {
             case NETWORK_ERROR:
@@ -174,4 +166,4 @@ public abstract class BaseSearchListFragment<M extends BasicWrapper> extends Bas
     public void setSearchResult(MoviesState.SearchResult result) {
         //TODO
     }
-}
+*/}

@@ -14,7 +14,7 @@ import retrofit.RetrofitError;
 /**
  * Created by Roodie on 16.09.2015.
  */
-public class FetchDetailTvSeasonRunnable extends BaseMovieRunnable<TvSeason> {
+public class FetchDetailTvSeasonRunnable extends BaseRunnable<TvSeason> {
 
     private final int showId;
     private final int seasonNumber;
@@ -35,21 +35,19 @@ public class FetchDetailTvSeasonRunnable extends BaseMovieRunnable<TvSeason> {
         ShowWrapper show = mState.getTvShow(showId);
         SeasonWrapper season = show.getSeason(String.valueOf(seasonNumber));
         season.markFullFetchCompleted();
-        if (season != null) {
-            if (!TextUtils.isEmpty(result.name)) {
-                season.setTitle(result.name);
-            }
-
-            if (!TextUtils.isEmpty(result.overview)) {
-                season.setOverview(result.overview);
-            }
-
-            if (!MoviesCollections.isEmpty(result.episodes)) {
-                season.setEpisodes(result.episodes);
-            }
-
-            getEventBus().post(new MoviesState.TvShowSeasonUpdatedEvent(getCallingId(), String.valueOf(showId), season));
+        if (!TextUtils.isEmpty(result.name)) {
+            season.setTitle(result.name);
         }
+
+        if (!TextUtils.isEmpty(result.overview)) {
+            season.setOverview(result.overview);
+        }
+
+        if (!MoviesCollections.isEmpty(result.episodes)) {
+            season.setEpisodes(result.episodes);
+        }
+
+        getEventBus().post(new MoviesState.TvShowSeasonUpdatedEvent(getCallingId(), String.valueOf(showId), season));
 
     }
 

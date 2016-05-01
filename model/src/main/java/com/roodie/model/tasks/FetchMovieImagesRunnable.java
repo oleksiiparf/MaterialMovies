@@ -14,7 +14,7 @@ import retrofit.RetrofitError;
 /**
  * Created by Roodie on 24.06.2015.
  */
-public class FetchMovieImagesRunnable extends BaseMovieRunnable<Images> {
+public class FetchMovieImagesRunnable extends BaseRunnable<Images> {
 
     private final int mId;
 

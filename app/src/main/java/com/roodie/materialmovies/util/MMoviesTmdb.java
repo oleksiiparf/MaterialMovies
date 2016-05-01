@@ -14,9 +14,6 @@ public class MMoviesTmdb extends Tmdb {
 
     private final Context context;
 
-    private static final String LOG_TAG = "MMoviesTmdb";
-
-
     public MMoviesTmdb(Context context) {
         this.context = context.getApplicationContext();
     }

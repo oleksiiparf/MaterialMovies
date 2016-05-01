@@ -1,76 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container_layout"
+<com.roodie.materialmovies.views.custom_views.MovieTitleCardLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:internal="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/movie_detail_card_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:baselineAligned="false"
-    android:background="?mmBackgroundColorSecondary"
-    android:orientation="vertical">
+    internal:title="@string/details">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_width="fill_parent"
+        android:id="@+id/card_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/spacing_minor"
-        android:paddingBottom="@dimen/title_summary_item_padding_bottom">
-
-        <com.roodie.materialmovies.views.custom_views.MMoviesImageView
-            android:id="@+id/imageview_poster"
-            android:layout_gravity="center_vertical"
-            android:layout_width="@dimen/movie_detail_poster_width"
-            android:layout_height="@dimen/movie_detail_poster_height"
-            android:layout_marginLeft="4.0dip"
-
-            android:cropToPadding="true"
-            android:scaleType="fitXY" />
+        android:orientation="vertical"
+        android:paddingTop="@dimen/spacing_minor">
 
         <LinearLayout
-            android:id="@+id/summary_root"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_gravity="top"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/spacing_minor"
-            android:paddingRight="@dimen/spacing_minor"
-            android:paddingTop="@dimen/spacing_minor"
-            android:layout_marginRight="4.0dip"
-            android:layout_weight="1.0">
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/spacing_major"
+            android:paddingRight="@dimen/spacing_major"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textview_title"
+            <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+                android:id="@+id/textview_tagline"
+                android:layout_width="0.0dip"
+                android:layout_weight="1.0"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/spacing_micro"
+                android:textColor="?mmTextColorPrimary"
+                internal:font="roboto_condensed_bold" />
+
+
+            <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+                android:id="@+id/textview_release_year"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:textAppearance="@style/Widget.MMovies.TextAppearance.PrimaryText.Large"
-                android:text="Title"/>
-
-            <TextView
-                android:id="@+id/textview_genres"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginBottom="@dimen/spacing_minor"
-                android:textAppearance="@style/Widget.MMovies.TextAppearance.SecondaryText"
-                android:text="genre1 | genre2"/>
-
-            <include layout="@layout/item_detail_rating" />
-
-            <include
-                android:id="@+id/play_trailer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                layout="@layout/item_movie_summary_trailer"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="bottom">
-            </include>
-
+                android:layout_marginLeft="8.0dip"
+                android:drawablePadding="@dimen/spacing_micro"
+                android:text="Year"
+                android:textColor="?mmTextColorPrimary"
+                internal:font="roboto_condensed_bold" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/spacing_major"
+            >
 
+            <RelativeLayout
+                android:layout_width="@dimen/watchableOverviewWidth"
+                android:layout_height="@dimen/watchableOverviewHeight">
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@android:color/white" />
+
+                <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+                    android:id="@+id/poster_image"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="1.0dip"
+                    android:scaleType="centerCrop" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="12.0dip"
+                android:paddingLeft="12.0dip"
+                android:paddingRight="12.0dip"
+                android:paddingTop="0.0dip">
+
+                <com.roodie.materialmovies.views.custom_views.RatingBarLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/rating_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </com.roodie.materialmovies.views.custom_views.RatingBarLayout>/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/divider_bottom"
+                layout="@layout/include_divider" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.roodie.materialmovies.views.custom_views.MovieWatchedToggler
+                    android:id="@+id/toggler_watched"
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.5"
+                    internal:togglerOn="?attr/mmImageViewTogglerOn"
+                    internal:togglerOff="?attr/mmImageViewTogglerOff"
+                />
+                <View
+                    android:layout_width="1.0px"
+                    android:layout_height="fill_parent"
+                    android:background="?android:listDivider" />
+
+                <TextView
+                    android:id="@+id/button_trailer"
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="center"
+                    android:padding="@dimen/spacing_minor"
+                    android:background="?attr/selectableItemBackground"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                    android:textColor="?attr/colorAccent"
+                    android:text="Trailer" />
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</com.roodie.materialmovies.views.custom_views.MovieTitleCardLayout>

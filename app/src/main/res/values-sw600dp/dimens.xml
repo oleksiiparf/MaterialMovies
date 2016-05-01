@@ -41,7 +41,7 @@
 
     <dimen name="movie_detail_fanart_height">276dp</dimen>
 
-    <dimen name="show_detail_fanart_height">300dp</dimen>
+    <dimen name="show_detail_fanart_height">380dp</dimen>
 
     <dimen name="movie_detail_title_textsize">32dp</dimen>
     <dimen name="movie_detail_tagline_textsize">18dp</dimen>
@@ -55,4 +55,6 @@
     <dimen name="show_grid_item_width">210dp</dimen>
     <dimen name="show_grid_item_height">250dp</dimen>
     <dimen name="show_grid_item_font_size">18dp</dimen>
+
+    <dimen name="card_item_image_size">180dip</dimen>
 </resources>

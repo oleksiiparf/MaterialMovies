@@ -9,6 +9,8 @@
     <color name="transparent">#00000000</color>
     <color name="semi_transparent">#88676767</color>
 
+    <color name="pasteTransparent">#00ffffff</color>
+
     <color name="side_menu_background">#FF202020</color>
     <color name="material_dialog_dark">#363F44</color>
     <color name="material_dialog_light">#EDEDED</color>
@@ -18,7 +20,11 @@
     <color name="light_gray">#FFDDDDDD</color>
     <color name="mid_gray">#FFAAAAAA</color>
 
-    <color name="white">#ffffffff</color> <!-- primary text dark -->
+
+    <color name="mm_white">#ffffffff</color> <!-- primary text dark -->
+    <color name="mm_white_20">#33ffffff</color>
+    <color name="mm_white_40">#66ffffff</color>
+    <color name="mm_white_12_5">#20ffffff</color>
 
     <color name="primary_color_translucent">#998BC34A</color>
     <color name="primary_color">#363F44</color>
@@ -44,6 +50,13 @@
     <color name="grey_60">#99333333</color>
     <color name="grey_45">#73333333</color>
     <color name="grey_30">#4C333333</color>
+    <color name="grey_12_5">#757575</color>
+
+    <color name="mm_light_green">#ff1ed760</color>
+    <color name="mm_medium_green">#ff1db954</color>
+    <color name="mm_medium_red">#ffce1a2b</color>
+    <color name="mm_medium_yellow">#ff8f8100</color>
+    <color name="mm_medium_orange">#ff8f4a00</color>
 
 
     <color name="abc_input_method_navigation_guard">@android:color/black</color>
@@ -197,6 +210,38 @@
 
     <color name="accent">#FFC107</color>
     <color name="star_deactivated">#D6D6D6</color>
+
+    <color name="cat_black">#ff000000</color>
+    <color name="cat_grayscale">#ffebedf2</color>
+    <color name="txt_offline_placeholder_body">#ffbdbcba</color>
+    <color name="txt_offline_placeholder_title">#ff000000</color>
+
+    <color name="alto">#ffd8d8d8</color>
+    <color name="mm_luxor_gold">#ff79b632</color>
+
+
+    <color name="mm_button_info_text_disabled">@color/mm_white_40</color>
+    <color name="mm_button_info_text_focused">@color/mm_white</color>
+    <color name="mm_button_info_text_pressed">@color/mm_white</color>
+    <color name="mm_button_info_text_default">@color/mm_white</color>
+
+    <color name="mm_button_border_checked">@color/mm_light_green</color>
+    <color name="mm_button_border_default">@color/mm_white_40</color>
+    <color name="mm_button_border_disabled">@color/mm_white_12_5</color>
+    <color name="mm_button_border_focused">@color/mm_white_40</color>
+    <color name="mm_button_border_pressed">@color/mm_medium_green</color>
+
+    <color name="mm_button_background_focused">@color/pasteTransparent</color>
+
+    <color name="mm_button_info_background_default">@color/mm_white_20</color>
+    <color name="mm_button_info_background_disabled">@color/mm_white_12_5</color>
+    <color name="mm_button_info_background_focused">@color/mm_white_20</color>
+    <color name="mm_button_info_background_pressed">@color/mm_white_40</color>
+
+    <color name="faded_search_background">#80000000</color>
+
+
+    <color name="background_color_primary">@color/mm_neutral_200</color>
 
 
 </resources>

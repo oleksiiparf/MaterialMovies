@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
+    <com.roodie.materialmovies.views.custom_views.MMoviesToolbar
         android:id="@+id/toolbar"
         android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
             </io.codetail.widget.RevealFrameLayout>
 
             <com.roodie.materialmovies.views.custom_views.MMoviesImageView
-                android:id="@+id/imageview_person"
+                android:id="@+id/poster_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -65,12 +65,16 @@
 
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
+        <FrameLayout
+            android:id="@+id/content_view"
             android:layout_width="0px"
             android:layout_weight="4"
             android:layout_marginTop="@dimen/spacing_minor"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+                <include layout="@layout/include_detail_recycler_view"/>
+
+        </FrameLayout>
 
         </LinearLayout>
 

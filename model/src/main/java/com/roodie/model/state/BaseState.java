@@ -2,7 +2,6 @@ package com.roodie.model.state;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import com.roodie.model.controllers.DrawerMenuItem;
 import com.roodie.model.network.NetworkError;
 
 import java.io.Serializable;
@@ -13,25 +12,28 @@ import java.util.List;
  */
 public interface BaseState {
 
-    public void setSelectedSideMenuItem(DrawerMenuItem item);
+    void registerForEvents(Object receiver);
 
-    public DrawerMenuItem getSelectedSideMenuItem();
+    void unregisterForEvents(Object receiver);
 
-    public void registerForEvents(Object receiver);
-
-    public void unregisterForEvents(Object receiver);
-
-    static class BaseArgumentEvent<T> {
+    class BaseEvent {
         public final int callingId;
+
+        public BaseEvent(int callingId) {
+            this.callingId = callingId;
+        }
+    }
+
+    class BaseArgumentEvent<T> extends BaseEvent {
         public final T item;
 
         public BaseArgumentEvent(int callingId, T item) {
-            this.callingId = callingId;
+            super(callingId);
             this.item = Preconditions.checkNotNull(item, "item cannot be null");
         }
     }
 
-    static class DoubleArgumentEvent<M, V> extends BaseArgumentEvent<M> {
+    class DoubleArgumentEvent<M, V> extends BaseArgumentEvent<M> {
         public final V secondaryItem;
 
         public DoubleArgumentEvent(int callingId, M item, V secondary) {
@@ -40,7 +42,7 @@ public interface BaseState {
         }
     }
 
-    public abstract static class PaginatedResult<T> implements Serializable {
+    abstract class PaginatedResult<T> implements Serializable {
         public List<T> items;
         public int page;
         public int totalPages;
@@ -68,13 +70,13 @@ public interface BaseState {
             for (T item: items) {
                sb.append(item.toString());
             }
-            sb.append("Page: " + page + " total pages: " + totalPages);
+            sb.append("Page: ").append(page).append(" total pages: ").append(totalPages);
             return sb.toString();
         }
 
     }
 
-    public static class ShowLoadingProgressEvent {
+    class ShowLoadingProgressEvent {
         public final int callingId;
         public final boolean show;
         public final boolean secondary;
@@ -90,31 +92,31 @@ public interface BaseState {
         }
     }
 
-    public static class ShowRelatedLoadingProgressEvent extends ShowLoadingProgressEvent {
+    class ShowRelatedLoadingProgressEvent extends ShowLoadingProgressEvent {
         public ShowRelatedLoadingProgressEvent(int callingId, boolean show) {
             super(callingId, show);
         }
     }
 
-    public static class ShowCreditLoadingProgressEvent extends ShowLoadingProgressEvent {
+    class ShowCreditLoadingProgressEvent extends ShowLoadingProgressEvent {
         public ShowCreditLoadingProgressEvent(int callingId, boolean show) {
             super(callingId, show);
         }
     }
 
-    public static class ShowVideosLoadingProgressEvent extends ShowLoadingProgressEvent {
+    class ShowVideosLoadingProgressEvent extends ShowLoadingProgressEvent {
         public ShowVideosLoadingProgressEvent(int callingId, boolean show) {
             super(callingId, show);
         }
     }
 
-    public static class ShowTvSeasonLoadingProgressEvent extends ShowLoadingProgressEvent {
+    class ShowTvSeasonLoadingProgressEvent extends ShowLoadingProgressEvent {
         public ShowTvSeasonLoadingProgressEvent(int callingId, boolean show) {
             super(callingId, show);
         }
     }
 
-    public static class OnErrorEvent {
+    class OnErrorEvent {
         public final int callingId;
         public final NetworkError error;
 

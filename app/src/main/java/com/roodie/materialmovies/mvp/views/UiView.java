@@ -1,32 +1,38 @@
 package com.roodie.materialmovies.mvp.views;
 
 
+import com.arellomobile.mvp.MvpView;
+
 /**
  * Created by Roodie on 25.06.2015.
  */
-public interface UiView {
+public interface UiView extends MvpView {
 
-    MovieQueryType getQueryType();
+    void updateDisplayTitle(String title);
 
-    boolean isModal();
+    void updateDisplaySubtitle(String subtitle);
 
-    public enum MovieQueryType {
+    enum MMoviesQueryType {
+        COMMON_MOVIES,
         POPULAR_MOVIES,
         UPCOMING_MOVIES,
         IN_THEATERS_MOVIES,
+        WATCHED,
+        COMMON_SHOWS,
+        POPULAR_SHOWS,
+        ON_THE_AIR_SHOWS,
+        WATCHED_SHOWS,
         MOVIES_TAB,
         SHOWS_TAB,
         SHOWS,
         MOVIE_DETAIL,
-        MOVIE_RELATED,
+        RELATED_MOVIES,
         MOVIE_CAST,
         MOVIE_CREW,
         MOVIE_IMAGES,
         PERSON_DETAIL,
         PERSON_CREDITS_CAST,
         PERSON_CREDITS_CREW,
-        POPULAR_SHOWS,
-        ON_THE_AIR_SHOWS,
         SEARCH,
         SEARCH_MOVIES,
         SEARCH_SHOWS,
@@ -37,12 +43,16 @@ public interface UiView {
         TV_SEASONS_LIST,
         TV_SEASONS,
         TV_SEASON_DETAIL,
+        FAVOURITE_MOVIES,
+        FAVOURITE_SHOWS,
         NONE;
 
         public boolean showUpNavigation() {
             switch (this) {
+                case COMMON_MOVIES:
+                case COMMON_SHOWS:
                 case MOVIE_DETAIL:
-                case MOVIE_RELATED:
+                case RELATED_MOVIES:
                 case MOVIE_CAST:
                 case MOVIE_CREW:
                 case MOVIE_IMAGES:
@@ -66,15 +76,28 @@ public interface UiView {
         }
     }
 
-    public static enum MovieTabs {
-        POPULAR, IN_THEATRES, UPCOMING
+    enum MovieTabs {
+        POPULAR("Popular"),
+        IN_THEATRES("In Theatres"),
+        UPCOMING("Upcoming");
+
+        private final String title;
+
+        MovieTabs(String title) {
+            this.title = title;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
     }
 
-    public static enum ShowTabs {
+    enum ShowTabs {
         POPULAR, ON_THE_AIR
     }
 
-    public static enum SearchMediaType {
+    enum SearchMediaType {
         MOVIES, SHOWS, PEOPLE
     }
 

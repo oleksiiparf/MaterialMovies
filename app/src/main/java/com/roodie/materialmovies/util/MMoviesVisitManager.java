@@ -3,6 +3,7 @@ package com.roodie.materialmovies.util;
 import android.content.Context;
 
 import com.google.common.base.Preconditions;
+import com.roodie.model.util.VisitManager;
 
 /**
  * Created by Roodie on 05.09.2015.
@@ -17,7 +18,7 @@ public class MMoviesVisitManager implements VisitManager {
 
     @Override
     public boolean isFirstVisitPerformed() {
-        return MMoviesPreferences.isSetFirstVisitPerformed(mContext);
+        return MMoviesPreferences.isSetFirstVisitAsPerformed(mContext);
     }
 
     @Override

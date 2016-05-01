@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group  android:id="@+id/menu_group_1">
+    <group  android:id="@+id/menu_group_1"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/menu_watched"
+            android:icon="@drawable/ic_drawer_heart"
+            android:title="@string/category_watched" />
 
         <item
             android:id="@+id/menu_movies"
-            android:icon="@drawable/ic_play_circle"
+            android:icon="@drawable/ic_drawer_film"
             android:title="@string/category_movies" />
         <item
             android:id="@+id/menu_shows"
-            android:icon="@drawable/ic_emoticon_cool"
+            android:icon="@drawable/ic_drawer_television"
             android:title="@string/category_shows" />
 
         </group>
@@ -21,9 +27,9 @@
             android:title="@string/category_settings" />
 
         <item
-            android:id="@+id/menu_about"
-            android:title="@string/category_about"
-            android:icon="@drawable/ic_alert_circle"/>
+            android:id="@+id/menu_mail"
+            android:title="@string/category_mail"
+            android:icon="@drawable/ic_drawer_mail"/>
     </group>
 
 </menu>

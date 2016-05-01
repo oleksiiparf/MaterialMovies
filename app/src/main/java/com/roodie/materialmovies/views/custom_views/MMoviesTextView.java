@@ -7,9 +7,9 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import com.roodie.materialmovies.MMoviesApp;
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.util.TypefaceManager;
-import com.roodie.materialmovies.views.MMoviesApplication;
+import com.roodie.materialmovies.util.FontManager;
 
 import javax.inject.Inject;
 
@@ -18,9 +18,10 @@ import javax.inject.Inject;
  */
 public class MMoviesTextView extends TextView {
 
-    @Inject TypefaceManager mTypefaceManager;
+    @Inject
+    FontManager mFontManager;
 
-    public static final int FONT_LOBSTER = 1;
+/*    public static final int FONT_LOBSTER = 1;
     public static final int FONT_ROBOTO_LIGHT = 2;
     public static final int FONT_ROBOTO_CONDENSED = 3;
     public static final int FONT_ROBOTO_CONDENSED_LIGHT = 4;
@@ -31,6 +32,8 @@ public class MMoviesTextView extends TextView {
     public static final int FONT_DIN_MEDIUM = 8;
     public static final int FONT_DIN_LIGHT = 9;
     public static final int FONT_DIN_ULTRA_LIGHT = 10;
+    public static final int PROXIMA_REGULAR = 11;
+    public static final int PROXIMA_REGULAR_50 = 12;*/
 
 
     public MMoviesTextView(Context context) {
@@ -44,28 +47,28 @@ public class MMoviesTextView extends TextView {
     public MMoviesTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        MMoviesApplication.from(context).inject(this);
+        MMoviesApp.from(context).inject(this);
 
         if (!isInEditMode()) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MMoviesTextView);
-            setFont(a.getInt(R.styleable.MMoviesTextView_font, 0));
+            setFont(a.getInt(R.styleable.MMoviesTextView_font, 7));
             a.recycle();
         }
     }
 
 
     public void setFont(final int font) {
-        Typeface typeface = getFont(mTypefaceManager, font);
+        Typeface typeface = mFontManager.getFont(font);
         if (typeface != null) {
             setPaintFlags(getPaintFlags() | TextPaint.SUBPIXEL_TEXT_FLAG);
             setTypeface(typeface);
         }
     }
 
-    public static Typeface getFont(TypefaceManager typefaceManager, final int customFont) {
+/*    public static Typeface getFont(FontManager typefaceManager, final int fontType) {
         Typeface typeface = null;
 
-        switch (customFont) {
+        switch (fontType) {
             case FONT_LOBSTER:
                 typeface = typefaceManager.getLobster();
                 break;
@@ -96,11 +99,17 @@ public class MMoviesTextView extends TextView {
             case FONT_DIN_ULTRA_LIGHT:
                 typeface = typefaceManager.getDinUltraLight();
                 break;
+            case PROXIMA_REGULAR:
+                typeface = typefaceManager.getProximaRegular();
+                break;
+            case PROXIMA_REGULAR_50:
+                typeface = typefaceManager.getProximaRegular50();
+                break;
 
         }
 
         return typeface;
-    }
+    }*/
 
 
 }

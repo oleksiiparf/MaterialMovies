@@ -1,9 +1,8 @@
 package com.roodie.materialmovies.util;
 
 import android.content.Context;
-import android.graphics.Point;
-import android.view.Display;
-import android.view.WindowManager;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.widget.Toast;
 
 import com.roodie.materialmovies.R;
@@ -13,7 +12,6 @@ import com.roodie.materialmovies.views.activities.SettingsActivity;
  * Created by Roodie on 22.07.2015.
  */
 public class Utils {
-
 
     /**
      * Returns true if there is an active connection which is approved by the user for large data
@@ -38,24 +36,7 @@ public class Utils {
                     largeDataOverWifiOnly ? R.string.offline_no_wifi : R.string.offline,
                     Toast.LENGTH_LONG).show();
         }
-
         return isConnected;
-    }
-
-    public static int getScreenWidth(Context context) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        return size.x;
-    }
-
-    public static int getScreenHeight(Context c) {
-            WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
-            Display display = wm.getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            return size.y;
     }
 
     /**
@@ -80,6 +61,30 @@ public class Utils {
             }
                 break;
         }
+    }
+
+    /**
+     * Calls {@link Context#startActivity(Intent)} with the given {@link Intent}. If it is
+     * <b>implicit</b>, makes sure there is an Activity to handle it. If <b>explicit</b>,
+     * will intercept {@link android.content.ActivityNotFoundException}. Can show an error toast on
+     * failure.
+     *
+     * <p> E.g. an implicit intent may fail if e.g. the web browser has been disabled through
+     * restricted profiles.
+     *
+     * @return Whether the {@link Intent} could be handled.
+     */
+
+
+    public static String getVersion(Context context) {
+        String version;
+        try {
+            version = context.getPackageManager().getPackageInfo(context.getPackageName(),
+                    PackageManager.GET_META_DATA).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            version = "UnknownVersion";
+        }
+        return version;
     }
 
 

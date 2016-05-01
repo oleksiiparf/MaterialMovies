@@ -6,8 +6,10 @@ import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.SeasonWrapper;
 import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.entities.TmdbConfiguration;
+import com.roodie.model.entities.Watchable;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,157 +17,196 @@ import java.util.Map;
  */
 public interface MoviesState extends BaseState {
 
-    public Map<String, MovieWrapper> getTmdbIdMovies();
+    Map<String, MovieWrapper> getTmdbIdMovies();
 
-    public Map<String, MovieWrapper> getImdbIdMovies();
+    Map<String, ShowWrapper> getTvShows();
 
-    public Map<String, ShowWrapper> getTmdbShows();
+    ShowWrapper getTvShow(String id);
 
-    public ShowWrapper getTvShow(String id);
+    ShowWrapper getTvShow(int id);
 
-    public ShowWrapper getTvShow(int id);
+    SeasonWrapper getTvSeason(String id);
 
-    public SeasonWrapper getTvSeason(String id);
+    SeasonWrapper getTvSeason(int id);
 
-    public SeasonWrapper getTvSeason(int id);
+    MovieWrapper getMovie(String id);
 
-    public MovieWrapper getMovie(String id);
+    MovieWrapper getMovie(int id);
 
-    public MovieWrapper getMovie(int id);
+    void putMovie(MovieWrapper movie);
 
-    public void putMovie(MovieWrapper movie);
+    void putShow(ShowWrapper show);
 
-    public MoviePaginatedResult getPopularMovies();
+    MoviePaginatedResult getPopularMovies();
 
-    public void setPopularMovies(MoviePaginatedResult popular);
+    void setPopularMovies(int callingId, MoviePaginatedResult popular);
 
-    public MoviePaginatedResult getNowPlaying();
+    MoviePaginatedResult getNowPlaying();
 
-    public void setNowPlaying(MoviePaginatedResult nowPlaying);
+    void setNowPlaying(int callingId, MoviePaginatedResult nowPlaying);
 
-    public MoviePaginatedResult getUpcoming();
+    MoviePaginatedResult getUpcoming();
 
-    public void setUpcoming(MoviePaginatedResult upcoming);
+    void setUpcoming(int callingId, MoviePaginatedResult upcoming);
 
-    public ShowPaginatedResult getPopularShows();
+    ShowPaginatedResult getPopularShows();
 
-    public void setPopularShows(ShowPaginatedResult popular);
+    void setPopularShows(int callingId, ShowPaginatedResult popular);
 
-    public ShowPaginatedResult getOnTheAirShows();
+    ShowPaginatedResult getOnTheAirShows();
 
-    public void setOnTheAirShows(ShowPaginatedResult onTheAir);
+    void setOnTheAirShows(int callingId, ShowPaginatedResult onTheAir);
 
-    public void setSearchResult(SearchResult result);
+    void setSearchResult(int callingId, SearchResult result);
 
-    public SearchResult getSearchResult();
+    SearchResult getSearchResult();
 
-    public TmdbConfiguration getTmdbConfiguration();
+    TmdbConfiguration getTmdbConfiguration();
 
-    public void setTmdbConfiguration(TmdbConfiguration configuration);
+    void setTmdbConfiguration(TmdbConfiguration configuration);
 
-    public Map<String, PersonWrapper> getPeople();
+    Map<String, PersonWrapper> getPeople();
 
-    public PersonWrapper getPerson(int id);
+    PersonWrapper getPerson(int id);
 
-    public PersonWrapper getPerson(String id);
+    PersonWrapper getPerson(String id);
 
-    public static class PopularMoviesChangedEvent {}
+    List<Watchable> getWatched();
 
-    public static class InTheatresMoviesChangedEvent {}
+    class PopularMoviesChangedEvent extends BaseEvent {
+        public PopularMoviesChangedEvent(int callingId) {
+            super(callingId);
+        }
+    }
 
-    public static class UpcomingMoviesChangedEvent {}
+    class InTheatresMoviesChangedEvent extends BaseEvent {
+        public InTheatresMoviesChangedEvent(int callingId) {
+            super(callingId);
+        }
+    }
 
-    public static class PopularShowsChangedEvent {}
+    class UpcomingMoviesChangedEvent extends BaseEvent {
+        public UpcomingMoviesChangedEvent(int callingId) {
+            super(callingId);
+        }
+    }
 
-    public static class OnTheAirShowsChangedEvent {}
+    class PopularShowsChangedEvent extends BaseEvent{
+        public PopularShowsChangedEvent(int callingId) {
+            super(callingId);
+        }
+    }
 
-    public static class SearchResultChangedEvent {}
+    class OnTheAirShowsChangedEvent extends BaseEvent{
+        public OnTheAirShowsChangedEvent(int callingId) {
+            super(callingId);
+        }
+    }
 
-    public static class TmdbConfigurationChangedEvent {}
+    class SearchResultChangedEvent extends BaseEvent{
+        public SearchResultChangedEvent(int callingId) {
+            super(callingId);
+        }
+    }
 
-    public static class TvSeasonsChangeEvent {}
+    class TmdbConfigurationChangedEvent{
+    }
 
-    public static class MovieInformationUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
+    class TvSeasonsChangeEvent{
+    }
+
+    class WatchedChangeEvent{
+    }
+
+    class MovieInformationUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
         public MovieInformationUpdatedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class MovieReleasesUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
+    class MovieReleasesUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
         public MovieReleasesUpdatedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class MovieRelatedItemsUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
+    class MovieRelatedItemsUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
         public MovieRelatedItemsUpdatedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class MovieVideosItemsUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
+    class MovieVideosItemsUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
         public MovieVideosItemsUpdatedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class MovieImagesUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
+    class MovieImagesUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
         public MovieImagesUpdatedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class MovieCastItemsUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
+    class MovieCastItemsUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {
         public MovieCastItemsUpdatedEvent(int callingId, MovieWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class PersonChangedEvent extends BaseArgumentEvent<PersonWrapper> {
+    class PersonChangedEvent extends BaseArgumentEvent<PersonWrapper> {
         public PersonChangedEvent(int callingId, PersonWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class TvShowInformationUpdatedEvent extends BaseArgumentEvent<ShowWrapper> {
+    class TvShowInformationUpdatedEvent extends BaseArgumentEvent<ShowWrapper> {
         public TvShowInformationUpdatedEvent(int callingId, ShowWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class TvShowImagesUpdatedEvent extends BaseArgumentEvent<ShowWrapper> {
+    class TvShowImagesUpdatedEvent extends BaseArgumentEvent<ShowWrapper> {
         public TvShowImagesUpdatedEvent(int callingId, ShowWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class TvShowCastItemsUpdatedEvent extends BaseArgumentEvent<ShowWrapper> {
+    class TvShowCastItemsUpdatedEvent extends BaseArgumentEvent<ShowWrapper> {
         public TvShowCastItemsUpdatedEvent(int callingId, ShowWrapper item) {
             super(callingId, item);
         }
     }
 
-    public static class TvShowSeasonUpdatedEvent extends DoubleArgumentEvent<String, SeasonWrapper> {
+    class TvShowSeasonUpdatedEvent extends DoubleArgumentEvent<String, SeasonWrapper> {
         public TvShowSeasonUpdatedEvent(int callingId,String showId, SeasonWrapper item) {
             super(callingId, showId, item);
         }
     }
 
-
-
-
-
-    public class MoviePaginatedResult extends PaginatedResult<MovieWrapper> {
+    class MovieFlagUpdateEvent extends BaseArgumentEvent<MovieWrapper> {
+        public MovieFlagUpdateEvent(int callingId, MovieWrapper item) {
+            super(callingId, item);
+        }
     }
 
-    public class PersonPaginatedResult extends PaginatedResult<PersonWrapper> {
+    class ShowFlagUpdateEvent extends BaseArgumentEvent<ShowWrapper> {
+        public ShowFlagUpdateEvent(int callingId, ShowWrapper item) {
+            super(callingId, item);
+        }
     }
 
-    public class ShowPaginatedResult extends PaginatedResult<ShowWrapper> {
+    class MoviePaginatedResult extends PaginatedResult<MovieWrapper> {
+    }
+
+    class PersonPaginatedResult extends PaginatedResult<PersonWrapper> {
+    }
+
+    class ShowPaginatedResult extends PaginatedResult<ShowWrapper> {
 
     }
 
-    public class SearchResult implements Serializable {
+    class SearchResult implements Serializable {
         public final String query;
         public MoviePaginatedResult movies;
         public PersonPaginatedResult people;

@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.TextView;
 
 import com.roodie.materialmovies.R;
 
@@ -45,7 +44,7 @@ public class ExpandableTextView extends MMoviesTextView implements View.OnClickL
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ExpandableTextView, 0 , defStyle);
         mCollapsedMaxLines = a.getInt(R.styleable.ExpandableTextView_collapsed_maxLines, 8);
-        mExpanded = a.getBoolean(R.styleable.ExpandableTextView_expanded, false);
+        mExpanded = a.getBoolean(R.styleable.ExpandableTextView_expanded_status, false);
         a.recycle();
 
         if (mExpanded) {

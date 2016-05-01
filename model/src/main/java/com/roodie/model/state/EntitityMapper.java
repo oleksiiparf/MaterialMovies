@@ -1,9 +1,8 @@
 package com.roodie.model.state;
 
-import android.text.TextUtils;
-
 import com.google.common.base.Preconditions;
 import com.roodie.model.entities.CreditWrapper;
+import com.roodie.model.entities.Genre;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.SeasonWrapper;
@@ -37,18 +36,13 @@ public class EntitityMapper {
     }
 
     MovieWrapper getMovieEntity(String id) {
-        if (mMoviesState.getImdbIdMovies().containsKey(id)) {
-            return mMoviesState.getImdbIdMovies().get(id);
-        } else if (mMoviesState.getTmdbIdMovies().containsKey(id)) {
+       if (mMoviesState.getTmdbIdMovies().containsKey(id)) {
             return mMoviesState.getTmdbIdMovies().get(id);
         }
         return null;
     }
 
     void putMovieEntity(MovieWrapper movie) {
-        if (!TextUtils.isEmpty(movie.getImdbId())) {
-            mMoviesState.getImdbIdMovies().put(movie.getImdbId(), movie);
-        }
         if (movie.getTmdbId() != null) {
             mMoviesState.getTmdbIdMovies().put(String.valueOf(movie.getTmdbId()), movie);
         }
@@ -63,15 +57,15 @@ public class EntitityMapper {
     }
 
     SeasonWrapper getSeasonEntity(String id) {
-        return mMoviesState.getTmdbSeasons().get(id);
+        return mMoviesState.getTvSeasons().get(id);
     }
 
     void putSeasonEntity(SeasonWrapper entity) {
-        mMoviesState.getTmdbSeasons().put(String.valueOf(entity.getId()), entity);
+        mMoviesState.getTvSeasons().put(String.valueOf(entity.getTmdbId()), entity);
     }
 
     ShowWrapper getShowEntity(String id) {
-        return mMoviesState.getTmdbShows().get(id);
+        return mMoviesState.getTvShows().get(id);
     }
 
     ShowWrapper getShowEntity(int id) {
@@ -79,7 +73,7 @@ public class EntitityMapper {
     }
 
     void putShowEntity(ShowWrapper entity) {
-        mMoviesState.getTmdbShows().put(String.valueOf(entity.getTmdbId()), entity);
+        mMoviesState.getTvShows().put(String.valueOf(entity.getTmdbId()), entity);
     }
 
     /*
@@ -168,7 +162,7 @@ public class EntitityMapper {
 
         if (movie == null) {
             // No movie, so create one
-            movie = new MovieWrapper();
+            movie = new MovieWrapper(String.valueOf(entity.id));
         }
         // We already have a movie, so just update it wrapped value
         movie.setFromMovie(entity);
@@ -189,7 +183,7 @@ public class EntitityMapper {
 
         if (show == null) {
             // No show, so create one
-            show = new ShowWrapper();
+            show = new ShowWrapper(String.valueOf(entity.id));
         }
         // We already have a movie, so just update it wrapped value
         show.setFromShow(entity);
@@ -226,6 +220,18 @@ public class EntitityMapper {
             return seasons;
         }
         return null;
+    }
+
+    public static List<Genre> mapGenres(List<com.uwetrottmann.tmdb.entities.Genre> entities) {
+        final ArrayList<Genre> genres = new ArrayList<>();
+        for (com.uwetrottmann.tmdb.entities.Genre tmdbGenre : entities) {
+            Genre value = Genre.fromName(tmdbGenre.id);
+            if (value != null) {
+                genres.add(value);
+            }
+        }
+        //Collections.sort(genres);
+        return genres;
     }
 
 

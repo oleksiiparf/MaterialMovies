@@ -14,13 +14,17 @@ import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.drawable.RoundedDrawable;
-import com.roodie.materialmovies.util.AnimationUtils;
+import com.roodie.materialmovies.util.AnimUtils;
+import com.roodie.materialmovies.util.Utils;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.SeasonWrapper;
 import com.roodie.model.entities.ShowWrapper;
+import com.roodie.model.entities.Watchable;
+import com.roodie.model.util.FileLog;
 import com.roodie.model.util.ImageHelper;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
@@ -39,9 +43,9 @@ public class MMoviesImageView extends ImageView {
 
     public interface OnLoadedListener {
 
-        public void onSuccess(MMoviesImageView imageView, Bitmap bitmap, String imageUrl);
+        void onSuccess(MMoviesImageView imageView, Bitmap bitmap, String imageUrl);
 
-        public void onError(MMoviesImageView imageView);
+        void onError(MMoviesImageView imageView);
     }
 
     public MMoviesImageView(Context context, AttributeSet attrs) {
@@ -77,7 +81,6 @@ public class MMoviesImageView extends ImageView {
     @Override
     protected void onDetachedFromWindow() {
         Picasso.with(getContext()).cancelRequest(mBitmapTarget);
-
         super.onDetachedFromWindow();
     }
 
@@ -92,8 +95,18 @@ public class MMoviesImageView extends ImageView {
 
         if (url != null) {
             mImageHandler.markAsStarted();
-
+            /*
+            * Build Picasso  which respects user requirement of
+            * only loading images over WiFi.
+            * */
             RequestCreator request = Picasso.with(getContext()).load(url);
+            /*
+            * If isAllowedLargeDataConnection is false, will set NetworkPolicy
+            * to OFFLINE  to skip the network and accept  stale images.
+            */
+            if (!Utils.isAllowedLargeDataConnection(getContext(), false)) {
+                request.networkPolicy(NetworkPolicy.OFFLINE);
+            }
             if (mImageHandler.getPlaceholderDrawable() != 0) {
                 request = request.placeholder(mImageHandler.getPlaceholderDrawable());
             }
@@ -104,7 +117,7 @@ public class MMoviesImageView extends ImageView {
             }
             request.into(mBitmapTarget);
 
-                Log.d("PhilmImageView", "Loading " + url);
+                FileLog.d("images", "Loading " + url);
         }
     }
 
@@ -114,6 +127,17 @@ public class MMoviesImageView extends ImageView {
         //TODO
     }
 
+
+    public void  loadPoster(Watchable item) {
+        switch (item.getWatchableType()) {
+            case MOVIE:
+                loadPoster((MovieWrapper) item);
+                break;
+            case TV_SHOW:
+                loadPoster((ShowWrapper) item);
+                break;
+        }
+    }
     /**
      * Set movie poster handler
      */
@@ -126,7 +150,7 @@ public class MMoviesImageView extends ImageView {
             setImageHandler(new MoviePosterHandler(movie, listener));
         } else {
             reset();
-            setImageResourceImpl(R.color.movie_placeholder);
+            setImageResourceImpl(R.drawable.poster);
         }
     }
 
@@ -142,7 +166,7 @@ public class MMoviesImageView extends ImageView {
             setImageHandler(new ShowPosterHandler(show, listener));
         } else {
             reset();
-            setImageResourceImpl(R.color.movie_placeholder);
+            setImageResourceImpl(R.drawable.poster);
         }
     }
 
@@ -158,7 +182,7 @@ public class MMoviesImageView extends ImageView {
             setImageHandler(new SeasonPosterHandler(season, listener));
         } else {
             reset();
-            setImageResourceImpl(R.color.movie_placeholder);
+            setImageResourceImpl(R.drawable.poster);
         }
     }
 
@@ -214,7 +238,7 @@ public class MMoviesImageView extends ImageView {
     }
 
     public void loadBackdrop(ShowWrapper show, OnLoadedListener listener) {
-        if (show.hasBackdrodUrl()) {
+        if (show.hasBackdropUrl()) {
             setImageHandler(new ShowBackdropHandler(show, listener));
         } else {
             reset();
@@ -311,6 +335,10 @@ public class MMoviesImageView extends ImageView {
             return ImageHelper.getPosterUrl(object, imageView.getWidth(), imageView.getHeight());
         }
 
+       /* @Override
+        int getPlaceholderDrawable() {
+            return R.drawable.poster;
+        }*/
     }
 
     //ShowPosterHandler
@@ -325,6 +353,11 @@ public class MMoviesImageView extends ImageView {
             return ImageHelper.getPosterUrl(object, imageView.getWidth(), imageView.getHeight());
         }
 
+        /*@Override
+        int getPlaceholderDrawable() {
+            return R.drawable.poster;
+        }*/
+
     }
 
     //SeasonPosterHandler
@@ -338,6 +371,11 @@ public class MMoviesImageView extends ImageView {
         protected String buildUrl(SeasonWrapper object, ImageView imageView) {
             return ImageHelper.getPosterUrl(object, imageView.getWidth(), imageView.getHeight());
         }
+
+      /*  @Override
+        int getPlaceholderDrawable() {
+            return R.drawable.poster;
+        }*/
 
     }
 
@@ -427,7 +465,7 @@ public class MMoviesImageView extends ImageView {
     private final Target mBitmapTarget = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            //Log.d(LOG_TAG, "On bitmap loaded");
+            Log.d("mmovies_image", "On bitmap loaded");
             setImageBitmapFromNetwork(bitmap, from);
             if (mImageHandler != null) {
                 if (mImageHandler.mListener != null) {
@@ -439,7 +477,7 @@ public class MMoviesImageView extends ImageView {
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
-            //Log.d(LOG_TAG, "On bitmap failed");
+            Log.d("mmovies_image", "On bitmap failed");
             if (mImageHandler != null) {
                 if (mImageHandler.mListener != null) {
                     mImageHandler.mListener.onError(MMoviesImageView.this);
@@ -451,7 +489,7 @@ public class MMoviesImageView extends ImageView {
 
         @Override
         public void onPrepareLoad(Drawable placeHolderDrawable) {
-            //Log.d(LOG_TAG, "On prepare load");
+            Log.d("mmovies_image", "On prepare load");
             if (mImageHandler == null || mImageHandler.shouldDisplayPlaceholder()) {
                 setImageDrawableImpl(placeHolderDrawable);
             }
@@ -460,22 +498,22 @@ public class MMoviesImageView extends ImageView {
 
 
     void setImageBitmapFromNetwork(final Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-        final boolean fade = mAutoFade && loadedFrom != Picasso.LoadedFrom.MEMORY;
-        final boolean blur = mBlurred && loadedFrom != Picasso.LoadedFrom.MEMORY;
+        //final boolean fade = mAutoFade && loadedFrom != Picasso.LoadedFrom.MEMORY;
+       // final boolean blur = mBlurred;
         final Drawable currentDrawable = getDrawable();
 
-        if (fade) {
+        if (mAutoFade) {
             if (currentDrawable == null || mImageHandler.getPlaceholderDrawable() != 0) {
                 // If we have no current drawable, or it is a placeholder drawable. Just fade in
                 setVisibility(View.INVISIBLE);
                 setImageBitmapImpl(bitmap);
-                AnimationUtils.Fade.show(this);
+                AnimUtils.Fade.show(this);
             } else {
-                    AnimationUtils.startCrossFade(this, currentDrawable,
+                    AnimUtils.startCrossFade(this, currentDrawable,
                             new BitmapDrawable(getResources(), bitmap));
             }
-        } else if (blur) {
-            AnimationUtils.makeBlur(this, bitmap);
+        } else if (mBlurred) {
+            AnimUtils.makeBlur(this, bitmap);
 
         } else {
             setImageBitmapImpl(bitmap);
@@ -502,6 +540,7 @@ public class MMoviesImageView extends ImageView {
     void setImageResourceImpl(int resId) {
         if (mAvatarMode) {
             BitmapDrawable d = (BitmapDrawable) getResources().getDrawable(resId);
+            assert d != null;
             setImageDrawable(new RoundedDrawable(d.getBitmap()));
         } else {
             setImageResource(resId);

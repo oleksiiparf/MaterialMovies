@@ -13,8 +13,7 @@
         android:layout_width="56.0dip"
         android:layout_height="56.0dip"
         android:background="?selectableItemBackgroundBorderless"
-        android:contentDescription="@string/back"
-        android:src="@drawable/abc_ic_ab_back_mtrl_am_alpha"
+        android:contentDescription="@string/label_back"
         android:tint="@color/mm_white_1" />
 
     <EditText
@@ -39,6 +38,6 @@
         android:layout_height="56.0dip"
         android:layout_marginLeft="@dimen/spacing_major"
         android:background="?selectableItemBackgroundBorderless"
-        android:contentDescription="@string/cancel"
+        android:contentDescription="@string/label_cancel"
         android:src="@drawable/ic_action_close" />
 </LinearLayout>

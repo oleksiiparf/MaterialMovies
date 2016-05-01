@@ -6,7 +6,7 @@
     android:addStatesFromChildren="true">
 
     <com.roodie.materialmovies.views.custom_views.MMoviesImageView
-        android:id="@+id/poster"
+        android:id="@+id/imageview_poster"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
@@ -25,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textColor="@color/mm_white"
             style="@style/Widget.MMovies.TextAppearance.PrimaryText" />
 
         <com.roodie.materialmovies.views.custom_views.MMoviesTextView
@@ -32,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:textColor="@color/mm_white"
             style="@style/Widget.MMovies.TextAppearance.SecondaryText.Small"
             android:layout_alignParentBottom="true" />
     </LinearLayout>

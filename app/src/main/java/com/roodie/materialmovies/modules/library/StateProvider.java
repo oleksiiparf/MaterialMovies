@@ -1,5 +1,6 @@
 package com.roodie.materialmovies.modules.library;
 
+import com.roodie.materialmovies.MMoviesApp;
 import com.roodie.model.state.ApplicationState;
 import com.squareup.otto.Bus;
 
@@ -20,7 +21,7 @@ public class StateProvider {
 
     @Provides @Singleton
     public ApplicationState provideApplicationState(Bus bus) {
-        return new ApplicationState(bus);
+        return MMoviesApp.get().getState();
     }
 
 }

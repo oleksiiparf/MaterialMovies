@@ -2,8 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
-        android:key="version"
-        android:summary="@string/current_buld_version"
+        android:key="com.roodie.materialmovies.licenses"
+        android:summary="@string/show_licenses"
+        android:title="@string/show_licenses_summary" />
+
+    <Preference
+        android:key="com.roodie.materialmovies.build_version"
+        android:summary=""
         android:title="@string/build_version" />
 
     <Preference

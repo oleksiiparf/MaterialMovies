@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by Roodie on 03.07.2015.
  */
-abstract class BasePaginatedRunnable<R extends BaseState.PaginatedResult<T>, T, MR> extends BaseMovieRunnable<MR> {
+abstract class BasePaginatedRunnable<R extends BaseState.PaginatedResult<T>, T, MR> extends BaseRunnable<MR> {
 
     private final int mPage;
 

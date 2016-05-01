@@ -5,5 +5,5 @@ package com.roodie.model.util;
  */
 public interface Injector {
 
-    public void inject(Object object);
+    void inject(Object object);
 }

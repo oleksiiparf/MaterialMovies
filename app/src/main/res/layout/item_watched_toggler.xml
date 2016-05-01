@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/textview_content"
+        android:layout_width="0.0dip"
+        android:layout_weight="1.0"
+        android:layout_height="wrap_content"
+        android:layout_margin="4.0dip"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textColor="?attr/colorAccent"
+        android:text="Watched" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="1.0px"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="@dimen/spacing_minor"
+        android:layout_marginBottom="@dimen/spacing_minor"
+        android:background="?android:listDivider" />
+
+    <ImageView
+        android:id="@+id/imageview_toggler"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:scaleType="centerInside"
+        />
+
+</LinearLayout>

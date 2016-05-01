@@ -4,35 +4,81 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.AbsListView;
+import android.widget.Toast;
 
 import com.roodie.materialmovies.R;
+import com.roodie.materialmovies.mvp.views.MvpLceView;
+import com.roodie.materialmovies.util.StringUtils;
+import com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout;
+import com.roodie.materialmovies.views.listeners.AppBarStateChangeListener;
+import com.roodie.model.network.NetworkError;
+import com.roodie.model.util.TextUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import butterknife.InjectView;
+import butterknife.Optional;
+
 /**
  * Created by Roodie on 28.06.2015.
  */
-public abstract class BaseDetailFragment extends BaseFragment {
+public abstract class BaseDetailFragment<M extends Serializable, RV extends BaseRecyclerLayout> extends BaseMvpFragment implements MvpLceView<M>{
 
 
+    protected RV mPrimaryRecyclerView;
 
-    protected RecyclerView mRecyclerView;
-    private LinearLayout mLeftContainer;
+    @Optional @InjectView(R.id.appbar)
+    protected AppBarLayout mAppBar;
 
-    private Context mContext;
+    @Optional @InjectView(R.id.left_container)
+    ViewGroup mLeftContainer;
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
+    protected String mToolbarTitle;
+
+    @Optional
+    @InjectView(R.id.backdrop_toolbar)
+    protected CollapsingToolbarLayout mCollapsingToolbarLayout;
+
+    protected RecyclerView.OnScrollListener expandableScrollListener = new RecyclerView.OnScrollListener() {
+        int scrollDy = 0;
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (scrollDy == 0 && (newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE)) {
+                mAppBar.setExpanded(true);
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            scrollDy += dy;
+        }
+    };
+
+    protected AppBarLayout.OnOffsetChangedListener offsetListener = new AppBarStateChangeListener() {
+        @Override
+        public void onStateChanged(AppBarLayout appBarLayout, AppBarStateChangeListener.State
+                state) {
+            if (state == AppBarStateChangeListener.State.EXPANDED || state == AppBarStateChangeListener.State.IDLE) {
+                mCollapsingToolbarLayout.setTitle("");
+            } else {
+                mCollapsingToolbarLayout.setTitle(mToolbarTitle);
+            }
+        }
+    };
+
+    protected Context mContext;
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -40,36 +86,63 @@ public abstract class BaseDetailFragment extends BaseFragment {
         mContext = activity.getApplicationContext();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_detail_list, container, false);
+    public void onResume() {
+        super.onResume();
+        if (mAppBar != null) {
+            mAppBar.addOnOffsetChangedListener(offsetListener);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mAppBar != null)
+            mAppBar.removeOnOffsetChangedListener(offsetListener);
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_detail_list;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        mLeftContainer = (LinearLayout) view.findViewById(R.id.left_container);
+        mPrimaryRecyclerView = (RV) view.findViewById(R.id.primary_recycler_view);
+        mPrimaryRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+
+        if (mCollapsingToolbarLayout != null) {
+            mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
+        }
     }
 
-
-
-    protected RecyclerView getRecyclerView() {
-        return mRecyclerView;
+    public RV getRecyclerView() {
+        return mPrimaryRecyclerView;
     }
-
-
 
     public boolean hasLeftContainer() {
         return mLeftContainer != null;
     }
 
-    protected abstract void setUpVisibility();
+    @Override
+    public void showError(NetworkError error) {
+        toast(getText(StringUtils.getMessageByError(error)).toString());
+    }
 
-    protected abstract void initializePresenter();
+    @Override
+    public void showLoadingProgress(boolean visible) {
+        getActivity().setProgressBarIndeterminateVisibility(visible);
+    }
+
+    public void toast(final String message) {
+        if (!this.isResumed()) {
+            return;
+        }
+        Toast.makeText(getBaseActivity(), TextUtils.toSpanned(getBaseActivity(), message, R.color.mm_green), Toast.LENGTH_SHORT).show();
+
+    }
 
     /**
      * BaseViewHolder
@@ -125,9 +198,6 @@ public abstract class BaseDetailFragment extends BaseFragment {
         public final void notifyBinderItemRangeRemoved(int positionStart, int itemCount) {
             mDataBindAdapter.notifyBinderItemRangeRemoved(this, positionStart, itemCount);
         }
-
-
-
     }
 
     /**

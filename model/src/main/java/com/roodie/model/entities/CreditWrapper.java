@@ -1,11 +1,13 @@
 package com.roodie.model.entities;
 
+import android.support.annotation.NonNull;
+
 import com.google.common.base.Preconditions;
 
 /**
  * Created by Roodie on 07.07.2015.
  */
-public class CreditWrapper extends BasicWrapper implements Comparable<CreditWrapper> {
+public class CreditWrapper implements Comparable<CreditWrapper> {
 
     PersonWrapper person;
     String job;
@@ -51,7 +53,7 @@ public class CreditWrapper extends BasicWrapper implements Comparable<CreditWrap
     }
 
     @Override
-    public int compareTo(CreditWrapper another) {
+    public int compareTo(@NonNull CreditWrapper another) {
         int thisOrder = getOrder();
         int otherOrder = another.getOrder();
 

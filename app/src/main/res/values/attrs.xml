@@ -36,7 +36,15 @@
         <enum name="din_medium" value="8" />
         <enum name="din_light" value="9" />
         <enum name="din_ultra_light" value="10" />
+        <enum name="cat_font_regular" value="11" />
+        <enum name="cat_font_regular50" value="12" />
+            />
     </attr>
+
+    <attr name="font_collapsed" format="integer"/>
+    <attr name="font_expanded" format="integer"/>
+
+
 
     <attr name="title" format="string|reference" />
 
@@ -49,8 +57,25 @@
         <attr name="font" />
     </declare-styleable>
 
+    <declare-styleable name="ExpandablePanel">
+        <attr name="handle" format="reference" />
+        <attr name="content" format="reference" />
+        <attr name="collapsedHeight" format="dimension" />
+        <attr name="animationDuration" format="integer" />
+    </declare-styleable>
+
+
     <declare-styleable name="MMoviesTextView">
         <attr name="font" />
+    </declare-styleable>
+
+    <declare-styleable name="MMoviesToolbar">
+        <attr name="font" />
+    </declare-styleable>
+
+    <declare-styleable name="MMoviesToolbarLayout">
+        <attr name="font_collapsed" />
+        <attr name="font_expanded" />
     </declare-styleable>
 
     <declare-styleable name="MMoviesButton">
@@ -69,12 +94,27 @@
         <attr name="title" />
     </declare-styleable>
 
+    <declare-styleable name="GradientView">
+        <attr name="startColor" format="color" />
+        <attr name="endColor" format="color" />
+        <attr name="angle" format="float|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="MovieTitleCardLayout">
+        <attr name="title" />
+    </declare-styleable>
+
     <declare-styleable name="MovieDetailCardLayoutWithoutTitle">
     </declare-styleable>
 
     <declare-styleable name="TvShowDialogView">
         <attr name="title" />
         <attr name="android:background" />
+    </declare-styleable>
+
+    <declare-styleable name="MovieWatchedToggler">
+        <attr name="togglerOff" format="reference"/>
+        <attr name="togglerOn" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="ForegroundLinearLayout">
@@ -122,12 +162,18 @@
         <attr name="mmColorDivider" format="reference|color" />
         <attr name="mmColorBackgroundDim" format="reference|color" />
 
+        <attr name="mmImageViewTogglerOff" format="reference" />
+        <attr name="mmImageViewTogglerOn" format="reference" />
 
+        <attr name="catFontRegular" format="string" />
+        <attr name="catFontRegular50" format="string" />
+        <attr name="mmSearchTintColor" format="reference|color" />
+        <attr name="mmSearchTextColor" format="reference|color" />
 
     </declare-styleable>
 
     <declare-styleable name="ExpandableTextView">
-        <attr name="expanded" format="boolean|reference" />
+        <attr name="expanded_status" format="boolean|reference" />
         <attr name="collapsed_maxLines" format="integer|reference" />
     </declare-styleable>
 
@@ -206,6 +252,25 @@
         <attr name="strokeWidth" format="reference|dimension" />
         <!-- View background -->
         <attr name="android:background"/>
+    </declare-styleable>
+
+    <declare-styleable name="LoadMoreRecyclerLayout">
+        <attr name="clipToPadding" format="boolean" />
+        <attr name="padding" format="dimension" />
+        <attr name="paddingTop" format="dimension" />
+        <attr name="paddingBottom" format="dimension" />
+        <attr name="paddingLeft" format="dimension" />
+        <attr name="paddingRight" format="dimension" />
+        <attr name="recyclerViewScrollbars" format="enum">
+            <enum name="none" value="0" />
+            <enum name="vertical" value="1" />
+            <enum name="horizontal" value="2" />
+        </attr>
+        <attr name="recyclerViewType" format="enum">
+            <enum name="list" value="0" />
+            <enum name="autofitGrid" value="1" />
+        </attr>
+        <attr name="defaultLoadingColor" format="reference"></attr>
     </declare-styleable>
 
 

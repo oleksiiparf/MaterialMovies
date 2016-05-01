@@ -2,6 +2,7 @@ package com.roodie.materialmovies.views.activities;
 
 import android.content.Intent;
 
+import com.roodie.materialmovies.R;
 import com.roodie.model.Display;
 
 /**
@@ -12,7 +13,12 @@ public class PersonActivity extends  BaseNavigationActivity {
     @Override
     protected void handleIntent(Intent intent, Display display) {
         if (!display.hasMainFragment()) {
-            display.showPersonDetailFragment(intent.getStringExtra(Display.PARAM_ID), intent.getIntArrayExtra(Display.PARAM_LOCATION));
+            display.showPersonDetailFragment(intent.getStringExtra(Display.PARAM_ID));
         }
+    }
+
+    @Override
+    protected int getContentViewLayoutId() {
+        return R.layout.activity_no_drawer;
     }
 }

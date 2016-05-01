@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:internal="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/include_toolbar"></include>
+
+
+<LinearLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:layout_width="@dimen/fragment_show_tuner_width"
+        android:layout_height="fill_parent">
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:fillViewport="true"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/data_container"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:transitionGroup="true">
+
+                <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+                    android:id="@+id/fanart_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:fitsSystemWindows="true"
+                    />
+
+                <com.roodie.materialmovies.views.custom_views.GradientView
+                    android:id="@+id/gradientview_fanart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    internal:startColor="#cc000000"
+                    internal:endColor="#00000000"
+                    internal:angle="90.0"/>
+
+                <include android:id="@+id/header"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    layout="@layout/include_show_detail_header_pager"
+                    />
+
+            </FrameLayout>
+
+        </ScrollView>
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:id="@+id/content_view"
+          android:layout_height="match_parent"
+          android:layout_width="match_parent">
+
+        <include layout="@layout/include_detail_recycler_view"/>
+
+    </FrameLayout>
+
+</LinearLayout>
+
+</FrameLayout>

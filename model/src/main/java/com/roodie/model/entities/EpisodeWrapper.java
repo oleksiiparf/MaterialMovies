@@ -3,29 +3,14 @@ package com.roodie.model.entities;
 import android.text.TextUtils;
 
 import com.google.common.base.Preconditions;
-import com.roodie.model.util.IntUtils;
-import com.roodie.model.util.MoviesCollections;
 import com.uwetrottmann.tmdb.entities.TvEpisode;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Roodie on 13.08.2015.
  */
-public class EpisodeWrapper extends BasicWrapper<EpisodeWrapper> {
-
-    Long _id;
-
-    Integer tmdbId;
-
-    long airDate;
+public class EpisodeWrapper extends Watchable {
 
     int episodeNumber;
-
-    String title;
-
-    String overview;
 
     String production_code;
 
@@ -33,16 +18,13 @@ public class EpisodeWrapper extends BasicWrapper<EpisodeWrapper> {
 
     String stillUrl;
 
-    int ratingPercent;
-    int ratingVotes;
+    public EpisodeWrapper(String parentId) {
+        super(parentId);
+    }
 
-    transient List<CreditWrapper> cast;
-    transient List<CreditWrapper> crew;
-
-    transient long lastFullFetchStarted;
-    transient long lastFullFetchCompleted;
-
-    public EpisodeWrapper() {
+    @Override
+    public WatchableType getWatchableType() {
+        return WatchableType.TV_EPISODE;
     }
 
     public void setFromEpisode(TvEpisode episode) {
@@ -50,29 +32,24 @@ public class EpisodeWrapper extends BasicWrapper<EpisodeWrapper> {
 
         tmdbId = episode.id;
 
-        if (_id == null) {
-            if (tmdbId != null) {
-                _id = new Long(tmdbId.hashCode());
-            }
-        }
 
         if (!TextUtils.isEmpty(episode.name)) {
-            title = episode.name;
+            tmdbTitle = episode.name;
         }
 
         if (episode.air_date != null) {
-            airDate = unbox(airDate, episode.air_date);
+            tmdbFirstAirDate = episode.air_date;
         }
 
         if (episode.episode_number != null) {
             episodeNumber = episode.episode_number;
         }
 
-        ratingPercent = unbox(ratingPercent, episode.vote_average);
-        ratingVotes = unbox(ratingVotes, episode.vote_count);
+        tmdbRatingPercent = unbox(tmdbRatingPercent, episode.vote_average);
+        tmdbRatingVotesAmount = unbox(tmdbRatingVotesAmount, episode.vote_count);
 
         if (!TextUtils.isEmpty(episode.overview)) {
-            overview = episode.overview;
+            tmdbOverview = episode.overview;
         }
 
         seasonNumber = episode.season_number;
@@ -83,59 +60,12 @@ public class EpisodeWrapper extends BasicWrapper<EpisodeWrapper> {
 
     }
 
-    private boolean needFullFetch() {
-        return MoviesCollections.isEmpty(cast)
-                || MoviesCollections.isEmpty(crew);
-    }
-
-
-
-    private static long unbox(long currentValue, Date newValue) {
-        return newValue != null ? newValue.getTime() : currentValue;
-    }
-
-    private static int unbox(int currentValue, Double newValue) {
-        return newValue != null ? ((int) (newValue * 10)) : currentValue;
-    }
-
-    private static int unbox(int currentValue, Integer newValue) {
-        return newValue != null ? newValue : currentValue;
-    }
-
-    public Long getDBId() {
-        return _id;
-    }
-
-    public long getAirDate() {
-        return airDate;
-    }
-
-    public void setAirDate(long airDate) {
-        this.airDate = airDate;
-    }
-
     public int getEpisodeNumber() {
         return episodeNumber;
     }
 
     public void setEpisodeNumber(int episodeNumber) {
         this.episodeNumber = episodeNumber;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
     }
 
     public String getProduction_code() {
@@ -164,55 +94,6 @@ public class EpisodeWrapper extends BasicWrapper<EpisodeWrapper> {
 
     public void setStillUrl(String still_path) {
         this.stillUrl = still_path;
-    }
-
-    public int getRatingPercent() {
-        return ratingPercent;
-    }
-
-    public void setRatingPercent(int ratingPercent) {
-        this.ratingPercent = ratingPercent;
-    }
-
-    public int getRatingVotes() {
-        return ratingVotes;
-    }
-
-    public void setRatingVotes(int ratingVotes) {
-        this.ratingVotes = ratingVotes;
-    }
-
-    public List<CreditWrapper> getCast() {
-        return cast;
-    }
-
-    public void setCast(List<CreditWrapper> cast) {
-        this.cast = cast;
-    }
-
-    public List<CreditWrapper> getCrew() {
-        return crew;
-    }
-
-    public void setCrew(List<CreditWrapper> crew) {
-        this.crew = crew;
-    }
-
-    public void markFullFetchStarted() {
-        lastFullFetchStarted = System.currentTimeMillis();
-    }
-
-    public void markFullFetchCompleted() {
-        lastFullFetchCompleted = System.currentTimeMillis();
-    }
-
-    public int getAverageRatingPercent() {
-        if ( ratingPercent > 0) {
-            return IntUtils.weightedAverage(
-                    ratingPercent, ratingVotes);
-        } else {
-            return ratingPercent;
-        }
     }
 
 

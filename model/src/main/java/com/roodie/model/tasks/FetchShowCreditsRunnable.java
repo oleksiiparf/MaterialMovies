@@ -15,7 +15,7 @@ import retrofit.RetrofitError;
 /**
  * Created by Roodie on 16.09.2015.
  */
-public class FetchShowCreditsRunnable extends BaseMovieRunnable<Credits> {
+public class FetchShowCreditsRunnable extends BaseRunnable<Credits> {
 
     private final int mId;
 

@@ -28,6 +28,6 @@ public class FetchPopularMoviesRunnable extends BasePaginatedMovieRunnable {
 
     @Override
     protected void updateState(ApplicationState.MoviePaginatedResult result) {
-        mState.setPopularMovies(result);
+        mState.setPopularMovies(getCallingId(), result);
     }
 }

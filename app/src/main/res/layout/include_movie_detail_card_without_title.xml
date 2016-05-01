@@ -10,7 +10,6 @@
         android:layout_marginBottom="@dimen/spacing_minor"
         android:layout_marginLeft="@dimen/spacing_minor"
         android:layout_marginRight="@dimen/spacing_minor"
-        android:layout_marginTop="@dimen/spacing_minor"
         app:cardBackgroundColor="?mmBackgroundColorSecondary">
 
         <LinearLayout

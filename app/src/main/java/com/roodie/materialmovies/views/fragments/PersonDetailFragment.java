@@ -1,7 +1,5 @@
 package com.roodie.materialmovies.views.fragments;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
@@ -20,19 +18,20 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.common.base.Preconditions;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.PersonPresenter;
-import com.roodie.materialmovies.views.MMoviesApplication;
+import com.roodie.materialmovies.mvp.views.PersonView;
 import com.roodie.materialmovies.views.activities.SettingsActivity;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
+import com.roodie.materialmovies.views.custom_views.recyclerview.DetailRecyclerLayout;
 import com.roodie.materialmovies.views.fragments.base.BaseAnimationFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
-import com.roodie.model.network.NetworkError;
 import com.roodie.model.util.MoviesCollections;
 import com.squareup.picasso.Picasso;
 
@@ -44,29 +43,36 @@ import java.util.List;
  * Created by Roodie on 28.06.2015.
  */
 
-public class PersonDetailFragment extends BaseAnimationFragment implements PersonPresenter.PersonView {
+public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, DetailRecyclerLayout> implements PersonView {
 
     private static final String LOG_TAG = PersonDetailFragment.class.getSimpleName();
     private static final String KEY_PERSON_ID = "person_id";
     private static final String KEY_PERSON_SAVE_STATE = "person_on_save_state";
+
+    @InjectPresenter
+    PersonPresenter mPresenter;
 
     private MenuItem mTmdbPersonItem;
     private MenuItem mSearchItem;
 
     private boolean isEnableSearch = false;
 
-    private PersonPresenter mPresenter;
     private PersonWrapper mPerson;
     private final ArrayList<PersonItems> mItems = new ArrayList<>();
 
-    private MMoviesImageView personImagePoster;
     private TextView personName;
 
     private DetailAdapter mAdapter;
     private CastCreditsAdapter mCastCreditAdapter;
     private CrewCreditsAdapter mCrewCreditAdapter;
 
-    private Context mContext;
+    @Override
+    protected void configureEnterTransition() {
+        if (mPosterImageView != null) {
+            ViewCompat.setTransitionName(mPosterImageView, getActivity().getString(R.string.transition_poster));
+            Picasso.with(getActivity().getApplicationContext()).load(getImageUrl()).into(mPosterImageView);
+        }
+    }
 
     public static PersonDetailFragment newInstance(String personId) {
         Preconditions.checkArgument(!TextUtils.isEmpty(personId), "personId cannot be empty");
@@ -74,18 +80,6 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
         Bundle bundle = new Bundle();
         bundle.putString(KEY_PERSON_ID, personId);
 
-        PersonDetailFragment fragment = new PersonDetailFragment();
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
-
-    public static PersonDetailFragment newInstance(String personId, int[] startingLocation) {
-        Preconditions.checkArgument(!TextUtils.isEmpty(personId), "personId cannot be empty");
-
-        Bundle bundle = new Bundle();
-        bundle.putString(KEY_PERSON_ID, personId);
-        bundle.putIntArray(KEY_REVEAL_START_LOCATION, startingLocation);
         PersonDetailFragment fragment = new PersonDetailFragment();
         fragment.setArguments(bundle);
 
@@ -108,21 +102,22 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null){
-           setPerson((PersonWrapper) savedInstanceState.getSerializable(KEY_PERSON_SAVE_STATE));
+           setData((PersonWrapper) savedInstanceState.getSerializable(KEY_PERSON_SAVE_STATE));
         }
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mContext = activity.getApplicationContext();
-        mPresenter = MMoviesApplication.from(activity.getApplicationContext()).getPersonPresenter();
+    public void onFabClicked() {
+        //NTD
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_person, container, false);
+    public void onRefreshData(boolean visible) {
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_person;
     }
 
     @Override
@@ -130,61 +125,14 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
 
         //set actionbar up navigation
         final Display display = getDisplay();
-        if (!isModal()) {
+        if (display != null) {
             display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
         }
 
-        personImagePoster = (MMoviesImageView) view.findViewById(R.id.imageview_person);
         personName = (TextView) view.findViewById(R.id.textview_person_name);
 
         mPresenter.attachView(this);
         super.onViewCreated(view, savedInstanceState);
-        //mPresenter.initialize();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mPresenter.detachView(true);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.onPause();
-    }
-
-    @Override
-    protected void setUpVisibility() {
-        if (personImagePoster != null && personName != null) {
-            personImagePoster.setVisibility(View.GONE);
-            personName.setVisibility(View.GONE);
-
-        }
-    }
-
-    @Override
-    protected void configureEnterTransition() {
-        if (personImagePoster != null) {
-            ViewCompat.setTransitionName(personImagePoster, KEY_IMAGE_URL);
-            Picasso.with(getActivity().getApplicationContext()).load(getImageUrl()).into(personImagePoster);
-        }
-        initializePresenter();
-    }
-
-    @Override
-    protected void configureEnterAnimation() {
-       // final int[] startingLocation = getStartingLocation();
-
-        //setEndAnimationX(startingLocation[0]);
-        //setEndAnimationY(startingLocation[1]);
-        super.configureEnterAnimation();
     }
 
     public String getImageUrl() {
@@ -192,14 +140,13 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
     }
 
     @Override
-    protected void initializePresenter() {
-        mPresenter.initialize();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
+    protected void attachUiToPresenter() {
+        mPresenter.attachUiByParameter(this, getRequestParameter());
+        Display display = getDisplay();
+        if ( display != null) {
+            display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
+            display.setActionBarTitle(mPresenter.getUiTitle(getRequestParameter()));
+        }
     }
 
     @Override
@@ -225,17 +172,11 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
         super.onPrepareOptionsMenu(menu);
     }
 
-    public PersonPresenter getPresenter() {
-        return mPresenter;
-    }
-
-    public final boolean hasPresenter () {
-        return mPresenter != null;
-    }
-
     public int[] getStartingLocation() {
         return getArguments().getIntArray(KEY_REVEAL_START_LOCATION);
     }
+
+
     private enum PersonItems  {
         HEADER,
         TITLE,                        //(R.layout.item_person_detail_title)
@@ -249,33 +190,34 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
         return new DetailAdapter(items);
     }
 
-    protected DetailAdapter getRecyclerAdapter() {
-        return mAdapter;
-    }
-
     /**
      * PersonView
-     *
-     * @param person
      */
+
+
     @Override
-    public void setPerson(PersonWrapper person) {
-        mPerson = person;
+    public void updateDisplaySubtitle(String subtitle) {
+
+    }
+
+    @Override
+    public void setData(PersonWrapper data) {
+        mPerson = data;
         getActivity().invalidateOptionsMenu();
         mAdapter = populateUi();
         getRecyclerView().setAdapter(mAdapter);
-        if (personImagePoster != null && personName != null) {
-            personImagePoster.setVisibility(View.VISIBLE);
+        if (mPosterImageView != null && personName != null) {
+            mPosterImageView.setVisibility(View.VISIBLE);
             personName.setVisibility(View.VISIBLE);
             animatePoster();
         }
     }
 
     private void animatePoster() {
-        personImagePoster.setTranslationY(-personImagePoster.getHeight());
+        mPosterImageView.setTranslationY(-mPosterImageView.getHeight());
         personName.setAlpha(0);
 
-        personImagePoster.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(getInterpolator());
+        mPosterImageView.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(getInterpolator());
         personName.animate().alpha(1).setDuration(200).setStartDelay(400).setInterpolator(getInterpolator()).start();
     }
 
@@ -297,14 +239,13 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
 
         Display display = getDisplay();
         if (display != null) {
-            display.startMovieDetailActivityByAnimation(String.valueOf(credit.getId()), startingLocation);
+            display.startMovieDetailActivity(String.valueOf(credit.getId()), null);
         }
     }
 
     @Override
-    public void showPersonCreditsDialog(MovieQueryType queryType) {
+    public void showPersonCreditsDialog(MMoviesQueryType queryType) {
         Preconditions.checkNotNull(queryType, "Query type cannot be null");
-        Log.d(LOG_TAG, "Show detail dialog list");
         ListView list = new ListView(mContext);
         String mTitle = "";
         boolean wrapInScrollView = false;
@@ -326,39 +267,17 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
                 .show();
     }
 
-    /**
-     * MovieView
-     *
-     * @param error
-     */
-    @Override
-    public void showError(NetworkError error) {
-
-    }
-
     @Override
     public void showLoadingProgress(boolean visible) {
-
     }
 
-    @Override
-    public void showSecondaryLoadingProgress(boolean visible) {
-
-    }
-
-    @Override
     public String getRequestParameter() {
         return getArguments().getString(KEY_PERSON_ID);
     }
 
     @Override
-    public MovieQueryType getQueryType() {
-        return MovieQueryType.PERSON_DETAIL;
-    }
-
-    @Override
-    public boolean isModal() {
-        return false;
+    public MMoviesQueryType getQueryType() {
+        return MMoviesQueryType.PERSON_DETAIL;
     }
 
     private DetailAdapter populateUi() {
@@ -366,15 +285,15 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
             return null;
         }
 
-        if (personImagePoster != null) {
-            personImagePoster.loadProfile(mPerson);
+        if (mPosterImageView != null) {
+            mPosterImageView.loadProfile(mPerson);
         }
         if (personName != null) {
             personName.setText(mPerson.getName());
         }
         mItems.clear();
 
-        if (personImagePoster == null && personName == null) {
+        if (mPosterImageView == null && personName == null) {
             mItems.add(PersonItems.HEADER);
         }
 
@@ -450,7 +369,6 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
         @Override
         public void bindViewHolder(ViewHolder holder, int position) {
             holder.personImage.loadProfile(mPerson);
-           // holder.personName.setText(mPerson.getName());
         }
 
         @Override
@@ -464,7 +382,7 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
 
             public ViewHolder(View view) {
                 super(view);
-                personImage = (MMoviesImageView) view.findViewById(R.id.imageview_person);
+                personImage = (MMoviesImageView) view.findViewById(R.id.poster_image);
                 }
         }
     }
@@ -614,7 +532,7 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showPersonCreditsDialog(MovieQueryType.PERSON_CREDITS_CAST);
+                    showPersonCreditsDialog(MMoviesQueryType.PERSON_CREDITS_CAST);
                 }
             };
 
@@ -682,7 +600,7 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
             final View.OnClickListener seeMoreClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showPersonCreditsDialog(MovieQueryType.PERSON_CREDITS_CREW);
+                    showPersonCreditsDialog(MMoviesQueryType.PERSON_CREDITS_CREW);
                 }
             };
 
@@ -756,11 +674,11 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
             title.setText(credit.getTitle());
 
             final MMoviesImageView imageView =
-                    (MMoviesImageView) view.findViewById(R.id.poster);
+                    (MMoviesImageView) view.findViewById(R.id.imageview_poster);
             //load poster to imageView
             imageView.loadPoster(credit);
 
-            TextView subTitle = (TextView) view.findViewById(R.id.subtitle_1);
+            TextView subTitle = (TextView) view.findViewById(R.id.textview_subtitle_1);
             if (!TextUtils.isEmpty(credit.getJob())) {
                 subTitle.setText(credit.getJob());
                 subTitle.setVisibility(View.VISIBLE);
@@ -787,11 +705,9 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
             super(inflater, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (hasPresenter()) {
-                        PersonCreditWrapper credit = (PersonCreditWrapper) view.getTag();
-                        if (credit != null && credit != null) {
-                            showMovieDetail(credit, view);
-                        }
+                    PersonCreditWrapper credit = (PersonCreditWrapper) view.getTag();
+                    if (credit != null) {
+                        showMovieDetail(credit, view);
                     }
                 }
             });
@@ -816,12 +732,11 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
             super(inflater, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (hasPresenter()) {
-                        PersonCreditWrapper credit = (PersonCreditWrapper) view.getTag();
-                        if (credit != null && credit != null) {
-                            showMovieDetail(credit, view);
-                        }
+                    PersonCreditWrapper credit = (PersonCreditWrapper) view.getTag();
+                    if (credit != null) {
+                        showMovieDetail(credit, view);
                     }
+
                 }
             });
         }
@@ -850,10 +765,5 @@ public class PersonDetailFragment extends BaseAnimationFragment implements Perso
         }
         return mCrewCreditAdapter;
     }
-
-
-
-
-
 
 }

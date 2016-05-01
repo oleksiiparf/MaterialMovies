@@ -19,7 +19,7 @@ import butterknife.OnClick;
  * Custom Popup menu
  */
 public class MovieContextMenu extends LinearLayout {
-    private static final int CONTEXT_MENU_WIDTH = UiUtils.dpToPx(240);
+    private static final int CONTEXT_MENU_WIDTH = UiUtils.getInstance().dpToPx(240);
 
     private int menuItem = -1;
 
@@ -44,7 +44,7 @@ public class MovieContextMenu extends LinearLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        ButterKnife.bind(this);
+        ButterKnife.inject(this);
     }
 
     public void dismiss() {
@@ -85,7 +85,7 @@ public class MovieContextMenu extends LinearLayout {
 
     public interface OnMovieContextMenuItemClickListener {
 
-        public void onMovieContextMenuClick(int menuItem, int id);
+        void onMovieContextMenuClick(int menuItem, int id);
 
     }
 }

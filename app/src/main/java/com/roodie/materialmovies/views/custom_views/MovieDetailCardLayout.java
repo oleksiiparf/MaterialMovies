@@ -51,7 +51,7 @@ public class MovieDetailCardLayout extends FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.include_movie_detail_card, this, true);
 
         mTitleLayout = findViewById(R.id.card_header);
-        mTitleTextView = (TextView) mTitleLayout.findViewById(R.id.textview_title);
+        mTitleTextView = (TextView) mTitleLayout.findViewById(R.id.title);
         mSeeMoreTextView = (TextView) mTitleLayout.findViewById(R.id.textview_see_more);
         mCardContent = (LinearLayout) findViewById(R.id.card_content_holder);
 

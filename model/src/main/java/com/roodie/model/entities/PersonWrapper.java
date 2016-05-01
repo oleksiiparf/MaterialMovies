@@ -12,19 +12,19 @@ import java.util.List;
 /**
  * Created by Roodie on 07.07.2015.
  */
-public class PersonWrapper extends  BasicWrapper<PersonWrapper> implements Serializable {
+public class PersonWrapper implements Serializable {
 
-    Integer tmdbId;
-    String name;
-    String pictureUrl;
+    public Integer tmdbId;
+    public String name;
+    public String pictureUrl;
 
-    String placeOfBirth;
-    Date dateOfBirth;
-    Date dateOfDeath;
-    int age;
-    String biography;
+    public String placeOfBirth;
+    public Date dateOfBirth;
+    public Date dateOfDeath;
+    public int age;
+    public String biography;
 
-    int pictureType;
+    public int pictureType;
 
     transient List<PersonCreditWrapper> castCredits;
     transient List<PersonCreditWrapper> crewCredits;
@@ -34,14 +34,12 @@ public class PersonWrapper extends  BasicWrapper<PersonWrapper> implements Seria
         tmdbId = member.id;
         name = member.name;
         pictureUrl = member.profile_path;
-        pictureType =  TYPE_TMDB;
     }
 
     public void set(CastMember member) {
         tmdbId = member.id;
         name = member.name;
         pictureUrl = member.profile_path;
-        pictureType =  TYPE_TMDB;
     }
 
     public void set(Person person) {
@@ -52,7 +50,6 @@ public class PersonWrapper extends  BasicWrapper<PersonWrapper> implements Seria
         dateOfBirth = person.birthday;
         dateOfDeath = person.deathday;
         placeOfBirth = person.place_of_birth;
-        pictureType = TYPE_TMDB;
 
         calculateAge();
     }

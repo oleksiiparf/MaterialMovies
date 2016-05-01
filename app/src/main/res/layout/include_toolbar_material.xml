@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.ActionBarContainer
+    style="?attr/actionBarStyle"
+    android:gravity="top"
+    android:id="@+id/action_bar_container"
+    android:layout_alignParentTop="true"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v7.widget.Toolbar
+        style="@style/Widget.MMovies.Toolbar.Transparent"
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        />
+
+    <android.support.v7.widget.ActionBarContextView
+        style="?attr/actionModeStyle"
+        android:id="@+id/action_context_bar"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:visibility="gone" />
+</android.support.v7.widget.ActionBarContainer>

@@ -1,0 +1,127 @@
+<resources>
+
+    <string name="app_name">MMovies</string>
+    <string name="title_film_detail">Подробности</string>
+
+    <!-- Main Menu -->
+    <string name="watched_title">Watched</string>
+    <string name="movies_title">Фильмы</string>
+    <string name="shows_title">Сериалы</string>
+    <string name="people_title">Люди</string>
+    <string name="popular_title">Популярное</string>
+    <string name="trending_title">Набирающие популярность</string>
+    <string name="watchlist_title">Что посмотреть</string>
+    <string name="search_title">Поиск</string>
+    <string name="about_title">О приложении</string>
+    <string name="in_theatres_title">В кино</string>
+    <string name="upcoming_title">Предстоящие</string>
+    <string name="on_the_air_title">В эфире</string>
+    <string name="recommended_title">Рекомендованное</string>
+
+    <string name="details">Подробности</string>
+    <string name="biography">Боиграфия</string>
+
+    <string name="movie_details_released">Вышел в прокат</string>
+    <string name="movie_details_runtime">Продолжительность</string>
+    <string name="movie_details_runtime_content">%1$d мин</string>
+    <string name="movie_details_certification">Ограничения</string>
+    <string name="movie_details_genres">Жанр</string>
+    <string name="movie_details_budget">Бюджет</string>
+    <string name="movie_details_language">Язык</string>
+
+    <string name="show_isalive">Продолжается</string>
+    <string name="show_isnotalive">Закончилось</string>
+    <string name="show_unknown">В производстве</string>
+
+    <string name="related_movies">Похожие</string>
+    <string name="cast_movies">Актерский состав</string>
+    <string name="crew_movies">Сьёмочная группа</string>
+    <string name="images_movies">Постеры</string>
+    <string name="trailers_movies">Трейлеры</string>
+
+    <string name="drawer_open_content_desc">Меню открыто</string>
+    <string name="drawer_closed_content_desc">Меню закрыто</string>
+
+    <string name="account_username_hint">Имя пользователя</string>
+    <string name="account_password_hint">Пароль</string>
+    <string name="account_login">Войти</string>
+    <string name="account_email_hint">E-mail адресс</string>
+    <string name="account_register">Регистрация</string>
+
+    <string name="menu_refresh">Обновить</string>
+    <string name="menu_search">Поиск</string>
+    <string name="menu_about">О приложении</string>
+
+    <string name="menu_filter">Фильтровать</string>
+    <string name="menu_filter_clear">Сбросить</string>
+
+    <string name="empty_network_error">%1$s невозможно выполнить из-за ошибки сети. Проверьте подключение к Интернету и попробуйте ещё раз.</string>
+    <string name="empty_unknown_error">%1$s невозможно выполнить из-за неизвестной ошибки.</string>
+
+
+    <string name="error_network">Ошибка сети</string>
+    <string name="error_unknown">Неизвестная ошибка ¯\_(ツ)_/¯</string>
+
+    <string name="search_hint">Поиск Material Movies</string>
+
+    <string name="category_watched">Ваша библиотека</string>
+    <string name="category_movies">Фильмы</string>
+    <string name="category_shows">Сериалы</string>
+    <string name="category_people">Люди</string>
+    <string name="category_settings">Настройки</string>
+    <string name="category_about">Справка</string>
+    <string name="category_mail">Обратная связь</string>
+
+    <string name="movie_title_year">%1$s (%2$d)</string>
+    <string name="movie_rating_votes">%1$d%% - %2$d голосов</string>
+    <string name="movie_release_date">Дата выхода: %1$s</string>
+
+    <string name="filter_collection">В коллекции</string>
+    <string name="filter_seen">Просмотренные</string>
+    <string name="filter_unseen">Непросмотренные</string>
+    <string name="filter_upcoming">Предстоящие</string>
+    <string name="filter_soon">Скоро выходят</string>
+    <string name="filter_released">Вышедшие</string>
+    <string name="filter_highly_rated">С высокой оценкой</string>
+
+    <string name="search_hint_movies">Искать фильмы</string>
+
+    <string name="search_empty">Ищите фильмы, вводя текст в верхем поле</string>
+    <string name="search_empty_no_results">Ничего не найдено</string>
+
+    <string name="movie_detail_votes">Голоса</string>
+    <string name="movie_detail_global">Общий</string>
+    <string name="movie_detail_rate">Рейтинг</string>
+
+
+    <string name="about_build_version_title">Версия сборки</string>
+    <string name="about_build_time_title">Время сборки</string>
+    <string name="about_open_source_title">Лицензии с открытым исходным кодом</string>
+    <string name="about_open_source_content">Лицензионные данные используемого программного обеспечения с открытым исходным кодом</string>
+    <string name="about_powered_tmdb_title">Powered by TMDb</string>
+    <string name="about_powered_tmdb_content">Данный продукт использует TMDb API, но не является одобренным или сертифитированным TMDb.</string>
+    <string name="about_powered_trakt_title">Powered by trakt.tv</string>
+    <string name="about_powered_trakt_content">Данный продукт использует trakt.tv API, но не является одобренным или сертифитированным trakt.tv.</string>
+
+    <string name="movie_rate_mark_watched">Отметить как просмотренный</string>
+
+    <string name="settings_title">Настройки</string>
+    <string name="see_more">Ещё</string>
+    <string name="close_dialog_window">Закрыть</string>
+
+    <!-- Tmdb ratings -->
+    <plurals name="votes">
+        <item quantity="zero">%d оценок</item>
+        <item quantity="one">%d оценка</item>
+        <item quantity="two">%d оценки</item>
+        <item quantity="few">%d оценки</item>
+        <item quantity="many">%d оценок</item>
+        <item quantity="other">%d оценки</item>
+    </plurals>
+
+    <string name="action_item_added_to_watched">&lt;b>%s&lt;/b> &lt;em>добавлено в Просмотрено&lt;/em></string>
+
+    <string name="nav_drawer_user_header_movies_label">Просмотрено фильмов</string>
+    <string name="nav_drawer_user_header_shows_label">Просмотрено сериалов</string>
+
+   </resources>

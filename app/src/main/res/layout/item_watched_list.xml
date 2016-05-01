@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+        android:id="@+id/imageview_poster"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/card_item_image_size"
+        android:scaleType="centerCrop"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/watched_list_item_container_height"
+        android:layout_gravity="bottom"
+        android:background="#AA000000"
+        android:orientation="vertical">
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MMovies.Show.Grid.Title" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MMovies.Show.Grid.Subtitle"
+            android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+
+</FrameLayout>

@@ -51,9 +51,11 @@ public class MMoviesBackgroundExecutor implements BackgroundExecutor {
             android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
 
             sHandler.post(new Runnable() {
+               // Object lock = new Object();
+
                 @Override
                 public void run() {
-                    mBackgroundRunnable.preExecute();
+                        mBackgroundRunnable.preExecute();
                 }
             });
 
@@ -92,7 +94,7 @@ public class MMoviesBackgroundExecutor implements BackgroundExecutor {
              sHandler.post(new Runnable() {
                  @Override
                  public void run() {
-                     mBackgroundRunnable.onPreTmdbCall();
+                     mBackgroundRunnable.onPreExecute();
                  }
              });
 

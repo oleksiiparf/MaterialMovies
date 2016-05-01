@@ -8,7 +8,7 @@ import com.roodie.model.network.NetworkCallRunnable;
  */
 public interface BackgroundExecutor {
 
-    public <R> void execute(NetworkCallRunnable<R> runnable);
+    <R> void execute(NetworkCallRunnable<R> runnable);
 
-    public <R> void execute(BackgroundCallRunnable<R> runnable);
+    <R> void execute(BackgroundCallRunnable<R> runnable);
 }

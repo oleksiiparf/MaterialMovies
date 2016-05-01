@@ -2,6 +2,7 @@ package com.roodie.materialmovies.modules.library;
 
 import android.content.Context;
 
+import com.roodie.materialmovies.MMoviesApp;
 import com.roodie.materialmovies.qualifiers.AppContext;
 import com.roodie.materialmovies.qualifiers.Database;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
@@ -32,7 +33,7 @@ public class UtilProvider {
     @Provides
     @Singleton
     public Bus provideEventBus() {
-        return new Bus();
+        return MMoviesApp.get().getBus();
     }
 
     @Provides @Singleton

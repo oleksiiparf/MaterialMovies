@@ -15,7 +15,7 @@ import retrofit.RetrofitError;
 /**
  * Created by Roodie on 24.06.2015.
  */
-public class FetchDetailMovieRunnable extends  BaseMovieRunnable<Movie> {
+public class FetchDetailMovieRunnable extends BaseRunnable<Movie> {
 
     private final int mId;
 
@@ -66,7 +66,9 @@ public class FetchDetailMovieRunnable extends  BaseMovieRunnable<Movie> {
             movie.setCrew(getEntityMapper().mapCrewCredits(result.credits.crew));
         }
 
-        getDbHelper().put(movie);
+        //movie.setWatched(true);
+       // movie.save();
+        //getDbHelper().put(movie);
         getEventBus().post(new MoviesState.MovieInformationUpdatedEvent(getCallingId(), movie));
     }
 
@@ -75,7 +77,7 @@ public class FetchDetailMovieRunnable extends  BaseMovieRunnable<Movie> {
         if (re.getResponse() != null && re.getResponse().getStatus() == 404) {
             MovieWrapper movie = mState.getMovie(mId);
             if (movie != null) {
-                getDbHelper().put(movie);
+                //getDbHelper().put(movie);
                 getEventBus()
                         .post(new MoviesState.MovieInformationUpdatedEvent(getCallingId(), movie));
             }

@@ -27,6 +27,6 @@ public class FetchPopularShowsRunnable extends BasePaginatedShowRunnable {
 
     @Override
     protected void updateState(ApplicationState.ShowPaginatedResult result) {
-        mState.setPopularShows(result);
+        mState.setPopularShows(getCallingId(), result);
     }
 }

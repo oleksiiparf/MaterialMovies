@@ -40,7 +40,7 @@ public class RatingBarLayout extends RelativeLayout {
 
     public void setRatingValue(String value) {
         if (TextUtils.isEmpty(mRatingValueTextView.getText()) ||
-                mRatingValue != value) {
+                !value.equals(mRatingValue)) {
             mRatingValue = value;
             mRatingValueTextView.setText(mRatingValue);
         }

@@ -21,6 +21,7 @@ public class Constants {
     public static final long STALE_MOVIE_DETAIL_THRESHOLD = 2 * DAY_IN_MILLIS;
     public static final long FULL_MOVIE_DETAIL_ATTEMPT_THRESHOLD = 60 * 60 * 1000; // 60 secs
 
-    public static final boolean DEBUG = true;
+
+    public static final String SUPPORT_MAIL = "ololoa3272@gmail.com";
 
 }

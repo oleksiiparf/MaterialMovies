@@ -12,7 +12,7 @@ import retrofit.RetrofitError;
 /**
  * Created by Roodie on 24.06.2015.
  */
-public class FetchMovieReleasesRunnable extends BaseMovieRunnable<Releases>{
+public class FetchMovieReleasesRunnable extends BaseRunnable<Releases> {
 
     @Inject
     CountryProvider mCountryProvider;
@@ -36,7 +36,7 @@ public class FetchMovieReleasesRunnable extends BaseMovieRunnable<Releases>{
 
             movie.updateReleases(result, countryCode);
 
-            getDbHelper().put(movie);
+            //getDbHelper().put(movie);
             getEventBus().post(new MoviesState.MovieReleasesUpdatedEvent(getCallingId(), movie));
         }
 

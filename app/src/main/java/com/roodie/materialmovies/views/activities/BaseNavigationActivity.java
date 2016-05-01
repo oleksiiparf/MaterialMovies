@@ -1,31 +1,40 @@
 package com.roodie.materialmovies.views.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.NavUtils;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
+import com.roodie.model.Display;
 
 /**
  * Created by Roodie on 03.09.2015.
  */
-public abstract class BaseNavigationActivity extends BaseActivity {
+
+
+public abstract class BaseNavigationActivity extends BaseActivity  {
 
    // @Bind({R.id.drawer_layout})
-    private DrawerLayout mDrawerLayout;
+    protected DrawerLayout mDrawerLayout;
 
     //@Bind({R.id.navigation_view})
     private NavigationView mNavigationView;
 
-    //@Bind({R.id.profile_image})
-    private MMoviesImageView mUserProfilePhoto;
-    protected String mTransationName;
+    private int checkedMenuItem;
+
+
+
+
+
+    public BaseNavigationActivity() {
+        checkedMenuItem = R.id.menu_movies;
+    }
 
     @Override
     protected int getThemeResId() {
@@ -44,66 +53,71 @@ public abstract class BaseNavigationActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            this.checkedMenuItem = savedInstanceState.getInt("checked_menu_item", R.id.menu_movies);
+        }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        getDisplay().setDrawerLayout(this.mDrawerLayout);
+        getDisplay().setDrawerLayout(mDrawerLayout);
 
-        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-
-        mUserProfilePhoto = (MMoviesImageView) findViewById(R.id.profile_image);
+       mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         if (mNavigationView != null) {
-            setupDrawerContent(mNavigationView);
-            setupHeader();
+            setupDrawerContent();
+            setMenuCheckedState(mNavigationView.getMenu(), checkedMenuItem);
         }
     }
 
-    private void setupHeader() {
-
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putInt("checked_menu_item", this.checkedMenuItem);
     }
 
-    public boolean onHomeButtonPressed() {
-        if (mDisplay != null && (mDisplay.toggleDrawer() || mDisplay.popEntireFragmentBackStack())) {
-            return true;
-        }
-        return false;
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        this.checkedMenuItem = savedInstanceState.getInt("checked_menu_item", R.id.menu_movies);
     }
 
-    private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
+    private void setupDrawerContent() {
+        this.mNavigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-                        //Checking if the item is in checked state or not, if not make it in checked state
-                        // if (menuItem.isChecked()) {
-                        //     menuItem.setChecked(false);
-                        //  } else {
-                        if (getDisplay() != null) {
-                            //}
-                            //Closing drawer on item click
-                            mDrawerLayout.closeDrawers();
-                            switch (menuItem.getItemId()) {
-                                case R.id.menu_movies:
-                                    getDisplay().showMovies();
-                                    break;
-                                case R.id.menu_shows:
-                                    getDisplay().showTvShows();
-                                    break;
-                                case R.id.menu_settings:
-                                    getDisplay().showSettings();
-                                    break;
-                                case R.id.menu_about:
-                                    break;
+                        if (menuItem.getItemId() != checkedMenuItem) {
+                            if (getDisplay() != null) {
+                                switch (menuItem.getItemId()) {
+                                    case R.id.menu_watched:
+                                        getDisplay().showWatched();
+                                        checkedMenuItem = R.id.menu_watched;
+                                        break;
+                                    case R.id.menu_movies:
+                                        getDisplay().showMovies();
+                                        checkedMenuItem = R.id.menu_movies;
+                                        break;
+                                    case R.id.menu_shows:
+                                        getDisplay().showTvShows();
+                                        checkedMenuItem = R.id.menu_shows;
+                                        break;
+                                    case R.id.menu_settings:
+                                        getDisplay().showSettings();
+                                        break;
+                                    case R.id.menu_mail:
+                                        getDisplay().sendEmail();
+                                        break;
+                                    default:
+                                        getDisplay().showWatched();
+                                        checkedMenuItem = R.id.menu_watched;
+                                        break;
+                                }
                             }
-                            menuItem.setChecked(true);
-                            mDisplay.closeDrawerLayout();
-                        } else {
-                            System.out.println("Display == null");
                         }
+                        getDisplay().closeDrawerLayout();
+
+                        setMenuCheckedState(mNavigationView.getMenu(), checkedMenuItem);
                         return true;
                     }
                 });
@@ -112,11 +126,13 @@ public abstract class BaseNavigationActivity extends BaseActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                BaseNavigationActivity.this.supportInvalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+                BaseNavigationActivity.this.supportInvalidateOptionsMenu();
             }
         };
 
@@ -124,6 +140,16 @@ public abstract class BaseNavigationActivity extends BaseActivity {
         mDrawerLayout.setDrawerListener(drawerToggle);
 
         drawerToggle.syncState();
+    }
+
+    private static void setMenuCheckedState(final Menu menu, final int itemId) {
+        for (int i = 0; i < menu.size(); ++i) {
+            final MenuItem item = menu.getItem(i);
+            item.setChecked(item.getItemId() == itemId);
+            if (item.hasSubMenu()) {
+                setMenuCheckedState(item.getSubMenu(), itemId);
+            }
+        }
     }
 
     @Override
@@ -140,32 +166,25 @@ public abstract class BaseNavigationActivity extends BaseActivity {
 
         }
         return super.onOptionsItemSelected(item);
+
     }
 
-    protected boolean navigateUp() {
-        final Intent intent = getParentIntent();
-        if (intent != null) {
-            NavUtils.navigateUpTo(this, intent);
-            return true;
-        }
-        return false;
-    }
-
-
-    protected Intent getParentIntent() {
-        return NavUtils.getParentActivityIntent(this);
+    public boolean onHomeButtonPressed() {
+        Display display = getDisplay();
+        return display != null && (display.toggleDrawer() || display.popEntireFragmentBackStack());
     }
 
     public DrawerLayout getDrawerLayout() {
         return mDrawerLayout;
     }
 
-    public String getTransationName() {
-        return mTransationName;
-    }
+    public void updateHeader(int[] data) {
+        if (mNavigationView != null) {
+            View headView = mNavigationView.getHeaderView(0);
 
-    public void setTransationName(String mTransationName) {
-        this.mTransationName = mTransationName;
-    }
+            ((TextView) headView.findViewById(R.id.watched_movies_txt)).setText(String.valueOf(data[0]));
+            ((TextView) headView.findViewById(R.id.watched_shows_txt)).setText(String.valueOf(data[1]));
+        }
 
+    }
 }

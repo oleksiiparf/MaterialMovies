@@ -16,9 +16,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,10 +24,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.roodie.materialmovies.MMoviesApp;
 import com.roodie.materialmovies.R;
+import com.roodie.materialmovies.mvp.presenters.SettingsPresenter;
+import com.roodie.materialmovies.mvp.views.SettingsView;
+import com.roodie.materialmovies.util.AboutUtils;
 import com.roodie.materialmovies.util.MMoviesPreferences;
 import com.roodie.materialmovies.util.Utils;
+import com.roodie.model.Display;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -38,15 +42,22 @@ import java.util.List;
 /**
  * Created by Roodie on 13.07.2015.
  */
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseNavigationActivity implements SettingsView {
+
+    @InjectPresenter
+    SettingsPresenter mPresenter;
 
     private static final String LOG_TAG = SettingsActivity.class.getSimpleName();
 
     private static final String KEY_CLEAR_CACHE = "com.roodie.materialmovies.clear_cache";
 
+    private static final String KEY_CLEAR_DATABASE = "com.roodie.materialmovies.local_database";
+
     public static final String KEY_THEME = "com.roodie.materialmovies.theme";
 
-    private static final String KEY_ABOUT = "about";
+    public static final String KEY_LICENSES = "com.roodie.materialmovies.licenses";
+
+    public static final String KEY_VERSION = "com.roodie.materialmovies.build_version";
 
     public static @StyleRes int THEME;
 
@@ -70,14 +81,30 @@ public class SettingsActivity extends AppCompatActivity {
         return THEME != 0;
     }
 
+    @Override
+    protected void handleIntent(Intent intent, Display display) {
+
+    }
+
+    @Override
+    protected int getContentViewLayoutId() {
+        return R.layout.activity_singlepane;
+    }
+
+    @Override
+    public void onWatchedCleared() {
+        Toast.makeText(this, getResources().getString(R.string.action_cleared_watched), Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("On create settings");
-        setTheme(SettingsActivity.THEME);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_singlepane);
+
         setupActionBar();
+        if ( getDisplay() != null) {
+            getDisplay().showUpNavigation(true);
+            getDisplay().setActionBarTitle(MMoviesApp.get().getStringFetcher().getString(R.string.settings_title));
+        }
 
         if (savedInstanceState == null) {
             Fragment fragment = new SettingsHeadersFragment();
@@ -85,14 +112,6 @@ public class SettingsActivity extends AppCompatActivity {
             ft.add(R.id.content_frame, fragment);
             ft.commit();
         }
-    }
-
-
-    private void setupActionBar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -124,8 +143,8 @@ public class SettingsActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    protected static void setupBasicSettings(final Activity activity, final Intent intent, Preference themePreference,
-                                             Preference onlyWiFiPreference) {
+    protected void setupBasicSettings(final Activity activity, final Intent intent, Preference themePreference,
+                                             Preference onlyWiFiPreference, Preference animationsPreference) {
         themePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -143,20 +162,54 @@ public class SettingsActivity extends AppCompatActivity {
         setListPreferenceSummary((ListPreference) themePreference);
 
         ((CheckBoxPreference)onlyWiFiPreference).setChecked(MMoviesPreferences.isLargeDataOverWifiOnly(activity.getApplicationContext()));
+
+        ((CheckBoxPreference)animationsPreference).setChecked(MMoviesPreferences.areAnimationsEnabled(activity.getApplicationContext()));
     }
 
-    protected static void setupAdvancedSettings(final Context context, Preference clearCachPreference) {
+    protected void setupAdvancedSettings(final Context context, Preference clearCachePreference, Preference clearDatabasePreference) {
 
-        clearCachPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        clearCachePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                // try to open app info where user can clear app cache folders
-                Intent intent = new Intent(
-                        android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(Uri.parse("package:" + context.getPackageName()));
+                Display display = getDisplay();
+                if (display != null) {
+                    // try to open app info where user can clear app cache folders
+                    Intent intent = new Intent(
+                            android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.parse("package:" + context.getPackageName()));
+                    if (!display.tryStartActivity(intent, false)) {
+                        // try to open all apps view if detail view not available
+                        intent = new Intent(
+                                android.provider.Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+                        display.tryStartActivity(intent, true);
+                    }
+                }
                 return true;
             }
         });
+
+        clearDatabasePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (mPresenter != null) {
+                    mPresenter.clearWatched(SettingsActivity.this);
+                }
+                return true;
+            }
+        });
+    }
+
+    protected void setupAboutSettings(final Context context, Preference licensesPreference, Preference buildVersionPreference) {
+
+        licensesPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                AboutUtils.showOpenSourceLicensesDialog(context);
+                return true;
+            }
+        });
+
+        buildVersionPreference.setSummary(Utils.getVersion(context));
     }
 
     public static void setListPreferenceSummary(ListPreference listPref) {
@@ -197,7 +250,7 @@ public class SettingsActivity extends AppCompatActivity {
             List<Header> headers = new LinkedList<>();
 
             headers.add(new Header(R.string.prefs_category_basic, "basic"));
-            headers.add(new Header(R.string.prefs_category_advanced, "advanced"));
+            headers.add(new Header(R.string.prefs_category_cache, "cache"));
             headers.add(new Header(R.string.prefs_category_about, "about"));
 
             return headers;
@@ -250,25 +303,39 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
+        private SettingsActivity mActivity;
+
+        @Override
+        public void onAttach(Activity activity) {
+            if (activity instanceof SettingsActivity)
+            {
+                mActivity = (SettingsActivity) activity;
+            }
+            super.onAttach(activity);
+        }
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
             String settings = getArguments().getString("settings");
+            assert settings != null;
             switch (settings) {
                 case "basic":
                     addPreferencesFromResource(R.xml.settings_basic);
-                    setupBasicSettings(getActivity(), getActivity().getIntent(),
+                    mActivity.setupBasicSettings(getActivity(), getActivity().getIntent(),
                             findPreference(KEY_THEME),
-                            findPreference(MMoviesPreferences.KEY_ONLYWIFI));
+                            findPreference(MMoviesPreferences.KEY_ONLYWIFI),
+                            findPreference(MMoviesPreferences.KEY_ANIMATIONS));
                     break;
-                case "advanced":
+                case "cache":
                     addPreferencesFromResource(R.xml.settings_advanced);
-                    setupAdvancedSettings(getActivity(),
-                            findPreference(KEY_CLEAR_CACHE));
+                    mActivity.setupAdvancedSettings(getActivity(),
+                            findPreference(KEY_CLEAR_CACHE), findPreference(KEY_CLEAR_DATABASE));
                     break;
                 case "about":
                     addPreferencesFromResource(R.xml.settings_about);
+                    mActivity.setupAboutSettings(getActivity(), findPreference(KEY_LICENSES), findPreference(KEY_VERSION));
                     break;
 
             }
@@ -307,6 +374,13 @@ public class SettingsActivity extends AppCompatActivity {
                 if (preference != null) {
                     CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
                     MMoviesPreferences.seLargeDataOverWifiOnly(getActivity().getApplicationContext(), checkBoxPreference.isChecked());
+                }
+            }
+
+            if (MMoviesPreferences.KEY_ANIMATIONS.equals(key)) {
+                if (preference != null) {
+                    CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
+                    MMoviesPreferences.setAnimationsEnabled(getActivity().getApplicationContext(), checkBoxPreference.isChecked());
                 }
             }
         }

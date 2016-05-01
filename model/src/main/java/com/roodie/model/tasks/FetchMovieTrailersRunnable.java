@@ -3,7 +3,6 @@ package com.roodie.model.tasks;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.state.BaseState;
 import com.roodie.model.state.MoviesState;
-import com.uwetrottmann.tmdb.entities.Movie;
 import com.uwetrottmann.tmdb.entities.Videos;
 
 import retrofit.RetrofitError;
@@ -11,7 +10,7 @@ import retrofit.RetrofitError;
 /**
  * Created by Roodie on 24.06.2015.
  */
-public class FetchMovieTrailersRunnable extends BaseMovieRunnable<Videos> {
+public class FetchMovieTrailersRunnable extends BaseRunnable<Videos> {
 
     private final int mId;
 

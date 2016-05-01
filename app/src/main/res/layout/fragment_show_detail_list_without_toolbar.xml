@@ -54,13 +54,12 @@
 
             </android.support.design.widget.AppBarLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerview"
+            <include
+                android:id="@+id/recycler_view_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                layout="@layout/include_detail_recycler_view"/>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/like_fab"

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_drawer_account_header"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true">
+
+    <com.roodie.materialmovies.views.custom_views.MMoviesImageView
+        android:id="@+id/profile_image"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:background="@color/mm_green"
+        android:scaleType="fitCenter"
+        android:src="?mmNavDrawerImage" />
+
+    <android.support.v7.widget.GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:paddingBottom="@dimen/spacing_minor"
+        android:paddingLeft="@dimen/spacing_major"
+        android:paddingRight="@dimen/spacing_major"
+        app:rowCount="3"
+        app:columnCount="2">
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/app_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/spacing_major"
+            android:text="@string/nav_drawer_user_header_app_label"
+            android:textAppearance="@style/Widget.MMovies.TextAppearance.PrimaryText"
+            android:textSize="14.0sp"
+            app:layout_columnSpan="2"/>
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/watched_movies_txt"
+            style="@style/GridLayoutCell"
+            android:layout_marginLeft="0.0dip"
+            android:textAppearance="@style/Widget.MMovies.TextAppearance.PrimaryText"
+            app:font="din_light"
+            android:textSize="22.0sp" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            android:id="@+id/watched_shows_txt"
+            style="@style/GridLayoutCell"
+            android:layout_marginLeft="0.0dip"
+            android:textAppearance="@style/Widget.MMovies.TextAppearance.PrimaryText"
+            app:font="din_light"
+            android:textSize="22.0sp" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            style="@style/GridLayoutCell"
+            android:layout_marginLeft="0.0dip"
+            android:text="@string/nav_drawer_user_header_movies_label"
+            android:textAppearance="@style/Widget.MMovies.TextAppearance"
+            android:textSize="14.0sp" />
+
+        <com.roodie.materialmovies.views.custom_views.MMoviesTextView
+            style="@style/GridLayoutCell"
+            android:layout_marginLeft="0.0dip"
+            android:text="@string/nav_drawer_user_header_shows_label"
+            android:textAppearance="@style/Widget.MMovies.TextAppearance"
+            android:textSize="14.0sp" />
+    </android.support.v7.widget.GridLayout>
+
+
+</FrameLayout>

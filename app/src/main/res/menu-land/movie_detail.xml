@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/menu_item_watched"
+        android:icon="@drawable/ic_add_to_watched_white_24dp"
+        android:title="@string/menu_item_watchable_add_to_watched"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_open_youtube"
+        android:icon="@drawable/ic_youtube_play_white_24dp"
+        app:showAsAction="never"
+        android:title="@string/trailer_movie" />
+    <item
+        android:id="@+id/menu_movie_share"
+        android:icon="@drawable/ic_share_variant_white_24dp"
+        app:showAsAction="ifRoom"
+        android:title="@string/share_movie" />
+
+
+    <item android:id="@+id/menu_refresh"
+        android:icon="@drawable/ic_refresh_white_24dp"
+        android:title="@string/menu_refresh"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_open_tmdb"
+        app:showAsAction="never"
+        android:title="@string/tmdb" />
+
+    <item
+        android:id="@+id/menu_action_movie_websearch"
+        app:showAsAction="never"
+        android:title="@string/web_search"/>
+</menu>

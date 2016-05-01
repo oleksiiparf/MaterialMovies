@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="@dimen/movie_list_small_item_height"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/movie_list_small_item_height"
+    android:background="?attr/selectableItemBackground"
     android:orientation="horizontal">
 
     <com.roodie.materialmovies.views.custom_views.MMoviesImageView
-          android:id="@+id/poster"
+          android:id="@+id/imageview_poster"
           android:layout_width="@dimen/movie_list_small_image_width"
           android:layout_height="@dimen/movie_list_small_image_width"
           android:layout_gravity="center_vertical"
@@ -29,7 +31,7 @@
               style="@style/Widget.MMovies.TextAppearance.PrimaryText" />
 
         <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-              android:id="@+id/subtitle_1"
+              android:id="@+id/textview_subtitle_1"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               style="@style/Widget.MMovies.TextAppearance.SecondaryText" />

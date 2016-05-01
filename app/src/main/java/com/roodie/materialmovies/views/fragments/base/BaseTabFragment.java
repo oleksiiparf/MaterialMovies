@@ -19,28 +19,48 @@ import java.util.List;
 /**
  * Created by Roodie on 02.08.2015.
  */
-public abstract class BaseTabFragment<E extends BaseTabFragment.TabPagerAdapter> extends BaseFragment {
+public abstract class BaseTabFragment<E extends BaseTabFragment.TabPagerAdapter> extends BaseMvpFragment {
 
     private static final String SAVE_SELECTED_TAB = "selected_tab";
 
     private static final String LOG_TAG = BaseTabFragment.class.getSimpleName();
 
-
     private ViewPager mViewPager;
     private TabLayout mSlidingTabStrip;
     private E mAdapter;
 
-    private int mCurrentItem;
+    protected int mCurrentItem;
+
+    final private TabLayout.TabLayoutOnPageChangeListener mOnPageChangeListener = new TabLayout.TabLayoutOnPageChangeListener(mSlidingTabStrip) {
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            //do nothing
+        }
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            //do nothing
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            onPageChanged(position);
+        }
+    };
+
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_viewpager, container, false);
+        View view = inflater.inflate(getLayoutRes(), container, false);
 
         mAdapter = setupAdapter();
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mViewPager.setAdapter(mAdapter);
+        mViewPager.addOnPageChangeListener(mOnPageChangeListener);
+        mViewPager.setOffscreenPageLimit(3);
 
         mSlidingTabStrip = (TabLayout) view.findViewById(R.id.tabs);
         mSlidingTabStrip.post(new Runnable() {
@@ -57,6 +77,12 @@ public abstract class BaseTabFragment<E extends BaseTabFragment.TabPagerAdapter>
 
         return view;
     }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_viewpager;
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -76,7 +102,7 @@ public abstract class BaseTabFragment<E extends BaseTabFragment.TabPagerAdapter>
         mCurrentItem = mViewPager.getCurrentItem();
     }
 
-    protected ViewPager getViewPager() {
+    public ViewPager getViewPager() {
         return mViewPager;
     }
 
@@ -96,6 +122,15 @@ public abstract class BaseTabFragment<E extends BaseTabFragment.TabPagerAdapter>
     }
 
     protected  abstract String getTabTitle(int position);
+
+    /**
+     * This method will be called when an item in the Tab Layout will be selected.
+     * Subclasses should override.
+     *
+     * @param position The position of the view in the Tab Layout
+     */
+    public void onPageChanged(int position) {
+    }
 
     public class TabPagerAdapter extends FragmentStatePagerAdapter {
 

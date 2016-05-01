@@ -6,4 +6,9 @@
         android:summary="@string/clear_cache_summary"
         android:title="@string/clear_cache" />
 
+    <Preference
+        android:key="com.roodie.materialmovies.local_database"
+        android:summary="@string/local_database_summary"
+        android:title="@string/local_database" />
+
 </PreferenceScreen>

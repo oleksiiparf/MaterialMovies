@@ -20,7 +20,7 @@ import retrofit.RetrofitError;
 
 public abstract class NetworkCallRunnable<R> {
 
-    public void onPreTmdbCall() {}
+    public void onPreExecute() {}
 
     public abstract R doBackgroundCall() throws RetrofitError;
 

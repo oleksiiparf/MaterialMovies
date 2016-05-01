@@ -12,7 +12,7 @@ import retrofit.RetrofitError;
 /**
  * Created by Roodie on 16.09.2015.
  */
-public class FetchDetailTvShowRunnable  extends  BaseMovieRunnable<TvShowComplete> {
+public class FetchDetailTvShowRunnable  extends BaseRunnable<TvShowComplete> {
 
     private final int mId;
 
@@ -57,7 +57,9 @@ public class FetchDetailTvShowRunnable  extends  BaseMovieRunnable<TvShowComplet
         }
 
 
-        getDbHelper().put(show);
+        //show.setWatched(true);
+        //show.save();
+        //getDbHelper().put(show);
         System.out.println(show.toString());
         getEventBus().post(new MoviesState.TvShowInformationUpdatedEvent(getCallingId(), show));
     }
@@ -67,7 +69,7 @@ public class FetchDetailTvShowRunnable  extends  BaseMovieRunnable<TvShowComplet
         if (re.getResponse() != null && re.getResponse().getStatus() == 404) {
             ShowWrapper show = mState.getTvShow(mId);
             if (show != null) {
-                getDbHelper().put(show);
+                //getDbHelper().put(show);
                 getEventBus().post(new MoviesState.TvShowInformationUpdatedEvent(getCallingId(), show));
             }
         }

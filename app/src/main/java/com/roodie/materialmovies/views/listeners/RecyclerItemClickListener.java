@@ -7,7 +7,7 @@ package com.roodie.materialmovies.views.listeners;
 
 public interface RecyclerItemClickListener {
 
-    public void onClick(View view, int position);
+    void onClick(View view, int position);
 
-    public void onPopupMenuClick(View view, int position);
+    void onPopupMenuClick(View view, int position);
 }

@@ -20,18 +20,23 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dip"
+        android:layout_marginTop="10dip"
+        android:layout_marginRight="16dip"
+        android:layout_marginBottom="16dip"
+        android:maxLines="2"
+        android:textSize="12.0sp"
         style="@style/Widget.MMovies.TextAppearance.PrimaryText" />
 
     <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-        android:id="@+id/subtitle_1"
+        android:id="@+id/textview_subtitle_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginBottom="8dp"
         style="@style/Widget.MMovies.TextAppearance.SecondaryText.Small"
+        android:maxLines="1"
+        android:textSize="10.0sp"
         android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

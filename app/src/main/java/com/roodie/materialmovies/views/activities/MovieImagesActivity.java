@@ -29,6 +29,6 @@ public class MovieImagesActivity extends BaseNavigationActivity {
 
     @Override
     protected int getContentViewLayoutId() {
-        return R.layout.activity_no_drawer;
+        return R.layout.fragment_no_drawer;
     }
 }

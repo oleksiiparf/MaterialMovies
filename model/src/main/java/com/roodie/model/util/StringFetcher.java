@@ -6,8 +6,8 @@ package com.roodie.model.util;
 
 public interface StringFetcher {
 
-    public String getString(int id);
+    String getString(int id);
 
-    public String getString(int id, Object... format);
+    String getString(int id, Object... format);
 
 }
