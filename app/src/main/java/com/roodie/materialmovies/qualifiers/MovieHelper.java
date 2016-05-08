@@ -6,13 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Qualifier;
 
-
 /**
- * Created by Roodie on 25.06.2015.
+ * Created by Roodie on 05.05.2016.
  */
-
 @Qualifier
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AppContext {
+public @interface MovieHelper {
 }

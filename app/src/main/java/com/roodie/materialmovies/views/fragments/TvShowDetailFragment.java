@@ -44,7 +44,7 @@ import com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout;
 import com.roodie.materialmovies.views.custom_views.MovieWatchedToggler;
 import com.roodie.materialmovies.views.custom_views.RatingBarLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
-import com.roodie.materialmovies.views.custom_views.recyclerview.DetailRecyclerLayout;
+import com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout;
 import com.roodie.materialmovies.views.fragments.base.BaseAnimationFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.CreditWrapper;
@@ -67,7 +67,7 @@ import butterknife.Optional;
  * Created by Roodie on 16.09.2015.
  */
 
-public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, DetailRecyclerLayout> implements TvShowDetailView {
+public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, BaseRecyclerLayout> implements TvShowDetailView {
 
     private static final String LOG_TAG = TvShowDetailFragment.class.getSimpleName();
 

@@ -2,13 +2,11 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_drawer_account_header"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:clickable="true">
 
     <com.roodie.materialmovies.views.custom_views.MMoviesImageView
-        android:id="@+id/profile_image"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
@@ -27,7 +25,6 @@
         app:columnCount="2">
 
         <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-            android:id="@+id/app_name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/spacing_major"

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.roodie.materialmovies.views.custom_views.recyclerview.DetailRecyclerLayout
+<com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout
     android:id="@+id/primary_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:transitionGroup="true"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    app:recyclerViewType="list"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" />

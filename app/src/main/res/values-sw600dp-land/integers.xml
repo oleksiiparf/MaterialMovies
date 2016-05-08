@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer name="search_card_max_items">4</integer>
-
 </resources>

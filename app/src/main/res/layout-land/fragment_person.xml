@@ -21,7 +21,6 @@
             android:orientation="horizontal">
 
         <RelativeLayout
-            android:id="@+id/header_layout"
             android:layout_width="0px"
             android:layout_weight="5"
             android:layout_height="match_parent">

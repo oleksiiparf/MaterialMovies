@@ -6,7 +6,6 @@
 
     <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
         android:layout_centerHorizontal="true"
-        android:id="@+id/secondary_progress_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true"

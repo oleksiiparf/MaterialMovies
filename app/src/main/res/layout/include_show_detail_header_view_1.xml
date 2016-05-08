@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/header_content"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -10,7 +9,6 @@
     android:paddingTop="16.0dip">
 
     <LinearLayout
-        android:id="@+id/slots_above_poster"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -18,7 +16,6 @@
         android:visibility="gone" />
 
     <FrameLayout
-        android:id="@+id/poster_container"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
@@ -30,7 +27,6 @@
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/slots_below_poster"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

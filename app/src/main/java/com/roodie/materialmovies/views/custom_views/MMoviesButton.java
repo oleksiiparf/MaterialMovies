@@ -30,7 +30,7 @@ public class MMoviesButton extends AppCompatButton {
     public MMoviesButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        MMoviesApp.from(context).inject(this);
+        MMoviesApp.from(context).inject(mTypefaceManager);
         if (isInEditMode())
             return;
         setFont();

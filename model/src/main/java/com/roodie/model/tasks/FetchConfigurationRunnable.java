@@ -29,9 +29,12 @@ public class FetchConfigurationRunnable extends NetworkCallRunnable<TmdbConfigur
 
     private static final String FILENAME_CONFIG = "tmdb.config";
 
-    @Inject Tmdb mTmdbClient;
-    @Inject ApplicationState mState;
-    @Inject FileManager mFileManager;
+    @Inject
+    Tmdb mTmdbClient;
+    @Inject
+    ApplicationState mState;
+    @Inject
+    FileManager mFileManager;
 
 
 

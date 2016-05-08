@@ -90,9 +90,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include
-                android:id="@+id/divider_bottom"
-                layout="@layout/include_divider" />
+            <include layout="@layout/include_divider" />
 
             <LinearLayout
                 android:layout_width="fill_parent"

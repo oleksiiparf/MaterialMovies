@@ -8,7 +8,6 @@
     android:clipToPadding="false">
 
     <FrameLayout
-        android:id="@+id/layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@android:color/transparent"/>
@@ -23,7 +22,6 @@
 
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/scroll_container_show"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@android:color/transparent"
@@ -48,7 +46,6 @@
                     android:orientation="horizontal" />
 
                 <RelativeLayout
-                    android:id="@+id/summary_root"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/ln_transparent"
@@ -136,9 +133,7 @@
                         android:layout_below="@id/summary_container"
                         android:orientation="vertical">
 
-                        <include
-                            android:id="@+id/divider_bottom"
-                            layout="@layout/include_divider" />
+                        <include layout="@layout/include_divider" />
 
                         <LinearLayout
                             android:layout_width="fill_parent"

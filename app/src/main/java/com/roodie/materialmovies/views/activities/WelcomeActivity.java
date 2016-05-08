@@ -12,6 +12,9 @@ import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.util.MMoviesVisitManager;
 import com.roodie.materialmovies.views.custom_views.CirclePageIndicator;
 import com.roodie.model.Display;
+import com.roodie.model.util.VisitManager;
+
+import javax.inject.Inject;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -21,8 +24,7 @@ import butterknife.OnClick;
  */
 public class WelcomeActivity extends BaseActivity {
 
-    //@Inject
-    MMoviesVisitManager mVisitManager;
+    @Inject VisitManager mVisitManager;
 
     private static final int WELCOME_ACTIVITY_PAGER_SIZE = 3;
 
@@ -55,7 +57,10 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mVisitManager = new MMoviesVisitManager(this);
+        if (mVisitManager == null) {
+            // #Issue
+            mVisitManager = new MMoviesVisitManager(this);
+        }
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         WelcomePagerAdapter welcomePagerAdapter = new WelcomePagerAdapter();

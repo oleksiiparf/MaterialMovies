@@ -40,7 +40,7 @@ import com.roodie.materialmovies.views.custom_views.MovieTitleCardLayout;
 import com.roodie.materialmovies.views.custom_views.MovieWatchedToggler;
 import com.roodie.materialmovies.views.custom_views.RatingBarLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
-import com.roodie.materialmovies.views.custom_views.recyclerview.DetailRecyclerLayout;
+import com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout;
 import com.roodie.materialmovies.views.fragments.base.BaseAnimationFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.CreditWrapper;
@@ -66,7 +66,7 @@ import io.codetail.animation.arcanimator.Side;
  * Created by Roodie on 27.06.2015.
  */
 
-public class MovieDetailFragment extends BaseAnimationFragment<MovieWrapper, DetailRecyclerLayout> implements MovieDetailView {
+public class MovieDetailFragment extends BaseAnimationFragment<MovieWrapper, BaseRecyclerLayout> implements MovieDetailView {
 
     @Override
     public void onRefreshData(boolean visible) {

@@ -19,6 +19,7 @@ import com.roodie.materialmovies.util.StringUtils;
 import com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout;
 import com.roodie.materialmovies.views.listeners.AppBarStateChangeListener;
 import com.roodie.model.network.NetworkError;
+import com.roodie.model.util.FileLog;
 import com.roodie.model.util.TextUtils;
 
 import java.io.Serializable;
@@ -44,6 +45,8 @@ public abstract class BaseDetailFragment<M extends Serializable, RV extends Base
     ViewGroup mLeftContainer;
 
     protected String mToolbarTitle;
+
+    private int mLastFirstVisiblePosition;
 
     @Optional
     @InjectView(R.id.backdrop_toolbar)
@@ -89,6 +92,8 @@ public abstract class BaseDetailFragment<M extends Serializable, RV extends Base
     @Override
     public void onResume() {
         super.onResume();
+        ((LinearLayoutManager) mPrimaryRecyclerView.getLayoutManager()).scrollToPosition(mLastFirstVisiblePosition);
+
         if (mAppBar != null) {
             mAppBar.addOnOffsetChangedListener(offsetListener);
         }
@@ -97,9 +102,20 @@ public abstract class BaseDetailFragment<M extends Serializable, RV extends Base
     @Override
     public void onPause() {
         super.onPause();
+        mLastFirstVisiblePosition = ((LinearLayoutManager)mPrimaryRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+
         if (mAppBar != null)
             mAppBar.removeOnOffsetChangedListener(offsetListener);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("FIRST_VISIBLE_POSITION", mLastFirstVisiblePosition);
+        FileLog.d("Base", "on save state");
+        super.onSaveInstanceState(outState);
+    }
+
+
 
     @Override
     protected int getLayoutRes() {
@@ -108,7 +124,12 @@ public abstract class BaseDetailFragment<M extends Serializable, RV extends Base
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        FileLog.d("Base", "on view created");
         super.onViewCreated(view, savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mLastFirstVisiblePosition = savedInstanceState.getInt("FIRST_VISIBLE_POSITION");
+        }
 
         mPrimaryRecyclerView = (RV) view.findViewById(R.id.primary_recycler_view);
         mPrimaryRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));

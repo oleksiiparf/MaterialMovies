@@ -34,6 +34,7 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
+
             </intent-filter>
             <meta-data android:name="android.app.searchable" android:resource="@xml/searchable"/>
 
@@ -105,6 +106,9 @@
         </activity>
 
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="e52140d6b7b19165b1a11bd3255a3b8484563a27" />
     </application>
 
 </manifest>

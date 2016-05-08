@@ -5,35 +5,21 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_horizontal_margin_half">8dp</dimen>
     <dimen name="activity_horizontal_margin_double">32dp</dimen>
-    <dimen name="activity_horizontal_margin_double_double">64dp</dimen>
 
     <dimen name="basic_container_padding">8.0dip</dimen>
-    <dimen name="basic_container_padding_minus_card_half_spacing">4.0dip</dimen>
-
-    <dimen name="title_summary_item_padding_bottom">15.0dip</dimen>
-    <dimen name="title_summary_item_margin_bottom">16.0dip</dimen>
 
     <dimen name="default_padding">8dp</dimen>
     <dimen name="keyline">16dp</dimen>
 
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_vertical_margin_half">8dp</dimen>
-    <dimen name="activity_vertical_margin_double">32dp</dimen>
-    <dimen name="activity_vertical_margin_double_double">64dp</dimen>
-
-    <dimen name="activity_movies_margins">@dimen/activity_horizontal_margin</dimen>
 
     <dimen name="activity_bottom_bar_height">48.0dip</dimen>
 
     <dimen name="welcome_view_side_padding">25.0dip</dimen>
 
     <!-- Material text sizes -->
-    <dimen name="text_size_default_sg">14sp</dimen>
     <dimen name="text_size_caption_sg">16sp</dimen>
-
-    <dimen name="insets">1dp</dimen>
-    <dimen name="item_movie_width">196dp</dimen>
-    <dimen name="item_movie_height">248dp</dimen>
 
     <dimen name="spacing_micro">4dp</dimen>
     <dimen name="spacing_minor">8dp</dimen>
@@ -41,67 +27,28 @@
     <dimen name="spacing_massive">24dp</dimen>
     <dimen name="spacing_huge">56dp</dimen>
 
-    <dimen name="fab_size">55dp</dimen>
-
     <dimen name="trailer_text_size">16dp</dimen>
 
-    <dimen name="drawer_login_height">180dp</dimen>
-    <dimen name="drawer_side_menu_width">304dp</dimen>
-    <dimen name="drawer_user_text_size">14dp</dimen>
-    <dimen name="drawer_movie_checkin_poster_width">56dp</dimen>
     <!-- Should be movie_detail_poster_width * 1.6 -->
-    <dimen name="drawer_movie_checkin_poster_height">90dp</dimen>
-    <dimen name="drawer_account_avatar_width">56dp</dimen>
-    <dimen name="drawer_account_avatar_height">56dp</dimen>
-
-    <dimen name="movie_detail_login_title_textsize">26dp</dimen>
 
     <dimen name="grid_spacing">4dip</dimen>
 
     <dimen name="card_item_image_size">140dip</dimen>
-    <dimen name="card_item_height">188dip</dimen>
 
     <!--  180 200    140 188
 -->
-    <dimen name="movie_grid_item_padding">3.0dip</dimen>
 
 
-    <dimen name="search_item_width">190dp</dimen>
-    <dimen name="search_item_height">240dp</dimen>
-
-    <dimen name="show_grid_spacing">2dp</dimen>
-    <dimen name="show_grid_item_width">130dp</dimen>
-    <dimen name="show_grid_item_height">150dp</dimen>
     <dimen name="show_grid_two_line_bar_height">68dp</dimen>
-    <dimen name="show_grid_single_line_bar_height">48dp</dimen>
-    <dimen name="show_grid_item_text_padding">16dp</dimen>
     <dimen name="show_grid_item_icon_size">24dp</dimen>
-    <dimen name="show_grid_item_icon_padding">12dp</dimen>
-
-    <dimen name="show_poster_height">150.0dip</dimen>
-    <dimen name="show_poster_width">100.0dip</dimen>
 
     <dimen name="show_card_item_icon_padding">24dp</dimen>
-    <dimen name="show_card_item_icon_padding_micro">8dp</dimen>
 
     <dimen name="show_grid_item_title_size">12dp</dimen>  <!--16-->
     <dimen name="show_grid_item_subtitle_size">10dp</dimen> <!--12-->
 
     <dimen name="show_detail_season_item_height">160dp</dimen>
     <dimen name="show_detail_season_item_width">240dp</dimen>
-
-
-    <dimen name="season_background_image_height">228.0dip</dimen>
-    <dimen name="season_fab_top_margin">26.0dip</dimen>
-    <dimen name="season_header_margin_top">26.0dip</dimen>
-    <item type="dimen" name="season_poster_margin">@dimen/spacing_major</item>
-
-
-    <dimen name="season_info_margin_top">8.0dip</dimen>
-
-
-    <dimen name="season_poster_width">110.0dip</dimen>
-    <dimen name="season_poster_height">164.0dip</dimen>
 
 
     <dimen name="movie_grid_item_font_size">18dp</dimen>
@@ -112,33 +59,14 @@
     <!--164  110-->
 
 
-    <dimen name="movie_detail_ratingbar_height">144dp</dimen>
-
     <dimen name="movie_detail_fanart_height">224dp</dimen>
 
     <dimen name="show_detail_fanart_height">380dp</dimen>
 
-    <dimen name="show_detail_poster_height">150dp</dimen>
-    <dimen name="show_detail_poster_width">100dp</dimen>
-
-    <dimen name="movie_detail_pinned_elevation">6dp</dimen>
-    <dimen name="movie_detail_title_textsize">26dp</dimen>
-    <dimen name="movie_detail_tagline_textsize">16dp</dimen>
-    <dimen name="movie_detail_summary_textsize">16dp</dimen>
-    <dimen name="movie_detail_flag_width">18dp</dimen>
-    <dimen name="movie_detail_flag_height">12dp</dimen>
-
     <dimen name="movie_detail_trailers_height">160dp</dimen>
     <dimen name="movie_detail_trailers_item_width">240dp</dimen>
-    <dimen name="movie_detail_multi_item_width">75dp</dimen>
 
-    <dimen name="person_detail_subtitle_textsize">13dp</dimen>
-    <dimen name="person_detail_headshot_size">40dp</dimen>
-    <dimen name="person_detail_headshot_large_width">100dp</dimen>
     <dimen name="person_detail_headshot_large_height">300dp</dimen>
-
-    <dimen name="detail_card_height">140dp</dimen>
-    <dimen name="detail_card_item_width">90dp</dimen>
 
     <dimen name="movie_list_image_width">48dp</dimen>
     <dimen name="movie_list_item_height">88dp</dimen>
@@ -150,74 +78,36 @@
 
     <dimen name="watched_list_item_container_height">64dp</dimen>
 
-    <dimen name="movie_discover_tab_height">48dp</dimen>
-
-    <dimen name="movie_backdrop_title_left_initial">16dp</dimen>
-    <dimen name="movie_backdrop_title_left_final">64dp</dimen>
-
-    <dimen name="person_headshot_size">40dp</dimen>
-
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="toolbar_elevation">4.0dip</dimen>
-
-    <dimen name="imagecontainer_height">180dp</dimen>
-
     <!-- Button-->
-    <dimen name="button_elevation">2.0dip</dimen>
-    <dimen name="button_inset_horizontal">4.0dip</dimen>
-    <dimen name="button_inset_vertical">6.0dip</dimen>
-    <dimen name="button_padding_horizontal">8.0dip</dimen>
-    <dimen name="button_padding_vertical">4.0dip</dimen>
-    <dimen name="button_pressed_z">2.0dip</dimen>
-    <dimen name="control_corner">2.0dip</dimen>
 
     <!-- Page indicator -->
     <dimen name="default_circle_indicator_radius">3dp</dimen>
     <dimen name="default_circle_indicator_stroke_width">0dp</dimen>
 
     <!-- List of seasons -->
-    <dimen name="season_item_padding_top_bottom">8dp</dimen>
-    <dimen name="season_item_padding_left_right">16dp</dimen>
 
 
     <!-- Snackbar -->
-    <dimen name="offline_bar_height">25.0dip</dimen>
     <dimen name="offline_placeholder_padding">20.0dip</dimen>
     <dimen name="offline_placeholder_text_size_body">15.0dip</dimen>
     <dimen name="offline_placeholder_text_size_title">20.0dip</dimen>
 
     <!-- Header item -->
-    <dimen name="sectionHeaderPaddingLeftRight">16.0dip</dimen>
-    <dimen name="sectionHeaderPaddingBottom">4.0dip</dimen>
-    <dimen name="sectionHeaderPaddingTop">32.0dip</dimen>
 
-    <dimen name="header_info_page_image_size">80.0dip</dimen>
     <dimen name="header_info_page_margin">16.0dip</dimen>
 
     <dimen name="watchableOverviewWidth">80.0dip</dimen>
     <dimen name="watchableOverviewHeight">120.0dip</dimen>
 
-    <dimen name="typo_subhead">16.0sp</dimen>
-
-    <dimen name="show_header_shadow_height">66.0dip</dimen>
-    <dimen name="cell_margin">15.0dip</dimen>
-
     <!-- Button -->
-    <dimen name="mm_button_border_width">2.0dip</dimen>
-    <dimen name="mm_button_corner_radius">24.0sp</dimen>
-    <dimen name="mm_button_height">48.0sp</dimen>
-    <dimen name="mm_button_padding">34.0sp</dimen>
     <dimen name="mm_button_small_border_width">1.0dip</dimen>
     <dimen name="mm_button_small_corner_radius">12.0sp</dimen>
     <dimen name="mm_button_small_height">24.0sp</dimen>
     <dimen name="mm_button_small_padding">19.0sp</dimen>
 
     <dimen name="fragment_show_tuner_width">220.0dip</dimen>
-
-    <dimen name="text_size_subtitle_material_toolbar">16.0dip</dimen>
-    <dimen name="text_size_title_material_toolbar">20.0dip</dimen>
-
 
 
 </resources>

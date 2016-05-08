@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:internal="http://schemas.android.com/apk/res-auto">
 
-        <com.roodie.materialmovies.views.custom_views.recyclerview.LoadMoreRecyclerLayout
+        <com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout
             android:id="@+id/primary_recycler_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -18,5 +18,5 @@
             android:scrollbars="vertical"
             android:fadeScrollbars="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        </com.roodie.materialmovies.views.custom_views.recyclerview.LoadMoreRecyclerLayout>
+        </com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout>
 </merge>

@@ -28,10 +28,6 @@ import com.google.common.base.Objects;
 import com.roodie.materialmovies.R;
 
 /**
- * Created by Roodie on 20.08.2015.
- */
-
-/**
  * This is a set of helper methods using for showing various "animations" in the app.
  */
 public class AnimUtils {

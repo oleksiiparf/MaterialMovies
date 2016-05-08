@@ -12,7 +12,7 @@
 
     <include layout="@layout/fragment_not_available"/>
 
-    <include android:id="@+id/loading_layout"
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

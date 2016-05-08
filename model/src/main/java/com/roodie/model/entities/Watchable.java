@@ -336,11 +336,8 @@ public abstract class Watchable extends Entity{
 
         Watchable that = (Watchable) o;
 
-        if (tmdbId != null && that.tmdbId != null) {
-            return tmdbId.equals(that.tmdbId);
-        }
+        return tmdbId != null && that.tmdbId != null && tmdbId.equals(that.tmdbId);
 
-        return false;
     }
 
     @Override

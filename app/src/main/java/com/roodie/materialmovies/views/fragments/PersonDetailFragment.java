@@ -27,7 +27,7 @@ import com.roodie.materialmovies.views.activities.SettingsActivity;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
-import com.roodie.materialmovies.views.custom_views.recyclerview.DetailRecyclerLayout;
+import com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout;
 import com.roodie.materialmovies.views.fragments.base.BaseAnimationFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.PersonCreditWrapper;
@@ -43,7 +43,7 @@ import java.util.List;
  * Created by Roodie on 28.06.2015.
  */
 
-public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, DetailRecyclerLayout> implements PersonView {
+public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, BaseRecyclerLayout> implements PersonView {
 
     private static final String LOG_TAG = PersonDetailFragment.class.getSimpleName();
     private static final String KEY_PERSON_ID = "person_id";

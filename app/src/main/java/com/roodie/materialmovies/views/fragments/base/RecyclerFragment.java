@@ -9,7 +9,7 @@ import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.BaseListView;
 import com.roodie.materialmovies.mvp.views.MvpLceView;
 import com.roodie.materialmovies.views.adapters.FooterViewListAdapter;
-import com.roodie.materialmovies.views.custom_views.recyclerview.LoadMoreRecyclerLayout;
+import com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout;
 import com.roodie.materialmovies.views.listeners.RecyclerItemClickListener;
 import com.roodie.model.Display;
 import com.roodie.model.network.NetworkError;
@@ -24,12 +24,12 @@ import java.util.List;
 public abstract class RecyclerFragment<VH extends RecyclerView.ViewHolder, M extends List<? extends Serializable>, V extends MvpLceView<M>>
         extends BaseMvpFragment implements BaseListView<M>, RecyclerItemClickListener {
 
-    protected LoadMoreRecyclerLayout mPrimaryRecyclerView;
+    protected BaseRecyclerLayout mPrimaryRecyclerView;
     protected FooterViewListAdapter<M, VH> mAdapter = null;
 
     protected abstract FooterViewListAdapter<M, VH> createAdapter();
 
-    protected LoadMoreRecyclerLayout getRecyclerView() {
+    protected BaseRecyclerLayout getRecyclerView() {
         return mPrimaryRecyclerView;
     }
 
@@ -37,7 +37,7 @@ public abstract class RecyclerFragment<VH extends RecyclerView.ViewHolder, M ext
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPrimaryRecyclerView = (LoadMoreRecyclerLayout) view.findViewById(R.id.primary_recycler_view);
+        mPrimaryRecyclerView = (BaseRecyclerLayout) view.findViewById(R.id.primary_recycler_view);
         mPrimaryRecyclerView.setHasFixedSize(true);
     }
 

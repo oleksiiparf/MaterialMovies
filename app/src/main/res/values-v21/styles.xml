@@ -10,8 +10,4 @@
 
     <style name="Widget.MMovies.RatingBar" parent="android:Widget.Material.Light.RatingBar" />
 
-    <style name="MaterialMoviesDetailConfirmation">
-        <item name="android:visibility">gone</item>
-    </style>
-
 </resources>

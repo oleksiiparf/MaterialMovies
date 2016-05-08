@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">MMovies</string>
-    <string name="title_film_detail">Film Detail</string>
     <string name="tmdb">TMDb</string>
 
     <!-- Welcome items -->
@@ -13,25 +12,18 @@
 
 
     <!-- Main Menu -->
-    <string name="watchlist_title">Watchlist</string>
     <string name="movies_title">Movies</string>
     <string name="shows_title">Shows</string>
-    <string name="seasons_title">Seasons</string>
     <string name="people_title">People</string>
     <string name="popular_title">Popular</string>
     <string name="watched_title">Watched</string>
-    <string name="trending_title">Trending</string>
     <string name="preferences">Settings</string>
-    <string name="about_title">AboutT</string>
     <string name="in_theatres_title">In theatres</string>
     <string name="upcoming_title">Upcoming</string>
     <string name="on_the_air_title">On the air</string>
 
     <string name="drawer_open_content_desc">Drawer open</string>
     <string name="drawer_closed_content_desc">Drawer closed</string>
-
-    <string name="nav_drawer_close_content_description">Close navigation drawer</string>
-    <string name="nav_drawer_open_content_description">Open navigation drawer</string>
 
 
     <!-- Media items -->
@@ -51,7 +43,6 @@
     <string name="images_movies">Images</string>
     <string name="trailer_movie">Trailer</string>
     <string name="trailers_movies">Trailers</string>
-    <string name="show_season">Season </string>
     <string name="show_seasons">Seasons</string>
     <string name="biography">Biography</string>
     <string name="placeholder_rating">--</string>
@@ -62,7 +53,6 @@
     <string name="show_unknown">Scripted</string>
     <string name="tv_season_specials">Season Specials</string>
     <string name="tv_season_number">Season %1$d</string>
-    <string name="tv_season_episodes">%1$d Episodes</string>
     <string name="season_air_date">Air date: %1$s</string>
 
     <!-- Tmdb ratings -->
@@ -78,14 +68,8 @@
 
     <!-- Menu items -->
     <string name="menu_refresh">Refresh</string>
-    <string name="menu_play_trailer">Trailer</string>
-    <string name="menu_movie_share">Share movie</string>
-    <string name="menu_open_tmdb">Share movie</string>
     <string name="menu_movie_websearch">Web search</string>
     <string name="menu_search">Search</string>
-    <string name="menu_about">About</string>
-    <string name="menu_filter">Filter</string>
-    <string name="menu_filter_clear">Clear</string>
 
     <string name="menu_item_watchable_add_to_watched">Mark as seen</string>
     <string name="menu_item_show_is_watched">Show is seen</string>
@@ -93,7 +77,6 @@
 
 
     <!-- Share -->
-    <string name="share">Share</string>
     <string name="share_tv_show">Share tv show</string>
     <string name="share_movie">Share movie</string>
     <string name="share_checkout">Check out %s</string>
@@ -112,32 +95,14 @@
     <string name="movie_rating_votes">%1$d%% - %2$d votes</string>
     <string name="movie_release_date">Release date: %1$s</string>
 
-    <string name="season_episodes_amount">%d episodes</string>
-
-    <string name="action_mark_liked">Mark as liked</string>
-    <string name="action_mark_unliked">Mark as unliked</string>
-
     <string name="search_hint">Search Material Movies</string>
-    <string name="search_hint_movies">Search movies</string>
-    <string name="search_hint_shows">Search tv shows</string>
-
 
 
     <string name="category_watched">Your collection</string>
     <string name="category_movies">Movies</string>
     <string name="category_shows">Shows</string>
     <string name="category_settings">Settings</string>
-    <string name="category_about">About</string>
-    <string name="category_people">People</string>
     <string name="category_mail">Feedback</string>
-
-    <string name="movie_detail_votes">Votes</string>
-    <string name="movie_detail_global">Global</string>
-    <string name="movie_detail_rating">Rating</string>
-
-    <string name="season_checkin">Checkin</string>
-    <string name="season_checkin_cancel">Cancel checkin</string>
-
 
 
     <string name="person_born_date">Born: %1$s</string>
@@ -148,15 +113,7 @@
     <string name="settings_title">Settings</string>
     <string name="see_more">See more</string>
 
-    <string name="activity_continue">Continue</string>
     <string name="activity_continue_with_caret">Continue   ❯</string>
-
-    <string name="season_regulars">Season regulars</string>
-    <string name="season_firstaired">Release date</string>
-    <string name="season_number_of_episodes">Number of episodes</string>
-    <string name="more">More</string>
-
-    <string name="empty_data"></string>
 
     <string name="unknown_default">UNKNOWN</string>
 
@@ -174,9 +131,7 @@
     <string name="pref_updatewifionly">Images via Wi-Fi only</string>
     <string name="pref_updatewifionlysummary">To reduce carrier data charges, don\'t download over mobile networks</string>
     <string name="pref_animations">Enable Animations</string>
-    <string name="pref_animations_summary">Enable Animations</string>
-    <string name="pref_about">About MaterialMovies</string>
-    <string name="pref_credits">Credits</string>
+    <string name="pref_animations_summary">Works on Anroid 5.0 and hire</string>
 
     <!-- Help -->
     <string name="feedback">Send feedback</string>
@@ -190,7 +145,6 @@
     <string name="local_database_summary">Clearing tle local database will delete the data from your library.</string>
 
     <string name="build_version">Build version</string>
-    <string name="current_buld_version">0.2</string>
     <string name="creator">Creator</string>
     <string name="creator_context">AlexParfenjuk</string>
     <string name="powered_tmdb">Powered by TMDB</string>
@@ -208,13 +162,10 @@
     <string name="offline">Connect to a network, then try again.</string>
     <string name="offline_no_wifi">Connect to Wi-Fi or allow all connections, then try again.</string>
     <string name="app_not_available">No app available to handle this.</string>
-    <string name="main_has_no_internet_connection">No Internet connection available</string>
 
     <string name="empty_network_error">%1$s is not available while you`re offline. Please connect to the internet and try again.</string>
-    <string name="empty_unknown_error">%1$s could not be retrieved due to an unknown error.</string>
 
     <string name="action_item_added_to_watched">&lt;b>%s&lt;/b> &lt;em>added to watched&lt;/em></string>
-    <string name="action_item_removed_from_watched">&lt;b>%s&lt;/b> &lt;em>removed from watched&lt;/em></string>
     <string name="action_cleared_watched">Database successfully cleared!</string>
 
     <string name="nav_drawer_user_header_app_label">Material Movies</string>
@@ -223,11 +174,6 @@
 
     <!-- transition shared elements -->
     <string name="transition_poster" translatable="false">poster</string>
-    <string name="transition_poster_background" translatable="false">poster_background</string>
-    <string name="transition_movie_title" translatable="true">movie_title</string>
-    <string name="transition_show_title" translatable="true">show_title</string>
-
-
 
 
 </resources>

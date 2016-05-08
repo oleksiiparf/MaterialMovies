@@ -2,23 +2,13 @@
 <resources>
 
 
-    <color name="movie_placeholder">#ff4e5d64</color>
-
-    <color name="summary_divider">#ff4e5d64</color>
-
-    <color name="transparent">#00000000</color>
-    <color name="semi_transparent">#88676767</color>
-
     <color name="pasteTransparent">#00ffffff</color>
 
-    <color name="side_menu_background">#FF202020</color>
     <color name="material_dialog_dark">#363F44</color>
     <color name="material_dialog_light">#EDEDED</color>
 
 
     <color name="dark_gray">#FF333333</color>
-    <color name="light_gray">#FFDDDDDD</color>
-    <color name="mid_gray">#FFAAAAAA</color>
 
 
     <color name="mm_white">#ffffffff</color> <!-- primary text dark -->
@@ -28,35 +18,16 @@
 
     <color name="primary_color_translucent">#998BC34A</color>
     <color name="primary_color">#363F44</color>
-    <color name="primary_color_dark">#ff1a1f23</color>
-    <color name="window_background_color">#ff54646c</color>
-    <color name="accent_color">#E91C62</color>
 
     <color name="color_primary_default">#FF5722</color>
-    <color name="color_primary_dark_default">#E64A19</color>
-
-    <color name="drawer_background">#FFDDDDDD</color>
-    <color name="chrome_background">#E6E6E6E6</color>
-    <color name="chrome_custom_background_alpha">#E6FFFFFF</color>
 
     <color name="translucent_black_dark">#BB000000</color>
-    <color name="translucent_black_light">#70000000</color>
 
     <color name="protection_dark">#66000000</color>
 
-    <color name="enabled">@color/grey_60</color>
-    <color name="disabled">@color/grey_30</color>
-
-    <color name="grey_60">#99333333</color>
-    <color name="grey_45">#73333333</color>
-    <color name="grey_30">#4C333333</color>
     <color name="grey_12_5">#757575</color>
 
-    <color name="mm_light_green">#ff1ed760</color>
     <color name="mm_medium_green">#ff1db954</color>
-    <color name="mm_medium_red">#ffce1a2b</color>
-    <color name="mm_medium_yellow">#ff8f8100</color>
-    <color name="mm_medium_orange">#ff8f4a00</color>
 
 
     <color name="abc_input_method_navigation_guard">@android:color/black</color>
@@ -81,33 +52,12 @@
     <color name="cardview_light_background">#fffafafa</color>
     <color name="cardview_shadow_end_color">#03000000</color>
     <color name="cardview_shadow_start_color">#37000000</color>
-    <color name="common_action_bar_splitter">#ffd2d2d2</color>
-    <color name="common_signin_btn_dark_text_default">@android:color/white</color>
-    <color name="common_signin_btn_dark_text_disabled">#ffaaaaaa</color>
-    <color name="common_signin_btn_dark_text_focused">@android:color/white</color>
-    <color name="common_signin_btn_dark_text_pressed">@android:color/white</color>
-    <color name="common_signin_btn_default_background">#ffdd4b39</color>
-    <color name="common_signin_btn_light_text_default">#ff737373</color>
-    <color name="common_signin_btn_light_text_disabled">#ffaaaaaa</color>
-    <color name="common_signin_btn_light_text_focused">#ff737373</color>
-    <color name="common_signin_btn_light_text_pressed">@android:color/white</color>
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
     <color name="dim_foreground_material_dark">#ffbebebe</color>
     <color name="dim_foreground_material_light">#ff323232</color>
-    <color name="disabled_black">#96040d14</color>
-    <color name="disabled_black_non_transparent">#ff616161</color>
-    <color name="disabled_green">#6421ce99</color>
-    <color name="disabled_white">#64ffffff</color>
-    <color name="error_color">#ffdd2c00</color>
-    <color name="fab_stroke_end_inner_color">#0a000000</color>
-    <color name="fab_stroke_end_outer_color">#0f000000</color>
-    <color name="fab_stroke_top_inner_color">#1affffff</color>
-    <color name="fab_stroke_top_outer_color">#2effffff</color>
     <color name="focused_dark">#0f000000</color>
-    <color name="focused_green">#ff1fc190</color>
     <color name="focused_light">#0fffffff</color>
-    <color name="focused_red">#ffe5502e</color>
     <color name="graph_interval_checked_color_dark">#ff444444</color>
     <color name="graph_interval_checked_color_light">#ffeeeeee</color>
     <color name="graph_interval_disabled_color">@color/mm_gray_1</color>
@@ -117,27 +67,18 @@
     <color name="highlighted_text_material_light">#66009688</color>
     <color name="hint_foreground_material_dark">@color/bright_foreground_disabled_material_dark</color>
     <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light</color>
-    <color name="iav_bank_of_america">#ffd4001a</color>
     <color name="link_text_material_dark">@color/material_deep_teal_200</color>
     <color name="link_text_material_light">@color/material_deep_teal_500</color>
-    <color name="login_text_error_color">@color/mm_white_1</color>
     <color name="material_blue_grey_800">#ff37474f</color>
     <color name="material_blue_grey_900">#ff263238</color>
     <color name="material_blue_grey_950">#ff21272b</color>
     <color name="material_deep_teal_200">#ff80cbc4</color>
     <color name="material_deep_teal_500">#ff009688</color>
-    <color name="netverify_dialog_negative_button_text">#ff666666</color>
-    <color name="netverify_dialog_positiv_button_text">#ff97be0d</color>
-    <color name="netverify_help_button_text">#ff97be0d</color>
-    <color name="netverify_info_bar_text">#ffffffff</color>
-    <color name="netverify_submission_text">#ff666666</color>
     <color name="onboarding_nav_bar_color_light">#ffeeeff0</color>
-    <color name="onboarding_window_background_dark">#ff232627</color>
     <color name="pressed_dark">#1c000000</color>
     <color name="pressed_dark_green">#ff1db788</color>
     <color name="pressed_green">#ff1db788</color>
     <color name="pressed_light">#1cffffff</color>
-    <color name="pressed_red">#ffd94b2b</color>
     <color name="primary_dark_material_dark">#ff000000</color>
     <color name="primary_dark_material_light">#ff757575</color>
     <color name="primary_material_dark">#ff212121</color>
@@ -149,7 +90,6 @@
     <color name="mm_black_1">@color/mm_neutral_600</color>
     <color name="mm_black_2">@color/mm_neutral_500</color>
     <color name="mm_dark_green">#ff26a47b</color>
-    <color name="mm_dark_red">#ffbb4227</color>
     <color name="mm_gray_1">@color/mm_neutral_300</color>
     <color name="mm_gray_2">@color/mm_neutral_400</color>
     <color name="mm_green">#ff21ce99</color>
@@ -159,7 +99,6 @@
     <color name="mm_neutral_400">#ff757577</color>
     <color name="mm_neutral_500">#ff303032</color>
     <color name="mm_neutral_600">#ff212124</color>
-    <color name="mm_orange_a_400">#FF9100</color>
     <color name="mm_red">#fff45531</color>
     <color name="mm_white_1">@color/mm_neutral_100</color>
     <color name="mm_white_2">@color/mm_neutral_200</color>
@@ -169,10 +108,6 @@
     <color name="secondary_text_default_material_light">#8a000000</color>
     <color name="secondary_text_disabled_material_dark">#36ffffff</color>
     <color name="secondary_text_disabled_material_light">#24000000</color>
-    <color name="shadow_end_color">@android:color/transparent</color>
-    <color name="shadow_mid_color">#14000000</color>
-    <color name="shadow_start_color">#44000000</color>
-    <color name="snackbar_background_color">#ff323232</color>
     <color name="spb_default_color">#ff33b5e5</color>
     <color name="switch_thumb_disabled_material_dark">#ff616161</color>
     <color name="switch_thumb_disabled_material_light">#ffbdbdbd</color>
@@ -185,38 +120,20 @@
     <color name="separator_inverse">#ffe9e9e9</color>
     <color name="divider">#26ffffff</color>
     <color name="divider_inverse">#1A000000</color>
-    <color name="background_dim">#80111111</color>
     <color name="background_dim_inverse">#80ffffff</color>
 
     <!-- Page indicator -->
-    <color name="vpi__background_holo_dark">#ff000000</color>
-    <color name="vpi__background_holo_light">#fff3f3f3</color>
-    <color name="vpi__bright_foreground_holo_dark">@color/vpi__background_holo_light</color>
-    <color name="vpi__bright_foreground_holo_light">@color/vpi__background_holo_dark</color>
-    <color name="vpi__bright_foreground_disabled_holo_dark">#ff4c4c4c</color>
-    <color name="vpi__bright_foreground_disabled_holo_light">#ffb2b2b2</color>
-    <color name="vpi__bright_foreground_inverse_holo_dark">@color/vpi__bright_foreground_holo_light</color>
-    <color name="vpi__bright_foreground_inverse_holo_light">@color/vpi__bright_foreground_holo_dark</color>
 
     <color name="default_circle_indicator_fill_color">#FFFFFFFF</color>
     <color name="default_circle_indicator_page_color">#00000000</color>
     <color name="default_circle_indicator_stroke_color">#FFDDDDDD</color>
-    <color name="default_line_indicator_selected_color">#FF33B5E5</color>
-    <color name="default_line_indicator_unselected_color">#FFBBBBBB</color>
-    <color name="default_title_indicator_footer_color">#FF33B5E5</color>
-    <color name="default_title_indicator_selected_color">#FFFFFFFF</color>
-    <color name="default_title_indicator_text_color">#BBFFFFFF</color>
-    <color name="default_underline_indicator_selected_color">#FF33B5E5</color>
 
     <color name="accent">#FFC107</color>
     <color name="star_deactivated">#D6D6D6</color>
 
-    <color name="cat_black">#ff000000</color>
-    <color name="cat_grayscale">#ffebedf2</color>
     <color name="txt_offline_placeholder_body">#ffbdbcba</color>
     <color name="txt_offline_placeholder_title">#ff000000</color>
 
-    <color name="alto">#ffd8d8d8</color>
     <color name="mm_luxor_gold">#ff79b632</color>
 
 
@@ -225,7 +142,6 @@
     <color name="mm_button_info_text_pressed">@color/mm_white</color>
     <color name="mm_button_info_text_default">@color/mm_white</color>
 
-    <color name="mm_button_border_checked">@color/mm_light_green</color>
     <color name="mm_button_border_default">@color/mm_white_40</color>
     <color name="mm_button_border_disabled">@color/mm_white_12_5</color>
     <color name="mm_button_border_focused">@color/mm_white_40</color>
@@ -235,13 +151,9 @@
 
     <color name="mm_button_info_background_default">@color/mm_white_20</color>
     <color name="mm_button_info_background_disabled">@color/mm_white_12_5</color>
-    <color name="mm_button_info_background_focused">@color/mm_white_20</color>
     <color name="mm_button_info_background_pressed">@color/mm_white_40</color>
 
     <color name="faded_search_background">#80000000</color>
-
-
-    <color name="background_color_primary">@color/mm_neutral_200</color>
 
 
 </resources>

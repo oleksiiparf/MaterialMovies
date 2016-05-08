@@ -11,13 +11,11 @@
     android:paddingTop="@dimen/md_content_padding_top">
 
     <ProgressBar
-        android:id="@+id/secondary_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true" />
 
     <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-        android:id="@+id/progress_text_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="start"

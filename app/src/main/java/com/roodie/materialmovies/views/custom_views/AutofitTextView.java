@@ -165,7 +165,6 @@ public class AutofitTextView extends MMoviesTextView {
      *
      * @param unit    The desired dimension unit.
      * @param minSize The desired size in the given units.
-     * @attr ref me.grantland.R.styleable#AutofitTextView_minTextSize
      */
     public void setMinTextSize(int unit, float minSize) {
         Context context = getContext();
@@ -183,7 +182,6 @@ public class AutofitTextView extends MMoviesTextView {
      * is adjusted based on the current density and user font size preference.
      *
      * @param minSize The scaled pixel size.
-     * @attr ref me.grantland.R.styleable#AutofitTextView_minTextSize
      */
     public void setMinTextSize(int minSize) {
         setMinTextSize(TypedValue.COMPLEX_UNIT_SP, minSize);

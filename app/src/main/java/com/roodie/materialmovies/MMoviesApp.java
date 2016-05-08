@@ -4,10 +4,12 @@ import android.content.Context;
 
 import com.activeandroid.app.Application;
 import com.arellomobile.mvp.MvpFacade;
-import com.roodie.materialmovies.modules.ApplicationModule;
-import com.roodie.materialmovies.modules.TaskProvider;
-import com.roodie.materialmovies.modules.ViewUtilProvider;
-import com.roodie.materialmovies.modules.library.ContextProvider;
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
+import com.roodie.materialmovies.modules.ApplicationComponent;
+import com.roodie.materialmovies.modules.TaskComponent;
+import com.roodie.materialmovies.modules.ViewUtilComponent;
+import com.roodie.materialmovies.modules.library.ContextModule;
 import com.roodie.materialmovies.modules.library.InjectorModule;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
 import com.roodie.materialmovies.util.AndroidStringFetcher;
@@ -32,32 +34,36 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.ObjectGraph;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Roodie on 02.07.2015.
  */
-public class MMoviesApp extends Application implements Injector {
+public class MMoviesApp extends Application implements Injector{
 
     private static volatile Context applicationContext;
 
     private static MMoviesApp sInstance;
 
-    private static ApplicationState mState;
-
-    private Bus mBus;
+    @Inject ApplicationState mState;
 
     @Inject @GeneralPurpose
     BackgroundExecutor executor;
+
+    @Inject MovieRepository mMovieRepositiry;
+
+    @Inject ShowRepository mShowRepository;
+
+
+    private Bus mBus;
 
     public MMoviesApp() {
         sInstance = this;
     }
 
-    @Singleton
     public ApplicationState getState() {
         return mState;
     }
-
 
     public  Context getAppContext() {
         return this;
@@ -98,27 +104,32 @@ public class MMoviesApp extends Application implements Injector {
     public void onCreate() {
         super.onCreate();
 
+        //Create Crashlytics,enabled for debug assembly
+        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+                .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                .build();
+
+        //Initialize Fabric with disabled crashlytics.
+        Fabric.with(this, crashlyticsKit);
+
         applicationContext = getApplicationContext();
 
         MvpFacade.init();
 
-
-
         mBus = new Bus();
-        mState = new ApplicationState(getBus());
 
         mObjectGraph = ObjectGraph.create(
-                new ContextProvider(this),
-                new ApplicationModule(),
-                new TaskProvider(),
-                new ViewUtilProvider(),
+                new ContextModule(this),
+                new ApplicationComponent(),
+                new TaskComponent(),
+                new ViewUtilComponent(),
                 new InjectorModule(this)
         );
         mObjectGraph.inject(this);
         initRepositories();
     }
 
-    public ObjectGraph getObjectGraph() {
+   public ObjectGraph getObjectGraph() {
         return mObjectGraph;
     }
 
@@ -138,8 +149,8 @@ public class MMoviesApp extends Application implements Injector {
 
     private void initDatabaseRepositories(Map<Class<? extends Entity>, Repository<? extends Entity>> reposMap, SQLiteHelper sQLiteHelper)
     {
-        reposMap.put(MovieWrapper.class, new MovieRepository(sQLiteHelper));
-        reposMap.put(ShowWrapper.class, new ShowRepository(sQLiteHelper));
+        reposMap.put(MovieWrapper.class, mMovieRepositiry);
+        reposMap.put(ShowWrapper.class, mShowRepository);
     }
 
     protected List<SQLiteUpgradeStep> getSQLiteUpgradeSteps()

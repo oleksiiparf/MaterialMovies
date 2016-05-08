@@ -2,7 +2,6 @@
 <resources>
 
     <dimen name="basic_container_padding">24.0dip</dimen>
-    <dimen name="basic_container_padding_minus_card_half_spacing">18.0dip</dimen>
 
 
 </resources>

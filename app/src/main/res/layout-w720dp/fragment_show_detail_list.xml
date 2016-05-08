@@ -48,8 +48,7 @@
 
 
     <FrameLayout
-        android:id="@+id/right_container"
-          android:layout_height="match_parent"
+        android:layout_height="match_parent"
           android:layout_width="0px"
           android:layout_weight="2">
 

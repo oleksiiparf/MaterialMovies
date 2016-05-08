@@ -97,8 +97,6 @@ public interface Display {
 
     boolean hasMainFragment();
 
-    boolean hasDetailFragment();
-
     void showUpNavigation(boolean show);
 
     void setActionBarTitle(CharSequence title);

@@ -13,10 +13,9 @@ import dagger.Lazy;
  */
 public abstract class DatabaseBackgroundRunnable<R> extends BackgroundCallRunnable<R> {
 
-    @Inject
-    ApplicationState mState;
-    @Inject
-    Lazy<Bus> mEventBus;
+    @Inject ApplicationState mState;
+    @Inject Lazy<Bus> mEventBus;
+
 
     private final int mCallingId;
 

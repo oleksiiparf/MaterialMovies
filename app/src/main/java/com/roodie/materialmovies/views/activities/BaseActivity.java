@@ -17,7 +17,6 @@ import com.roodie.materialmovies.views.custom_views.MMoviesToolbar;
 import com.roodie.model.Display;
 
 import butterknife.ButterKnife;
-//import icepick.Icepick;
 
 /**
  * Created by Roodie on 27.06.2015.

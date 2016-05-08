@@ -30,6 +30,8 @@ public abstract class BaseRunnable<R> extends NetworkCallRunnable<R> {
     @Inject Lazy<CountryProvider> mCountryProvider;
     @Inject Lazy<EntitityMapper> mLazyEntityMapper;
 
+
+
     private final int mCallingId;
 
     public BaseRunnable(int callingId) {

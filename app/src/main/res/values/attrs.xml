@@ -254,7 +254,7 @@
         <attr name="android:background"/>
     </declare-styleable>
 
-    <declare-styleable name="LoadMoreRecyclerLayout">
+    <declare-styleable name="BaseRecyclerLayout">
         <attr name="clipToPadding" format="boolean" />
         <attr name="padding" format="dimension" />
         <attr name="paddingTop" format="dimension" />

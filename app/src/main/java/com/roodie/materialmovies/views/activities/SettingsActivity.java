@@ -35,9 +35,12 @@ import com.roodie.materialmovies.util.AboutUtils;
 import com.roodie.materialmovies.util.MMoviesPreferences;
 import com.roodie.materialmovies.util.Utils;
 import com.roodie.model.Display;
+import com.roodie.model.util.StringFetcher;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by Roodie on 13.07.2015.
@@ -46,6 +49,9 @@ public class SettingsActivity extends BaseNavigationActivity implements Settings
 
     @InjectPresenter
     SettingsPresenter mPresenter;
+
+    @Inject
+    StringFetcher mStringFetcher;
 
     private static final String LOG_TAG = SettingsActivity.class.getSimpleName();
 
@@ -103,6 +109,7 @@ public class SettingsActivity extends BaseNavigationActivity implements Settings
         setupActionBar();
         if ( getDisplay() != null) {
             getDisplay().showUpNavigation(true);
+            //TODO
             getDisplay().setActionBarTitle(MMoviesApp.get().getStringFetcher().getString(R.string.settings_title));
         }
 

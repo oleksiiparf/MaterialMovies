@@ -4,6 +4,4 @@
 
     <item name="fade_state" type="id" />
 
-    <item name="swipe_refresh_layout" type="id" />
-
 </resources>

@@ -241,11 +241,6 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
-    public boolean hasDetailFragment() {
-        return mActivity.getSupportFragmentManager().findFragmentById(R.id.fragment_detail) != null;
-    }
-
-    @Override
     public void setActionBarTitle(CharSequence title) {
         ActionBar ab = mActivity.getSupportActionBar();
         if (ab != null) {

@@ -14,6 +14,8 @@ import java.util.List;
  * Created by Roodie on 30.03.2016.
  */
 public class WatchedDbLoadCallback implements ApplicationState.Callback<List<Watchable>> {
+
+
     @Override
     public void onFinished(List<Watchable> result) {
         FileLog.d("watched", "LoadCallback : result is empty? : " + (MoviesCollections.isEmpty(result)));

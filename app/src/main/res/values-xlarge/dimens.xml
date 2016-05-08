@@ -4,5 +4,4 @@
     <dimen name="movie_detail_poster_height">423.0dip</dimen>
 
     <dimen name="basic_container_padding">80.0dip</dimen>
-    <dimen name="basic_container_padding_minus_card_half_spacing">74.0dip</dimen>
 </resources>

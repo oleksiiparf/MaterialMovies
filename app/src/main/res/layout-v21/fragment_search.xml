@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/search_view_container"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -64,5 +65,6 @@
         android:id="@+id/primary_recycler_view"
         android:layout_marginTop="@dimen/spacing_micro"
         android:layout_width="fill_parent"
+        app:recyclerViewType="list"
         android:layout_height="wrap_content" />
 </LinearLayout>
