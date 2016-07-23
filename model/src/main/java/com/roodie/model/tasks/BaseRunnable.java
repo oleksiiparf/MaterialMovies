@@ -5,7 +5,7 @@ import com.roodie.model.network.NetworkCallRunnable;
 import com.roodie.model.network.NetworkError;
 import com.roodie.model.state.ApplicationState;
 import com.roodie.model.state.BaseState;
-import com.roodie.model.state.EntitityMapper;
+import com.roodie.model.state.EntityMapper;
 import com.roodie.model.util.CountryProvider;
 import com.squareup.otto.Bus;
 import com.uwetrottmann.tmdb.Tmdb;
@@ -28,7 +28,7 @@ public abstract class BaseRunnable<R> extends NetworkCallRunnable<R> {
     @Inject Lazy<Tmdb> mTmdbClient;
     @Inject Lazy<Bus> mEventBus;
     @Inject Lazy<CountryProvider> mCountryProvider;
-    @Inject Lazy<EntitityMapper> mLazyEntityMapper;
+    @Inject Lazy<EntityMapper> mLazyEntityMapper;
 
 
 
@@ -74,7 +74,7 @@ public abstract class BaseRunnable<R> extends NetworkCallRunnable<R> {
         return new BaseState.ShowLoadingProgressEvent(getCallingId(), show);
     }
 
-    public EntitityMapper getEntityMapper() {
+    public EntityMapper getEntityMapper() {
         return mLazyEntityMapper.get();
     }
 }

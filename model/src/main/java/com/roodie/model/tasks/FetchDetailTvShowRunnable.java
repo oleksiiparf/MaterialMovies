@@ -56,10 +56,6 @@ public class FetchDetailTvShowRunnable  extends BaseRunnable<TvShowComplete> {
             show.setSeasons(getEntityMapper().mapTvSeasons(result.id, result.seasons));
         }
 
-
-        //show.setWatched(true);
-        //show.save();
-        //getDbHelper().put(show);
         System.out.println(show.toString());
         getEventBus().post(new MoviesState.TvShowInformationUpdatedEvent(getCallingId(), show));
     }
@@ -69,7 +65,6 @@ public class FetchDetailTvShowRunnable  extends BaseRunnable<TvShowComplete> {
         if (re.getResponse() != null && re.getResponse().getStatus() == 404) {
             ShowWrapper show = mState.getTvShow(mId);
             if (show != null) {
-                //getDbHelper().put(show);
                 getEventBus().post(new MoviesState.TvShowInformationUpdatedEvent(getCallingId(), show));
             }
         }

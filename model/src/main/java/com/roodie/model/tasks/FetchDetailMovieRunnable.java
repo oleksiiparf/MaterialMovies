@@ -66,9 +66,6 @@ public class FetchDetailMovieRunnable extends BaseRunnable<Movie> {
             movie.setCrew(getEntityMapper().mapCrewCredits(result.credits.crew));
         }
 
-        //movie.setWatched(true);
-       // movie.save();
-        //getDbHelper().put(movie);
         getEventBus().post(new MoviesState.MovieInformationUpdatedEvent(getCallingId(), movie));
     }
 
@@ -77,7 +74,7 @@ public class FetchDetailMovieRunnable extends BaseRunnable<Movie> {
         if (re.getResponse() != null && re.getResponse().getStatus() == 404) {
             MovieWrapper movie = mState.getMovie(mId);
             if (movie != null) {
-                //getDbHelper().put(movie);
+
                 getEventBus()
                         .post(new MoviesState.MovieInformationUpdatedEvent(getCallingId(), movie));
             }

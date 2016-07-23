@@ -112,10 +112,10 @@ public interface MoviesState extends BaseState {
     class TmdbConfigurationChangedEvent{
     }
 
-    class TvSeasonsChangeEvent{
+    class WatchedChangedEvent {
     }
 
-    class WatchedChangeEvent{
+    class WatchedClearedEvent{
     }
 
     class MovieInformationUpdatedEvent extends BaseArgumentEvent<MovieWrapper> {

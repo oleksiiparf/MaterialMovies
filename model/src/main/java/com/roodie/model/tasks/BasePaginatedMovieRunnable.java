@@ -33,7 +33,6 @@ abstract class BasePaginatedMovieRunnable extends BasePaginatedRunnable <
         if (tmdbResult.total_pages != null) {
             result.totalPages = tmdbResult.total_pages;
         }
-
     }
 
     @Override

@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class PersonWrapper implements Serializable {
 
+    private static final long serialVersionUID = 907671509045298947L;
+
     public Integer tmdbId;
     public String name;
     public String pictureUrl;

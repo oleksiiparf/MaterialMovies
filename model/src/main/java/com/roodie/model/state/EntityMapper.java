@@ -26,12 +26,12 @@ import javax.inject.Singleton;
  */
 
 @Singleton
-public class EntitityMapper {
+public class EntityMapper {
 
     final ApplicationState mMoviesState;
 
     @Inject
-    public EntitityMapper(ApplicationState mMoviesState) {
+    public EntityMapper(ApplicationState mMoviesState) {
         this.mMoviesState = Preconditions.checkNotNull(mMoviesState, "mMoviesState cannot be null");
     }
 

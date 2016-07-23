@@ -5,7 +5,7 @@ import android.text.TextUtils;
 
 import com.google.common.base.Preconditions;
 import com.roodie.model.Constants;
-import com.roodie.model.state.EntitityMapper;
+import com.roodie.model.state.EntityMapper;
 import com.roodie.model.util.MoviesCollections;
 import com.roodie.model.util.Tmdb;
 import com.uwetrottmann.tmdb.entities.ContentRating;
@@ -140,7 +140,7 @@ public class ShowWrapper extends Watchable {
 
         if (show.genres != null) {
             tmdbGenres = getGenresString(show.genres);
-            mGenres = EntitityMapper.mapGenres(show.genres);
+            mGenres = EntityMapper.mapGenres(show.genres);
 
         }
 

@@ -17,13 +17,14 @@ public interface Display {
 
     String PARAM_LOCATION = "_location";
 
-    String PARAM_IMAGE = "_image";
+    String PARAM_POSITION = "_image";
     String PARAM_IMAGE_BACKGROUND = "_image_background";
-
 
     String PARAM_SEARCH_TYPE = "_search_type";
 
     void setDrawerLayout(DrawerLayout layout);
+
+    boolean hasSearchFragment();
 
     void showMovies();
 
@@ -39,13 +40,15 @@ public interface Display {
 
     void startWatchlistActivity();
 
+    void startSearchListActivity(String listType, Bundle bundle);
+
     void startMovieDetailActivityBySharedElements(String movieId, View view, String imageUrl);
 
     void startMovieDetailActivity(String movieId, Bundle bundle);
 
     void showMovieDetailFragment(String movieId);
 
-    Fragment showMovieDetailFragmentBySharedElements(String movieId, String imageUrl);
+    Fragment showMovieDetailFragmentBySharedElements(String movieId);
 
     void startTvDetailActivity(String showId, Bundle bundle);
 
@@ -53,11 +56,15 @@ public interface Display {
 
     void showTvDetailFragment(String tvId);
 
-    Fragment showTvDetailFragmentBySharedElement(String tvId, String imageUrl);
+    Fragment showTvDetailFragmentBySharedElement(String tvId);
 
     void startPersonDetailActivity(String id, Bundle bundle);
 
+    void startPersonDetailActivityBySharedElement(String id, View view);
+
     void showPersonDetailFragment(String id);
+
+    Fragment showPersonFragment(String tvId);
 
     void startMovieImagesActivity(String movieId);
 

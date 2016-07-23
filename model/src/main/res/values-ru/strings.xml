@@ -13,6 +13,7 @@
     <string name="genre_comedy">Комедия</string>
     <string name="genre_crime">Криминал</string>
     <string name="genre_disaster">Disaster</string>
+    <string name="genre_detective">Детектив</string>
     <string name="genre_documentary">Documentary</string>
     <string name="genre_drama">Драма</string>
     <string name="genre_erotic">Erotic</string>

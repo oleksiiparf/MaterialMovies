@@ -27,25 +27,18 @@ public class FetchWatchedRunnable extends DatabaseBackgroundRunnable<List<Watcha
     public List<Watchable> doDatabaseCall() {
 
         ArrayList watchedList = Lists.newArrayList();
-
         List<MovieWrapper> movies = mState.getRepositoryInstance(MovieWrapper.class).getAll();
-        //Issue : iterator is not working right, actually it`s not working
-         /*Iterator moviesIterator = movies.iterator();
-        while (moviesIterator.hasNext()) { */
+
         for (MovieWrapper movie: movies) {
-            /*MovieWrapper movie = (MovieWrapper)moviesIterator.next();*/
             if (movie.isWatched()) {
                 watchedList.add(movie);
 
             }
         }
 
-        /*Iterator showsIterator = Lists.newArrayList(mState.getRepositoryInstance(ShowWrapper.class).getAll()).iterator();*/
         List<ShowWrapper> shows = mState.getRepositoryInstance(ShowWrapper.class).getAll();
-     /*   showsIterator.next();
-        while (showsIterator.hasNext()) {*/
+
         for (ShowWrapper show: shows) {
-           /* ShowWrapper show = (ShowWrapper)showsIterator.next();*/
             if (show.isWatched()) {
                 watchedList.add(show);
             }

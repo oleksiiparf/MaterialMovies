@@ -84,6 +84,6 @@ public abstract class WatchableActionRunnable<M extends Watchable> extends Datab
 
     @Override
     public void postExecute(Void result) {
-        getEventBus().post(new MoviesState.WatchedChangeEvent());
+        getEventBus().post(new MoviesState.WatchedChangedEvent());
     }
 }

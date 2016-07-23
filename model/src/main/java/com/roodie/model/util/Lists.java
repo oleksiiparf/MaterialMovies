@@ -21,6 +21,10 @@ public class Lists {
         return new ArrayList<>();
     }
 
+    public static <E> ArrayList<E> newArrayList(int size) {
+        return new ArrayList<>(size);
+    }
+
     /**
      * Creates a <i>mutable</i> {@code ArrayList} instance containing the given elements.
      *

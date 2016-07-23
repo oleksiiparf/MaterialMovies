@@ -22,8 +22,6 @@ public abstract class Watchable extends Entity{
 
     private static final long serialVersionUID = 7112183194708331797L;
 
-    private  Date mDate;
-
     public static final Comparator<Watchable> COMPARATOR__ITEM_DATE_ASC
             = new ItemReleaseDateComparator(true);
 

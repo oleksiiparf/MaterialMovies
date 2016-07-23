@@ -234,14 +234,16 @@ public  class ApplicationState implements BaseState, MoviesState {
     }
 
 
+    public void setWatchedCleared() {
+        mWatched.clear();
+        mEventBus.post(new WatchedClearedEvent());
+    }
 
     public void setWatched(List<Watchable> items) {
-        if (items == null) {
-            mWatched.clear();
-        } else if (!Objects.equal(items, mWatched)) {
+        if (!Objects.equal(items, mWatched)) {
             mWatched = items;
         }
-        mEventBus.post(new WatchedChangeEvent());
+        mEventBus.post(new WatchedChangedEvent());
     }
 
     public boolean isPopulatedWatchedFromDb() {
