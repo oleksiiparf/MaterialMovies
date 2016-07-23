@@ -13,8 +13,9 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/spacing_major"
         android:paddingTop="@dimen/spacing_minor"
-        style="@style/Widget.MMovies.TextAppearance.PrimaryText"
-        app:font="din_regular" />
+        style="@style/Widget.MMovies.Movie.Detail.Summary"
+        app:font="din_regular"
+        />
 
 
 </com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout>

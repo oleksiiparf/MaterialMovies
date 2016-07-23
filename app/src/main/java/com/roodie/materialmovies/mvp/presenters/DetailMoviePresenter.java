@@ -14,7 +14,6 @@ import com.roodie.model.tasks.DatabaseBackgroundRunnable;
 import com.roodie.model.tasks.FetchDetailMovieRunnable;
 import com.roodie.model.tasks.MarkEntitySeenRunnable;
 import com.roodie.model.tasks.MarkEntityUnseenRunnable;
-import com.roodie.model.util.FileLog;
 import com.squareup.otto.Subscribe;
 
 
@@ -80,7 +79,7 @@ public class DetailMoviePresenter extends MvpPresenter<MovieDetailView> implemen
         fetchDetailMovie(callingId, parameter);
     }
 
-    private void checkDetailMovieResult(int callingId, MovieWrapper movie) {
+    public void checkDetailMovieResult(int callingId, MovieWrapper movie) {
         Preconditions.checkNotNull(movie, "movie cannot be null");
         fetchDetailMovieIfNeeded(callingId, movie, false);
     }
@@ -133,7 +132,7 @@ public class DetailMoviePresenter extends MvpPresenter<MovieDetailView> implemen
     /**
      * Fetch detail movie information
      */
-    private void fetchDetailMovie(final int callingId, String id) {
+    public void fetchDetailMovie(final int callingId, String id) {
         Preconditions.checkNotNull(id, "id cannot be null");
 
         final MovieWrapper movie = MMoviesApp.get().getState().getMovie(id);
@@ -142,7 +141,7 @@ public class DetailMoviePresenter extends MvpPresenter<MovieDetailView> implemen
         }
     }
 
-    private void fetchDetailMovieFromTmdb(final int callingId, int id) {
+    public void fetchDetailMovieFromTmdb(final int callingId, int id) {
         Preconditions.checkNotNull(id, "id cannot be null");
 
         MovieWrapper movie = MMoviesApp.get().getState().getMovie(id);
@@ -153,7 +152,7 @@ public class DetailMoviePresenter extends MvpPresenter<MovieDetailView> implemen
         executeNetworkTask(new FetchDetailMovieRunnable(callingId, id));
     }
 
-    private void fetchDetailMovieIfNeeded(final int callingId, String id) {
+    public void fetchDetailMovieIfNeeded(final int callingId, String id) {
         Preconditions.checkNotNull(id, "id cannot be null");
 
         MovieWrapper cached = MMoviesApp.get().getState().getMovie(id);
@@ -164,26 +163,23 @@ public class DetailMoviePresenter extends MvpPresenter<MovieDetailView> implemen
         }
     }
 
-    private void fetchDetailMovieIfNeeded(int callingId, MovieWrapper movie, boolean force) {
+    public void fetchDetailMovieIfNeeded(int callingId, MovieWrapper movie, boolean force) {
         Preconditions.checkNotNull(movie, "movie cannot be null");
 
         if (force || movie.needFullFetchFromTmdb()) {
             if (movie.getTmdbId() != null) {
                 fetchDetailMovieFromTmdb(callingId, movie.getTmdbId());
-            } else {
-                fetchDetailMovieFromTmdb(callingId, movie.getTmdbId());
             }
         }
     }
 
-    private void markMovieSeen(int callingId, MovieWrapper movie) {
-        FileLog.d("watched", "DetailMoviePresenter : Mark movie seen");
+    public void markMovieSeen(int callingId, MovieWrapper movie) {
         executeBackgroundTask(new MarkEntitySeenRunnable(callingId, movie));
 
 
     }
 
-    private void markMovieUnseen(int callingId, MovieWrapper movie) {
+    public void markMovieUnseen(int callingId, MovieWrapper movie) {
         executeBackgroundTask(new MarkEntityUnseenRunnable(callingId, movie));
 
     }

@@ -11,8 +11,9 @@ import com.roodie.materialmovies.util.FontManager;
 
 import javax.inject.Inject;
 
+
 /**
- * Created by Roodie on 01.09.2015.
+ * Implementation of {@link AppCompatButton} with customizable font
  */
 public class MMoviesButton extends AppCompatButton {
 

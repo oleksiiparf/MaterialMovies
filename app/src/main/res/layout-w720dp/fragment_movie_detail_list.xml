@@ -6,62 +6,62 @@
     <include layout="@layout/include_toolbar"></include>
 
 
-<LinearLayout
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:layout_marginTop="?attr/actionBarSize"
-    android:orientation="horizontal">
-
     <LinearLayout
-        android:id="@+id/left_container"
-        android:orientation="vertical"
-        android:layout_width="0px"
-        android:layout_weight="2"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="horizontal">
 
-        <FrameLayout
-            android:id="@+id/animation_container"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/left_container"
+            android:orientation="vertical"
+            android:layout_width="0px"
+            android:layout_weight="2"
             android:layout_height="match_parent">
 
-            <io.codetail.widget.RevealFrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="?mmRevealBackgroundColor">
+                <FrameLayout
+                    android:id="@+id/animation_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <include layout="@layout/include_detail_minor"/>
+                    <io.codetail.widget.RevealFrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="?mmRevealBackgroundColor">
 
-            </io.codetail.widget.RevealFrameLayout>
+                        <include layout="@layout/include_detail_minor"/>
 
-        </FrameLayout>
+                    </io.codetail.widget.RevealFrameLayout>
 
-        <FrameLayout
-            android:id="@+id/data_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:transitionGroup="true">
+                </FrameLayout>
 
-            <include layout="@layout/item_movie_detail_common"/>
-        </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/data_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:transitionGroup="true">
+
+                    <include layout="@layout/item_movie_detail_common"/>
+                </FrameLayout>
+
+        </LinearLayout>
+
+
+            <FrameLayout
+                android:layout_height="match_parent"
+                  android:layout_width="0px"
+                  android:layout_weight="2">
+
+                <FrameLayout
+                    android:id="@+id/content_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include layout="@layout/include_detail_recycler_view"/>
+                </FrameLayout>
+
+            </FrameLayout>
 
     </LinearLayout>
-
-
-    <FrameLayout
-        android:layout_height="match_parent"
-          android:layout_width="0px"
-          android:layout_weight="2">
-
-        <FrameLayout
-            android:id="@+id/content_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <include layout="@layout/include_detail_recycler_view"/>
-        </FrameLayout>
-
-    </FrameLayout>
-
-</LinearLayout>
 
 </FrameLayout>

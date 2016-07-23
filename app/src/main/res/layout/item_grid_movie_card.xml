@@ -10,6 +10,8 @@
     android:layout_height="wrap_content"
     app:cardBackgroundColor="?mmBackgroundColorSecondary"
     app:cardPreventCornerOverlap="false"
+    android:elevation="@dimen/z_card"
+    android:stateListAnimator="@animator/raise"
     android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout

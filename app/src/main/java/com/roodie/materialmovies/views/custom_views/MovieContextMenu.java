@@ -12,10 +12,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by Roodie on 31.08.2015.
- */
-
-/**
  * Custom Popup menu
  */
 public class MovieContextMenu extends LinearLayout {

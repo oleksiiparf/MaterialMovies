@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -14,16 +14,18 @@
         style="@style/Widget.MMovies.Toolbar" />
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    <android.support.percent.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginTop="?attr/actionBarSize"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:transitionName="@string/transition_poster_background"
+            android:transitionGroup="false">
 
-        <RelativeLayout
-            android:layout_width="0px"
-            android:layout_weight="5"
-            android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            app:layout_widthPercent="40%">
 
             <io.codetail.widget.RevealFrameLayout
                 android:layout_width="match_parent"
@@ -43,38 +45,22 @@
                 android:id="@+id/poster_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@color/protection_dark" />
-
-            <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-                android:id="@+id/textview_person_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/default_padding"
-                android:layout_marginLeft="@dimen/keyline"
-                android:layout_marginRight="@dimen/keyline"
-                android:layout_alignBottom="@+id/imageview_person"
-                android:maxLines="2"
-                android:ellipsize="end"
-                tools:text="Kiefer Sutherland"
-                android:shadowColor="@color/protection_dark"
-                android:shadowDx="0"
-                android:shadowDy="0"
-                android:shadowRadius="2" />
-
-        </RelativeLayout>
+                android:scaleType="fitCenter"
+                android:transitionName="@string/transition_poster"
+                android:foreground="@drawable/mid_grey_ripple"
+                />
+        </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/content_view"
-            android:layout_width="0px"
-            android:layout_weight="4"
             android:layout_marginTop="@dimen/spacing_minor"
-            android:layout_height="wrap_content">
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            app:layout_widthPercent="60%">
 
                 <include layout="@layout/include_detail_recycler_view"/>
 
         </FrameLayout>
 
-        </LinearLayout>
+        </android.support.percent.PercentRelativeLayout>
 
-</FrameLayout>
+   </FrameLayout>

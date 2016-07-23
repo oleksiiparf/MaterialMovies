@@ -23,6 +23,7 @@
             android:id="@+id/poster_image"
             android:layout_width="160dp"
             android:layout_height="160dp"
+            android:scaleType="fitCenter"
             android:layout_gravity="center" />
     </FrameLayout>
 

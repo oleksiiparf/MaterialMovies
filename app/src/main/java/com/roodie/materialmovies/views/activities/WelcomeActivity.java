@@ -8,8 +8,8 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.roodie.materialmovies.MMoviesApp;
 import com.roodie.materialmovies.R;
-import com.roodie.materialmovies.util.MMoviesVisitManager;
 import com.roodie.materialmovies.views.custom_views.CirclePageIndicator;
 import com.roodie.model.Display;
 import com.roodie.model.util.VisitManager;
@@ -57,11 +57,9 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (mVisitManager == null) {
-            // #Issue
-            mVisitManager = new MMoviesVisitManager(this);
-        }
+        MMoviesApp.from(this).inject(this);
         super.onCreate(savedInstanceState);
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         WelcomePagerAdapter welcomePagerAdapter = new WelcomePagerAdapter();
         this.mViewPager.setAdapter(welcomePagerAdapter);

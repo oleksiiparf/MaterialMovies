@@ -10,7 +10,7 @@
         android:layout_height="0.0dip"
         android:layout_weight="@integer/welcome_view_image_weight"
         android:scaleType="center"
-        android:src="@drawable/mm_logo_large" />
+        android:src="@drawable/firstexperience_welcome" />
 
     <LinearLayout
         android:layout_width="fill_parent"

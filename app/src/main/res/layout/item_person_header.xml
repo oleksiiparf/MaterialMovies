@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
+        android:cropToPadding="true"
+        android:fitsSystemWindows="true"
         android:src="@color/protection_dark" />
 
 </RelativeLayout>

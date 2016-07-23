@@ -11,16 +11,13 @@
         android:fitsSystemWindows="true"
         style="@style/Widget.MMovies.Toolbar" />
 
-    <com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout
+    <com.roodie.materialmovies.views.custom_views.recyclerview.MMoviesRecyclerView
         android:id="@+id/primary_recycler_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:layout_gravity="center_horizontal"
-        android:clipToPadding="false"
-        internal:recyclerViewType="list"
-        android:scrollbars="vertical"
-        android:fadeScrollbars="true">
-    </com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout>
+        internal:recyclerviewClipToPadding="true"
+        internal:recyclerviewScrollbars="vertical" />
+
 </merge>
 

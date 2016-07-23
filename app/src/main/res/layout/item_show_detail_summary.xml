@@ -15,11 +15,10 @@
         android:paddingTop="@dimen/spacing_minor">
 
         <com.roodie.materialmovies.views.custom_views.ExpandableTextView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/textview_summary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MMovies.TextAppearance.PrimaryText"
+            style="@style/Widget.MMovies.Movie.Detail.Summary"
             app:font="din_regular" />
 
     </LinearLayout>

@@ -10,6 +10,8 @@
 
     <color name="dark_gray">#FF333333</color>
 
+    <color name="mid_grey">#40808080</color>
+
 
     <color name="mm_white">#ffffffff</color> <!-- primary text dark -->
     <color name="mm_white_20">#33ffffff</color>
@@ -99,7 +101,11 @@
     <color name="mm_neutral_400">#ff757577</color>
     <color name="mm_neutral_500">#ff303032</color>
     <color name="mm_neutral_600">#ff212124</color>
+    <color name="mm_green_600">#ff43A047</color>
+    <color name="mm_green_700">#ff388E3C</color>
+    <color name="mm_green_800">#ff2E7D32</color>
     <color name="mm_red">#fff45531</color>
+    <color name="white_30">#4cffffff</color>
     <color name="mm_white_1">@color/mm_neutral_100</color>
     <color name="mm_white_2">@color/mm_neutral_200</color>
     <color name="ripple_material_dark">#4dffffff</color>
@@ -154,6 +160,8 @@
     <color name="mm_button_info_background_pressed">@color/mm_white_40</color>
 
     <color name="faded_search_background">#80000000</color>
+
+    <color name="immersive_bars">#99000000</color>
 
 
 </resources>

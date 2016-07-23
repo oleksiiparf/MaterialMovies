@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<com.roodie.materialmovies.views.custom_views.MovieDetailCardLayoutWithoutTitle xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/movie_detail_card_details"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/card_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingTop="@dimen/spacing_minor"
         android:paddingLeft="@dimen/spacing_major"
         android:paddingRight="@dimen/spacing_major"
         android:paddingBottom="@dimen/spacing_major">
@@ -30,4 +26,3 @@
 
     </LinearLayout>
 
-</com.roodie.materialmovies.views.custom_views.MovieDetailCardLayoutWithoutTitle>

@@ -114,6 +114,10 @@
         <item name="mmStarIconItem">@drawable/ic_star_grey_24dp</item>
     </style>
 
+    <style name="Theme.MMovies.Green.Launcher" parent="Theme.MMovies.Green">
+        <item name="android:windowBackground">@drawable/launch_screen</item>
+    </style>
+
     <style name="Theme.MMovies.Images" parent="Base.Theme.MMovies.Dark">
         <item name="android:windowBackground">@android:color/black</item>
     </style>

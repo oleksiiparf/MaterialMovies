@@ -1,6 +1,7 @@
 package com.roodie.materialmovies.views.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.roodie.materialmovies.R;
 import com.roodie.model.Display;
@@ -25,6 +26,12 @@ public class MovieImagesActivity extends BaseNavigationActivity {
         if (!display.hasMainFragment()) {
             display.showMovieImagesFragment(intent.getStringExtra(Display.PARAM_ID));
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        animateManually(true);
     }
 
     @Override

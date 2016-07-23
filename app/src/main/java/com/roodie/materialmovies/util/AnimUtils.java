@@ -2,7 +2,9 @@ package com.roodie.materialmovies.util;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -49,6 +51,8 @@ public class AnimUtils {
          * for example.
          */
         public static final int ANIMATION_DURATION = 500;
+
+        public final static int COLOR_ANIMATION_DURATION = 1000;
 
         private AnimUtils() {
         }
@@ -401,6 +405,36 @@ public class AnimUtils {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    /**
+     * Change the color of a view with an animation
+     *
+     * @param view the view to change the color
+     * @param startColor the color to start animation
+     * @param endColor the color to end the animation
+     */
+    public static void animateViewColor(final View view, int startColor, int endColor) {
+
+     /*   ObjectAnimator animator = ObjectAnimator.ofObject(v, "backgroundColor",
+                new ArgbEvaluator(), startColor, endColor);
+
+        animator.setInterpolator(new PathInterpolator(0.4f,0f,1f,1f));
+        animator.setDuration(COLOR_ANIMATION_DURATION);
+        animator.start();*/
+
+        ValueAnimator anim = new ValueAnimator();
+        anim.setIntValues(startColor, endColor);
+        anim.setEvaluator(new ArgbEvaluator());
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                view.setBackgroundColor((Integer)valueAnimator.getAnimatedValue());
+            }
+        });
+
+        anim.setDuration(COLOR_ANIMATION_DURATION);
+        anim.start();
     }
 
 

@@ -30,4 +30,7 @@
     <dimen name="movie_grid_item_font_size">18dp</dimen>
 
     <dimen name="card_item_image_size">180dip</dimen>
+
+    <!-- Z-axis elevations -->
+    <dimen name="touch_raise">9dp</dimen>
 </resources>

@@ -42,13 +42,8 @@ public class ListPeoplePresenter extends MvpPresenter<ListPeopleView> implements
     public void search(ListPeopleView view, UiView.MMoviesQueryType queryType, String query) {
         final int callingId = getId(view);
         switch (queryType) {
-            case SEARCH:
-                //fetchSearchResults(getId(ui), query);
-                break;
-            case SEARCH_MOVIES:
-                //fetchMovieSearchResults(getId(ui), query);
-                break;
             case SEARCH_PEOPLE:
+                getViewState().updateDisplaySubtitle(query);
                 fetchPeopleSearchResults(callingId, query);
                 break;
         }
@@ -57,8 +52,11 @@ public class ListPeoplePresenter extends MvpPresenter<ListPeopleView> implements
 
     @Override
     public void onUiAttached(ListPeopleView view, UiView.MMoviesQueryType queryType, String parameter) {
+        String title = null;
         switch (queryType) {
             case SEARCH_PEOPLE:
+                title = getUiTitle(queryType);
+                view.updateDisplayTitle(title);
                 break;
         }
 
@@ -80,6 +78,15 @@ public class ListPeoplePresenter extends MvpPresenter<ListPeopleView> implements
     }
 
     @Override
+    public String getUiSubtitle(UiView.MMoviesQueryType queryType) {
+        switch (queryType) {
+            case SEARCH_PEOPLE:
+                return MMoviesApp.get().getStringFetcher().getString(R.string.people_title);
+        }
+        return null;
+    }
+
+    @Override
     public void populateUi(ListPeopleView view, UiView.MMoviesQueryType queryType) {
 
         List<PersonWrapper> items = null;
@@ -88,6 +95,7 @@ public class ListPeoplePresenter extends MvpPresenter<ListPeopleView> implements
                 MoviesState.SearchResult searchResult = MMoviesApp.get().getState().getSearchResult();
                 if (searchResult != null && searchResult.people != null) {
                     items = searchResult.people.items;
+                    view.updateDisplaySubtitle(getUiSubtitle(UiView.MMoviesQueryType.SEARCH_PEOPLE));
                 }
                 break;
         }

@@ -50,11 +50,11 @@ public class Utils {
                 MMoviesPreferences.setApplicationTheme(context, 1);
             }
                 break;
-            case 2: {
+         /*   case 2: {
                 SettingsActivity.THEME = R.style.Theme_MMovies_Green;
                 MMoviesPreferences.setApplicationTheme(context, 2);
             }
-                break;
+                break;*/
             default : {
                 SettingsActivity.THEME = R.style.Theme_MMovies_Light;
                 MMoviesPreferences.setApplicationTheme(context, 0);

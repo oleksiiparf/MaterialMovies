@@ -33,12 +33,20 @@
             internal:title="@string/movie_details_certification" />
 
         <com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout
-            android:id="@+id/layout_info_genres"
+            android:id="@+id/layout_info_seasons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/spacing_micro"
             android:visibility="gone"
-            internal:title="@string/movie_details_genres" />
+            internal:title="@string/movie_details_seasons" />
+
+        <com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout
+            android:id="@+id/layout_info_episodes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_micro"
+            android:visibility="gone"
+            internal:title="@string/movie_details_episodes" />
 
         <com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout
             android:id="@+id/layout_info_language"

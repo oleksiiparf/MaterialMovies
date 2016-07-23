@@ -12,7 +12,7 @@ public class MMoviesAndroidUtils {
     /**
      * Whether there is an active WiFi connection.
      */
-    public  static boolean isWifiConnected(Context context) {
+    public static boolean isWifiConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifiNetworkInfo = connectivityManager
@@ -24,7 +24,7 @@ public class MMoviesAndroidUtils {
     /**
      * Whether there is any network connected.
      */
-    public  static boolean isNetworkConnected(Context context) {
+    public static boolean isNetworkConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager == null) {

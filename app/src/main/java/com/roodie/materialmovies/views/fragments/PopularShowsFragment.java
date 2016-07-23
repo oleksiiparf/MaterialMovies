@@ -1,7 +1,7 @@
 package com.roodie.materialmovies.views.fragments;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.roodie.materialmovies.mvp.presenters.GridTvShowsPresenter;
+import com.roodie.materialmovies.mvp.presenters.ListTvShowsPresenter;
 import com.roodie.materialmovies.views.fragments.base.TvShowsGridFragment;
 import com.roodie.model.Display;
 
@@ -12,13 +12,13 @@ import com.roodie.model.Display;
 public class PopularShowsFragment extends TvShowsGridFragment {
 
     @InjectPresenter
-    GridTvShowsPresenter mPresenter;
+    ListTvShowsPresenter mPresenter;
 
     @Override
     protected void attachUiToPresenter() {
         mPresenter.onUiAttached(this, getQueryType(), null);
         Display display = getDisplay();
-        if ( display != null) {
+        if (display != null) {
             display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
         }
     }

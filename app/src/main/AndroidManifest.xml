@@ -18,7 +18,7 @@
         <activity
             android:name=".views.activities.WelcomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.MMovies.Green">
+            android:theme="@style/Theme.MMovies.Green.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -84,6 +84,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".views.activities.MovieActivity" />
+
+        </activity>
+
+        <activity android:name=".views.activities.SearchItemsActivity"
+            android:parentActivityName=".views.activities.WatchlistActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.activities.WatchlistActivity" />
 
         </activity>
 

@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="@dimen/spacing_minor"
-        android:paddingBottom="@dimen/spacing_minor"/>
+        />
+        <!--android:paddingTop="@dimen/spacing_minor"
+        android:paddingBottom="@dimen/spacing_minor"-->
 
 </com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout>

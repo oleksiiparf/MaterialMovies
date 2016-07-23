@@ -8,6 +8,8 @@ import com.roodie.model.tasks.BaseRunnable;
  */
  public interface BasePresenter<M extends MvpView>{
 
+    int TMDB_FIRST_PAGE = 1;
+
     int getId(M view);
 
     <BR> void executeNetworkTask(BaseRunnable<BR> task);

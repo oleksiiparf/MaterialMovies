@@ -23,8 +23,6 @@ public abstract class BaseTabFragment<E extends BaseTabFragment.TabPagerAdapter>
 
     private static final String SAVE_SELECTED_TAB = "selected_tab";
 
-    private static final String LOG_TAG = BaseTabFragment.class.getSimpleName();
-
     private ViewPager mViewPager;
     private TabLayout mSlidingTabStrip;
     private E mAdapter;
@@ -90,11 +88,6 @@ public abstract class BaseTabFragment<E extends BaseTabFragment.TabPagerAdapter>
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mAdapter.notifyDataSetChanged();
-    }
 
     @Override
     public void onPause() {

@@ -21,7 +21,7 @@ import com.squareup.otto.Subscribe;
 
 
 @InjectViewState
-public class SearchPresenter extends MvpPresenter<SearchView> implements BaseListPresenter<SearchView> {
+public class SearchPresenter extends MvpPresenter<SearchView> implements BasePresenter<SearchView> {
 
     private static final String LOG_TAG = SearchPresenter.class.getSimpleName();
 
@@ -50,7 +50,7 @@ public class SearchPresenter extends MvpPresenter<SearchView> implements BaseLis
         MMoviesApp.get().getState().setSearchResult(callingId, null);
     }
 
-    @Override
+
     public String getUiTitle(UiView.MMoviesQueryType queryType) {
         switch (queryType) {
             case SEARCH:
@@ -64,39 +64,20 @@ public class SearchPresenter extends MvpPresenter<SearchView> implements BaseLis
         return null;
     }
 
-    @Override
     public void onUiAttached(SearchView view, UiView.MMoviesQueryType queryType, String parameter) {
         populateUi(view, queryType);
     }
 
-    @Override
     public void populateUi(SearchView view, UiView.MMoviesQueryType queryType) {
         view.setData(MMoviesApp.get().getState().getSearchResult());
     }
 
-    @Override
-    public boolean canFetchNextPage(BaseState.PaginatedResult<?> paginatedResult) {
-        return false;
-    }
-
-    @Override
     public void refresh(SearchView view, UiView.MMoviesQueryType queryType) {
         //NTD
     }
 
-    @Override
     public void onScrolledToBottom(SearchView view, UiView.MMoviesQueryType queryType) {
         //NTD
-    }
-
-    @Override
-    public void populateUiFromEvent(BaseState.BaseEvent event, UiView.MMoviesQueryType queryType) {
-        //NTD
-    }
-
-    @Override
-    public SearchView findUi(int id) {
-        return null;
     }
 
     @Override

@@ -15,13 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <io.codetail.widget.RevealFrameLayout
-        android:id="@+id/animation_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/color_primary_default"
-        android:visibility="invisible">
-    </io.codetail.widget.RevealFrameLayout>
+        <io.codetail.widget.RevealFrameLayout
+            android:id="@+id/animation_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_primary_default"
+            android:visibility="invisible">
+        </io.codetail.widget.RevealFrameLayout>
 
     </io.codetail.widget.RevealFrameLayout>
 
@@ -34,6 +34,5 @@
         <include layout="@layout/include_detail_recycler_view"/>
 
     </FrameLayout>
-
 
 </FrameLayout>

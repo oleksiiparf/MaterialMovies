@@ -1,13 +1,13 @@
 package com.roodie.materialmovies.views.adapters;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.view.LayoutInflater;
+import android.os.Build;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
+import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.listeners.RecyclerItemClickListener;
@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by Roodie on 29.06.2015.
  */
-public class MoviesGridAdapter extends FooterViewListAdapter<List<MovieWrapper>, MoviesGridAdapter.MovieGridViewHolder> {
+public class MoviesGridAdapter extends easyRegularAdapter<MovieWrapper, MoviesGridAdapter.MovieGridViewHolder> {
 
     private static final String LOG_TAG = MoviesGridAdapter.class.getName();
 
@@ -28,58 +28,76 @@ public class MoviesGridAdapter extends FooterViewListAdapter<List<MovieWrapper>,
 
     private RecyclerItemClickListener mClickListener;
 
-    public MoviesGridAdapter(Context context, RecyclerItemClickListener mClickListener) {
-        super(context);
+    public MoviesGridAdapter(List<MovieWrapper> list, RecyclerItemClickListener mClickListener) {
+        super(list);
         this.mClickListener = mClickListener;
     }
 
     @Override
-    public void onBindViewHolder(final MovieGridViewHolder holder, final int position) {
-        if (position < getTotalItemsCount() && position < getItemCount() ) {
-
-            final MovieWrapper movie = items.get(position);
-
-            holder.title.setText(movie.getTitle());
-
-            if (movie.getReleasedTime() > 0) {
-                Date DATE = new Date(movie.getReleasedTime());
-                DateFormat dateFormat = DateFormat.getDateInstance();
-                holder.subtitle.setText( dateFormat.format(DATE));
-            } else {
-                holder.subtitle.setText("");
-            }
-            //load poster
-            holder.poster.setAutoFade(true);
-            holder.poster.loadPoster(movie, new MMoviesImageView.OnLoadedListener() {
-                @Override
-                public void onSuccess(MMoviesImageView imageView, Bitmap bitmap, String imageUrl) {
-                    holder.poster.setTag(imageUrl);
-                }
-
-                @Override
-                public void onError(MMoviesImageView imageView) {
-
-                }
-            });
-
-        }
-
+    protected int getNormalLayoutResId() {
+        return R.layout.item_grid_movie_card;
     }
 
     @Override
-    public MovieGridViewHolder getViewHolder(View view) {
+    protected MovieGridViewHolder newViewHolder(View view) {
+        return new MovieGridViewHolder(view, true);
+    }
+
+    @Override
+    public MovieGridViewHolder newFooterHolder(View view) {
         return new MovieGridViewHolder(view, false);
     }
 
     @Override
-    public MovieGridViewHolder onCreateViewHolder(ViewGroup parent) {
-        View rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grid_movie_card, parent, false);
-        return new MovieGridViewHolder(rowView, true);
+    public MovieGridViewHolder newHeaderHolder(View view) {
+        return new MovieGridViewHolder(view, false);
     }
 
+    @Override
+    protected void withBindHolder(final MovieGridViewHolder holder, MovieWrapper data, final int position) {
 
+        holder.title.setText(data.getTitle());
 
-    public class MovieGridViewHolder extends ListViewHolder implements View.OnClickListener {
+        if (data.getReleasedTime() > 0) {
+            Date DATE = new Date(data.getReleasedTime());
+            DateFormat dateFormat = DateFormat.getDateInstance();
+            holder.subtitle.setText(dateFormat.format(DATE));
+        } else {
+            holder.subtitle.setText("");
+        }
+        //load poster
+        holder.poster.setAutoFade(true);
+        holder.poster.loadPoster(data, new MMoviesImageView.OnLoadedListener() {
+            @Override
+            public void onSuccess(MMoviesImageView imageView, Bitmap bitmap, String imageUrl) {
+                holder.poster.setTag(imageUrl);
+            }
+
+            @Override
+            public void onError(MMoviesImageView imageView) {
+
+            }
+        });
+
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    holder.poster.setTransitionName(holder.itemView.getResources().getString(R.string.transition_poster));
+                }
+                mClickListener.onClick(holder.poster, position);
+            }
+        });
+
+        holder.contextMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mClickListener.onPopupMenuClick(holder.contextMenu, position);
+            }
+        });
+    }
+
+    public class MovieGridViewHolder extends UltimateRecyclerviewViewHolder {
         View container;
         TextView title;
         TextView subtitle;
@@ -88,31 +106,15 @@ public class MoviesGridAdapter extends FooterViewListAdapter<List<MovieWrapper>,
         View bottomContainer;
 
          public MovieGridViewHolder(View itemView, boolean isItem) {
-             super(itemView, isItem);
+             super(itemView);
 
              if (isItem) {
                  container = itemView.findViewById(R.id.card_content_holder);
-                 container.setOnClickListener(this);
                  poster = (MMoviesImageView) itemView.findViewById(R.id.imageview_poster);
                  title = (TextView) itemView.findViewById(R.id.title);
                  subtitle = (TextView) itemView.findViewById(R.id.textview_subtitle_1);
                  bottomContainer = itemView.findViewById(R.id.bottom_container);
                  contextMenu = (ImageView) itemView.findViewById(R.id.context_menu);
-                 contextMenu.setOnClickListener(this);
-             }
-         }
-
-         @Override
-         public void onClick(View v) {
-             final int viewId = v.getId();
-             switch (viewId) {
-                 case R.id.card_content_holder : {
-                     mClickListener.onClick(poster, getPosition());
-                 }
-                     break;
-                 case R.id.context_menu:
-                     mClickListener.onPopupMenuClick(contextMenu, getPosition());
-                     break;
              }
          }
      }

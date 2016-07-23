@@ -4,10 +4,10 @@ import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.common.base.Preconditions;
+import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
 import com.roodie.materialmovies.mvp.presenters.ListMoviesPresenter;
 import com.roodie.materialmovies.mvp.views.ListMoviesView;
-import com.roodie.materialmovies.views.adapters.FooterViewListAdapter;
-import com.roodie.materialmovies.views.adapters.WatchableListAdapter;
+import com.roodie.materialmovies.views.adapters.MovieListAdapter;
 import com.roodie.materialmovies.views.fragments.base.BaseListFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
@@ -18,7 +18,7 @@ import java.util.List;
  * Created by Roodie on 06.09.2015.
  */
 
-public class SearchMoviesListFragment extends BaseListFragment<WatchableListAdapter.WatchableListViewHolder, List<MovieWrapper>, ListMoviesView> implements ListMoviesView {
+public class SearchMoviesListFragment extends BaseListFragment<MovieListAdapter.WatchableListViewHolder, MovieWrapper> implements ListMoviesView {
 
     @InjectPresenter
     ListMoviesPresenter mPresenter;
@@ -29,8 +29,8 @@ public class SearchMoviesListFragment extends BaseListFragment<WatchableListAdap
     }
 
     @Override
-    protected FooterViewListAdapter createAdapter() {
-        return new WatchableListAdapter(getActivity(), this);
+    protected easyRegularAdapter<MovieWrapper, MovieListAdapter.WatchableListViewHolder> createAdapter(List<MovieWrapper> data) {
+        return new MovieListAdapter(data, this);
     }
 
     @Override
@@ -43,8 +43,14 @@ public class SearchMoviesListFragment extends BaseListFragment<WatchableListAdap
     }
 
     @Override
+    public void onScrolledToBottom() {
+        super.onScrolledToBottom();
+        mPresenter.onScrolledToBottom(this, getQueryType());
+    }
+
+    @Override
     public void onClick(View view, int position) {
-        MovieWrapper item = mAdapter.getItems().get(position);
+        MovieWrapper item = mAdapter.getObjects().get(position);
         showItemDetail(item, view);
     }
 

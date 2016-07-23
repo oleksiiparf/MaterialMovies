@@ -12,7 +12,7 @@ import com.roodie.materialmovies.util.FontManager;
 import javax.inject.Inject;
 
 /**
- * Created by Roodie on 21.08.2015.
+ * Implementation of {@link AppCompatEditText} with customizable font
  */
 public class MMoviesEditText extends AppCompatEditText {
 

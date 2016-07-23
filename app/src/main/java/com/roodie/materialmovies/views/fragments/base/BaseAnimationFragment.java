@@ -17,12 +17,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.common.base.Preconditions;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.util.MMoviesPreferences;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
-import com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout;
 import com.roodie.materialmovies.views.listeners.RotateAnimationListener;
 
 import java.io.Serializable;
@@ -37,11 +37,11 @@ import io.codetail.animation.arcanimator.Side;
 /**
  * Created by Roodie on 12.08.2015.
  */
-public abstract class BaseAnimationFragment<M extends Serializable, RV extends BaseRecyclerLayout> extends BaseDetailFragment<M, RV> {
+public abstract class BaseAnimationFragment<M extends Serializable> extends BaseDetailFragment<M> {
 
     protected static final String KEY_REVEAL_START_LOCATION = "reveal_start_location";
     protected static final String KEY_VIEW = "image_view";
-    protected static final String KEY_IMAGE_URL = "_image";
+    protected static final String KEY_IMAGE_POSITION = "_position";
 
     @Optional @InjectView(R.id.animation_layout)
     FrameLayout mAnimationLayout;
@@ -55,7 +55,7 @@ public abstract class BaseAnimationFragment<M extends Serializable, RV extends B
     protected FrameLayout mAnimationContainer;
 
     @Optional @InjectView(R.id.data_container)
-    FrameLayout mDataContainer;
+    protected View mDataContainer;
 
     @Optional @InjectView(R.id.poster_image)
     protected MMoviesImageView mPosterImageView;
@@ -69,6 +69,8 @@ public abstract class BaseAnimationFragment<M extends Serializable, RV extends B
     final static DecelerateInterpolator DECELERATE = new DecelerateInterpolator();
     final static AccelerateDecelerateInterpolator ACCELERATE_DECELERATE = new AccelerateDecelerateInterpolator();
     final static  Interpolator INTERPOLATOR = new DecelerateInterpolator();
+
+    protected static final int SCALE_DELAY = 30;
 
     public static Interpolator getInterpolator() {
         return INTERPOLATOR;
@@ -125,6 +127,8 @@ public abstract class BaseAnimationFragment<M extends Serializable, RV extends B
     protected abstract void configureEnterTransition();
 
     protected void startCircleAnimation() {
+        Preconditions.checkNotNull(mAnimationLayout, "Animation Layout can not be null");
+        Preconditions.checkNotNull(mFloatingButton, "FAB can not be null");
         mFloatingButton.setVisibility(View.INVISIBLE);
         mDataContainer.setVisibility(View.GONE);
         mAnimationContainer.setVisibility(View.VISIBLE);

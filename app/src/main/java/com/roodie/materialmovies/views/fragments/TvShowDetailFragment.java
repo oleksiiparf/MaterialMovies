@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,6 +30,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.common.base.Preconditions;
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
+import com.roodie.materialmovies.MMoviesApp;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.DetailShowPresenter;
 import com.roodie.materialmovies.mvp.views.TvShowDetailView;
@@ -44,7 +45,6 @@ import com.roodie.materialmovies.views.custom_views.MovieDetailInfoLayout;
 import com.roodie.materialmovies.views.custom_views.MovieWatchedToggler;
 import com.roodie.materialmovies.views.custom_views.RatingBarLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
-import com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout;
 import com.roodie.materialmovies.views.fragments.base.BaseAnimationFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.CreditWrapper;
@@ -53,7 +53,6 @@ import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.SeasonWrapper;
 import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.util.MoviesCollections;
-import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -67,7 +66,7 @@ import butterknife.Optional;
  * Created by Roodie on 16.09.2015.
  */
 
-public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, BaseRecyclerLayout> implements TvShowDetailView {
+public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper> implements TvShowDetailView {
 
     private static final String LOG_TAG = TvShowDetailFragment.class.getSimpleName();
 
@@ -144,7 +143,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
     @Override
     protected void configureEnterTransition() {
         ViewCompat.setTransitionName(mPosterImageView, getActivity().getString(R.string.transition_poster));
-        Picasso.with(getActivity().getApplicationContext()).load(getImageUrl()).into(mPosterImageView);
     }
 
     @Override
@@ -182,18 +180,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
         return mHeaderViewPager != null;
     }
 
-    public static TvShowDetailFragment newInstance(String id, String imageUrl) {
-        Preconditions.checkArgument(id != null, "showId can not be null");
-
-        Bundle bundle = new Bundle();
-        bundle.putString(KEY_QUERY_SHOW_ID, id);
-        bundle.putString(KEY_IMAGE_URL, imageUrl);
-        TvShowDetailFragment fragment = new TvShowDetailFragment();
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
-
     public static TvShowDetailFragment newInstance(String id) {
         Preconditions.checkArgument(id != null, "showId can not be null");
 
@@ -205,9 +191,23 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
         return fragment;
     }
 
+    public static TvShowDetailFragment newInstance(String id, String imagePosition) {
+        Preconditions.checkArgument(id != null, "showId can not be null");
+
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_QUERY_SHOW_ID, id);
+        //bundle.putString(KEY_IMAGE_POSITION, imagePosition);
+        TvShowDetailFragment fragment = new TvShowDetailFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MMoviesApp.from(getActivity()).inject(this);
         setHasOptionsMenu(true);
     }
 
@@ -215,7 +215,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(KEY_SHOW_SAVE_STATE, mShow);
-
     }
 
     @Override
@@ -282,44 +281,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
         }
 
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    private class HeaderPagerAdapter extends PagerAdapter {
-
-        public HeaderPagerAdapter() {
-        }
-
-        @Override
-        public int getCount() {
-            return HEADER_PAGER_SIZE;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            switch (position) {
-                default:
-                    return null;
-                case 0:
-                    return TvShowDetailFragment.this.mHeaderPage1;
-                case 1:
-                    return TvShowDetailFragment.this.mHeaderPage2;
-            }
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-    }
-
-    @Override
-    protected void attachUiToPresenter() {
-        mPresenter.attachUiByQuery(this, getRequestParameter(), getQueryType());
-        Display display = getDisplay();
-        if ( display != null) {
-            display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
-            display.setActionBarTitle(mPresenter.getUiTitle(getRequestParameter()));
-        }
     }
 
     @Override
@@ -402,8 +363,21 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
         return getArguments().getString(KEY_QUERY_SHOW_ID);
     }
 
-    public String getImageUrl() {
-        return getArguments().getString(KEY_IMAGE_URL);
+    public String getImagePosition() {
+        return getArguments().getString(KEY_IMAGE_POSITION);
+    }
+
+    /**
+     * ShowDetailView
+     */
+    @Override
+    protected void attachUiToPresenter() {
+        mPresenter.attachUiByQuery(this, getRequestParameter(), getQueryType());
+        Display display = getDisplay();
+        if ( display != null) {
+            display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
+            display.setActionBarTitle(mPresenter.getUiTitle(getRequestParameter()));
+        }
     }
 
     @Override
@@ -433,9 +407,10 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
         mShow = data;
         mToolbarTitle = data.getTitle();
         mAdapter = populateUi();
-        getRecyclerView().setAdapter(mAdapter);
-        updateShowWatched(mShow.isWatched());
+        if (mAdapter != null)
+            getRecyclerView().setAdapter(mAdapter);
 
+        updateShowWatched(mShow.isWatched());
         mFanartImageView.setVisibility(View.VISIBLE);
     }
 
@@ -463,7 +438,8 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
     @Override
     public void showTvShowCreditsDialog(MMoviesQueryType queryType) {
         Preconditions.checkNotNull(queryType, "Query type cannot be null");
-        ListView list = new ListView(mContext);
+        ListView list = new ListView(getActivity());
+        list.setDivider(null);
         String mTitle = "";
         boolean wrapInScrollView = false;
 
@@ -607,7 +583,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
         SEASONS,
         CAST,
         CREW
-
     }
 
     private class DetailAdapter extends EnumListDetailAdapter<DetailItemType> {
@@ -646,7 +621,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
         }
 
     }
-
 
     /**
      * ShowSummaryBinder
@@ -692,7 +666,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
 
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends UltimateRecyclerviewViewHolder {
 
             ViewGroup container;
 
@@ -730,7 +704,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
             return new ViewHolder(view);
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends UltimateRecyclerviewViewHolder {
 
             View container;
             TextView summary;
@@ -786,6 +760,20 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
                 holder.lastAirInfoLayout.setVisibility(View.GONE);
             }
 
+            if (mShow.getAmountOfSeasons() > 0) {
+                holder.seasonsLayout.setContentText(String.valueOf(mShow.getAmountOfSeasons()));
+                holder.seasonsLayout.setVisibility(View.VISIBLE);
+            } else {
+                holder.seasonsLayout.setVisibility(View.GONE);
+            }
+
+            if (mShow.getAmountOfEpisodes() > 0) {
+                holder.episodesLayout.setContentText(String.valueOf(mShow.getAmountOfEpisodes()));
+                holder.episodesLayout.setVisibility(View.VISIBLE);
+            } else {
+                holder.episodesLayout.setVisibility(View.GONE);
+            }
+
             if (!TextUtils.isEmpty(mShow.getOriginalLanguage())) {
                 holder.languageLayout.setContentText(mShow.getOriginalLanguage());
                 holder.languageLayout.setVisibility(View.VISIBLE);
@@ -802,14 +790,15 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
             return new ViewHolder(view);
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends UltimateRecyclerviewViewHolder {
 
             MovieDetailCardLayout container;
             MovieDetailInfoLayout runtimeLayout;
             MovieDetailInfoLayout contentRatingLayout;
-            MovieDetailInfoLayout genreLayout;
             MovieDetailInfoLayout lastAirInfoLayout;
             MovieDetailInfoLayout languageLayout;
+            MovieDetailInfoLayout seasonsLayout;
+            MovieDetailInfoLayout episodesLayout;
 
             public ViewHolder(View view) {
                 super(view);
@@ -817,9 +806,10 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
                 container = (MovieDetailCardLayout) view.findViewById(R.id.movie_detail_card_details);
                 runtimeLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_runtime);
                 contentRatingLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_certification);
-                genreLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_genres);
                 lastAirInfoLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_last_air);
                 languageLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_language);
+                seasonsLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_seasons);
+                episodesLayout = (MovieDetailInfoLayout) view.findViewById(R.id.layout_info_episodes);
             }
         }
     }
@@ -849,7 +839,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
             return null;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends UltimateRecyclerviewViewHolder {
 
             public ViewHolder(View view) {
                 super(view);
@@ -914,7 +904,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
             return new ViewHolder(view);
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends UltimateRecyclerviewViewHolder {
 
             ViewGroup layout;
 
@@ -924,7 +914,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
             }
         }
     }
-
 
     /**
      * ShowCrewBinder
@@ -982,7 +971,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
             return new ViewHolder(view);
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends UltimateRecyclerviewViewHolder {
 
             ViewGroup layout;
 
@@ -1048,7 +1037,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
             return new ViewHolder(view);
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends UltimateRecyclerviewViewHolder {
 
             ViewGroup layout;
 
@@ -1070,7 +1059,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
             this.mInflater = mInflater;
             this.mItemOnClickListener = mItemOnClickListener;
         }
-
 
         @Override
         public abstract CreditWrapper getItem(int position) ;
@@ -1220,7 +1208,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
             imageView.loadPoster(season);
 
             final TextView title = (TextView) convertView.findViewById(R.id.title);
-            title.setText(StringUtils.getSeasonString(mContext, season.getSeasonNumber()));
+            title.setText(StringUtils.getSeasonString(getActivity(), season.getSeasonNumber()));
 
 
             if (season.getReleasedTime() > 0) {
@@ -1243,8 +1231,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
         }
     }
 
-
-
     private ShowCastAdapter getShowCastAdapter() {
         if (mShowCastAdapter == null) {
             mShowCastAdapter = new ShowCastAdapter(LayoutInflater.from(getActivity()));
@@ -1266,6 +1252,33 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper, Bas
         return mShowSeasonsAdapter;
     }
 
+    private class HeaderPagerAdapter extends PagerAdapter {
+
+        public HeaderPagerAdapter() {
+        }
+
+        @Override
+        public int getCount() {
+            return HEADER_PAGER_SIZE;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            switch (position) {
+                default:
+                    return null;
+                case 0:
+                    return TvShowDetailFragment.this.mHeaderPage1;
+                case 1:
+                    return TvShowDetailFragment.this.mHeaderPage2;
+            }
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+    }
 
     @Override
     protected void setSupportActionBar(Toolbar toolbar) {

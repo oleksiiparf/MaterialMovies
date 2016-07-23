@@ -97,8 +97,10 @@ public interface UiView extends MvpView {
         POPULAR, ON_THE_AIR
     }
 
-    enum SearchMediaType {
-        MOVIES, SHOWS, PEOPLE
+    enum NavigationGridType {
+        MOVIES, SHOWS, WATCHED
     }
+
+
 
 }

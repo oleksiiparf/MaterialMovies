@@ -1,7 +1,5 @@
 package com.roodie.materialmovies.views.fragments.base;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -13,13 +11,14 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Toast;
 
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
+import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.MvpLceView;
 import com.roodie.materialmovies.util.StringUtils;
-import com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout;
 import com.roodie.materialmovies.views.listeners.AppBarStateChangeListener;
 import com.roodie.model.network.NetworkError;
-import com.roodie.model.util.FileLog;
 import com.roodie.model.util.TextUtils;
 
 import java.io.Serializable;
@@ -33,10 +32,9 @@ import butterknife.Optional;
 /**
  * Created by Roodie on 28.06.2015.
  */
-public abstract class BaseDetailFragment<M extends Serializable, RV extends BaseRecyclerLayout> extends BaseMvpFragment implements MvpLceView<M>{
+public abstract class BaseDetailFragment<M extends Serializable> extends BaseMvpFragment implements MvpLceView<M>{
 
-
-    protected RV mPrimaryRecyclerView;
+    protected UltimateRecyclerView mPrimaryRecyclerView;
 
     @Optional @InjectView(R.id.appbar)
     protected AppBarLayout mAppBar;
@@ -80,15 +78,6 @@ public abstract class BaseDetailFragment<M extends Serializable, RV extends Base
         }
     };
 
-    protected Context mContext;
-
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mContext = activity.getApplicationContext();
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -111,11 +100,8 @@ public abstract class BaseDetailFragment<M extends Serializable, RV extends Base
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt("FIRST_VISIBLE_POSITION", mLastFirstVisiblePosition);
-        FileLog.d("Base", "on save state");
         super.onSaveInstanceState(outState);
     }
-
-
 
     @Override
     protected int getLayoutRes() {
@@ -124,27 +110,31 @@ public abstract class BaseDetailFragment<M extends Serializable, RV extends Base
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        FileLog.d("Base", "on view created");
         super.onViewCreated(view, savedInstanceState);
-
         if (savedInstanceState != null) {
             mLastFirstVisiblePosition = savedInstanceState.getInt("FIRST_VISIBLE_POSITION");
         }
 
-        mPrimaryRecyclerView = (RV) view.findViewById(R.id.primary_recycler_view);
-        mPrimaryRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        mPrimaryRecyclerView = (UltimateRecyclerView) view.findViewById(R.id.primary_recycler_view);
+        mPrimaryRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        enableEmptyViewPolicy();
+        getRecyclerView().disableLoadmore();
 
         if (mCollapsingToolbarLayout != null) {
             mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
         }
     }
 
-    public RV getRecyclerView() {
+    public UltimateRecyclerView getRecyclerView() {
         return mPrimaryRecyclerView;
     }
 
     public boolean hasLeftContainer() {
         return mLeftContainer != null;
+    }
+
+    protected void enableEmptyViewPolicy() {
+        mPrimaryRecyclerView.setEmptyView(R.layout.empty_view, UltimateRecyclerView.EMPTY_KEEP_HEADER_AND_LOARMORE);
     }
 
     @Override
@@ -170,7 +160,7 @@ public abstract class BaseDetailFragment<M extends Serializable, RV extends Base
      *
      * @param <T>
      */
-    abstract public class BaseViewHolder<T extends RecyclerView.ViewHolder> {
+    abstract public class BaseViewHolder<T extends UltimateRecyclerviewViewHolder> {
 
         private BaseDetailAdapter mDataBindAdapter;
 
@@ -224,17 +214,42 @@ public abstract class BaseDetailFragment<M extends Serializable, RV extends Base
     /**
      * BaseDetailAdapter
      */
-    abstract public class BaseDetailAdapter extends android.support.v7.widget.RecyclerView.Adapter<android.support.v7.widget.RecyclerView.ViewHolder> {
+    abstract public class BaseDetailAdapter extends UltimateViewAdapter<UltimateRecyclerviewViewHolder> {
 
         @Override
-        public android.support.v7.widget.RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public UltimateRecyclerviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return getDataBinder(viewType).newViewHolder(parent);
         }
 
         @Override
-        public void onBindViewHolder(android.support.v7.widget.RecyclerView.ViewHolder viewHolder, int position) {
+        public void onBindViewHolder(UltimateRecyclerviewViewHolder holder, int position) {
             int binderPosition = getBinderPosition(position);
-            getDataBinder(viewHolder.getItemViewType()).bindViewHolder(viewHolder, binderPosition);
+            getDataBinder(holder.getItemViewType()).bindViewHolder(holder, binderPosition);
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+            return null;
+        }
+
+        @Override
+        public UltimateRecyclerviewViewHolder newFooterHolder(View view) {
+            return new UltimateRecyclerviewViewHolder<>(view);
+        }
+
+        @Override
+        public UltimateRecyclerviewViewHolder newHeaderHolder(View view) {
+            return new UltimateRecyclerviewViewHolder<>(view);
+        }
+
+        @Override
+        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        }
+
+        @Override
+        public long generateHeaderId(int position) {
+            return 0;
         }
 
         @Override
@@ -283,12 +298,22 @@ public abstract class BaseDetailFragment<M extends Serializable, RV extends Base
         protected List<BaseViewHolder> mBinderList = new ArrayList<>();
 
         @Override
+        public UltimateRecyclerviewViewHolder onCreateViewHolder(ViewGroup parent) {
+            return null;
+        }
+
+        @Override
         public int getItemCount() {
             int itemCount = 0;
             for (BaseViewHolder binder : mBinderList) {
                 itemCount += binder.getItemCount();
             }
             return itemCount;
+        }
+
+        @Override
+        public int getAdapterItemCount() {
+            return 0;
         }
 
         @Override

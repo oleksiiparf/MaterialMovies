@@ -44,6 +44,9 @@ public class TvActivity extends BaseNavigationActivity {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && MMoviesPreferences.areAnimationsEnabled(this)) {
             setupWindowAnimations();
+            animateManually(true);
+        } else {
+            animateManually(false);
         }
     }
 
@@ -69,7 +72,7 @@ public class TvActivity extends BaseNavigationActivity {
             public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
                 FileLog.d("animations", "TvActivity: onSharedElementEnd");
                 if (!mIsReturning) {
-                    getWindow().setEnterTransition(makeReturnTransition());
+                    getWindow().setReturnTransition(makeReturnTransition());
                  }
             }
 
@@ -83,7 +86,7 @@ public class TvActivity extends BaseNavigationActivity {
             }
         });
         // We are not interested in defining a new Enter Transition. Instead we change default transition duration
-        getWindow().getEnterTransition().setDuration(getResources().getInteger(R.integer.anim_duration_long));
+        getWindow().getEnterTransition().setDuration(getResources().getInteger(R.integer.anim_duration_medium));
     }
 
     @TargetApi(21)
@@ -94,8 +97,8 @@ public class TvActivity extends BaseNavigationActivity {
     @Override
     protected void handleIntent(Intent intent, Display display) {
       if (!display.hasMainFragment()) {
-            if (intent.getStringExtra(Display.PARAM_IMAGE) != null) {
-                currentFragment = display.showTvDetailFragmentBySharedElement(intent.getStringExtra(Display.PARAM_ID), intent.getStringExtra(Display.PARAM_IMAGE));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && MMoviesPreferences.areAnimationsEnabled(this)) {
+                currentFragment = display.showTvDetailFragmentBySharedElement(intent.getStringExtra(Display.PARAM_ID));
             } else {
                 display.showTvDetailFragment(intent.getStringExtra(Display.PARAM_ID));
             }
@@ -185,7 +188,7 @@ public class TvActivity extends BaseNavigationActivity {
         cardSlide.addTarget(rootView.findViewById(R.id.primary_recycler_view));
         returnTransition.addTransition(cardSlide);
 
-        returnTransition.setDuration(getResources().getInteger(R.integer.anim_duration_long));
+        returnTransition.setDuration(getResources().getInteger(R.integer.anim_duration_medium));
         return returnTransition;
     }
 
@@ -193,13 +196,13 @@ public class TvActivity extends BaseNavigationActivity {
     public void finishAfterTransition() {
        mIsReturning = true;
        if (currentFragment == null || !MMoviesPreferences.areAnimationsEnabled(this)) {
+           animateManually(false);
            finish();
        } else {
-           setupFinishAnimations();
+          // setupFinishAnimations();
            super.finishAfterTransition();
        }
     }
-
 
     @Override
     protected int getContentViewLayoutId() {

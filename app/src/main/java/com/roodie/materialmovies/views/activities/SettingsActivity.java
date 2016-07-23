@@ -76,9 +76,9 @@ public class SettingsActivity extends BaseNavigationActivity implements Settings
             case 1 :
                 THEME = R.style.Theme_MMovies_Dark;
                 break;
-            case 2 :
+           /* case 2 :
                 THEME = R.style.Theme_MMovies_Green;
-                break;
+                break;*/
             }
         }
 
@@ -106,10 +106,11 @@ public class SettingsActivity extends BaseNavigationActivity implements Settings
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        MMoviesApp.from(this).inject(this);
+
         setupActionBar();
         if ( getDisplay() != null) {
             getDisplay().showUpNavigation(true);
-            //TODO
             getDisplay().setActionBarTitle(MMoviesApp.get().getStringFetcher().getString(R.string.settings_title));
         }
 

@@ -1,6 +1,7 @@
 package com.roodie.materialmovies.views.fragments;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.roodie.materialmovies.mvp.presenters.ListMoviesPresenter;
@@ -20,6 +21,12 @@ public class InTheatresMoviesFragment extends MoviesGridFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getRecyclerView().disableLoadmore();
     }
 
     @Override

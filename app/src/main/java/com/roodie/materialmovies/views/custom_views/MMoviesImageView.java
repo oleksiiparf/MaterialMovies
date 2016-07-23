@@ -6,7 +6,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -29,7 +28,9 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
 
-
+/**
+ * Implementation of {@link ImageView} with fetching Bitmap images with {@link Picasso}
+ */
 public class MMoviesImageView extends ImageView {
 
     private static final String LOG_TAG = MMoviesImageView.class.getSimpleName();
@@ -116,6 +117,8 @@ public class MMoviesImageView extends ImageView {
                 request = request.resize(getWidth(), getHeight()).centerInside();
             }
             request.into(mBitmapTarget);
+
+            request.fit();
 
                 FileLog.d("images", "Loading " + url);
         }
@@ -334,11 +337,6 @@ public class MMoviesImageView extends ImageView {
         protected String buildUrl(MovieWrapper object, ImageView imageView) {
             return ImageHelper.getPosterUrl(object, imageView.getWidth(), imageView.getHeight());
         }
-
-       /* @Override
-        int getPlaceholderDrawable() {
-            return R.drawable.poster;
-        }*/
     }
 
     //ShowPosterHandler
@@ -353,11 +351,6 @@ public class MMoviesImageView extends ImageView {
             return ImageHelper.getPosterUrl(object, imageView.getWidth(), imageView.getHeight());
         }
 
-        /*@Override
-        int getPlaceholderDrawable() {
-            return R.drawable.poster;
-        }*/
-
     }
 
     //SeasonPosterHandler
@@ -371,12 +364,6 @@ public class MMoviesImageView extends ImageView {
         protected String buildUrl(SeasonWrapper object, ImageView imageView) {
             return ImageHelper.getPosterUrl(object, imageView.getWidth(), imageView.getHeight());
         }
-
-      /*  @Override
-        int getPlaceholderDrawable() {
-            return R.drawable.poster;
-        }*/
-
     }
 
     //CastProfileHandler
@@ -465,7 +452,6 @@ public class MMoviesImageView extends ImageView {
     private final Target mBitmapTarget = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            Log.d("mmovies_image", "On bitmap loaded");
             setImageBitmapFromNetwork(bitmap, from);
             if (mImageHandler != null) {
                 if (mImageHandler.mListener != null) {
@@ -477,7 +463,6 @@ public class MMoviesImageView extends ImageView {
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
-            Log.d("mmovies_image", "On bitmap failed");
             if (mImageHandler != null) {
                 if (mImageHandler.mListener != null) {
                     mImageHandler.mListener.onError(MMoviesImageView.this);
@@ -489,7 +474,6 @@ public class MMoviesImageView extends ImageView {
 
         @Override
         public void onPrepareLoad(Drawable placeHolderDrawable) {
-            Log.d("mmovies_image", "On prepare load");
             if (mImageHandler == null || mImageHandler.shouldDisplayPlaceholder()) {
                 setImageDrawableImpl(placeHolderDrawable);
             }

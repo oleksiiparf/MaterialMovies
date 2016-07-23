@@ -106,20 +106,6 @@
                     android:layout_below="@id/title_root"/>
 
 
-
-             <!--   <LinearLayout
-                    android:id="@+id/separator"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@id/title_root"
-                    android:layout_marginLeft="@dimen/spacing_massive"
-                    android:layout_marginRight="@dimen/spacing_massive"
-                    android:layout_marginTop="@dimen/spacing_massive"
-                    android:layout_marginBottom="@dimen/spacing_massive"
-                    android:background="?mmTextColorPrimary"
-                    android:orientation="vertical" />-->
-
-
                 <LinearLayout
                     android:id="@+id/summary_container"
                     android:layout_width="fill_parent"
@@ -141,25 +127,6 @@
                         style="@style/Widget.MMovies.Movie.Detail.Summary.Scroll" />
 
                 </LinearLayout>
-
-             <!--   <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/summary_container"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <com.roodie.materialmovies.views.custom_views.MMoviesButton
-                        android:id="@+id/trailer_button"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/spacing_major"
-                        android:layout_marginRight="@dimen/spacing_major"
-                        android:layout_marginTop="@dimen/spacing_minor"
-                        style="@style/Widget.MMovies.Button.Borderless"
-                        android:text="@string/trailer_movie" />
-
-                </LinearLayout>-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -197,7 +164,7 @@
                             android:background="?attr/selectableItemBackground"
                             android:textAppearance="@style/TextAppearance.AppCompat.Button"
                             android:textColor="?attr/colorAccent"
-                            android:text="Trailer" />
+                            android:text="@string/trailer_movie" />
                     </LinearLayout>
                 </LinearLayout>
 

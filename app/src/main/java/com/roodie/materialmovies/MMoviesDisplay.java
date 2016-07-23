@@ -1,5 +1,7 @@
 package com.roodie.materialmovies;
 
+import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -8,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,8 +17,9 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import com.roodie.materialmovies.util.Utils;
 import com.roodie.materialmovies.views.activities.MovieActivity;
 import com.roodie.materialmovies.views.activities.MovieImagesActivity;
 import com.roodie.materialmovies.views.activities.PersonActivity;
+import com.roodie.materialmovies.views.activities.SearchItemsActivity;
 import com.roodie.materialmovies.views.activities.SettingsActivity;
 import com.roodie.materialmovies.views.activities.TvActivity;
 import com.roodie.materialmovies.views.activities.WatchlistActivity;
@@ -49,7 +52,6 @@ import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.entities.ShowWrapper;
-import com.roodie.model.util.FileLog;
 
 /**
  * Created by Roodie on 27.06.2015.
@@ -62,18 +64,27 @@ public class MMoviesDisplay implements Display {
 
     private int mColorPrimaryDark;
 
-    private final ActionBarActivity mActivity;
+    private final AppCompatActivity mActivity;
     private  DrawerLayout mDrawerLayout;
 
     private Toolbar mToolbar;
     private boolean mCanChangeToolbarBackground;
 
 
-    public MMoviesDisplay(ActionBarActivity mActivity) {
+    public MMoviesDisplay(AppCompatActivity mActivity) {
         this.mActivity = Preconditions.checkNotNull(mActivity, "Activity can not be null");
 
         mActivity.getTheme().resolveAttribute(R.attr.colorPrimaryDark, sTypedValue, true);
         mColorPrimaryDark = sTypedValue.data;
+    }
+
+    @Override
+    public boolean hasSearchFragment() {
+        Fragment f = mActivity.getSupportFragmentManager().findFragmentById(R.id.fragment_main);
+        if (f instanceof SearchFragment) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -101,6 +112,16 @@ public class MMoviesDisplay implements Display {
                 .commit();
     }
 
+    private void showFragmentWithAnimation(Fragment fragment) {
+        FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right);
+
+        transaction.replace(R.id.fragment_main, fragment);
+        transaction.commit();
+    }
+
     private void startActivity(Intent intent, Bundle options) {
         ActivityCompat.startActivity(mActivity, intent, options);
     }
@@ -121,6 +142,14 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
+    public void startSearchListActivity(String listType, Bundle bundle) {
+        Intent intent = new Intent(mActivity, SearchItemsActivity.class);
+        intent.putExtra(PARAM_ID, listType);
+        startActivity(intent, bundle);
+       // mActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+    }
+
+    @Override
     public void showWatched() {
         showFragmentFromDrawer(new WatchedFragment());
 
@@ -137,8 +166,8 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
-    public Fragment showMovieDetailFragmentBySharedElements(String movieId, String imageUrl) {
-        Fragment fragment = MovieDetailFragment.newInstance(movieId, imageUrl);
+    public Fragment showMovieDetailFragmentBySharedElements(String movieId) {
+        Fragment fragment = MovieDetailFragment.newInstance(movieId);
         showFragmentFromDrawer(fragment);
         return fragment;
     }
@@ -148,16 +177,17 @@ public class MMoviesDisplay implements Display {
         showFragmentFromDrawer(MovieDetailFragment.newInstance(movieId));
     }
 
+    @TargetApi(21)
     @Override
-    public void startMovieDetailActivityBySharedElements(String movieId, View view, String imageUrl) {
-        FileLog.d("animations","Display: Movie Activity By Shared Element()");
-        ActivityOptionsCompat options =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        mActivity, view, mActivity.getString(R.string.transition_poster));
+    public void startMovieDetailActivityBySharedElements(String movieId, View view, String imagePosition) {
+        ActivityOptions options =
+                ActivityOptions.makeSceneTransitionAnimation(mActivity,
+                        Pair.create(view, mActivity.getString(R.string.transition_poster) + view.getTag()),
+                        Pair.create(view, mActivity.getString(R.string.transition_poster_background)));
 
         Intent intent = new Intent(mActivity, MovieActivity.class);
         intent.putExtra(PARAM_ID, movieId);
-        intent.putExtra(PARAM_IMAGE, imageUrl);
+        intent.putExtra(PARAM_POSITION, imagePosition);
         startActivity(intent, options.toBundle());
     }
 
@@ -168,15 +198,16 @@ public class MMoviesDisplay implements Display {
         startActivity(intent, bundle);
     }
 
+    @TargetApi(21)
     @Override
-    public void startTvDetailActivityBySharedElements(String tvId, View view, String imageUrl) {
-        FileLog.d("animations","Display: tv Activity By Shared Element()");
-        ActivityOptionsCompat options =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        mActivity, view, mActivity.getString(R.string.transition_poster));
+    public void startTvDetailActivityBySharedElements(String tvId, View view, String imagePosition) {
+        ActivityOptions options =
+                ActivityOptions.makeSceneTransitionAnimation(mActivity,
+                        Pair.create(view, mActivity.getString(R.string.transition_poster)),
+                        Pair.create(view, mActivity.getString(R.string.transition_poster_background)));
+
         Intent intent = new Intent(mActivity, TvActivity.class);
         intent.putExtra(PARAM_ID, tvId);
-        intent.putExtra(PARAM_IMAGE, imageUrl);
         startActivity(intent, options.toBundle());
     }
 
@@ -193,8 +224,8 @@ public class MMoviesDisplay implements Display {
     }
 
     @Override
-    public Fragment showTvDetailFragmentBySharedElement(String tvId, String imageUrl) {
-        Fragment fragment = TvShowDetailFragment.newInstance(tvId, imageUrl);
+    public Fragment showTvDetailFragmentBySharedElement(String tvId) {
+        Fragment fragment = TvShowDetailFragment.newInstance(tvId);
         showFragmentFromDrawer(fragment);
         return fragment;
     }
@@ -211,9 +242,29 @@ public class MMoviesDisplay implements Display {
         startActivity(intent, bundle);
     }
 
+    @TargetApi(21)
+    @Override
+    public void startPersonDetailActivityBySharedElement(String id, View view) {
+        ActivityOptions options =
+                ActivityOptions.makeSceneTransitionAnimation(mActivity,
+                        Pair.create(view, mActivity.getString(R.string.transition_poster)),
+                        Pair.create(view, mActivity.getString(R.string.transition_poster_background)));
+
+        Intent intent = new Intent(mActivity, PersonActivity.class);
+        intent.putExtra(PARAM_ID, id);
+        startActivity(intent, options.toBundle());
+    }
+
     @Override
     public void showPersonDetailFragment(String id) {
         showFragmentFromDrawer(PersonDetailFragment.newInstance(id));
+    }
+
+    @Override
+    public Fragment showPersonFragment(String tvId) {
+        Fragment fragment = PersonDetailFragment.newInstance(tvId);
+        showFragmentFromDrawer(fragment);
+        return fragment;
     }
 
     @Override
@@ -346,7 +397,6 @@ public class MMoviesDisplay implements Display {
         }
 
         if (displayError && !handled) {
-            FileLog.d("start_activity", "make toast");
             Toast.makeText(mActivity, R.string.app_not_available, Toast.LENGTH_LONG).show();
         }
         return handled;
@@ -364,26 +414,28 @@ public class MMoviesDisplay implements Display {
 
    @Override
     public void showSearchFragment() {
+       //showFragmentFromDrawer(new SearchFragment());
        mActivity.getSupportFragmentManager().beginTransaction()
                .add(R.id.fragment_main, SearchFragment.newInstance())
                .addToBackStack(null)
+               .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                .commitAllowingStateLoss();
 
     }
 
     @Override
     public void showSearchMoviesFragment() {
-        showFragment(new SearchMoviesListFragment());
+        showFragmentFromDrawer(new SearchMoviesListFragment());
     }
 
     @Override
     public void showSearchPeopleFragment() {
-        showFragment(new SearchPeopleListFragment());
+        showFragmentFromDrawer(new SearchPeopleListFragment());
     }
 
     @Override
     public void showSearchTvShowsFragment() {
-        showFragment(new SearchShowsListFragment());
+        showFragmentFromDrawer(new SearchShowsListFragment());
     }
 
     @Override

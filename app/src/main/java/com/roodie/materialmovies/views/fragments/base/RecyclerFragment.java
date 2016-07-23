@@ -2,18 +2,19 @@ package com.roodie.materialmovies.views.fragments.base;
 
 
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import android.os.Handler;
 import android.view.View;
 
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
+import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
+import com.marshalchen.ultimaterecyclerview.ui.emptyview.emptyViewOnShownListener;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.BaseListView;
-import com.roodie.materialmovies.mvp.views.MvpLceView;
-import com.roodie.materialmovies.views.adapters.FooterViewListAdapter;
-import com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout;
+import com.roodie.materialmovies.views.custom_views.recyclerview.MMoviesRecyclerView;
 import com.roodie.materialmovies.views.listeners.RecyclerItemClickListener;
 import com.roodie.model.Display;
 import com.roodie.model.network.NetworkError;
-import com.roodie.model.util.FileLog;
 
 import java.io.Serializable;
 import java.util.List;
@@ -21,38 +22,41 @@ import java.util.List;
 /**
  * Created by Roodie on 12.12.2015.
  */
-public abstract class RecyclerFragment<VH extends RecyclerView.ViewHolder, M extends List<? extends Serializable>, V extends MvpLceView<M>>
-        extends BaseMvpFragment implements BaseListView<M>, RecyclerItemClickListener {
+public abstract class RecyclerFragment<VH extends UltimateRecyclerviewViewHolder, M extends Serializable>
+        extends BaseMvpFragment implements BaseListView<M>, RecyclerItemClickListener, emptyViewOnShownListener {
 
-    protected BaseRecyclerLayout mPrimaryRecyclerView;
-    protected FooterViewListAdapter<M, VH> mAdapter = null;
+    protected MMoviesRecyclerView mUltimateRecyclerView;
 
-    protected abstract FooterViewListAdapter<M, VH> createAdapter();
+    protected boolean  status_progress = false;
 
-    protected BaseRecyclerLayout getRecyclerView() {
-        return mPrimaryRecyclerView;
+    //protected BaseRecyclerLayout mPrimaryRecyclerView;
+    protected easyRegularAdapter<M, VH> mAdapter = null;
+
+    protected abstract easyRegularAdapter<M, VH> createAdapter(List<M> data);
+
+    protected MMoviesRecyclerView getRecyclerView() {
+        return mUltimateRecyclerView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPrimaryRecyclerView = (BaseRecyclerLayout) view.findViewById(R.id.primary_recycler_view);
-        mPrimaryRecyclerView.setHasFixedSize(true);
+        mUltimateRecyclerView = (MMoviesRecyclerView) view.findViewById(R.id.primary_recycler_view);
     }
 
     @Override
-    public void setData(M data) {
+    public void setData(List<M> data) {
         if (data != null) {
-            mPrimaryRecyclerView.setAdapter(getAdapter());
-            getAdapter().setItems(data);
-            getAdapter().notifyDataSetChanged();
+                mAdapter.removeAll();
+                getAdapter().insert(data);
         }
     }
 
     public boolean hasAdapter() {
         return mAdapter != null;
     }
+
     @Override
     public void updateDisplayTitle(String title) {
         Display display = getDisplay();
@@ -75,40 +79,45 @@ public abstract class RecyclerFragment<VH extends RecyclerView.ViewHolder, M ext
 
     @Override
     public void showError(NetworkError error) {
-        FileLog.d("lce", "RecyclerFragment: showError()");
-        switch (error) {
-            case NETWORK_ERROR:
-                mPrimaryRecyclerView.setErrorText(getString(R.string.empty_network_error));
-                break;
-            case UNKNOWN:
-                mPrimaryRecyclerView.setErrorText(getString(R.string.error_no_connection_body));
-                break;
-        }
+        mUltimateRecyclerView.showEmptyView();
     }
 
     @Override
     public void showLoadingProgress(boolean visible) {
-        if (visible) {
-            mPrimaryRecyclerView.setContentShown(false);
-        } else {
-            mPrimaryRecyclerView.setContentShown(true);
-        }
+        mUltimateRecyclerView.setRefreshing(visible);
     }
 
     @Override
     public void onRefreshData(boolean visible) {
-        FileLog.d("lce", "RecyclerFragment: onRefreshData()");
-        if (visible) {
-            mPrimaryRecyclerView.setContentShown(false);
-        } else {
-            mPrimaryRecyclerView.setContentShown(true, false);
-        }
+        mUltimateRecyclerView.setRefreshing(false);
+        mUltimateRecyclerView.scrollVerticallyTo(0);
+        mAdapter.removeAll();
     }
 
-    public FooterViewListAdapter<M, VH> getAdapter() {
-        if (mAdapter == null) {
-            mAdapter = createAdapter();
-        }
+    protected void enableLoadMore() {
+        mUltimateRecyclerView.setLoadMoreView(R.layout.secondary_progress_bar);
+
+        mUltimateRecyclerView.setOnLoadMoreListener(new UltimateRecyclerView.OnLoadMoreListener() {
+            @Override
+            public void loadMore(int itemsCount, int maxLastVisiblePosition) {
+                status_progress = true;
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+
+                        onScrolledToBottom();
+                        status_progress = false;
+                    }
+                }, 500);
+            }
+        });
+    }
+
+    protected void enableEmptyViewPolicy() {
+         mUltimateRecyclerView.setEmptyView(R.layout.item_empty_screen, UltimateRecyclerView.EMPTY_KEEP_HEADER_AND_LOARMORE, this);
+    }
+
+    public easyRegularAdapter<M, VH> getAdapter() {
         return mAdapter;
     }
 }

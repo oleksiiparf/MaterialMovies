@@ -1,18 +1,32 @@
 package com.roodie.materialmovies.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.common.base.Preconditions;
 import com.nineoldandroids.view.ViewHelper;
+import com.roodie.materialmovies.MMoviesApp;
 import com.roodie.materialmovies.R;
+
+import javax.inject.Inject;
 
 /**
  * Created by Roodie on 17.08.2015.
  */
 public class UiUtils {
+
+    @Inject
+    FontManager mFontManager;
+
+    private Typeface menuTypeface;
 
     private static  UiUtils instance;
 
@@ -69,4 +83,21 @@ public class UiUtils {
         return (int) Math.ceil(Resources.getSystem().getDisplayMetrics().density * value);
     }
 
+    public void applyFontToMenu(Menu paramMenu, Context paramContext) {
+        Preconditions.checkNotNull(paramMenu, "Menu cannot be null");
+        if (menuTypeface == null) {
+            menuTypeface = MMoviesApp.from(paramContext).getFontManager().getFont(FontManager.FONT_DIN_REGULAR);
+           }
+        for (int i = 0; i < paramMenu.size(); i++)
+            applyFontToMenuItems(paramMenu.getItem(i), menuTypeface);
+    }
+
+    private static void applyFontToMenuItems(MenuItem paramMenuItem, Typeface paramTypeface)
+    {
+        paramMenuItem.setTitle(CustomTypefaceSpan.applySpan(paramMenuItem.getTitle(), paramTypeface));
+        SubMenu localSubMenu = paramMenuItem.getSubMenu();
+        if (localSubMenu != null)
+            for (int i = 0; i < localSubMenu.size(); i++)
+                applyFontToMenuItems(localSubMenu.getItem(i), paramTypeface);
+    }
 }

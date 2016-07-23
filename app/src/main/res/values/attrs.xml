@@ -26,18 +26,13 @@
     </declare-styleable>
 
     <attr name="font" format="enum">
-        <enum name="lobster" value="1" />
-        <enum name="roboto_light" value="2" />
-        <enum name="roboto_condensed" value="3" />
-        <enum name="roboto_condensed_light" value="4" />
-        <enum name="roboto_condensed_bold" value="5" />
-        <enum name="roboto_slab" value="6" />
-        <enum name="din_regular" value="7" />
-        <enum name="din_medium" value="8" />
-        <enum name="din_light" value="9" />
-        <enum name="din_ultra_light" value="10" />
-        <enum name="cat_font_regular" value="11" />
-        <enum name="cat_font_regular50" value="12" />
+        <enum name="roboto_condensed" value="1" />
+        <enum name="roboto_condensed_light" value="2" />
+        <enum name="roboto_condensed_bold" value="3" />
+        <enum name="roboto_slab" value="4" />
+        <enum name="din_regular" value="5" />
+        <enum name="din_medium" value="6" />
+        <enum name="din_light" value="7" />
             />
     </attr>
 
@@ -254,23 +249,8 @@
         <attr name="android:background"/>
     </declare-styleable>
 
-    <declare-styleable name="BaseRecyclerLayout">
-        <attr name="clipToPadding" format="boolean" />
-        <attr name="padding" format="dimension" />
-        <attr name="paddingTop" format="dimension" />
-        <attr name="paddingBottom" format="dimension" />
-        <attr name="paddingLeft" format="dimension" />
-        <attr name="paddingRight" format="dimension" />
-        <attr name="recyclerViewScrollbars" format="enum">
-            <enum name="none" value="0" />
-            <enum name="vertical" value="1" />
-            <enum name="horizontal" value="2" />
-        </attr>
-        <attr name="recyclerViewType" format="enum">
-            <enum name="list" value="0" />
-            <enum name="autofitGrid" value="1" />
-        </attr>
-        <attr name="defaultLoadingColor" format="reference"></attr>
+    <declare-styleable name="MMoviesRecyclerView">
+        <attr name="recyclerAutofit" format="boolean"/>
     </declare-styleable>
 
 

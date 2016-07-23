@@ -10,7 +10,6 @@ import com.roodie.model.state.MoviesState;
 import com.roodie.model.tasks.DatabaseBackgroundRunnable;
 import com.roodie.model.tasks.MarkEntitySeenRunnable;
 import com.roodie.model.tasks.MarkEntityUnseenRunnable;
-import com.roodie.model.util.FileLog;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -44,7 +43,6 @@ public class TvShowPresenter extends MvpPresenter<TvShowWatchedView> {
 
     public void toggleShowWatched(ShowWrapper item, int position) {
         Preconditions.checkNotNull(item, "show cannot be null");
-       // final int callingId = getId(getViewState());
         final int callingId = position;
         if (item.isWatched()) {
             markShowUnseen(callingId, item);
@@ -54,19 +52,16 @@ public class TvShowPresenter extends MvpPresenter<TvShowWatchedView> {
     }
 
     private void markShowSeen(int callingId, ShowWrapper item) {
-        FileLog.d("watched", "TvShowPresenter : Mark item seen");
         executeBackgroundTask(new MarkEntitySeenRunnable(callingId, item));
     }
 
     private void markShowUnseen(int callingId, ShowWrapper item) {
-        FileLog.d("watched", "TvShowPresenter : Mark item unSeen");
         executeBackgroundTask(new MarkEntityUnseenRunnable(callingId, item));
 
     }
 
     @Subscribe
     public void onShowWatchedChanged(MoviesState.ShowFlagUpdateEvent event) {
-        FileLog.d("watched", "TvShowPresenter : show watched changed()");
        // updateShowWatched(event.item, event.callingId);
     }
 

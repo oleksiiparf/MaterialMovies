@@ -16,6 +16,8 @@ public interface BaseListPresenter<M extends BaseListView> extends BasePresenter
 
     String getUiTitle(UiView.MMoviesQueryType queryType);
 
+    String getUiSubtitle(UiView.MMoviesQueryType queryType);
+
     void populateUi(M view, UiView.MMoviesQueryType queryType);
 
     boolean canFetchNextPage(ApplicationState.PaginatedResult<?> paginatedResult);

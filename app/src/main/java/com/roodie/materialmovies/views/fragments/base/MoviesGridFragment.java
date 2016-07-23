@@ -8,11 +8,12 @@ import android.view.View;
 import android.widget.PopupMenu;
 
 import com.google.common.base.Preconditions;
+import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.ListMoviesView;
 import com.roodie.materialmovies.util.MMoviesPreferences;
-import com.roodie.materialmovies.views.adapters.FooterViewListAdapter;
 import com.roodie.materialmovies.views.adapters.MoviesGridAdapter;
+import com.roodie.materialmovies.views.custom_views.recyclerview.RecyclerInsetsDecoration;
 import com.roodie.materialmovies.views.listeners.MovieMenuItemClickListener;
 import com.roodie.model.Display;
 import com.roodie.model.entities.MovieWrapper;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * Created by Roodie on 29.06.2015.
  */
-public abstract class MoviesGridFragment extends BaseGridFragment<MoviesGridAdapter.MovieGridViewHolder, List<MovieWrapper>, ListMoviesView> implements ListMoviesView {
+public abstract class MoviesGridFragment extends BaseGridFragment<MoviesGridAdapter.MovieGridViewHolder, MovieWrapper> implements ListMoviesView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,23 +33,23 @@ public abstract class MoviesGridFragment extends BaseGridFragment<MoviesGridAdap
     }
 
     @Override
-    protected int getLayoutRes() {
-        return R.layout.fragment_grid_recycler;
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getRecyclerView().addItemDecoration(new RecyclerInsetsDecoration(getActivity(), NavigationGridType.MOVIES));
     }
 
-
-    public String getRequestParameter() {
-        return null;
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_movie_recycler;
     }
 
     public MMoviesQueryType getQueryType() {
         return MMoviesQueryType.COMMON_MOVIES;
     }
 
-
     @Override
-    protected FooterViewListAdapter<List<MovieWrapper>, MoviesGridAdapter.MovieGridViewHolder> createAdapter() {
-        return new MoviesGridAdapter(getActivity(), this);
+    protected easyRegularAdapter<MovieWrapper, MoviesGridAdapter.MovieGridViewHolder> createAdapter(List<MovieWrapper> data) {
+        return new MoviesGridAdapter(data, this);
     }
 
     @Override
@@ -64,17 +65,16 @@ public abstract class MoviesGridFragment extends BaseGridFragment<MoviesGridAdap
 
     @Override
     public void onClick(View view, int position) {
-        MovieWrapper item = mAdapter.getItems().get(position);
+       MovieWrapper item = mAdapter.getObjects().get(position);
         showItemDetail(item, view);
     }
-
 
     @Override
     public void onPopupMenuClick(View view, int position) {
         PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
         popupMenu.inflate(R.menu.movie_popup_menu);
 
-        MovieWrapper movieWrapper = mAdapter.getItems().get(position);
+        MovieWrapper movieWrapper = mAdapter.getObjects().get(position);
 
         // show/hide some menu items depending on movie information
         Menu menu = popupMenu.getMenu();

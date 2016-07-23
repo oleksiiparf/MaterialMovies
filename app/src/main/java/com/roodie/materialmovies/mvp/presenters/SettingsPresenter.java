@@ -30,8 +30,9 @@ public class SettingsPresenter extends MvpPresenter<SettingsView> {
     }
 
     @Subscribe
-    public void onWatchedMoviesChanged(MoviesState.WatchedChangeEvent event) {
+    public void onWatchedChanged(MoviesState.WatchedClearedEvent event) {
         FileLog.d("watched", "MainPresenter: on watched changed");
+
         getViewState().onWatchedCleared();
     }
 
@@ -46,17 +47,16 @@ public class SettingsPresenter extends MvpPresenter<SettingsView> {
 
 
     public void clearWatched(SettingsView view) {
-        FileLog.d("watched", "MainPresenter: Fetching watched from db");
         final int callingId = getId(view);
         if (MMoviesApp.get().isAuthentificatedFeatureEnabled()) {
             executeBackgroundTask(new ClearWatchedRunnable(callingId, new WatchedDbClearedCallback()));
         }
     }
 
-    public class WatchedDbClearedCallback implements ApplicationState.Callback<Void> {
+    public final class WatchedDbClearedCallback implements ApplicationState.Callback<Void> {
         @Override
         public void onFinished(Void result) {
-            MMoviesApp.get().getState().setWatched(null);
+            MMoviesApp.get().getState().setWatchedCleared();
             MMoviesApp.get().getState().setPopulatedWatchedFromDb(true);
         }
     }

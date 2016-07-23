@@ -9,7 +9,6 @@ import com.roodie.model.entities.Watchable;
 import com.roodie.model.state.MoviesState;
 import com.roodie.model.tasks.DatabaseBackgroundRunnable;
 import com.roodie.model.tasks.FetchWatchedRunnable;
-import com.roodie.model.util.FileLog;
 import com.roodie.model.util.MoviesCollections;
 import com.squareup.otto.Subscribe;
 
@@ -34,7 +33,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     @Subscribe
-    public void onWatchedMoviesChanged(MoviesState.WatchedChangeEvent event) {
+    public void onWatchedMoviesChanged(MoviesState.WatchedChangedEvent event) {
         populateUi(getViewState());
     }
 
@@ -67,7 +66,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
             populateUi(view);
     }
 
-    private void populateStateFromDb(int callingId) {
+    public void populateStateFromDb(int callingId) {
         if (!MMoviesApp.get().getState().isPopulatedWatchedFromDb() || MoviesCollections.isEmpty(MMoviesApp.get().getState().getWatched())) {
             fetchWatched(callingId);
         }
@@ -78,8 +77,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
         MMoviesApp.get().getBackgroundExecutor().execute(task);
     }
 
-    private void fetchWatched(final int callingId) {
-        FileLog.d("watched", "MainPresenter: Fetching watched from db");
+    public void fetchWatched(final int callingId) {
         if (MMoviesApp.get().isAuthentificatedFeatureEnabled()) {
             executeBackgroundTask(new FetchWatchedRunnable(callingId, new WatchedDbLoadCallback()));
         }

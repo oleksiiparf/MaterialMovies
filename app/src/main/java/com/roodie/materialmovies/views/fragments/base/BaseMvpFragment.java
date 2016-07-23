@@ -6,12 +6,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.arellomobile.mvp.MvpDelegate;
 import com.roodie.materialmovies.R;
+import com.roodie.materialmovies.util.UiUtils;
 import com.roodie.materialmovies.views.activities.BaseActivity;
 import com.roodie.materialmovies.views.custom_views.MMoviesToolbar;
 import com.roodie.model.Display;
@@ -93,6 +96,12 @@ public abstract class BaseMvpFragment extends Fragment implements BaseUiView {
             setSupportActionBar(mToolbar);
             mToolbar.setToolbarTitleTypeface();
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        UiUtils.getInstance().applyFontToMenu(menu, getActivity());
     }
 
     protected  void setSupportActionBar(Toolbar toolbar) {

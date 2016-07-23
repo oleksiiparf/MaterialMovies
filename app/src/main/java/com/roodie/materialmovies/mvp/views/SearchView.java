@@ -13,7 +13,7 @@ import com.roodie.model.state.MoviesState;
  */
 
 @GenerateViewState
-public interface SearchView extends BaseListView<MoviesState.SearchResult> {
+public interface SearchView extends MvpLceView<MoviesState.SearchResult> {
 
     void showMovieDetail(MovieWrapper movie, View item);
 

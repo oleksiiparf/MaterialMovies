@@ -31,7 +31,8 @@
 
     <!-- Should be movie_detail_poster_width * 1.6 -->
 
-    <dimen name="grid_spacing">4dip</dimen>
+    <dimen name="movie_grid_spacing">4dip</dimen>
+    <dimen name="show_grid_spacing">0dip</dimen>
 
     <dimen name="card_item_image_size">140dip</dimen>
 
@@ -44,8 +45,8 @@
 
     <dimen name="show_card_item_icon_padding">24dp</dimen>
 
-    <dimen name="show_grid_item_title_size">12dp</dimen>  <!--16-->
-    <dimen name="show_grid_item_subtitle_size">10dp</dimen> <!--12-->
+    <dimen name="show_grid_item_title_size">14dp</dimen>  <!--12-->
+    <dimen name="show_grid_item_subtitle_size">12dp</dimen> <!--10-->
 
     <dimen name="show_detail_season_item_height">160dp</dimen>
     <dimen name="show_detail_season_item_width">240dp</dimen>
@@ -108,6 +109,14 @@
     <dimen name="mm_button_small_padding">19.0sp</dimen>
 
     <dimen name="fragment_show_tuner_width">220.0dip</dimen>
+
+    <dimen name="country_flag_width">18dp</dimen>
+    <dimen name="country_flag_height">12dp</dimen>
+
+    <!-- Z-axis elevations -->
+    <dimen name="z_app_bar">4dp</dimen>
+    <dimen name="z_card">2dp</dimen>
+    <dimen name="touch_raise">6dp</dimen>
 
 
 </resources>

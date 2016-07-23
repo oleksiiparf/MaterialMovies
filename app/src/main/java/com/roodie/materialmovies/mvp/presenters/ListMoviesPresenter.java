@@ -1,7 +1,5 @@
 package com.roodie.materialmovies.mvp.presenters;
 
-import android.util.Log;
-
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.google.common.base.Preconditions;
@@ -85,6 +83,8 @@ public class ListMoviesPresenter extends MvpPresenter<ListMoviesView> implements
                 view.updateDisplaySubtitle(subtitle);
                 break;
             case SEARCH_MOVIES:
+                subtitle = getUiTitle(queryType);
+                view.updateDisplayTitle(subtitle);
                 break;
 
         }
@@ -107,8 +107,23 @@ public class ListMoviesPresenter extends MvpPresenter<ListMoviesView> implements
                     return movie.getTitle();
                 }
             }
+            case SEARCH_MOVIES: {
+                final MoviesState.SearchResult result = MMoviesApp.get().getState().getSearchResult();
+                if (result != null) {
+                    return result.query;
+                } else {
+                    return MMoviesApp.get().getStringFetcher().getString(R.string.search_title);
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String getUiSubtitle(MMoviesQueryType queryType) {
+        switch (queryType) {
             case SEARCH_MOVIES:
-                return null;
+                return MMoviesApp.get().getStringFetcher().getString(R.string.movies_title);
         }
         return null;
     }
@@ -186,7 +201,7 @@ public class ListMoviesPresenter extends MvpPresenter<ListMoviesView> implements
 
     @Override
     public void populateUi(ListMoviesView ui, MMoviesQueryType queryType){
-        FileLog.d("lce", "Populate UI by query = " + queryType);
+        FileLog.d("ult", "Populate UI by query = " + queryType);
         List<MovieWrapper> items = null;
 
         switch (queryType) {
@@ -219,6 +234,7 @@ public class ListMoviesPresenter extends MvpPresenter<ListMoviesView> implements
                 MoviesState.SearchResult searchResult = MMoviesApp.get().getState().getSearchResult();
                 if (searchResult != null && searchResult.movies != null) {
                     items = searchResult.movies.items;
+                    ui.updateDisplaySubtitle(getUiSubtitle(MMoviesQueryType.SEARCH_MOVIES));
                 }
                 break;
 
@@ -242,7 +258,6 @@ public class ListMoviesPresenter extends MvpPresenter<ListMoviesView> implements
 
     @Subscribe
     public void onSearchResultChanged(MoviesState.SearchResultChangedEvent event) {
-        Log.d("search", "Search results changed");
         populateUiFromEvent(event, UiView.MMoviesQueryType.SEARCH_MOVIES );
      }
 
@@ -260,13 +275,11 @@ public class ListMoviesPresenter extends MvpPresenter<ListMoviesView> implements
 
     @Subscribe
     public void onUpcomingChanged(MoviesState.UpcomingMoviesChangedEvent event) {
-        FileLog.d("lce", "Upcoming movies changed");
         populateUiFromEvent(event, UiView.MMoviesQueryType.UPCOMING_MOVIES);
     }
 
     @Subscribe
     public void onRelatedChanged(MoviesState.MovieRelatedItemsUpdatedEvent event) {
-        FileLog.d("lce", "Popular changed");
         populateUiFromEvent(event, MMoviesQueryType.RELATED_MOVIES);
     }
 
@@ -292,7 +305,6 @@ public class ListMoviesPresenter extends MvpPresenter<ListMoviesView> implements
         }
     }
 
-
     public void search(ListMoviesView view, UiView.MMoviesQueryType queryType, String query) {
         final int callingId = getId(view);
         switch (queryType) {
@@ -314,7 +326,7 @@ public class ListMoviesPresenter extends MvpPresenter<ListMoviesView> implements
         fetchPopular(callingId, TMDB_FIRST_PAGE);
     }
 
-    private void fetchPopularIfNeeded(final int callingId) {
+    public void fetchPopularIfNeeded(final int callingId) {
         ApplicationState.MoviePaginatedResult popular = MMoviesApp.get().getState().getPopularMovies();
         if (popular == null || MoviesCollections.isEmpty(popular.items)) {
             fetchPopular(callingId, TMDB_FIRST_PAGE);
@@ -343,19 +355,19 @@ public class ListMoviesPresenter extends MvpPresenter<ListMoviesView> implements
     /**
      * Fetch upcoming movies task
      */
-    private void fetchUpcomingIfNeeded(final int callingId) {
+    public void fetchUpcomingIfNeeded(final int callingId) {
         ApplicationState.MoviePaginatedResult upcoming = MMoviesApp.get().getState().getUpcoming();
         if (upcoming == null || MoviesCollections.isEmpty(upcoming.items)) {
             fetchUpcoming(callingId, TMDB_FIRST_PAGE);
         }
     }
 
-    private void fetchUpcoming(final int callingId) {
+    public void fetchUpcoming(final int callingId) {
         MMoviesApp.get().getState().setUpcoming(callingId, null);
         fetchUpcoming(callingId, TMDB_FIRST_PAGE);
     }
 
-    private void fetchUpcoming(final int callingId, final int page) {
+    public void fetchUpcoming(final int callingId, final int page) {
          executeNetworkTask(new FetchUpcomingMoviesRunnable(callingId, page));
     }
 
@@ -363,7 +375,6 @@ public class ListMoviesPresenter extends MvpPresenter<ListMoviesView> implements
      * Fetch related movies task
      */
     private void fetchRelatedIfNeeded(final int callingId, String id) {
-        Log.d(LOG_TAG, "fetch related if needed");
         Preconditions.checkNotNull(id, "id cannot be null");
 
         MovieWrapper movie = MMoviesApp.get().getState().getMovie(id);

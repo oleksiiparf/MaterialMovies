@@ -4,9 +4,9 @@ import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.common.base.Preconditions;
+import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
 import com.roodie.materialmovies.mvp.presenters.ListPeoplePresenter;
 import com.roodie.materialmovies.mvp.views.ListPeopleView;
-import com.roodie.materialmovies.views.adapters.FooterViewListAdapter;
 import com.roodie.materialmovies.views.adapters.PeopleListAdapter;
 import com.roodie.materialmovies.views.fragments.base.BaseListFragment;
 import com.roodie.model.Display;
@@ -18,7 +18,7 @@ import java.util.List;
  * Created by Roodie on 07.09.2015.
  */
 
-public class SearchPeopleListFragment extends BaseListFragment<PeopleListAdapter.PeopleListViewHolder, List<PersonWrapper>, ListPeopleView> implements ListPeopleView {
+public class SearchPeopleListFragment extends BaseListFragment<PeopleListAdapter.PeopleListViewHolder, PersonWrapper> implements ListPeopleView {
 
     @InjectPresenter
     ListPeoplePresenter mPresenter;
@@ -29,8 +29,8 @@ public class SearchPeopleListFragment extends BaseListFragment<PeopleListAdapter
     }
 
     @Override
-    protected FooterViewListAdapter createAdapter() {
-        return new PeopleListAdapter(getActivity(), this);
+    protected easyRegularAdapter<PersonWrapper, PeopleListAdapter.PeopleListViewHolder> createAdapter(List<PersonWrapper> data) {
+        return new PeopleListAdapter(data, this);
     }
 
     @Override
@@ -43,8 +43,14 @@ public class SearchPeopleListFragment extends BaseListFragment<PeopleListAdapter
     }
 
     @Override
+    public void onScrolledToBottom() {
+        super.onScrolledToBottom();
+        mPresenter.onScrolledToBottom(this, getQueryType());
+    }
+
+    @Override
     public void onClick(View view, int position) {
-        PersonWrapper item = mAdapter.getItems().get(position);
+        PersonWrapper item = mAdapter.getObjects().get(position);
         showItemDetail(item, view);
     }
 

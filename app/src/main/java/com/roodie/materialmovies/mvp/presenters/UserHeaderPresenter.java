@@ -42,7 +42,7 @@ public class UserHeaderPresenter extends MvpPresenter<UserHeaderView> implements
     }
 
     @Subscribe
-    public void onWatchedChanged(MoviesState.WatchedChangeEvent event) {
+    public void onWatchedChanged(MoviesState.WatchedChangedEvent event) {
         populateUi(getViewState());
     }
 

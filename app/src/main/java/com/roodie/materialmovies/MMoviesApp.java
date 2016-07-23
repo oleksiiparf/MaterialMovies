@@ -1,8 +1,8 @@
 package com.roodie.materialmovies;
 
+import android.app.Application;
 import android.content.Context;
 
-import com.activeandroid.app.Application;
 import com.arellomobile.mvp.MvpFacade;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
@@ -12,26 +12,25 @@ import com.roodie.materialmovies.modules.ViewUtilComponent;
 import com.roodie.materialmovies.modules.library.ContextModule;
 import com.roodie.materialmovies.modules.library.InjectorModule;
 import com.roodie.materialmovies.qualifiers.GeneralPurpose;
-import com.roodie.materialmovies.util.AndroidStringFetcher;
+import com.roodie.materialmovies.util.FontManager;
 import com.roodie.model.entities.Entity;
 import com.roodie.model.entities.MovieWrapper;
 import com.roodie.model.entities.ShowWrapper;
 import com.roodie.model.repository.MovieRepository;
 import com.roodie.model.repository.Repository;
 import com.roodie.model.repository.ShowRepository;
-import com.roodie.model.sqlite.SQLiteHelper;
 import com.roodie.model.sqlite.SQLiteUpgradeStep;
 import com.roodie.model.state.ApplicationState;
 import com.roodie.model.util.BackgroundExecutor;
 import com.roodie.model.util.Injector;
 import com.roodie.model.util.Lists;
+import com.roodie.model.util.StringFetcher;
 import com.squareup.otto.Bus;
 
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import dagger.ObjectGraph;
 import io.fabric.sdk.android.Fabric;
@@ -41,14 +40,18 @@ import io.fabric.sdk.android.Fabric;
  */
 public class MMoviesApp extends Application implements Injector{
 
-    private static volatile Context applicationContext;
-
     private static MMoviesApp sInstance;
 
     @Inject ApplicationState mState;
 
     @Inject @GeneralPurpose
     BackgroundExecutor executor;
+
+    @Inject
+    StringFetcher mStringFetcher;
+
+    @Inject
+    FontManager mFontManager;
 
     @Inject MovieRepository mMovieRepositiry;
 
@@ -73,9 +76,12 @@ public class MMoviesApp extends Application implements Injector{
         return executor;
     }
 
-    @Singleton
-    public AndroidStringFetcher getStringFetcher() {
-        return new AndroidStringFetcher(applicationContext);
+    public StringFetcher getStringFetcher() {
+        return mStringFetcher;
+    }
+
+    public FontManager getFontManager() {
+        return mFontManager;
     }
 
     public Bus getBus() {
@@ -100,6 +106,7 @@ public class MMoviesApp extends Application implements Injector{
 
     private ObjectGraph mObjectGraph;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -111,8 +118,6 @@ public class MMoviesApp extends Application implements Injector{
 
         //Initialize Fabric with disabled crashlytics.
         Fabric.with(this, crashlyticsKit);
-
-        applicationContext = getApplicationContext();
 
         MvpFacade.init();
 
@@ -141,13 +146,12 @@ public class MMoviesApp extends Application implements Injector{
 
     private void initRepositories() {
         if (sInstance.isDaatabaseEnabled()) {
-            SQLiteHelper helper = new SQLiteHelper(this);
-            initDatabaseRepositories(getState().getRepositories(), helper);
-            helper.addUpgradeSteps(getSQLiteUpgradeSteps());
+
+            initDatabaseRepositories(getState().getRepositories());
         }
     }
 
-    private void initDatabaseRepositories(Map<Class<? extends Entity>, Repository<? extends Entity>> reposMap, SQLiteHelper sQLiteHelper)
+    private void initDatabaseRepositories(Map<Class<? extends Entity>, Repository<? extends Entity>> reposMap)
     {
         reposMap.put(MovieWrapper.class, mMovieRepositiry);
         reposMap.put(ShowWrapper.class, mShowRepository);

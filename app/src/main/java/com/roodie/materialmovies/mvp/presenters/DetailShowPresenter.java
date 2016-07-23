@@ -16,7 +16,6 @@ import com.roodie.model.tasks.DatabaseBackgroundRunnable;
 import com.roodie.model.tasks.FetchDetailTvShowRunnable;
 import com.roodie.model.tasks.MarkEntitySeenRunnable;
 import com.roodie.model.tasks.MarkEntityUnseenRunnable;
-import com.roodie.model.util.FileLog;
 import com.roodie.model.util.MoviesCollections;
 import com.squareup.otto.Subscribe;
 
@@ -220,7 +219,6 @@ public class DetailShowPresenter extends MvpPresenter<TvShowDetailView> implemen
     }
 
     private void markShowUnseen(int callingId, ShowWrapper show) {
-        FileLog.d("watched", "DetailShowPresenter : Mark show unSeen");
         executeBackgroundTask(new MarkEntityUnseenRunnable(callingId, show));
 
     }

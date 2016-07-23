@@ -17,7 +17,7 @@
         android:layout_gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:textColor="?attr/colorAccent"
-        android:text="Watched" />
+        android:text="@string/watched_movie" />
 
     <View
         android:id="@+id/divider"

@@ -18,7 +18,7 @@
     <!-- The drawer is given a fixed width in dp and extends the full height of
          the container. -->
 
-    <android.support.design.widget.NavigationView
+    <com.roodie.materialmovies.views.custom_views.MMNavigationView
         android:id="@+id/navigation_view"
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
@@ -26,6 +26,7 @@
         mmovies:itemIconTint="?mmTextColorSecondary"
         mmovies:itemTextColor="?mmTextColorPrimary"
         android:layout_gravity="start"
+        android:fitsSystemWindows="true"
         mmovies:headerLayout="@layout/item_account_header"
         mmovies:menu="@menu/drawer_view"
         />

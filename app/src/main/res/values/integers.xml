@@ -19,6 +19,10 @@
 
     <integer name="anim_duration_long">500</integer>
 
+    <integer name="anim_duration_medium">400</integer>
+
     <integer name="image_background_fade_millis">1000</integer>
+
+    <integer name="rapid_animation">120</integer>
 
 </resources>

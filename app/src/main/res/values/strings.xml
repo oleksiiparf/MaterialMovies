@@ -2,6 +2,11 @@
     <string name="app_name">MMovies</string>
     <string name="tmdb">TMDb</string>
 
+    <!-- Themes -->
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_green">Green</string>
+
     <!-- Welcome items -->
     <string name="welcome_to_mmovies">Welcome to MaterialMovies</string>
     <string name="welcome_desc">Swipe to learn more.</string>
@@ -18,6 +23,7 @@
     <string name="popular_title">Popular</string>
     <string name="watched_title">Watched</string>
     <string name="preferences">Settings</string>
+    <string name="search_title">Search</string>
     <string name="in_theatres_title">In theatres</string>
     <string name="upcoming_title">Upcoming</string>
     <string name="on_the_air_title">On the air</string>
@@ -35,14 +41,19 @@
     <string name="movie_details_certification">Certification</string>
     <string name="movie_details_genres">Genres</string>
     <string name="movie_details_budget">Budget</string>
+    <string name="movie_details_seasons">Seasons</string>
+    <string name="movie_details_episodes">Episodes</string>
     <string name="movie_details_budget_content">$%,d</string>
     <string name="movie_details_language">Language</string>
+
     <string name="related_movies">Related</string>
     <string name="cast_movies">Cast</string>
     <string name="crew_movies">Crew</string>
     <string name="images_movies">Images</string>
     <string name="trailer_movie">Trailer</string>
     <string name="trailers_movies">Trailers</string>
+    <string name="watched_movie">Watched</string>
+
     <string name="show_seasons">Seasons</string>
     <string name="biography">Biography</string>
     <string name="placeholder_rating">--</string>
@@ -68,6 +79,7 @@
 
     <!-- Menu items -->
     <string name="menu_refresh">Refresh</string>
+    <string name="menu_reload">Reload</string>
     <string name="menu_movie_websearch">Web search</string>
     <string name="menu_search">Search</string>
 
@@ -76,16 +88,15 @@
     <string name="menu_item_movie_is_watched">Movie is seen</string>
 
 
-    <!-- Share -->
+    <!-- Action -->
     <string name="share_tv_show">Share tv show</string>
     <string name="share_movie">Share movie</string>
     <string name="share_checkout">Check out %s</string>
-
-    <!-- Search -->
     <string name="label_back">Back</string>
     <string name="label_cancel">Cancel</string>
-
     <string name="web_search">Web search</string>
+    <string name="explore">Explore</string>
+
 
     <string name="error_network">Network error</string>
     <string name="error_movie_not_found_tmdb">Movie not found at TMDb</string>
@@ -157,13 +168,17 @@
 
 
     <!-- Status messages -->
+    <string name="loading_more">Loading more…</string>
     <string name="error_no_connection">You are offline</string>
-    <string name="error_no_connection_body">Please connect to the internet and try again.</string>
+    <string name="error_no_connection_body">Please check your internet connection.</string>
     <string name="offline">Connect to a network, then try again.</string>
     <string name="offline_no_wifi">Connect to Wi-Fi or allow all connections, then try again.</string>
     <string name="app_not_available">No app available to handle this.</string>
 
     <string name="empty_network_error">%1$s is not available while you`re offline. Please connect to the internet and try again.</string>
+
+    <string name="empty_library_title">Your library is empty</string>
+    <string name="empty_library_body">Explore the top rated movies and shows to find those you have watched!</string>
 
     <string name="action_item_added_to_watched">&lt;b>%s&lt;/b> &lt;em>added to watched&lt;/em></string>
     <string name="action_cleared_watched">Database successfully cleared!</string>
@@ -174,6 +189,7 @@
 
     <!-- transition shared elements -->
     <string name="transition_poster" translatable="false">poster</string>
+    <string name="transition_poster_background" translatable="false">poster_background</string>
 
 
 </resources>

@@ -15,7 +15,7 @@ import com.roodie.model.Display;
 /**
  * Created by Roodie on 27.06.2015.
  */
-public class WatchlistActivity extends BaseNavigationActivity implements MainView {
+public class WatchlistActivity extends BaseNavigationActivity implements MainView{
 
     @InjectPresenter
     MainPresenter mPresenter;
@@ -23,6 +23,7 @@ public class WatchlistActivity extends BaseNavigationActivity implements MainVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        animateManually(true);
         mDrawerLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
@@ -56,8 +57,9 @@ public class WatchlistActivity extends BaseNavigationActivity implements MainVie
                 display.showSearchFragment();
             }
         } else  {
-            if (!display.hasMainFragment())
-             display.showMovies();
+            if (!display.hasMainFragment()) {
+                display.showMovies();
+            }
         }
     }
 
@@ -65,6 +67,8 @@ public class WatchlistActivity extends BaseNavigationActivity implements MainVie
     public void setData(int[] data) {
         updateHeader(data);
     }
+
+
 }
 
 

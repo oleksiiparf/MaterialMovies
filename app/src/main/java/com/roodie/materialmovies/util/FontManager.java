@@ -13,32 +13,22 @@ import com.google.common.base.Preconditions;
  */
 public class FontManager {
 
-    public static final int FONT_LOBSTER = 1;
-    public static final int FONT_ROBOTO_LIGHT = 2;
-    public static final int FONT_ROBOTO_CONDENSED = 3;
-    public static final int FONT_ROBOTO_CONDENSED_LIGHT = 4;
-    public static final int FONT_ROBOTO_CONDENSED_BOLD = 5;
-    public static final int FONT_ROBOTO_SLAB = 6;
+    public static final int FONT_ROBOTO_CONDENSED = 1;
+    public static final int FONT_ROBOTO_CONDENSED_LIGHT = 2;
+    public static final int FONT_ROBOTO_CONDENSED_BOLD = 3;
+    public static final int FONT_ROBOTO_SLAB = 4;
 
-    public static final int FONT_DIN_REGULAR = 7;
-    public static final int FONT_DIN_MEDIUM = 8;
-    public static final int FONT_DIN_LIGHT = 9;
-    public static final int FONT_DIN_ULTRA_LIGHT = 10;
-    public static final int FONT_PROXIMA_REGULAR = 11;
-    public static final int FONT_PROXIMA_REGULAR_50 = 12;
+    public static final int FONT_DIN_REGULAR = 5;
+    public static final int FONT_DIN_MEDIUM = 6;
+    public static final int FONT_DIN_LIGHT = 7;
 
-    private static final String LOBSTER = "Lobster-Regular.ttf";
-    private static final String ROBOTO_LIGHT = "Roboto-Light.ttf";
     private static final String ROBOTO_CONDENSED = "RobotoCondensed-Regular.ttf";
     private static final String ROBOTO_CONDENSED_BOLD = "RobotoCondensed-Bold.ttf";
     private static final String ROBOTO_CONDENSED_LIGHT = "RobotoCondensed-Light.ttf";
     private static final String DIN_REGULAR = "DINPro-Regular.otf";
     private static final String DIN_MEDIUM = "DINPro-Medium.otf";
     private static final String DIN_LIGHT = "DINPro-Light.otf";
-    private static final String DIN_ULTRA_LIGHT = "DINNextLTPro-UltraLight.otf";
     private static final String ROBOTO_SLAB = "RobotoSlab-Regular.ttf";
-    private static final String PROXIMA_REGULAR = "ProximaNova-Regular.otf";
-    private static final String PROXIMA_REGULAR_50 = "ProximaNova-RegularT50.otf";
 
     private static final String ROBOTO_LIGHT_NATIVE_FONT_FAMILY = "sans-serif-light";
     private static final String ROBOTO_CONDENSED_NATIVE_FONT_FAMILY = "sans-serif-condensed";
@@ -49,13 +39,6 @@ public class FontManager {
     public FontManager(AssetManager assetManager) {
         mAssetManager = Preconditions.checkNotNull(assetManager, "assetManager cannot be null");
         mCache = new LruCache<>(3);
-    }
-
-    public Typeface getRobotoLight() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            return Typeface.create(ROBOTO_LIGHT_NATIVE_FONT_FAMILY, Typeface.NORMAL);
-        }
-        return getTypeface(ROBOTO_LIGHT);
     }
 
     public Typeface getRobotoCondensed() {
@@ -87,25 +70,10 @@ public class FontManager {
         return getTypeface(DIN_MEDIUM);
     }
 
-    public Typeface getProximaRegular() {
-        return getTypeface(PROXIMA_REGULAR);
-    }
-
-    public Typeface getProximaRegular50() {
-        return getTypeface(PROXIMA_REGULAR_50);
-    }
-
-    public Typeface getDinUltraLight() {
-        return getTypeface(DIN_ULTRA_LIGHT);
-    }
-
     public Typeface getRobotoSlab() {
         return getTypeface(ROBOTO_SLAB);
     }
 
-    public Typeface getLobster() {
-        return  getTypeface(LOBSTER);
-    }
 
     private Typeface getTypeface(final String filename) {
         Typeface typeface = mCache.get(filename);
@@ -120,12 +88,6 @@ public class FontManager {
         Typeface typeface = null;
 
         switch (fontType) {
-            case FONT_LOBSTER:
-                typeface = getLobster();
-                break;
-            case FONT_ROBOTO_LIGHT:
-                typeface = getRobotoLight();
-                break;
             case FONT_ROBOTO_CONDENSED:
                 typeface = getRobotoCondensed();
                 break;
@@ -146,15 +108,6 @@ public class FontManager {
                 break;
             case FONT_DIN_LIGHT:
                 typeface = getDinLight();
-                break;
-            case FONT_DIN_ULTRA_LIGHT:
-                typeface = getDinUltraLight();
-                break;
-            case FONT_PROXIMA_REGULAR:
-                typeface = getProximaRegular();
-                break;
-            case FONT_PROXIMA_REGULAR_50:
-                typeface = getProximaRegular50();
                 break;
         }
 

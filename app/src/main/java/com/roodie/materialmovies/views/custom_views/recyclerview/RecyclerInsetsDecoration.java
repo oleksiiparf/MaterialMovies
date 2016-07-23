@@ -6,16 +6,28 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.roodie.materialmovies.R;
+import com.roodie.materialmovies.mvp.views.UiView;
 
 /**
- * Created by Roodie on 12.08.2015.
+ * Implementation of {@link RecyclerView.ItemDecoration}, which depends on {@link UiView.NavigationGridType} item
  */
 public class RecyclerInsetsDecoration extends RecyclerView.ItemDecoration {
 
     private int mSpacing;
 
-    public RecyclerInsetsDecoration(Context context) {
-        mSpacing = context.getResources().getDimensionPixelSize(R.dimen.grid_spacing);
+    public RecyclerInsetsDecoration(Context context, UiView.NavigationGridType type) {
+        switch (type) {
+            case MOVIES:
+                mSpacing = context.getResources().getDimensionPixelSize(R.dimen.movie_grid_spacing);
+                break;
+            case SHOWS:
+                mSpacing = context.getResources().getDimensionPixelSize(R.dimen.show_grid_spacing);
+                break;
+            case WATCHED:
+                mSpacing = context.getResources().getDimensionPixelSize(R.dimen.show_grid_spacing);
+                break;
+
+        }
     }
 
     @Override

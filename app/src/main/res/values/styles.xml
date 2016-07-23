@@ -10,7 +10,7 @@
     </style>
 
     <style name="Widget.MMovies.Movie.Grid.Title" parent="android:Widget">
-        <item name="font">lobster</item>
+        <item name="font">din_medium</item>
         <item name="android:textSize">@dimen/movie_grid_item_font_size</item>
         <item name="android:layout_gravity">bottom</item>
         <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
@@ -25,7 +25,7 @@
     </style>
 
     <style name="Widget.MMovies.Show.Grid.Title" parent="android:Widget">
-        <item name="font">roboto_condensed_bold</item>
+        <item name="font">din_medium</item>
         <item name="android:textSize">@dimen/show_grid_item_title_size</item>
         <item name="android:paddingLeft">@dimen/activity_vertical_margin_half</item>
         <item name="android:paddingTop">@dimen/activity_vertical_margin_half</item>
@@ -38,7 +38,7 @@
     </style>
 
     <style name="Widget.MMovies.Show.Grid.Subtitle" parent="android:Widget">
-        <item name="font">roboto_condensed_bold</item>
+        <item name="font">din_regular</item>
         <item name="android:textSize">@dimen/show_grid_item_subtitle_size</item>
         <item name="android:paddingLeft">@dimen/activity_vertical_margin_half</item>
         <item name="android:paddingBottom">@dimen/activity_horizontal_margin_half</item>
@@ -72,7 +72,7 @@
     </style>
 
     <style name="Widget.MMovies.Movie.AnimationLayout.Title" parent="android:Widget">
-        <item name="font">lobster</item>
+        <item name="font">din_light</item>
         <item name="android:layout_marginTop">60dp</item>
         <item name="android:textSize">40sp</item>
         <item name="android:ellipsize">end</item>
@@ -147,6 +147,7 @@
         <item name="android:textColor">?mmTextColorPrimary</item>
         <item name="android:background">?mmBackgroundColorSecondary</item>
         <item name="collapsed_maxLines">@integer/default_summary_maxlines</item>
+        <item name="android:textSize">16.0sp</item>
     </style>
 
     <style name="Widget.MMovies.Movie.Detail.Summary.Scroll" parent="Widget.MMovies.Movie.Detail.Summary">
@@ -158,7 +159,7 @@
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
-    <style name="Widget.MMovies.Movie.Detail.Ratings.Title" parent="android:Widget">
+<!--    <style name="Widget.MMovies.Movie.Detail.Ratings.Title" parent="android:Widget">
         <item name="font">roboto_light</item>
         <item name="android:textSize">16dp</item>
     </style>
@@ -166,7 +167,7 @@
     <style name="Widget.MMovies.Movie.Detail.Ratings.Votes" parent="android:Widget">
         <item name="font">roboto_condensed_bold</item>
         <item name="android:textSize">24dp</item>
-    </style>
+    </style>-->
 
     <style name="Widget.MMovies.Movie.Detail.Rating.Description" parent="android:Widget">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
@@ -179,22 +180,6 @@
         <item name="android:ellipsize">end</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">?android:attr/textColorSecondaryInverse</item>
-    </style>
-
-    <style name="Widget.MMovies.Movie.Drawer.AddAccount" parent="android:Widget">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">18dp</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:ellipsize">end</item>
-    </style>
-
-
-    <style name="Widget.MMovies.Movie.Drawer.Checkin.Title" parent="android:Widget">
-        <item name="font">roboto_condensed</item>
-        <item name="android:textSize">18dp</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
     </style>
 
     <style name="Widget.MMovies.ProgressBar" parent="android:Widget.Holo.Light.ProgressBar.Horizontal">
@@ -289,6 +274,7 @@
     <style name="Widget.MMovies.TextAppearance.SecondaryText.Small"
         parent="Widget.MMovies.TextAppearance.SecondaryText">
         <item name="android:textSize">12.0sp</item>
+        <item name="android:textColor">?mmTextColorPrimary</item>
     </style>
 
     <style name="Widget.MMovies.TextAppearance.SecondaryText.Negative"
@@ -461,7 +447,7 @@
         <item name="android:textSize">18.0sp</item>
         <item name="android:textColor">?colorPrimary</item>
         <item name="android:textColorLink">?colorControlHighlight</item>
-        <item name="font">cat_font_regular</item>
+        <item name="font">din_regular</item>
     </style>
 
     <style name="TextAppearance.Cat.Button.Info" parent="@style/TextAppearance.Cat.Button">
@@ -499,6 +485,39 @@
         <item name="spb_mirror_mode">true</item>
         <item name="spb_progressiveStart_activated">true</item>
     </style>
+
+    <style name="MMovies.Button.PrimaryDark" parent="@style/MMovies.Button">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/background_button_green_dark</item>
+    </style>
+
+
+    <style name="MMovies.Button" parent="@style/Widget.AppCompat.Button">
+        <item name="android:textAppearance">@style/TextAppearance.Cat.Button</item>
+        <item name="android:textSize">14.0sp</item>
+        <item name="android:paddingLeft">16.0dip</item>
+        <item name="android:paddingRight">16.0dip</item>
+        <item name="android:layout_marginLeft">8.0dip</item>
+        <item name="android:layout_marginTop">6.0dip</item>
+        <item name="android:layout_marginRight">8.0dip</item>
+        <item name="android:layout_marginBottom">6.0dip</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="Widget.AppCompat.Button" parent="@style/Base.Widget.AppCompat.Button" />
+
+    <style name="Base.Widget.AppCompat.Button" parent="@android:style/Widget">
+        <item name="android:textAppearance">?android:textAppearanceButton</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/abc_btn_default_mtrl_shape</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:minWidth">88.0dip</item>
+        <item name="android:minHeight">48.0dip</item>
+    </style>
+
+
+
 
 
 </resources>

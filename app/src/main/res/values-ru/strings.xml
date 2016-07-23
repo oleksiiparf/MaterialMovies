@@ -1,9 +1,23 @@
 <resources>
 
     <string name="app_name">MMovies</string>
+    <string name="tmdb">TMDb</string>
+
+    <!-- Themes -->
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="theme_green">Зелёная</string>
+
+    <!-- Welcome items -->
+    <string name="welcome_to_mmovies">Добро пожаловать в MaterialMovies</string>
+    <string name="welcome_desc">Проведите пальцем чтобы узнать больше.</string>
+    <string name="use_mmovies_title">Используй MaterialMovies где угодно.</string>
+    <string name="use_mmovies_desc">Наслаждайтесь любимыми фильмами, ТВ-шоу в любое время, в любом месте.</string>
+    <string name="welcome_extras_title">Трейлеры к фильмам, и другие дополнительные услуги.</string>
+    <string name="welcome_extras_desc">Автоматически получайте доступ к высококачественным онлайн трейлерам и дополнительным информации о кино.</string>
 
     <!-- Main Menu -->
-    <string name="watched_title">Watched</string>
+    <string name="watched_title">Библиотека</string>
     <string name="movies_title">Фильмы</string>
     <string name="shows_title">Сериалы</string>
     <string name="people_title">Люди</string>
@@ -12,60 +26,43 @@
     <string name="in_theatres_title">В кино</string>
     <string name="upcoming_title">Предстоящие</string>
     <string name="on_the_air_title">В эфире</string>
+    <string name="preferences">Настройки</string>
 
+    <!-- Media items -->
     <string name="details">Подробности</string>
-    <string name="biography">Боиграфия</string>
+
 
     <string name="movie_details_released">Вышел в прокат</string>
     <string name="movie_details_runtime">Продолжительность</string>
     <string name="movie_details_runtime_content">%1$d мин</string>
+
     <string name="movie_details_certification">Ограничения</string>
     <string name="movie_details_genres">Жанр</string>
     <string name="movie_details_budget">Бюджет</string>
+    <string name="movie_details_seasons">Сезоны</string>
+    <string name="movie_details_episodes">Епизоды</string>
+    <string name="movie_details_budget_content">$%,d</string>
     <string name="movie_details_language">Язык</string>
-
-    <string name="show_isalive">Продолжается</string>
-    <string name="show_isnotalive">Закончилось</string>
-    <string name="show_unknown">В производстве</string>
 
     <string name="related_movies">Похожие</string>
     <string name="cast_movies">Актерский состав</string>
     <string name="crew_movies">Сьёмочная группа</string>
     <string name="images_movies">Постеры</string>
+    <string name="trailer_movie">Трейлер</string>
     <string name="trailers_movies">Трейлеры</string>
+    <string name="watched_movie">Просмотрено</string>
 
-    <string name="drawer_open_content_desc">Меню открыто</string>
-    <string name="drawer_closed_content_desc">Меню закрыто</string>
-
-    <string name="menu_refresh">Обновить</string>
-    <string name="menu_search">Поиск</string>
-
-    <string name="empty_network_error">%1$s невозможно выполнить из-за ошибки сети. Проверьте подключение к Интернету и попробуйте ещё раз.</string>
-
-
-    <string name="error_network">Ошибка сети</string>
-    <string name="error_unknown">Неизвестная ошибка ¯\_(ツ)_/¯</string>
-
-    <string name="search_hint">Поиск Material Movies</string>
-
-    <string name="category_watched">Ваша библиотека</string>
-    <string name="category_movies">Фильмы</string>
-    <string name="category_shows">Сериалы</string>
-    <string name="category_settings">Настройки</string>
-    <string name="category_mail">Обратная связь</string>
-
-    <string name="movie_title_year">%1$s (%2$d)</string>
-    <string name="movie_rating_votes">%1$d%% - %2$d голосов</string>
-    <string name="movie_release_date">Дата выхода: %1$s</string>
-
-    <string name="filter_upcoming">Предстоящие</string>
-    <string name="filter_soon">Скоро выходят</string>
-    <string name="filter_released">Вышедшие</string>
-
-
-    <string name="settings_title">Настройки</string>
-    <string name="see_more">Ещё</string>
-    <string name="close_dialog_window">Закрыть</string>
+    <string name="show_seasons">Сезоны</string>
+    <string name="biography">Боиграфия</string>
+    <string name="placeholder_rating">--</string>
+    <string name="tvdb_range">/10</string>
+    <string name="no_rating">н/и</string>
+    <string name="show_isalive">Продолжается</string>
+    <string name="show_isnotalive">Закончилось</string>
+    <string name="show_unknown">В производстве</string>
+    <string name="tv_season_specials">Специальные выпуски</string>
+    <string name="tv_season_number">Сезон %1$d</string>
+    <string name="season_air_date">Дата выхода в эфир: %1$s</string>
 
     <!-- Tmdb ratings -->
     <plurals name="votes">
@@ -77,9 +74,115 @@
         <item quantity="other">%d оценки</item>
     </plurals>
 
-    <string name="action_item_added_to_watched">&lt;b>%s&lt;/b> &lt;em>добавлено в Просмотрено&lt;/em></string>
+    <!-- Menu items -->
+    <string name="menu_refresh">Обновить</string>
+    <string name="menu_reload">Обновить</string>
+    <string name="menu_search">Поиск</string>
+    <string name="menu_movie_websearch">Web search</string>
 
+    <string name="menu_item_watchable_add_to_watched">Добавить в библиотеку</string>
+    <string name="menu_item_show_is_watched">В библиотеке</string>
+    <string name="menu_item_movie_is_watched">В библиотеке</string>
+
+    <string name="drawer_open_content_desc">Меню открыто</string>
+    <string name="drawer_closed_content_desc">Меню закрыто</string>
+
+    <!-- Action -->
+    <string name="share_tv_show">Поделиться ТВ-шоу</string>
+    <string name="share_movie">Поделиться фильмом</string>
+    <string name="share_checkout">Check out %s</string>
+    <string name="label_back">Назад</string>
+    <string name="label_cancel">Отменить</string>
+    <string name="web_search">Поиск</string>
+    <string name="explore">Исследовать</string>
+
+    <string name="error_network">Ошибка сети</string>
+    <string name="error_unknown">Неизвестная ошибка ¯\_(ツ)_/¯</string>
+    <string name="error_movie_not_found_tmdb">Фильм не найден на TMDb</string>
+    <string name="search_hint">Поиск Material Movies</string>
+
+    <string name="movie_title_year">%1$s (%2$d)</string>
+    <string name="movie_rating_votes">%1$d%% - %2$d голосов</string>
+    <string name="movie_release_date">Дата выхода: %1$s</string>
+
+    <string name="category_watched">Ваша библиотека</string>
+    <string name="category_movies">Фильмы</string>
+    <string name="category_shows">Сериалы</string>
+    <string name="category_settings">Настройки</string>
+    <string name="category_mail">Обратная связь</string>
+
+    <string name="person_born_date">Дата рождения: %1$s</string>
+    <string name="person_born_date_with_loc">Дата рождения: %1$s в %2$s</string>
+    <string name="person_age">Возраст: %1$s</string>
+    <string name="person_death_date">Дата смерти: %1$s, в возрасте %2$s</string>
+
+    <string name="settings_title">Настройки</string>
+    <string name="see_more">Ещё</string>
+
+    <string name="activity_continue_with_caret">Продолжить  ❯</string>
+
+    <string name="unknown_default">Неизвестно</string>
+
+    <!-- Appearance settings -->
+    <string name="pref_appearance">Внешний вид</string>
+    <string name="pref_theme">Тема</string>
+    <string name="pref_media_download">Авто загрузка медиа</string>
+
+    <!-- Settings -->
+    <string name="close_dialog_window">Закрыть</string>
+    <string name="prefs_category_basic">Базовые настройки</string>
+    <string name="prefs_category_cache">Настройки кэша</string>
+    <string name="prefs_category_about">Доп. информация</string>
+    <string name="pref_updatewifionly">Изображения только через Wi-Fi</string>
+    <string name="pref_updatewifionlysummary">Для економии трафика, данные не будут загражаться через моб. интернет</string>
+    <string name="pref_animations">Включить анимации</string>
+    <string name="pref_animations_summary">Работает на Android 5.0 и выше</string>
+
+    <!-- Help -->
+    <string name="feedback">Отправить отзыв</string>
+
+
+    <!-- Other advanced settings -->
+    <string name="clear_cache">Очистить кэш</string>
+    <string name="clear_cache_summary">Удалить все кэшированные изображения с устройства</string>
+
+    <string name="local_database">Локальная база данных</string>
+    <string name="local_database_summary">Очистка базы данных приведет к удалению данных из вашей библиотеки.</string>
+
+    <string name="build_version">Версия сборки</string>
+    <string name="creator">Разработчик</string>
+    <string name="creator_context">Alex Parfenjuk</string>
+    <string name="powered_tmdb">Powered by TMDB</string>
+    <string name="powered_tmdb_content">Этот продукт использует API TMDb.</string>
+    <string name="show_licenses">Просмотреть лицензии</string>
+    <string name="show_licenses_summary">Используемое ПО</string>
+    <string name="about_licenses_title">Open Source Licenses</string>
+    <string name="ok">OK</string>
+
+
+
+    <!-- Status messages -->
+    <string name="loading_more">Загружаем больше…</string>
+    <string name="error_no_connection">Вы не в сети</string>
+    <string name="error_no_connection_body">Подключитесь к Интернету и повторите попытку.</string>
+    <string name="offline">Подключитесь к Интернету, а затем повторите попытку.</string>
+    <string name="offline_no_wifi">Подключитесь к Wi-Fi или другой сети, затем повторите попытку.</string>
+    <string name="app_not_available">Нет доступных приложений.</string>
+
+    <string name="empty_library_title">Ваша библиотека пуста</string>
+    <string name="empty_library_body">Исследуйте популярные фильмы и Тв-шоу, чтобы найти те, которые вы смотрели!</string>
+
+     <string name="empty_network_error">%1$s невозможно выполнить из-за ошибки сети. Проверьте подключение к Интернету и попробуйте ещё раз.</string>
+
+    <string name="action_item_added_to_watched">&lt;b>%s&lt;/b> &lt;em>добавлено в Просмотрено&lt;/em></string>
+    <string name="action_cleared_watched">База данных успешно очищена!</string>
+
+    <string name="nav_drawer_user_header_app_label">Material Movies</string>
     <string name="nav_drawer_user_header_movies_label">Просмотрено фильмов</string>
     <string name="nav_drawer_user_header_shows_label">Просмотрено сериалов</string>
+
+
+
+
 
    </resources>

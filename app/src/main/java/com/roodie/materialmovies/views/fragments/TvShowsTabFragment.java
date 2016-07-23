@@ -12,6 +12,7 @@ import com.roodie.materialmovies.util.StringUtils;
 import com.roodie.materialmovies.views.fragments.base.BaseTabFragment;
 import com.roodie.model.Display;
 import com.roodie.model.network.NetworkError;
+import com.roodie.model.util.MoviesCollections;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +90,7 @@ public class TvShowsTabFragment extends BaseTabFragment<BaseTabFragment.TabPager
 
     @Override
     protected String getTabTitle(int position) {
-        if (mTabs != null) {
+        if (!MoviesCollections.isEmpty(mTabs)) {
             return getResources().getString(StringUtils.getShowsStringResId(mTabs.get(position)));
         }
         return null;

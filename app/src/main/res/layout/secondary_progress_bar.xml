@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:gravity="end|center"
+    android:gravity="center"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/md_content_padding_top"
     android:paddingLeft="@dimen/md_dialog_frame_margin"
@@ -16,10 +16,11 @@
         android:indeterminate="true" />
 
     <com.roodie.materialmovies.views.custom_views.MMoviesTextView
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="start"
+        android:gravity="center_horizontal"
         style="@style/Widget.MMovies.TextAppearance.PrimaryText"
-        android:text="Loading more"
-        android:paddingLeft="16.0dip" />
+        android:text="@string/loading_more"
+        android:paddingLeft="16.0dip"
+        />
 </LinearLayout>

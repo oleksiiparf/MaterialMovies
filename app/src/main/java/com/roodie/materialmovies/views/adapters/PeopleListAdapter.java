@@ -1,10 +1,9 @@
 package com.roodie.materialmovies.views.adapters;
 
-import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
+import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MMoviesTextView;
@@ -16,45 +15,45 @@ import java.util.List;
 /**
  * Created by Roodie on 22.03.2016.
  */
-public class PeopleListAdapter extends FooterViewListAdapter<List<PersonWrapper>, PeopleListAdapter.PeopleListViewHolder> {
+public class PeopleListAdapter extends easyRegularAdapter<PersonWrapper, PeopleListAdapter.PeopleListViewHolder> {
 
     private RecyclerItemClickListener mClickListener;
 
-    public PeopleListAdapter(Context context, RecyclerItemClickListener mClickListener) {
-        super(context);
+    public PeopleListAdapter(List<PersonWrapper> list, RecyclerItemClickListener mClickListener) {
+        super(list);
         this.mClickListener = mClickListener;
     }
 
     @Override
-    public PeopleListViewHolder onCreateViewHolder(ViewGroup parent) {
-        View rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_2line, parent, false);
-        return new PeopleListViewHolder(rowView, true);
+    protected int getNormalLayoutResId() {
+        return R.layout.item_list_2line;
     }
 
     @Override
-    public PeopleListViewHolder getViewHolder(View view) {
+    protected PeopleListViewHolder newViewHolder(View view) {
+        return new PeopleListViewHolder(view, true);
+    }
+
+    @Override
+    public PeopleListViewHolder newHeaderHolder(View view) {
         return new PeopleListViewHolder(view, false);
     }
 
     @Override
-    public void onBindViewHolder(PeopleListViewHolder holder, int position) {
-        if (position < getTotalItemsCount() && position < getItemCount() ) {
+    protected void withBindHolder(PeopleListViewHolder holder, PersonWrapper data, int position) {
 
-            final PersonWrapper item = items.get(position);
-
-            holder.name.setText(item.getName());
-            holder.poster.setAvatarMode(true);
-            holder.poster.loadProfile(item);
-        }
+        holder.name.setText(data.getName());
+        holder.poster.setAvatarMode(true);
+        holder.poster.loadProfile(data);
     }
 
-    public class PeopleListViewHolder extends ListViewHolder implements View.OnClickListener {
+    public class PeopleListViewHolder extends UltimateRecyclerviewViewHolder implements View.OnClickListener {
         View container;
         MMoviesTextView name;
         MMoviesImageView poster;
 
         public PeopleListViewHolder(View itemView, boolean isItem) {
-            super(itemView, isItem);
+            super(itemView);
 
             if (isItem) {
                 container = itemView.findViewById(R.id.container);

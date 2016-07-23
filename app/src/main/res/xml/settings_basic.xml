@@ -11,8 +11,7 @@
     <CheckBoxPreference
         android:defaultValue="True"
         android:key="com.roodie.materialmovies.animations"
-        android:title="@string/pref_animations"
-        android:summary="@string/pref_animations_summary" />
+        android:title="@string/pref_animations" />
         />
     </PreferenceCategory>
 

@@ -1,9 +1,10 @@
 package com.roodie.materialmovies.views.fragments;
 
+import android.annotation.TargetApi;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.common.base.Preconditions;
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.PersonPresenter;
 import com.roodie.materialmovies.mvp.views.PersonView;
@@ -27,13 +30,11 @@ import com.roodie.materialmovies.views.activities.SettingsActivity;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MovieDetailCardLayout;
 import com.roodie.materialmovies.views.custom_views.ViewRecycler;
-import com.roodie.materialmovies.views.custom_views.recyclerview.BaseRecyclerLayout;
 import com.roodie.materialmovies.views.fragments.base.BaseAnimationFragment;
 import com.roodie.model.Display;
 import com.roodie.model.entities.PersonCreditWrapper;
 import com.roodie.model.entities.PersonWrapper;
 import com.roodie.model.util.MoviesCollections;
-import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ import java.util.List;
  * Created by Roodie on 28.06.2015.
  */
 
-public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, BaseRecyclerLayout> implements PersonView {
+public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper> implements PersonView {
 
     private static final String LOG_TAG = PersonDetailFragment.class.getSimpleName();
     private static final String KEY_PERSON_ID = "person_id";
@@ -60,18 +61,12 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
     private PersonWrapper mPerson;
     private final ArrayList<PersonItems> mItems = new ArrayList<>();
 
-    private TextView personName;
-
     private DetailAdapter mAdapter;
     private CastCreditsAdapter mCastCreditAdapter;
     private CrewCreditsAdapter mCrewCreditAdapter;
 
     @Override
     protected void configureEnterTransition() {
-        if (mPosterImageView != null) {
-            ViewCompat.setTransitionName(mPosterImageView, getActivity().getString(R.string.transition_poster));
-            Picasso.with(getActivity().getApplicationContext()).load(getImageUrl()).into(mPosterImageView);
-        }
     }
 
     public static PersonDetailFragment newInstance(String personId) {
@@ -121,32 +116,30 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         //set actionbar up navigation
         final Display display = getDisplay();
         if (display != null) {
             display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
         }
 
-        personName = (TextView) view.findViewById(R.id.textview_person_name);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                @TargetApi(21)
+                public boolean onPreDraw() {
+                    view.getViewTreeObserver().removeOnPreDrawListener(this);
+                    getActivity().startPostponedEnterTransition();
+                    return true;
+                }
+            });
+        }
 
-        mPresenter.attachView(this);
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public String getImageUrl() {
-        return getArguments().getString(KEY_IMAGE_URL);
-    }
-
-    @Override
-    protected void attachUiToPresenter() {
-        mPresenter.attachUiByParameter(this, getRequestParameter());
-        Display display = getDisplay();
-        if ( display != null) {
-            display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
-            display.setActionBarTitle(mPresenter.getUiTitle(getRequestParameter()));
-        }
+    public String getImagePosition() {
+        return getArguments().getString(KEY_IMAGE_POSITION);
     }
 
     @Override
@@ -172,28 +165,34 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
         super.onPrepareOptionsMenu(menu);
     }
 
-    public int[] getStartingLocation() {
-        return getArguments().getIntArray(KEY_REVEAL_START_LOCATION);
+    private void animatePoster() {
+        mPosterImageView.setScaleY(0);
+        mPosterImageView.setScaleX(0);
+        mPosterImageView.animate()
+                .scaleY(1).scaleX(1)
+                .setDuration(200)
+                .setStartDelay(SCALE_DELAY)
+                .start();
+        //mPosterImageView.setTranslationY(-mPosterImageView.getHeight());
+        //mPosterImageView.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(getInterpolator());
     }
-
-
-    private enum PersonItems  {
-        HEADER,
-        TITLE,                        //(R.layout.item_person_detail_title)
-        BIOGRAPHY,                    //(R.layout.item_movie_detail_summary)
-        CREDITS_CAST,                 //(R.layout.item_movie_detail_generic_card),
-        CREDITS_CREW                  //(R.layout.item_movie_detail_generic_card);
-    }
-
 
     protected DetailAdapter createRecyclerAdapter(List<PersonItems> items) {
         return new DetailAdapter(items);
     }
 
     /**
-     * PersonView
+     * PersonDetailView
      */
-
+    @Override
+    protected void attachUiToPresenter() {
+        mPresenter.attachUiByParameter(this, getRequestParameter());
+        Display display = getDisplay();
+        if ( display != null) {
+            display.showUpNavigation(getQueryType() != null && getQueryType().showUpNavigation());
+            display.setActionBarTitle(mPresenter.getUiTitle(getRequestParameter()));
+        }
+    }
 
     @Override
     public void updateDisplaySubtitle(String subtitle) {
@@ -206,19 +205,9 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
         getActivity().invalidateOptionsMenu();
         mAdapter = populateUi();
         getRecyclerView().setAdapter(mAdapter);
-        if (mPosterImageView != null && personName != null) {
+        if (mPosterImageView != null) {
             mPosterImageView.setVisibility(View.VISIBLE);
-            personName.setVisibility(View.VISIBLE);
-            animatePoster();
         }
-    }
-
-    private void animatePoster() {
-        mPosterImageView.setTranslationY(-mPosterImageView.getHeight());
-        personName.setAlpha(0);
-
-        mPosterImageView.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(getInterpolator());
-        personName.animate().alpha(1).setDuration(200).setStartDelay(400).setInterpolator(getInterpolator()).start();
     }
 
     @Override
@@ -246,8 +235,8 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
     @Override
     public void showPersonCreditsDialog(MMoviesQueryType queryType) {
         Preconditions.checkNotNull(queryType, "Query type cannot be null");
-        ListView list = new ListView(mContext);
-        String mTitle = "";
+        ListView list = new ListView(getActivity());
+        String mTitle = null;
         boolean wrapInScrollView = false;
 
         switch (queryType) {
@@ -271,13 +260,13 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
     public void showLoadingProgress(boolean visible) {
     }
 
-    public String getRequestParameter() {
-        return getArguments().getString(KEY_PERSON_ID);
-    }
-
     @Override
     public MMoviesQueryType getQueryType() {
         return MMoviesQueryType.PERSON_DETAIL;
+    }
+
+    public String getRequestParameter() {
+        return getArguments().getString(KEY_PERSON_ID);
     }
 
     private DetailAdapter populateUi() {
@@ -286,14 +275,21 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
         }
 
         if (mPosterImageView != null) {
-            mPosterImageView.loadProfile(mPerson);
-        }
-        if (personName != null) {
-            personName.setText(mPerson.getName());
+            mPosterImageView.loadProfile(mPerson, new MMoviesImageView.OnLoadedListener() {
+                @Override
+                public void onSuccess(MMoviesImageView imageView, Bitmap bitmap, String imageUrl) {
+                  animatePoster();
+                }
+
+                @Override
+                public void onError(MMoviesImageView imageView) {
+
+                }
+            });
         }
         mItems.clear();
 
-        if (mPosterImageView == null && personName == null) {
+        if (mPosterImageView == null) {
             mItems.add(PersonItems.HEADER);
         }
 
@@ -313,6 +309,14 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
         }
 
         return createRecyclerAdapter(mItems);
+    }
+
+    private enum PersonItems  {
+        HEADER,
+        TITLE,                        //(R.layout.item_person_detail_title)
+        BIOGRAPHY,                    //(R.layout.item_movie_detail_summary)
+        CREDITS_CAST,                 //(R.layout.item_movie_detail_generic_card),
+        CREDITS_CREW                  //(R.layout.item_movie_detail_generic_card);
     }
 
     /**
@@ -376,7 +380,7 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
             return 1;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends UltimateRecyclerviewViewHolder {
 
             MMoviesImageView personImage;
 
@@ -431,11 +435,11 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
                 holder.subtitle2.setText(
                         getString(R.string.person_death_date,
                                 mMediumDateFormatter.format(mPerson.getDateOfDeath()),
-                                mPerson.getAge())
+                                mPerson.getAge().toString())
                 );
                 holder.subtitle2.setVisibility(View.VISIBLE);
             } else if (mPerson.getDateOfBirth() != null) {
-                holder.subtitle2.setText(getString(R.string.person_age, mPerson.getAge()));
+                holder.subtitle2.setText(getString(R.string.person_age, mPerson.getAge().toString()));
                 holder.subtitle2.setVisibility(View.VISIBLE);
             } else {
                 holder.subtitle2.setVisibility(View.GONE);
@@ -447,17 +451,16 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
             return 1;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends UltimateRecyclerviewViewHolder {
 
 
-            View container;
+
             TextView subtitle1;
             TextView subtitle2;
 
             public ViewHolder(View view) {
                 super(view);
 
-                container = view.findViewById(R.id.movie_detail_card_details);
                 subtitle1 = (TextView) view.findViewById(R.id.textview_subtitle_1);
                 subtitle2 = (TextView) view.findViewById(R.id.textview_subtitle_2);
             }
@@ -492,7 +495,7 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
             return 1;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends UltimateRecyclerviewViewHolder {
 
             TextView biography;
 
@@ -560,7 +563,7 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
             return 1;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends UltimateRecyclerviewViewHolder {
 
             ViewGroup layout;
 
@@ -628,7 +631,7 @@ public class PersonDetailFragment extends BaseAnimationFragment<PersonWrapper, B
             return 1;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends UltimateRecyclerviewViewHolder {
 
             ViewGroup layout;
 

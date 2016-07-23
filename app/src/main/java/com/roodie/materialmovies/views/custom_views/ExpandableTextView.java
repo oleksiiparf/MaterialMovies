@@ -23,7 +23,9 @@ import android.view.View;
 
 import com.roodie.materialmovies.R;
 
-
+/**
+ * Implementation of {@link MMoviesTextView} with expanding feature by changing maxLines.
+ */
 public class ExpandableTextView extends MMoviesTextView implements View.OnClickListener {
 
     private int mCollapsedMaxLines;

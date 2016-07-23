@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Themes -->
-    <string name="theme_light">Light</string>
-    <string name="theme_dark">Dark</string>
-    <string name="theme_green">Green</string>
-
     <!-- Theme variants -->
     <string-array name="themeSelection">
         <item>@string/theme_light</item>
         <item>@string/theme_dark</item>
-        <item>@string/theme_green</item>
+     <!--   <item>@string/theme_green</item>-->
     </string-array>
-    <string-array name="themeSelectionData">
+    <string-array name="themeSelectionData" translatable="false">
         <item>0</item>
         <item>1</item>
-        <item>2</item>
     </string-array>
 
 </resources>

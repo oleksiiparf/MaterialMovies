@@ -7,7 +7,7 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.arellomobile.mvp.MvpDelegate;
@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Roodie on 27.06.2015.
  */
-public abstract class BaseActivity extends ActionBarActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     protected Display mDisplay;
 
@@ -36,8 +36,8 @@ public abstract class BaseActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         this.appliedTheme = getThemeResId();
         setTheme(this.appliedTheme);
-
         super.onCreate(savedInstanceState);
+
         getMvpDelegate().onCreate(savedInstanceState);
         setContentView(getContentViewLayoutId());
         ButterKnife.inject(this);

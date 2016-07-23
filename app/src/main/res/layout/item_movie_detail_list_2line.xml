@@ -7,7 +7,9 @@
     android:paddingTop="@dimen/spacing_minor"
     android:paddingBottom="@dimen/spacing_minor"
     android:paddingLeft="@dimen/spacing_major"
-    android:paddingRight="@dimen/spacing_major">
+    android:paddingRight="@dimen/spacing_major"
+    android:clipToPadding="false"
+    android:foreground="?android:selectableItemBackground">
 
     <com.roodie.materialmovies.views.custom_views.MMoviesImageView
           android:id="@+id/imageview_poster"

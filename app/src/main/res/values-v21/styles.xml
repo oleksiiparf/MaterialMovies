@@ -10,4 +10,6 @@
 
     <style name="Widget.MMovies.RatingBar" parent="android:Widget.Material.Light.RatingBar" />
 
+    <style name="Base.Widget.AppCompat.Button" parent="@android:style/Widget.Material.Button" />
+
 </resources>

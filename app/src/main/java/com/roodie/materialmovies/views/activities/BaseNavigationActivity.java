@@ -2,7 +2,9 @@ package com.roodie.materialmovies.views.activities;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.NavigationView;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
@@ -11,6 +13,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.roodie.materialmovies.R;
+import com.roodie.materialmovies.util.EspressoIdlingResource;
+import com.roodie.materialmovies.util.MMoviesPreferences;
+import com.roodie.materialmovies.util.UiUtils;
 import com.roodie.model.Display;
 
 /**
@@ -28,12 +33,16 @@ public abstract class BaseNavigationActivity extends BaseActivity  {
 
     private int checkedMenuItem;
 
-
-
+    private boolean animateActivityManually = false;
 
 
     public BaseNavigationActivity() {
         checkedMenuItem = R.id.menu_movies;
+    }
+
+    @VisibleForTesting
+    public IdlingResource getCountingIdlingResource() {
+        return EspressoIdlingResource.getIdlingResource();
     }
 
     @Override
@@ -54,9 +63,11 @@ public abstract class BaseNavigationActivity extends BaseActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            this.checkedMenuItem = savedInstanceState.getInt("checked_menu_item", R.id.menu_movies);
-        }
+       /* if (savedInstanceState != null) {
+            FileLog.d("activ", "OnCreate(); ckeckedMenu =" + this.checkedMenuItem);
+            this.checkedMenuItem = savedInstanceState.getInt("_checked_menu_item", R.id.menu_movies);
+            this.animateActivityManually = savedInstanceState.getBoolean("_animate_manually");
+        }*/
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -71,15 +82,35 @@ public abstract class BaseNavigationActivity extends BaseActivity  {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        onEnterSlideAnimate();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
-        outState.putInt("checked_menu_item", this.checkedMenuItem);
+        outState.putInt("_checked_menu_item", this.checkedMenuItem);
+        outState.putBoolean("_animate_manually", this.animateActivityManually);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        this.checkedMenuItem = savedInstanceState.getInt("checked_menu_item", R.id.menu_movies);
+        this.checkedMenuItem = savedInstanceState.getInt("_checked_menu_item", R.id.menu_movies);
+        this.animateActivityManually = savedInstanceState.getBoolean("_animate_manually");
+    }
+
+    public void animateManually(boolean animate) {
+        this.animateActivityManually = animate;
+    }
+
+
+    public void setMoviesItemNavigationView() {
+        if (mNavigationView != null) {
+            this.mNavigationView.setCheckedItem(R.id.menu_movies);
+            this.mNavigationView.getMenu().performIdentifierAction(R.id.menu_movies, 0);
+        }
     }
 
     private void setupDrawerContent() {
@@ -153,6 +184,12 @@ public abstract class BaseNavigationActivity extends BaseActivity  {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        UiUtils.getInstance().applyFontToMenu(menu, this);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -160,6 +197,7 @@ public abstract class BaseNavigationActivity extends BaseActivity  {
                     return true;
                 }
                 if (navigateUp()) {
+                    onExitSlideAnimate();
                     return true;
                 }
                 break;
@@ -167,6 +205,24 @@ public abstract class BaseNavigationActivity extends BaseActivity  {
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        onExitSlideAnimate();
+    }
+
+    public void onExitSlideAnimate() {
+        if (!animateActivityManually && MMoviesPreferences.areAnimationsEnabled(this)) {
+            this.overridePendingTransition(0, R.anim.slide_out_right);
+        }
+    }
+
+    public void onEnterSlideAnimate() {
+        if (!animateActivityManually && MMoviesPreferences.areAnimationsEnabled(this)) {
+            this.overridePendingTransition(R.anim.slide_in_right, 0);
+        }
     }
 
     public boolean onHomeButtonPressed() {

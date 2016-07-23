@@ -94,7 +94,6 @@
                 android:clickable="true"
                 style="@style/Widget.MMovies.Movie.FAB" />
 
-
         </android.support.design.widget.CoordinatorLayout>
 
     </FrameLayout>

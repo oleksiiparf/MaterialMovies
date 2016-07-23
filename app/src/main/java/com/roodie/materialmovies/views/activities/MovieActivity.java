@@ -47,8 +47,8 @@ public class MovieActivity extends BaseNavigationActivity {
     @Override
     protected void handleIntent(Intent intent, Display display) {
         if (!display.hasMainFragment()) {
-            if (intent.getStringExtra(Display.PARAM_IMAGE) != null) {
-                currentFragment = display.showMovieDetailFragmentBySharedElements(intent.getStringExtra(Display.PARAM_ID), intent.getStringExtra(Display.PARAM_IMAGE));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && MMoviesPreferences.areAnimationsEnabled(this)) {
+                currentFragment = display.showMovieDetailFragmentBySharedElements(intent.getStringExtra(Display.PARAM_ID));
             } else {
                 display.showMovieDetailFragment(intent.getStringExtra(Display.PARAM_ID));
             }
@@ -59,7 +59,10 @@ public class MovieActivity extends BaseNavigationActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && MMoviesPreferences.areAnimationsEnabled(this)) {
+            animateManually(true);
             setupWindowAnimations();
+        } else {
+            animateManually(false);
         }
     }
 
@@ -83,10 +86,6 @@ public class MovieActivity extends BaseNavigationActivity {
 
             @Override
             public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
-                FileLog.d("animations", "MovieActivity: onSharedElementEnd");
-                if (!mIsReturning) {
-                    getWindow().setEnterTransition(makeReturnTransition());
-                }
             }
 
             private View getSharedElement(List<View> sharedElements) {
@@ -104,6 +103,7 @@ public class MovieActivity extends BaseNavigationActivity {
 
     @TargetApi(21)
     private void setupFinishAnimations() {
+        FileLog.d("animations", "setupFinishAnimations()");
         getWindow().setReturnTransition(makeReturnTransition());
     }
 
@@ -198,11 +198,13 @@ public class MovieActivity extends BaseNavigationActivity {
     public void finishAfterTransition() {
         mIsReturning = true;
         if (currentFragment == null || !MMoviesPreferences.areAnimationsEnabled(this)) {
+            animateManually(false);
             finish();
         } else {
             setupFinishAnimations();
             super.finishAfterTransition();
         }
     }
+
 
 }

@@ -12,7 +12,7 @@ import com.roodie.materialmovies.util.FontManager;
 import javax.inject.Inject;
 
 /**
- * Created by Roodie on 02.04.2016.
+ * Implementation of {@link Toolbar} with customizable font
  */
 public class MMoviesToolbar extends Toolbar {
 

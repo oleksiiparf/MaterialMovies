@@ -120,7 +120,7 @@
                     android:background="?attr/selectableItemBackground"
                     android:textAppearance="@style/TextAppearance.AppCompat.Button"
                     android:textColor="?attr/colorAccent"
-                    android:text="Trailer" />
+                    android:text="@string/trailer_movie" />
             </LinearLayout>
         </LinearLayout>
 

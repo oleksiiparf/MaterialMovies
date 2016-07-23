@@ -62,6 +62,11 @@ public class ListWatchedPresenter extends MvpPresenter<WatchedListView> implemen
     }
 
     @Override
+    public String getUiSubtitle(UiView.MMoviesQueryType queryType) {
+        return null;
+    }
+
+    @Override
     public void populateUi(WatchedListView view, UiView.MMoviesQueryType queryType) {
         FileLog.d("watched", "Populate UI by query = " + queryType);
         List<Watchable> items = null;
@@ -73,8 +78,11 @@ public class ListWatchedPresenter extends MvpPresenter<WatchedListView> implemen
         }
 
         view.updateDisplayTitle(getUiTitle(UiView.MMoviesQueryType.WATCHED));
-
-        view.setData(items);
+        if (items.size() == 0) {
+            view.showError(null);
+        } else {
+            view.setData(items);
+        }
     }
 
     @Override
@@ -122,7 +130,7 @@ public class ListWatchedPresenter extends MvpPresenter<WatchedListView> implemen
     }
 
     @Subscribe
-    public void onWatchedChanged(MoviesState.WatchedChangeEvent event) {
+    public void onWatchedChanged(MoviesState.WatchedChangedEvent event) {
         populateUi(getViewState(), UiView.MMoviesQueryType.WATCHED);
     }
 
