@@ -43,11 +43,10 @@ public class TvShowPresenter extends MvpPresenter<TvShowWatchedView> {
 
     public void toggleShowWatched(ShowWrapper item, int position) {
         Preconditions.checkNotNull(item, "show cannot be null");
-        final int callingId = position;
         if (item.isWatched()) {
-            markShowUnseen(callingId, item);
+            markShowUnseen(position, item);
         } else {
-            markShowSeen(callingId, item);
+            markShowSeen(position, item);
         }
     }
 

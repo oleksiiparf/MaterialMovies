@@ -250,7 +250,7 @@
     </declare-styleable>
 
     <declare-styleable name="MMoviesRecyclerView">
-        <attr name="recyclerAutofit" format="boolean"/>
+        <attr name="recyclerSliding" format="boolean"/>
     </declare-styleable>
 
 

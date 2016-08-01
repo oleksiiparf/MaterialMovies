@@ -4,8 +4,8 @@
         android:fromXDelta="0"
         android:toXDelta="100%"
         android:interpolator="@android:anim/decelerate_interpolator"
-        android:duration="@android:integer/config_shortAnimTime"/>
+        android:duration="@android:integer/config_mediumAnimTime"/>
     <alpha android:fromAlpha="1.0"
         android:toAlpha="0.0"
-        android:duration="@android:integer/config_shortAnimTime" />
+        android:duration="@android:integer/config_mediumAnimTime" />
 </set>

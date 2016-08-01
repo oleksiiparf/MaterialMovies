@@ -149,7 +149,7 @@ public class WatchlistActivityTest{
     public void testClickOnLibraryNavigationItem_ShowLibraryScreen() {
         //Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .check(matches(isClosed(Gravity.START))) // Left Drawer should be closed.
                 .perform(open()); // Open Drawer
 
         // Start library screen.
@@ -168,7 +168,7 @@ public class WatchlistActivityTest{
     public void testClickOnAndroidHomeIcon_OpensNavigation() {
         // Check that left drawer is closed at startup
         onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT))); // Left Drawer should be closed.
+                .check(matches(isClosed(Gravity.START))); // Left Drawer should be closed.
 
         // Open Drawer
         String navigateUpDesc = mWatchlistActivityTestRule.getActivity()
@@ -178,7 +178,7 @@ public class WatchlistActivityTest{
 
         // Check if drawer is open
         onView(withId(R.id.drawer_layout))
-                .check(matches(isOpen(Gravity.LEFT))); // Left drawer is open open.
+                .check(matches(isOpen(Gravity.START))); // Left drawer is open open.
     }
 
     @Test
@@ -188,7 +188,7 @@ public class WatchlistActivityTest{
 
         //Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .check(matches(isClosed(Gravity.START))) // Left Drawer should be closed.
                 .perform(open()); // Open Drawer
 
         // Start library screen.

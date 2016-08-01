@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.util.EspressoIdlingResource;
-import com.roodie.materialmovies.util.MMoviesPreferences;
 import com.roodie.materialmovies.util.UiUtils;
 import com.roodie.model.Display;
 
@@ -25,7 +24,6 @@ import com.roodie.model.Display;
 
 public abstract class BaseNavigationActivity extends BaseActivity  {
 
-   // @Bind({R.id.drawer_layout})
     protected DrawerLayout mDrawerLayout;
 
     //@Bind({R.id.navigation_view})
@@ -37,7 +35,7 @@ public abstract class BaseNavigationActivity extends BaseActivity  {
 
 
     public BaseNavigationActivity() {
-        checkedMenuItem = R.id.menu_movies;
+        //checkedMenuItem = R.id.menu_movies;
     }
 
     @VisibleForTesting
@@ -63,17 +61,14 @@ public abstract class BaseNavigationActivity extends BaseActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       /* if (savedInstanceState != null) {
-            FileLog.d("activ", "OnCreate(); ckeckedMenu =" + this.checkedMenuItem);
-            this.checkedMenuItem = savedInstanceState.getInt("_checked_menu_item", R.id.menu_movies);
-            this.animateActivityManually = savedInstanceState.getBoolean("_animate_manually");
-        }*/
+        if (savedInstanceState != null) {
+            this.checkedMenuItem = savedInstanceState.getInt("_checked_menu_item");
+        } else
+            checkedMenuItem = R.id.menu_movies;
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         getDisplay().setDrawerLayout(mDrawerLayout);
-
-       mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         if (mNavigationView != null) {
             setupDrawerContent();
@@ -97,7 +92,7 @@ public abstract class BaseNavigationActivity extends BaseActivity  {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        this.checkedMenuItem = savedInstanceState.getInt("_checked_menu_item", R.id.menu_movies);
+        //this.checkedMenuItem = savedInstanceState.getInt("_checked_menu_item", R.id.menu_movies);
         this.animateActivityManually = savedInstanceState.getBoolean("_animate_manually");
     }
 
@@ -213,14 +208,14 @@ public abstract class BaseNavigationActivity extends BaseActivity  {
         onExitSlideAnimate();
     }
 
-    public void onExitSlideAnimate() {
-        if (!animateActivityManually && MMoviesPreferences.areAnimationsEnabled(this)) {
+    private void onExitSlideAnimate() {
+        if (!animateActivityManually /*&& MMoviesPreferences.areAnimationsEnabled(this)*/) {
             this.overridePendingTransition(0, R.anim.slide_out_right);
         }
     }
 
-    public void onEnterSlideAnimate() {
-        if (!animateActivityManually && MMoviesPreferences.areAnimationsEnabled(this)) {
+    private void onEnterSlideAnimate() {
+        if (!animateActivityManually /*&& MMoviesPreferences.areAnimationsEnabled(this)*/) {
             this.overridePendingTransition(R.anim.slide_in_right, 0);
         }
     }

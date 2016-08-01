@@ -10,7 +10,7 @@
         android:layout_height="fill_parent"
         android:fadeScrollbars="true"
         android:clipToPadding="false"
-        app:recyclerAutofit="true"
+        app:recyclerSliding="true"
         android:layout_marginLeft="@dimen/spacing_minor"
         android:layout_marginRight="@dimen/spacing_minor"
         app:recyclerviewScrollbars="vertical"

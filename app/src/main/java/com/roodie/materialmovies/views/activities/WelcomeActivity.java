@@ -1,7 +1,6 @@
 package com.roodie.materialmovies.views.activities;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -60,7 +59,7 @@ public class WelcomeActivity extends BaseActivity {
         MMoviesApp.from(this).inject(this);
         super.onCreate(savedInstanceState);
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         WelcomePagerAdapter welcomePagerAdapter = new WelcomePagerAdapter();
         this.mViewPager.setAdapter(welcomePagerAdapter);
         this.mViewPager.setOffscreenPageLimit(WELCOME_ACTIVITY_PAGER_SIZE);

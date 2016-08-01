@@ -81,19 +81,12 @@ public class MMoviesDisplay implements Display {
     @Override
     public boolean hasSearchFragment() {
         Fragment f = mActivity.getSupportFragmentManager().findFragmentById(R.id.fragment_main);
-        if (f instanceof SearchFragment) {
-            return true;
-        }
-        return false;
+        return f instanceof SearchFragment;
     }
 
     @Override
     public void setDrawerLayout(DrawerLayout layout){
         this.mDrawerLayout = layout;
-
-      /*  if (mDrawerLayout != null) {
-            mDrawerLayout.setStatusBarBackgroundColor(mColorPrimaryDark);
-        }*/
     }
 
     private void showFragment(Fragment fragment) {
@@ -182,12 +175,11 @@ public class MMoviesDisplay implements Display {
     public void startMovieDetailActivityBySharedElements(String movieId, View view, String imagePosition) {
         ActivityOptions options =
                 ActivityOptions.makeSceneTransitionAnimation(mActivity,
-                        Pair.create(view, mActivity.getString(R.string.transition_poster) + view.getTag()),
+                        Pair.create(view, mActivity.getString(R.string.transition_poster)),
                         Pair.create(view, mActivity.getString(R.string.transition_poster_background)));
 
         Intent intent = new Intent(mActivity, MovieActivity.class);
         intent.putExtra(PARAM_ID, movieId);
-        intent.putExtra(PARAM_POSITION, imagePosition);
         startActivity(intent, options.toBundle());
     }
 

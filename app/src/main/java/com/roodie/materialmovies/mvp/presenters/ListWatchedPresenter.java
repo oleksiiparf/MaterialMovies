@@ -78,6 +78,7 @@ public class ListWatchedPresenter extends MvpPresenter<WatchedListView> implemen
         }
 
         view.updateDisplayTitle(getUiTitle(UiView.MMoviesQueryType.WATCHED));
+        assert items != null;
         if (items.size() == 0) {
             view.showError(null);
         } else {

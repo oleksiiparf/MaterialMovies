@@ -8,11 +8,12 @@ import android.view.View;
 import android.widget.PopupMenu;
 
 import com.google.common.base.Preconditions;
-import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
+import com.marshalchen.ultimaterecyclerview.UltimateGridLayoutAdapter;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.ListMoviesView;
 import com.roodie.materialmovies.util.MMoviesPreferences;
 import com.roodie.materialmovies.views.adapters.MoviesGridAdapter;
+import com.roodie.materialmovies.views.custom_views.recyclerview.AutofitGridLayoutManager;
 import com.roodie.materialmovies.views.custom_views.recyclerview.RecyclerInsetsDecoration;
 import com.roodie.materialmovies.views.listeners.MovieMenuItemClickListener;
 import com.roodie.model.Display;
@@ -35,6 +36,8 @@ public abstract class MoviesGridFragment extends BaseGridFragment<MoviesGridAdap
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        int width = (int)getActivity().getResources().getDimension(R.dimen.movie_grid_item_width);
+        getRecyclerView().setLayoutManager(new AutofitGridLayoutManager(getActivity(), width , getAdapter()));
         getRecyclerView().addItemDecoration(new RecyclerInsetsDecoration(getActivity(), NavigationGridType.MOVIES));
     }
 
@@ -48,7 +51,7 @@ public abstract class MoviesGridFragment extends BaseGridFragment<MoviesGridAdap
     }
 
     @Override
-    protected easyRegularAdapter<MovieWrapper, MoviesGridAdapter.MovieGridViewHolder> createAdapter(List<MovieWrapper> data) {
+    protected UltimateGridLayoutAdapter<MovieWrapper, MoviesGridAdapter.MovieGridViewHolder> createAdapter(List<MovieWrapper> data) {
         return new MoviesGridAdapter(data, this);
     }
 
@@ -65,7 +68,7 @@ public abstract class MoviesGridFragment extends BaseGridFragment<MoviesGridAdap
 
     @Override
     public void onClick(View view, int position) {
-       MovieWrapper item = mAdapter.getObjects().get(position);
+       MovieWrapper item = getAdapter().getObjects().get(position);
         showItemDetail(item, view);
     }
 

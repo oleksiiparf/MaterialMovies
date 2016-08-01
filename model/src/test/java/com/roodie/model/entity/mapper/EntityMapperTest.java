@@ -56,7 +56,7 @@ public class EntityMapperTest {
         Genre mockGenreEntityOne = createGenreEntityFromId(28);
         Genre mockGenreEntityTwo = createGenreEntityFromId(14);
 
-        List<Genre> genreEntityList = new ArrayList<Genre>(5);
+        List<Genre> genreEntityList = new ArrayList<>(5);
         genreEntityList.add(mockGenreEntityOne);
         genreEntityList.add(mockGenreEntityTwo);
 

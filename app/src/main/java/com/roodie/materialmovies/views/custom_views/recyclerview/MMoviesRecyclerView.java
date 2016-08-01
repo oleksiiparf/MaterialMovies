@@ -11,12 +11,12 @@ import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.roodie.materialmovies.R;
 
 /**
- * Implementation of {@link UltimateRecyclerView} with {@link AutofitGridRecyclerView}
+ * Implementation of {@link UltimateRecyclerView} with {@link AnimationGridRecyclerView}
  * instead of RecyclerView
  */
 public class MMoviesRecyclerView extends UltimateRecyclerView {
 
-    private boolean isRecyclerAutofit;
+    private boolean isRecyclerAnimated;
 
     public MMoviesRecyclerView(Context context) {
         super(context);
@@ -35,25 +35,25 @@ public class MMoviesRecyclerView extends UltimateRecyclerView {
         super.initAttrs(attrs);
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.MMoviesRecyclerView);
         try {
-            isRecyclerAutofit = typedArray.getBoolean(R.styleable.MMoviesRecyclerView_recyclerAutofit, false);
+            isRecyclerAnimated = typedArray.getBoolean(R.styleable.MMoviesRecyclerView_recyclerSliding, false);
         } finally {
             typedArray.recycle();
         }
     }
 
-    protected void checkRecyclerAutofit() {
-        if (isRecyclerAutofit) {
+    protected void applyRecyclerAnimation() {
+        if (isRecyclerAnimated) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mSwipeRefreshLayout.removeView(mRecyclerView);
             View animationGridRecyclerView = inflater.inflate(R.layout.recyclerview_layout_grid, mSwipeRefreshLayout, true);
-            mRecyclerView = (AutofitGridRecyclerView) animationGridRecyclerView.findViewById(R.id.recycler_view);
+            mRecyclerView = (AnimationGridRecyclerView) animationGridRecyclerView.findViewById(R.id.recycler_view);
         }
     }
 
     @Override
     protected void setScrollbars() {
         super.setScrollbars();
-        checkRecyclerAutofit();
+        applyRecyclerAnimation();
     }
 
     /* Show empty view regardless from empty_policy. */

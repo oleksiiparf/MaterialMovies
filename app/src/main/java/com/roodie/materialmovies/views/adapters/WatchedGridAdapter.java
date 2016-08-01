@@ -2,8 +2,8 @@ package com.roodie.materialmovies.views.adapters;
 
 import android.view.View;
 
+import com.marshalchen.ultimaterecyclerview.UltimateGridLayoutAdapter;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
-import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.custom_views.MMoviesTextView;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by Roodie on 05.03.2016.
  */
-public class WatchedGridAdapter extends easyRegularAdapter<Watchable, WatchedGridAdapter.WatchedItemViewHolder> {
+public class WatchedGridAdapter extends UltimateGridLayoutAdapter<Watchable, WatchedGridAdapter.WatchedItemViewHolder> {
 
     private RecyclerItemClickListener mClickListener;
 
@@ -40,11 +40,15 @@ public class WatchedGridAdapter extends easyRegularAdapter<Watchable, WatchedGri
     }
 
     @Override
-    protected void withBindHolder(WatchedItemViewHolder holder, Watchable data, int position) {
+    protected void bindNormal(WatchedItemViewHolder holder, Watchable data, int position) {
         holder.title.setText(data.getTitle());
         holder.watchedType.setText(data.getWatchableType().getResId());
 
         holder.poster.loadPoster(data);
+    }
+
+    @Override
+    protected void withBindHolder(WatchedItemViewHolder holder, Watchable data, int position) {
     }
 
     public class WatchedItemViewHolder extends UltimateRecyclerviewViewHolder implements View.OnClickListener {

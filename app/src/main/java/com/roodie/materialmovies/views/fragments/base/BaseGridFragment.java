@@ -5,17 +5,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.marshalchen.ultimaterecyclerview.UltimateGridLayoutAdapter;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 import com.roodie.materialmovies.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Roodie on 01.07.2015.
  */
 public abstract class BaseGridFragment<VH extends UltimateRecyclerviewViewHolder, M extends Serializable>
         extends RecyclerFragment<VH, M> {
+
+    protected abstract UltimateGridLayoutAdapter<M, VH> createAdapter(List<M> data);
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -25,6 +29,7 @@ public abstract class BaseGridFragment<VH extends UltimateRecyclerviewViewHolder
         enableLoadMore();
         mAdapter = createAdapter(new ArrayList<M>());
         mUltimateRecyclerView.setItemViewCacheSize(mAdapter.getAdditionalItems());
+        ((UltimateGridLayoutAdapter)getAdapter()).setSpanColumns(2);
         mUltimateRecyclerView.setAdapter(mAdapter);
     }
 

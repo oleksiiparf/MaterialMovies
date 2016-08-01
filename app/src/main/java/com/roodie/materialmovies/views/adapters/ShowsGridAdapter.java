@@ -17,8 +17,8 @@ import android.widget.TextView;
 import com.arellomobile.mvp.MvpDelegate;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.PresenterType;
+import com.marshalchen.ultimaterecyclerview.UltimateGridLayoutAdapter;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
-import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.TvShowPresenter;
 import com.roodie.materialmovies.mvp.views.TvShowWatchedView;
@@ -37,7 +37,7 @@ import io.fabric.sdk.android.Fabric;
 /**
  * Created by Roodie on 15.08.2015.
  */
-public class ShowsGridAdapter extends easyRegularAdapter<ShowWrapper, ShowsGridAdapter.ShowViewHolder> implements TvShowWatchedView {
+public class ShowsGridAdapter extends UltimateGridLayoutAdapter<ShowWrapper, ShowsGridAdapter.ShowViewHolder> implements TvShowWatchedView {
 
     @InjectPresenter(type = PresenterType.GLOBAL, tag = TvShowPresenter.TAG)
     TvShowPresenter mPresenter;
@@ -78,6 +78,11 @@ public class ShowsGridAdapter extends easyRegularAdapter<ShowWrapper, ShowsGridA
     }
 
     @Override
+    public long generateHeaderId(int position) {
+        return 0;
+    }
+
+    @Override
     protected int getNormalLayoutResId() {
         return R.layout.item_grid_show_card;
     }
@@ -98,8 +103,7 @@ public class ShowsGridAdapter extends easyRegularAdapter<ShowWrapper, ShowsGridA
     }
 
     @Override
-    protected void withBindHolder(final ShowViewHolder holder, final ShowWrapper data, final int position) {
-
+    protected void bindNormal(final ShowViewHolder holder, final ShowWrapper data, final int position) {
         holder.title.setText(data.getTitle());
         if (data.getReleasedTime() > 0) {
             Date DATE = new Date(data.getReleasedTime());
@@ -156,6 +160,10 @@ public class ShowsGridAdapter extends easyRegularAdapter<ShowWrapper, ShowsGridA
                 mPresenter.toggleShowWatched(data, position);
             }
         });
+    }
+
+    @Override
+    protected void withBindHolder(final ShowViewHolder holder, final ShowWrapper data, final int position) {
     }
 
     private void animateHolder(ShowViewHolder holder, int position) {

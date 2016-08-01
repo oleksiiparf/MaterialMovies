@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.roodie.materialmovies.views.custom_views.recyclerview.AutofitGridRecyclerView
+<com.roodie.materialmovies.views.custom_views.recyclerview.AnimationGridRecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:columnWidth="@dimen/card_item_image_size"
     android:scrollbars="vertical"
     android:fadeScrollbars="true"
     android:clipToPadding="false"
     android:layoutAnimation="@anim/grid_view_animation">
 
-    </com.roodie.materialmovies.views.custom_views.recyclerview.AutofitGridRecyclerView>
+    </com.roodie.materialmovies.views.custom_views.recyclerview.AnimationGridRecyclerView>

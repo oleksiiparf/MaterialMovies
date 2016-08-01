@@ -141,7 +141,7 @@
     <string name="prefs_category_about">Info and Other</string>
     <string name="pref_updatewifionly">Images via Wi-Fi only</string>
     <string name="pref_updatewifionlysummary">To reduce carrier data charges, don\'t download over mobile networks</string>
-    <string name="pref_animations">Enable Animations</string>
+    <string name="pref_animations">Enable Transition animations</string>
     <string name="pref_animations_summary">Works on Anroid 5.0 and hire</string>
 
     <!-- Help -->

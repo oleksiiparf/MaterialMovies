@@ -10,7 +10,8 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:id="@+id/left_container"
@@ -49,16 +50,11 @@
 
             <FrameLayout
                 android:layout_height="match_parent"
+                android:id="@+id/content_view"
                   android:layout_width="0px"
                   android:layout_weight="2">
 
-                <FrameLayout
-                    android:id="@+id/content_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <include layout="@layout/include_detail_recycler_view"/>
-                </FrameLayout>
+                <include layout="@layout/include_detail_recycler_view"/>
 
             </FrameLayout>
 

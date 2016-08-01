@@ -1,8 +1,6 @@
 package com.roodie.materialmovies.views.fragments;
 
 
-import android.os.Bundle;
-
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.roodie.materialmovies.mvp.presenters.ListMoviesPresenter;
 import com.roodie.materialmovies.views.fragments.base.MoviesGridFragment;
@@ -17,11 +15,6 @@ public class PopularMoviesFragment extends MoviesGridFragment {
 
     @InjectPresenter
     ListMoviesPresenter mMoviesPresenter;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     protected void attachUiToPresenter() {

@@ -1,6 +1,5 @@
 package com.roodie.materialmovies.views.fragments;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -28,12 +27,6 @@ public class MoviesTabFragment extends BaseTabFragment<BaseTabFragment.TabPagerA
     TabMoviesPresenter mPresenter;
 
     private List<UiView.MovieTabs> mTabs;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
 
     @Override
     protected void attachUiToPresenter() {
@@ -98,7 +91,7 @@ public class MoviesTabFragment extends BaseTabFragment<BaseTabFragment.TabPagerA
     @Override
     protected String getTabTitle(int position) {
         if (!MoviesCollections.isEmpty(mTabs)) {
-            return getResources().getString(StringUtils.getTabTitle(mTabs.get(position)));
+            return getActivity().getResources().getString(StringUtils.getTabTitle(mTabs.get(position)));
         }
         return null;
     }

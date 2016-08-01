@@ -130,14 +130,6 @@ public class SearchFragment extends BaseDetailFragment<ApplicationState.SearchRe
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            //restore
-        }
-    }
-
-    @Override
     protected int getLayoutRes() {
         return R.layout.fragment_search;
     }
@@ -289,10 +281,6 @@ public class SearchFragment extends BaseDetailFragment<ApplicationState.SearchRe
         }
     }
 
-    public void onScrolledToBottom() {
-        //NTD
-    }
-
     @Override
     public void onRefreshData(boolean visible) {
         //NTD
@@ -421,6 +409,7 @@ public class SearchFragment extends BaseDetailFragment<ApplicationState.SearchRe
                     showSoftInputUnchecked.invoke(imm, flags, null);
                     return;
                 } catch (Exception e) {
+                    FileLog.e("Show soft input", e.getMessage());
                 }
             }
 

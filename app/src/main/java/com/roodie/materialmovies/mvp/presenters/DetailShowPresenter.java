@@ -134,8 +134,8 @@ public class DetailShowPresenter extends MvpPresenter<TvShowDetailView> implemen
 
     @Subscribe
     public void onTvSeasonDetailsChanged(MoviesState.TvShowSeasonUpdatedEvent event) {
-        //populateUi();
-        //checkDetailSeasonResult(event.callingId, event.item, event.secondaryItem);
+        /*populateUi();
+        checkDetailSeasonResult(event.callingId, event.item, event.secondaryItem);*/
     }
 
     @Subscribe

@@ -13,7 +13,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -211,6 +210,8 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper> imp
         setHasOptionsMenu(true);
     }
 
+
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -230,13 +231,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper> imp
         return R.layout.fragment_show_detail_list;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mAppBar != null) {
-            mPrimaryRecyclerView.addOnScrollListener(expandableScrollListener);
-        }
-    }
 
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
@@ -462,7 +456,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper> imp
 
     @Override
     public void updateDisplaySubtitle(String subtitle) {
-
     }
 
     public void showSeasonDetail(int seasonId, View view, int position) {
@@ -560,6 +553,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper> imp
 
         if (!MoviesCollections.isEmpty(mShow.getCast())) {
             mItems.add(DetailItemType.CAST);
+
         }
 
         if (!MoviesCollections.isEmpty(mShow.getCrew())) {
@@ -570,7 +564,11 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper> imp
             mItems.add(DetailItemType.SEASONS);
         }
 
-
+        //If we have al least, enable scroll listener
+        if(mItems.size() >= 4){
+            if (mAppBar != null)
+                mPrimaryRecyclerView.addOnScrollListener(expandableScrollListener);
+        }
         return createRecyclerAdapter(mItems);
 
     }
@@ -1016,7 +1014,7 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper> imp
                 final int numItems = getResources().getInteger(R.integer.detail_card_max_items);
                 final int adapterCount = getShowSeasonsAdapter().getCount();
 
-                for (int i = 0; i < Math.min(numItems, adapterCount); i++) {
+                for (int i = 0; i < adapterCount; i++) {
                     View view = getShowSeasonsAdapter().getView(i, viewRecycler.getRecycledView(), holder.layout);
                     holder.layout.addView(view);
                 }
@@ -1182,7 +1180,6 @@ public class TvShowDetailFragment extends BaseAnimationFragment<ShowWrapper> imp
 
         @Override
         public SeasonWrapper getItem(int position) {
-            Log.d(LOG_TAG, mShow.getSeasons().get(position).toString());
             return mShow.getSeason(position);
         }
 

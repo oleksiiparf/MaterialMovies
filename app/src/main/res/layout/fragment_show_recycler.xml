@@ -12,7 +12,7 @@
             android:layout_gravity="center_horizontal"
             android:clipToPadding="false"
             app:recyclerviewScrollbars="vertical"
-            app:recyclerAutofit="true"
+            app:recyclerSliding="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             />
 

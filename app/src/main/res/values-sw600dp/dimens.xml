@@ -33,4 +33,10 @@
 
     <!-- Z-axis elevations -->
     <dimen name="touch_raise">9dp</dimen>
+
+    <dimen name="movie_grid_item_width">160dip</dimen>
+    <dimen name="show_grid_item_width">170dip</dimen>
+
+  <!--  <dimen name="movie_grid_item_width">160dip</dimen>
+    <dimen name="show_grid_item_width">170dip</dimen>-->
 </resources>

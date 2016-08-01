@@ -1,13 +1,12 @@
 package com.roodie.materialmovies.views.adapters;
 
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.marshalchen.ultimaterecyclerview.UltimateGridLayoutAdapter;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
-import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.views.custom_views.MMoviesImageView;
 import com.roodie.materialmovies.views.listeners.RecyclerItemClickListener;
@@ -20,7 +19,7 @@ import java.util.List;
 /**
  * Created by Roodie on 29.06.2015.
  */
-public class MoviesGridAdapter extends easyRegularAdapter<MovieWrapper, MoviesGridAdapter.MovieGridViewHolder> {
+public class MoviesGridAdapter extends UltimateGridLayoutAdapter<MovieWrapper, MoviesGridAdapter.MovieGridViewHolder> {
 
     private static final String LOG_TAG = MoviesGridAdapter.class.getName();
 
@@ -54,8 +53,7 @@ public class MoviesGridAdapter extends easyRegularAdapter<MovieWrapper, MoviesGr
     }
 
     @Override
-    protected void withBindHolder(final MovieGridViewHolder holder, MovieWrapper data, final int position) {
-
+    protected void bindNormal(final MovieGridViewHolder holder, final MovieWrapper data, final int position) {
         holder.title.setText(data.getTitle());
 
         if (data.getReleasedTime() > 0) {
@@ -67,22 +65,13 @@ public class MoviesGridAdapter extends easyRegularAdapter<MovieWrapper, MoviesGr
         }
         //load poster
         holder.poster.setAutoFade(true);
-        holder.poster.loadPoster(data, new MMoviesImageView.OnLoadedListener() {
-            @Override
-            public void onSuccess(MMoviesImageView imageView, Bitmap bitmap, String imageUrl) {
-                holder.poster.setTag(imageUrl);
-            }
-
-            @Override
-            public void onError(MMoviesImageView imageView) {
-
-            }
-        });
+        holder.poster.loadPoster(data);
 
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    holder.poster.setTag(String.valueOf(position));
                     holder.poster.setTransitionName(holder.itemView.getResources().getString(R.string.transition_poster));
                 }
                 mClickListener.onClick(holder.poster, position);
@@ -95,6 +84,10 @@ public class MoviesGridAdapter extends easyRegularAdapter<MovieWrapper, MoviesGr
                 mClickListener.onPopupMenuClick(holder.contextMenu, position);
             }
         });
+    }
+
+    @Override
+    protected void withBindHolder(final MovieGridViewHolder holder, MovieWrapper data, final int position) {
     }
 
     public class MovieGridViewHolder extends UltimateRecyclerviewViewHolder {

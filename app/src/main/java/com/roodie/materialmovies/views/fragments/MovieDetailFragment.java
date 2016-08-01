@@ -233,14 +233,6 @@ public class MovieDetailFragment extends BaseAnimationFragment<MovieWrapper> imp
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (mAppBar != null) {
-            mPrimaryRecyclerView.addOnScrollListener(expandableScrollListener);
-        }
-    }
-
-    @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -585,6 +577,10 @@ public class MovieDetailFragment extends BaseAnimationFragment<MovieWrapper> imp
             mItems.add(DetailItemType.RELATED);
         }
 
+        if (mItems.size() >= 4) {
+            if (mAppBar != null)
+                mPrimaryRecyclerView.addOnScrollListener(expandableScrollListener);
+        }
 
         return createRecyclerAdapter(mItems);
 

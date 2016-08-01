@@ -40,6 +40,22 @@ public class TvActivity extends BaseNavigationActivity {
     private Fragment currentFragment;
 
     @Override
+    protected int getContentViewLayoutId() {
+        return R.layout.activity_no_drawer;
+    }
+
+    @Override
+    protected void handleIntent(Intent intent, Display display) {
+        if (!display.hasMainFragment()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && MMoviesPreferences.areAnimationsEnabled(this)) {
+                currentFragment = display.showTvDetailFragmentBySharedElement(intent.getStringExtra(Display.PARAM_ID));
+            } else {
+                display.showTvDetailFragment(intent.getStringExtra(Display.PARAM_ID));
+            }
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && MMoviesPreferences.areAnimationsEnabled(this)) {
@@ -70,10 +86,10 @@ public class TvActivity extends BaseNavigationActivity {
 
             @Override
             public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
-                FileLog.d("animations", "TvActivity: onSharedElementEnd");
+             /*   FileLog.d("animations", "TvActivity: onSharedElementEnd");
                 if (!mIsReturning) {
                     getWindow().setReturnTransition(makeReturnTransition());
-                 }
+                 }*/
             }
 
             private View getSharedElement(List<View> sharedElements) {
@@ -92,17 +108,6 @@ public class TvActivity extends BaseNavigationActivity {
     @TargetApi(21)
     private void setupFinishAnimations() {
         getWindow().setReturnTransition(makeReturnTransition());
-    }
-
-    @Override
-    protected void handleIntent(Intent intent, Display display) {
-      if (!display.hasMainFragment()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && MMoviesPreferences.areAnimationsEnabled(this)) {
-                currentFragment = display.showTvDetailFragmentBySharedElement(intent.getStringExtra(Display.PARAM_ID));
-            } else {
-                display.showTvDetailFragment(intent.getStringExtra(Display.PARAM_ID));
-            }
-        }
     }
 
     @TargetApi(21)
@@ -202,10 +207,5 @@ public class TvActivity extends BaseNavigationActivity {
           // setupFinishAnimations();
            super.finishAfterTransition();
        }
-    }
-
-    @Override
-    protected int getContentViewLayoutId() {
-        return R.layout.activity_no_drawer;
     }
 }

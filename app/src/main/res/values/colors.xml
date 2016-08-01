@@ -103,7 +103,6 @@
     <color name="mm_neutral_600">#ff212124</color>
     <color name="mm_green_600">#ff43A047</color>
     <color name="mm_green_700">#ff388E3C</color>
-    <color name="mm_green_800">#ff2E7D32</color>
     <color name="mm_red">#fff45531</color>
     <color name="white_30">#4cffffff</color>
     <color name="mm_white_1">@color/mm_neutral_100</color>
@@ -137,9 +136,6 @@
     <color name="accent">#FFC107</color>
     <color name="star_deactivated">#D6D6D6</color>
 
-    <color name="txt_offline_placeholder_body">#ffbdbcba</color>
-    <color name="txt_offline_placeholder_title">#ff000000</color>
-
     <color name="mm_luxor_gold">#ff79b632</color>
 
 
@@ -160,8 +156,5 @@
     <color name="mm_button_info_background_pressed">@color/mm_white_40</color>
 
     <color name="faded_search_background">#80000000</color>
-
-    <color name="immersive_bars">#99000000</color>
-
 
 </resources>

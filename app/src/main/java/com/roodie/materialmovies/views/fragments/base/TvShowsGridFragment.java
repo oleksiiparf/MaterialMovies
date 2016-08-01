@@ -3,15 +3,13 @@ package com.roodie.materialmovies.views.fragments.base;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.google.common.base.Preconditions;
-import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
+import com.marshalchen.ultimaterecyclerview.UltimateGridLayoutAdapter;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.views.ListTvShowsView;
 import com.roodie.materialmovies.util.AnimUtils;
@@ -19,6 +17,7 @@ import com.roodie.materialmovies.util.MMoviesPreferences;
 import com.roodie.materialmovies.views.activities.SettingsActivity;
 import com.roodie.materialmovies.views.adapters.ShowsGridAdapter;
 import com.roodie.materialmovies.views.custom_views.TvShowDialogView;
+import com.roodie.materialmovies.views.custom_views.recyclerview.AutofitGridLayoutManager;
 import com.roodie.materialmovies.views.custom_views.recyclerview.RecyclerInsetsDecoration;
 import com.roodie.model.Display;
 import com.roodie.model.entities.ShowWrapper;
@@ -46,13 +45,8 @@ public abstract class TvShowsGridFragment extends BaseGridFragment<ShowsGridAdap
     }
 
     @Override
-    protected easyRegularAdapter<ShowWrapper, ShowsGridAdapter.ShowViewHolder> createAdapter(List<ShowWrapper> data) {
+    protected UltimateGridLayoutAdapter<ShowWrapper, ShowsGridAdapter.ShowViewHolder> createAdapter(List<ShowWrapper> data) {
         return new ShowsGridAdapter(data, getActivity(),getMvpDelegate(), this);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -74,6 +68,8 @@ public abstract class TvShowsGridFragment extends BaseGridFragment<ShowsGridAdap
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        int width = (int)getActivity().getResources().getDimension(R.dimen.show_grid_item_width);
+        getRecyclerView().setLayoutManager(new AutofitGridLayoutManager(getActivity(), width , getAdapter()));
         getRecyclerView().addItemDecoration(new RecyclerInsetsDecoration(getActivity(), NavigationGridType.SHOWS));
 
         //set actionbar up navigation
@@ -102,7 +98,8 @@ public abstract class TvShowsGridFragment extends BaseGridFragment<ShowsGridAdap
         Display display = getDisplay();
         if (display != null) {
             if (tvShow.getTmdbId() != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && MMoviesPreferences.areAnimationsEnabled(getContext()) && view.getTag() != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && MMoviesPreferences.areAnimationsEnabled(getContext())
+                        && view.getTag() != null) {
                     display.startTvDetailActivityBySharedElements(String.valueOf(tvShow.getTmdbId()), view, (String) view.getTag());
                 } else {
                     display.startTvDetailActivity(String.valueOf(tvShow.getTmdbId()), null);

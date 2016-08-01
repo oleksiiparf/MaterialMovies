@@ -27,6 +27,8 @@
     <dimen name="spacing_massive">24dp</dimen>
     <dimen name="spacing_huge">56dp</dimen>
 
+    <dimen name="margin_fab">44dp</dimen>
+
     <dimen name="trailer_text_size">16dp</dimen>
 
     <!-- Should be movie_detail_poster_width * 1.6 -->
@@ -35,6 +37,9 @@
     <dimen name="show_grid_spacing">0dip</dimen>
 
     <dimen name="card_item_image_size">140dip</dimen>
+
+    <dimen name="movie_grid_item_width">130dip</dimen>
+    <dimen name="show_grid_item_width">140dip</dimen>
 
     <!--  180 200    140 188
 -->
@@ -116,7 +121,6 @@
     <!-- Z-axis elevations -->
     <dimen name="z_app_bar">4dp</dimen>
     <dimen name="z_card">2dp</dimen>
-    <dimen name="touch_raise">6dp</dimen>
 
 
 </resources>

@@ -59,8 +59,8 @@ public class MovieActivity extends BaseNavigationActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && MMoviesPreferences.areAnimationsEnabled(this)) {
-            animateManually(true);
             setupWindowAnimations();
+            animateManually(true);
         } else {
             animateManually(false);
         }
@@ -103,7 +103,6 @@ public class MovieActivity extends BaseNavigationActivity {
 
     @TargetApi(21)
     private void setupFinishAnimations() {
-        FileLog.d("animations", "setupFinishAnimations()");
         getWindow().setReturnTransition(makeReturnTransition());
     }
 
@@ -201,7 +200,7 @@ public class MovieActivity extends BaseNavigationActivity {
             animateManually(false);
             finish();
         } else {
-            setupFinishAnimations();
+            //setupFinishAnimations();
             super.finishAfterTransition();
         }
     }

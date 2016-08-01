@@ -9,16 +9,20 @@ import android.view.View;
 
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 import com.marshalchen.ultimaterecyclerview.layoutmanagers.ScrollSmoothLineaerLayoutManager;
+import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
 import com.roodie.materialmovies.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Roodie on 12.02.2016.
  */
 public abstract class BaseListFragment<VH extends UltimateRecyclerviewViewHolder, M extends Serializable>
         extends RecyclerFragment<VH, M> {
+
+    protected abstract easyRegularAdapter<M, VH> createAdapter(List<M> data);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

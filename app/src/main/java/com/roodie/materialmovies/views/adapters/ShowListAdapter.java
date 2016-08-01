@@ -29,6 +29,7 @@ public class ShowListAdapter extends easyRegularAdapter<ShowWrapper, ShowListAda
 
     public ShowListAdapter(List<ShowWrapper> list, RecyclerItemClickListener mClickListener) {
         super(list);
+        //setHasStableIds(false);
         mDate = new Date();
         this.mClickListener = mClickListener;
     }

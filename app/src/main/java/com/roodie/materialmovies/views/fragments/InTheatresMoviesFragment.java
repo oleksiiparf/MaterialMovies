@@ -19,11 +19,6 @@ public class InTheatresMoviesFragment extends MoviesGridFragment {
     private static final String LOG_TAG = InTheatresMoviesFragment.class.getSimpleName();
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getRecyclerView().disableLoadmore();

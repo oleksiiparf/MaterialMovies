@@ -19,7 +19,7 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:fadeScrollbars="true"
         app:recyclerviewClipToPadding="true"
-        app:recyclerAutofit="true"
+        app:recyclerSliding="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
     </merge>

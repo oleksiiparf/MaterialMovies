@@ -29,10 +29,9 @@ public abstract class RecyclerFragment<VH extends UltimateRecyclerviewViewHolder
 
     protected boolean  status_progress = false;
 
-    //protected BaseRecyclerLayout mPrimaryRecyclerView;
     protected easyRegularAdapter<M, VH> mAdapter = null;
 
-    protected abstract easyRegularAdapter<M, VH> createAdapter(List<M> data);
+    //protected abstract AD createAdapter(List<M> data);
 
     protected MMoviesRecyclerView getRecyclerView() {
         return mUltimateRecyclerView;

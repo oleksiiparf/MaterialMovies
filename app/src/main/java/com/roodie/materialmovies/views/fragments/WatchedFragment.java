@@ -2,8 +2,6 @@ package com.roodie.materialmovies.views.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,12 +9,13 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.common.base.Preconditions;
-import com.marshalchen.ultimaterecyclerview.quickAdapter.easyRegularAdapter;
+import com.marshalchen.ultimaterecyclerview.UltimateGridLayoutAdapter;
 import com.roodie.materialmovies.R;
 import com.roodie.materialmovies.mvp.presenters.ListWatchedPresenter;
 import com.roodie.materialmovies.mvp.views.WatchedListView;
 import com.roodie.materialmovies.views.activities.BaseNavigationActivity;
 import com.roodie.materialmovies.views.adapters.WatchedGridAdapter;
+import com.roodie.materialmovies.views.custom_views.recyclerview.AutofitGridLayoutManager;
 import com.roodie.materialmovies.views.custom_views.recyclerview.RecyclerInsetsDecoration;
 import com.roodie.materialmovies.views.fragments.base.BaseGridFragment;
 import com.roodie.model.Display;
@@ -51,11 +50,6 @@ public class WatchedFragment extends BaseGridFragment<WatchedGridAdapter.Watched
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     public void onPopupMenuClick(View view, int position) {
     }
 
@@ -63,6 +57,8 @@ public class WatchedFragment extends BaseGridFragment<WatchedGridAdapter.Watched
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getRecyclerView().setHasFixedSize(true);
+        int width = (int)getActivity().getResources().getDimension(R.dimen.show_grid_item_width);
+        getRecyclerView().setLayoutManager(new AutofitGridLayoutManager(getActivity(), width , getAdapter()));
         getRecyclerView().addItemDecoration(new RecyclerInsetsDecoration(getActivity(), NavigationGridType.WATCHED));
         getRecyclerView().disableLoadmore();
     }
@@ -99,7 +95,7 @@ public class WatchedFragment extends BaseGridFragment<WatchedGridAdapter.Watched
     }
 
     @Override
-    protected easyRegularAdapter<Watchable, WatchedGridAdapter.WatchedItemViewHolder> createAdapter(List<Watchable> data) {
+    protected UltimateGridLayoutAdapter<Watchable, WatchedGridAdapter.WatchedItemViewHolder> createAdapter(List<Watchable> data) {
         return new WatchedGridAdapter(data, this);
     }
 

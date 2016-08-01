@@ -9,10 +9,10 @@ import com.google.common.base.Preconditions;
  */
 public class CreditWrapper implements Comparable<CreditWrapper> {
 
-    PersonWrapper person;
-    String job;
-    String department;
-    int order;
+    private PersonWrapper person;
+    private String job;
+    private String department;
+    private int order;
 
     private static int ORDER_DIRECTOR = 0;
     private static int ORDER_WRITER = 1;
@@ -48,7 +48,7 @@ public class CreditWrapper implements Comparable<CreditWrapper> {
         return department;
     }
 
-    public int getOrder() {
+    private int getOrder() {
         return order;
     }
 

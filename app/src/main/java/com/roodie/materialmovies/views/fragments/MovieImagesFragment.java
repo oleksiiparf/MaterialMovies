@@ -76,11 +76,6 @@ public class MovieImagesFragment extends BaseMvpFragment implements MovieImagesV
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
     protected void attachUiToPresenter() {
         mPresenter.attachUiByParameter(this, getRequestParameter());
         Display display = getDisplay();

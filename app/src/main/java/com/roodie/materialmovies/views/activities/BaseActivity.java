@@ -2,6 +2,7 @@ package com.roodie.materialmovies.views.activities;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -37,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         this.appliedTheme = getThemeResId();
         setTheme(this.appliedTheme);
         super.onCreate(savedInstanceState);
-
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         getMvpDelegate().onCreate(savedInstanceState);
         setContentView(getContentViewLayoutId());
         ButterKnife.inject(this);
@@ -101,11 +102,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         getMvpDelegate().onSaveInstanceState(outState);
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
     @StyleRes
     protected abstract int getThemeResId();
 
@@ -128,16 +124,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         this.savedState = false;
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
     protected boolean navigateUp() {
         final Intent intent = getParentIntent();
         if (intent != null) {
@@ -158,11 +144,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public Display getDisplay() {
         return mDisplay;
-    }
-
-    @Override
-    public final void setSupportActionBar(@Nullable Toolbar toolbar) {
-        super.setSupportActionBar(toolbar);
     }
 
     public void setSupportActionBar(@Nullable Toolbar toolbar, boolean handleBackground) {

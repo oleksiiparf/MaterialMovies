@@ -8,13 +8,6 @@
     android:paddingRight="16.0dip"
     android:paddingTop="16.0dip">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone" />
-
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
